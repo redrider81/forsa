@@ -1,7 +1,7 @@
 import CtaLink from "@/components/cta-link";
 import Link from "next/link";
+import Image from "next/image";
 import HeroReveal from "@/components/animations/HeroReveal";
-import HeroAccent from "@/components/decorative/HeroAccent";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
@@ -20,8 +20,17 @@ export default function HomePage() {
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
 
         {/* Hero */}
-        <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
-          <HeroAccent />
+        <section className="relative overflow-hidden border-b border-zinc-300 pb-16 pt-16 md:pb-24 md:pt-24">
+          <Image
+            src="/hero.jpg"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-white/20" aria-hidden="true" />
+          <div className="relative z-10">
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
@@ -44,6 +53,7 @@ export default function HomePage() {
               </span>
             </div>
           </HeroReveal>
+          </div>
         </section>
 
         {/* Two-col: Kompetens */}
