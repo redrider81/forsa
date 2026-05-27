@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import gsap from "gsap";
+import { prefersReducedMotion } from "@/lib/motion";
 
 const navItems = [
   { href: "/", label: "Start" },
@@ -22,9 +25,25 @@ function linkClass(isActive: boolean) {
 
 export default function SiteNavigation() {
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el || prefersReducedMotion()) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { y: -14, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.65, ease: "power3.out", delay: 0.05 }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <header className="border-b border-zinc-300 bg-zinc-50/95">
+    <header ref={headerRef} className="border-b border-zinc-300 bg-zinc-50/95">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5 md:px-10">
         <Link
           href="/"
