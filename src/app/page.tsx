@@ -1,65 +1,210 @@
-import Image from "next/image";
+import CtaLink from "@/components/cta-link";
+import Link from "next/link";
 
-export default function Home() {
+const relevancePoints = [
+  "Ni står inför ett strategiskt vägval.",
+  "Prioriteringar är oklara eller skiftar för ofta.",
+  "Friktion i ledningsgruppen bromsar viktiga beslut.",
+  "Bolaget är i tillväxt, omställning eller ny fas.",
+  "Trycket från ägare eller styrelse ökar.",
+  "Beslut fattas i rummet men tappar kraft i verkligheten.",
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
+      <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
+        <section className="border-b border-zinc-300 pb-16 md:pb-20">
+          <p className="text-sm font-medium tracking-[0.12em] text-zinc-600">
+            Executive coaching och ledningsstöd
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          <h1 className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
+            När ledningen behöver tänka klarare.
+          </h1>
+          <p className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
+            Forsa arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning
+            behöver skärpas. Vi skapar ett konfidentiellt samtalsrum för klarare tänkande, skarpare
+            prioriteringar och beslut som håller i verkligheten.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <CtaLink href="/kontakt" variant="primary">
+              Boka ett första samtal
+            </CtaLink>
+            <CtaLink href="/executive-coaching" variant="secondary">
+              Se executive coaching
+            </CtaLink>
+          </div>
+        </section>
+
+        <section className="grid gap-10 border-b border-zinc-300 py-16 md:grid-cols-12 md:py-20">
+          <h2 className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">
+            Kompetens finns ofta redan. Klarheten gör inte alltid det.
+          </h2>
+          <div className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+            <p>
+              Ledningsgrupper har sällan brist på erfarenhet. Det som oftare saknas är gemensam
+              skärpa i vad som är viktigast nu.
+            </p>
+            <p>
+              När trycket ökar blir friktionen tydlig. Prioriteringar glider. Beslut tas, men får
+              inte fullt fäste i genomförandet.
+            </p>
+            <p>Forsa arbetar där det blir avgörande att tänka klart tillsammans.</p>
+          </div>
+        </section>
+
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <h2 className="text-3xl font-medium tracking-tight">Vad Forsa hjälper med</h2>
+          <div className="mt-10 grid gap-8 md:grid-cols-3">
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6">
+              <p className="text-xs tracking-[0.18em] text-zinc-500">01</p>
+              <h3 className="text-xl font-medium">Klarhet</h3>
+              <p className="mt-4 leading-7 text-zinc-700">
+                Kärnfrågan ringas in snabbt, och bruset hålls utanför. Fokus hamnar där det gör
+                verklig skillnad.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6">
+              <p className="text-xs tracking-[0.18em] text-zinc-500">02</p>
+              <h3 className="text-xl font-medium">Beslut</h3>
+              <p className="mt-4 leading-7 text-zinc-700">
+                Underlag, avvägningar och ansvar görs tydliga. Det ger beslut som håller även efter
+                mötet.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6">
+              <p className="text-xs tracking-[0.18em] text-zinc-500">03</p>
+              <h3 className="text-xl font-medium">Riktning</h3>
+              <p className="mt-4 leading-7 text-zinc-700">
+                Ledningen håller kurs i komplexa lägen, utan att tappa tempo eller kvalitet i
+                genomförandet.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section className="grid gap-10 border-b border-zinc-300 py-16 md:grid-cols-12 md:py-20">
+          <h2 className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">
+            När Forsa är relevant
+          </h2>
+          <div className="md:col-span-7">
+            <h3 className="text-xl font-medium">När mycket står på spel</h3>
+            <ul className="mt-5 space-y-3 text-zinc-700">
+              {relevancePoints.map((point) => (
+                <li key={point} className="flex items-start gap-3 leading-relaxed">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <h2 className="text-3xl font-medium tracking-tight">
+            Coaching för ledare, team och organisationer
+          </h2>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6">
+              <h3 className="text-xl font-medium">Executive coaching</h3>
+              <p className="mt-3 leading-7 text-zinc-700">
+                För vd:ar, grundare och seniora ledare i komplexa beslut, ansvar och rollklarhet.
+              </p>
+              <Link href="/executive-coaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+                Läs mer
+              </Link>
+            </article>
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6">
+              <h3 className="text-xl font-medium">Ledningsgruppscoaching</h3>
+              <p className="mt-3 leading-7 text-zinc-700">
+                För ledningsgrupper som behöver tydligare beslut, ansvar och gemensam riktning.
+              </p>
+              <Link href="/ledningsgruppscoaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+                Läs mer
+              </Link>
+            </article>
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6">
+              <h3 className="text-xl font-medium">Individuell coaching</h3>
+              <p className="mt-3 leading-7 text-zinc-700">
+                För ledare och nyckelpersoner som behöver klarhet i roll, prioritering och påverkan.
+              </p>
+              <Link href="/individuell-coaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+                Läs mer
+              </Link>
+            </article>
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6">
+              <h3 className="text-xl font-medium">Team coaching</h3>
+              <p className="mt-3 leading-7 text-zinc-700">
+                För team som behöver stärka samspel, ansvar och gemensamt lärande i arbetet.
+              </p>
+              <Link href="/team-coaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+                Läs mer
+              </Link>
+            </article>
+            <article className="rounded-2xl border border-zinc-300 bg-white p-6 md:col-span-2 lg:col-span-1">
+              <h3 className="text-xl font-medium">Coachande ledarskap</h3>
+              <p className="mt-3 leading-7 text-zinc-700">
+                För organisationer som vill utveckla chefers förmåga att leda genom samtal, frågor och ansvar.
+              </p>
+              <Link href="/coachande-ledarskap" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+                Läs mer
+              </Link>
+            </article>
+          </div>
+        </section>
+
+        <section className="grid gap-10 border-b border-zinc-300 py-16 md:grid-cols-12 md:py-20">
+          <h2 className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">
+            Så arbetar Forsa
+          </h2>
+          <div className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+            <h3 className="text-xl font-medium text-zinc-900">Konfidentiellt. Affärsnära. Precist.</h3>
+            <p>
+              Arbetet sker i strukturerade samtal med tydlig koppling till ert faktiska läge. Vi
+              börjar i det som är svårt på riktigt: var det skaver, vad som står still och vad som
+              måste avgöras.
+            </p>
+            <p>
+              Därifrån skärps prioritering, ansvar och beslut, med uppföljning tills riktningen syns
+              i handling.
+            </p>
+          </div>
+        </section>
+
+        <section className="grid gap-10 border-b border-zinc-300 py-16 md:grid-cols-12 md:py-20">
+          <h2 className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">Förtroende</h2>
+          <div className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+            <h3 className="text-xl font-medium text-zinc-900">
+              Göteborgsbaserat stöd för svenska företagsledningar
+            </h3>
+            <p>
+              Forsa är baserat i Göteborg och arbetar med svenska företagsledningar. Uppdragen
+              präglas av diskretion, senioritet och affärsförståelse.
+            </p>
+            <p>
+              Vi arbetar nära ledningen i frågor som påverkar bolagets riktning, tempo och resultat.
+            </p>
+          </div>
+        </section>
+
+        <section id="kontakt" className="py-16 md:py-20">
+          <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
+            När nästa beslut behöver bära längre än till nästa möte
+          </h2>
+          <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
+            Om ni vill ha större skärpa i ledningens prioriteringar, ansvar och beslut, börjar vi med
+            ett konfidentiellt första samtal.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <CtaLink href="/kontakt" variant="primary">
+              Boka ett första samtal
+            </CtaLink>
+            <CtaLink href="mailto:kontakt@forsa.se" variant="secondary" external>
+              Kontakta Forsa
+            </CtaLink>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }
