@@ -125,51 +125,66 @@ export default function HomePage() {
             Coaching för ledare, team och organisationer
           </h2>
           <StaggerCards className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <h3 className="text-xl font-medium">Executive coaching</h3>
-              <p className="mt-3 leading-7 text-zinc-700">
+            <Link data-card href="/executive-coaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+              <h3 className="text-xl font-medium text-zinc-900">Executive coaching</h3>
+              <p className="mt-3 grow leading-7 text-zinc-600">
                 För vd:ar, grundare och seniora ledare i komplexa beslut, ansvar och rollklarhet.
               </p>
-              <Link href="/executive-coaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
-              </Link>
-            </article>
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <h3 className="text-xl font-medium">Ledningsgruppscoaching</h3>
-              <p className="mt-3 leading-7 text-zinc-700">
+                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </Link>
+            <Link data-card href="/ledningsgruppscoaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+              <h3 className="text-xl font-medium text-zinc-900">Ledningsgruppscoaching</h3>
+              <p className="mt-3 grow leading-7 text-zinc-600">
                 För ledningsgrupper som behöver tydligare beslut, ansvar och gemensam riktning.
               </p>
-              <Link href="/ledningsgruppscoaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
-              </Link>
-            </article>
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <h3 className="text-xl font-medium">Individuell coaching</h3>
-              <p className="mt-3 leading-7 text-zinc-700">
+                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </Link>
+            <Link data-card href="/individuell-coaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+              <h3 className="text-xl font-medium text-zinc-900">Individuell coaching</h3>
+              <p className="mt-3 grow leading-7 text-zinc-600">
                 För ledare och nyckelpersoner som behöver klarhet i roll, prioritering och påverkan.
               </p>
-              <Link href="/individuell-coaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
-              </Link>
-            </article>
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <h3 className="text-xl font-medium">Team coaching</h3>
-              <p className="mt-3 leading-7 text-zinc-700">
+                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </Link>
+            <Link data-card href="/team-coaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+              <h3 className="text-xl font-medium text-zinc-900">Team coaching</h3>
+              <p className="mt-3 grow leading-7 text-zinc-600">
                 För team som behöver stärka samspel, ansvar och gemensamt lärande i arbetet.
               </p>
-              <Link href="/team-coaching" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
-              </Link>
-            </article>
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md md:col-span-2 lg:col-span-1">
-              <h3 className="text-xl font-medium">Coachande ledarskap</h3>
-              <p className="mt-3 leading-7 text-zinc-700">
+                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </Link>
+            <Link data-card href="/coachande-ledarskap" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer md:col-span-2 lg:col-span-1">
+              <h3 className="text-xl font-medium text-zinc-900">Coachande ledarskap</h3>
+              <p className="mt-3 grow leading-7 text-zinc-600">
                 För organisationer som vill utveckla chefers förmåga att leda genom samtal, frågor och ansvar.
               </p>
-              <Link href="/coachande-ledarskap" className="mt-5 inline-block text-sm text-zinc-600 underline-offset-4 hover:underline">
+              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
-              </Link>
-            </article>
+                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </Link>
           </StaggerCards>
         </section>
 

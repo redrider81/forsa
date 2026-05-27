@@ -17,8 +17,10 @@ export default function HeroReveal({ children, className }: Props) {
     if (!el || prefersReducedMotion()) return;
 
     const mobile = isMobile();
+    let ctx: gsap.Context | undefined;
 
-    const ctx = gsap.context(() => {
+    const id = setTimeout(() => {
+    ctx = gsap.context(() => {
       const line = el.querySelector<HTMLElement>("[data-hero-line]");
       const label = el.querySelector<HTMLElement>("[data-hero-label]");
       const headline = el.querySelector<HTMLElement>("[data-hero-headline]");
@@ -81,8 +83,12 @@ export default function HeroReveal({ children, className }: Props) {
         );
       }
     }, ref);
+    }, 32);
 
-    return () => ctx.revert();
+    return () => {
+      clearTimeout(id);
+      ctx?.revert();
+    };
   }, []);
 
   return (

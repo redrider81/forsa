@@ -31,19 +31,26 @@ export default function SiteNavigation() {
     const el = headerRef.current;
     if (!el || prefersReducedMotion()) return;
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        el,
-        { y: -14, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.65, ease: "power3.out", delay: 0.05 }
-      );
-    });
+    let ctx: gsap.Context | undefined;
 
-    return () => ctx.revert();
+    const id = setTimeout(() => {
+      ctx = gsap.context(() => {
+        gsap.fromTo(
+          el,
+          { y: -14, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, ease: "power3.out" }
+        );
+      });
+    }, 32);
+
+    return () => {
+      clearTimeout(id);
+      ctx?.revert();
+    };
   }, []);
 
   return (
-    <header ref={headerRef} className="border-b border-zinc-300 bg-zinc-50/95">
+    <header ref={headerRef} className="sticky top-0 z-50 border-b border-zinc-300 bg-zinc-50/90 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5 md:px-10">
         <Link
           href="/"

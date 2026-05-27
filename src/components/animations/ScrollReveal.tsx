@@ -26,8 +26,10 @@ export default function ScrollReveal({
     if (!el || prefersReducedMotion()) return;
 
     gsap.registerPlugin(ScrollTrigger);
+    let ctx: gsap.Context | undefined;
 
-    const ctx = gsap.context(() => {
+    const id = setTimeout(() => {
+    ctx = gsap.context(() => {
       if (variant === "fadeUp") {
         gsap.fromTo(
           el,
@@ -94,8 +96,12 @@ export default function ScrollReveal({
         }
       }
     }, ref);
+    }, 32);
 
-    return () => ctx.revert();
+    return () => {
+      clearTimeout(id);
+      ctx?.revert();
+    };
   }, [variant]);
 
   return (

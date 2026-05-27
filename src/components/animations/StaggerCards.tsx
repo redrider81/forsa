@@ -18,8 +18,10 @@ export default function StaggerCards({ children, className, ...rest }: Props) {
     if (!el || prefersReducedMotion()) return;
 
     gsap.registerPlugin(ScrollTrigger);
+    let ctx: gsap.Context | undefined;
 
-    const ctx = gsap.context(() => {
+    const id = setTimeout(() => {
+    ctx = gsap.context(() => {
       const cards = el.querySelectorAll<HTMLElement>("[data-card]");
       if (!cards.length) return;
 
@@ -37,8 +39,12 @@ export default function StaggerCards({ children, className, ...rest }: Props) {
         }
       );
     }, ref);
+    }, 32);
 
-    return () => ctx.revert();
+    return () => {
+      clearTimeout(id);
+      ctx?.revert();
+    };
   }, []);
 
   return (
