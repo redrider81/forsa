@@ -1,0 +1,113 @@
+---
+description: Forsa project context and startup verification
+alwaysApply: true
+---
+
+# Forsa Project Context Rule
+
+This is the canonical workspace for the Forsa website project:
+
+/Users/dimensiontraining/Projekt/forsa-site
+
+The GitHub/Vercel-connected repository is:
+
+https://github.com/redrider81/forsa.git
+
+The active branch is:
+
+main
+
+This is a solo project. Work directly on main unless the user explicitly says otherwise. Do not create branches or worktrees unless explicitly instructed.
+
+## Critical path rule
+
+Always verify that the current workspace is:
+
+/Users/dimensiontraining/Projekt/forsa-site
+
+Never work from these similarly named folders unless the user explicitly instructs it:
+
+/Users/dimensiontraining/Projekt/forsa
+/Users/dimensiontraining/Projekt/om-forsa
+/Users/dimensiontraining/Projekt/Website
+
+If the active workspace is not /Users/dimensiontraining/Projekt/forsa-site, stop immediately and tell the user that the wrong project is open.
+
+## Required startup check
+
+Before making any change, always run:
+
+pwd
+git rev-parse --show-toplevel
+git branch --show-current
+git status --short
+git log --oneline -5
+git remote -v
+
+Expected values:
+
+- project root: /Users/dimensiontraining/Projekt/forsa-site
+- branch: main
+- remote origin: https://github.com/redrider81/forsa.git
+- latest history should include the current Forsa commits, including:
+  - 4516311 Design polish: Playfair Display...
+  - fff0820 Add GSAP motion system to Forsa site
+  - 5eabdc6 Create Forsa site prototype
+
+If these expectations do not match, stop and report the mismatch before doing anything.
+
+## Dev server rule
+
+The correct project has a package.json with a dev script.
+
+When starting the dev server, use the correct project root:
+
+cd /Users/dimensiontraining/Projekt/forsa-site
+
+Then run:
+
+npm run dev
+
+If port 3000 is already in use, use:
+
+npm run dev -- -p 3001
+
+Do not attempt to run dev scripts from /Users/dimensiontraining/Projekt/forsa, because that is not the active Vercel-connected Forsa website repo.
+
+## Existing work to preserve
+
+Do not remove or rewrite the existing GSAP motion system.
+
+Preserve:
+- GSAP animation setup
+- Playfair Display heading styling
+- sticky blur navigation
+- full footer
+- linked home service cards
+- Vercel/GitHub connection
+- main branch workflow
+
+Do not replace GSAP with Framer Motion or any other animation library.
+
+## Git workflow
+
+Before edits:
+- confirm working tree state with git status --short
+- do not overwrite unrelated changes
+- do not reformat unrelated files
+
+After edits:
+- run npm run build
+- show git status --short
+- show git diff --stat
+- do not commit or push until user approval
+
+After creating/updating this rule file, verify:
+
+pwd
+git status --short
+find .cursor -maxdepth 4 -type f | sort
+
+Then show the created/updated rule file path and summarize what was saved.
+
+Do not make any other project changes.
