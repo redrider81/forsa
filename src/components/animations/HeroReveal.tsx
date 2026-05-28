@@ -2,92 +2,112 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { prefersReducedMotion, isMobile } from "@/lib/motion";
+import { isMobile, motion, prefersReducedMotion, showTargets } from "@/lib/motion";
 
 type Props = {
   children: React.ReactNode;
   className?: string;
 };
 
+const heroSelectors =
+  "[data-hero-line], [data-hero-label], [data-hero-headline], [data-hero-body], [data-hero-cta]";
+
 export default function HeroReveal({ children, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
+
+    const line = el.querySelector<HTMLElement>("[data-hero-line]");
+    const label = el.querySelector<HTMLElement>("[data-hero-label]");
+    const headline = el.querySelector<HTMLElement>("[data-hero-headline]");
+    const body = el.querySelector<HTMLElement>("[data-hero-body]");
+    const ctas = el.querySelectorAll<HTMLElement>("[data-hero-cta]");
+    const all = el.querySelectorAll(heroSelectors);
+
+    if (prefersReducedMotion()) {
+      showTargets(all);
+      return;
+    }
 
     const mobile = isMobile();
     let ctx: gsap.Context | undefined;
 
-    const id = setTimeout(() => {
     ctx = gsap.context(() => {
-      const line = el.querySelector<HTMLElement>("[data-hero-line]");
-      const label = el.querySelector<HTMLElement>("[data-hero-label]");
-      const headline = el.querySelector<HTMLElement>("[data-hero-headline]");
-      const body = el.querySelector<HTMLElement>("[data-hero-body]");
-      const ctas = el.querySelectorAll<HTMLElement>("[data-hero-cta]");
-
-      const tl = gsap.timeline();
-
-      if (line) {
-        tl.fromTo(
-          line,
-          { scaleX: 0, transformOrigin: "left center" },
-          { scaleX: 1, duration: 0.7, ease: "power3.inOut" },
-          0
-        );
-      }
-
-      if (label) {
-        tl.fromTo(
-          label,
-          { clipPath: "inset(100% 0 0 0)" },
-          { clipPath: "inset(0% 0 0 0)", duration: 0.55, ease: "power3.out" },
-          0.15
-        );
-      }
-
+      if (line) gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+      if (label) gsap.set(label, { clipPath: "inset(100% 0 0 0)", autoAlpha: 0 });
       if (headline) {
         if (mobile) {
-          tl.fromTo(
+          gsap.set(headline, { autoAlpha: 0, y: 18, force3D: true });
+        } else {
+          gsap.set(headline, { clipPath: "inset(0 100% 0 0)", autoAlpha: 1 });
+        }
+      }
+      if (body) gsap.set(body, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+      if (ctas.length) gsap.set(ctas, { autoAlpha: 0, y: 12, force3D: true });
+
+      const tl = gsap.timeline({ defaults: { ease: motion.ease.reveal } });
+
+      if (line) {
+        tl.to(line, { scaleX: 1, duration: 0.72, ease: motion.ease.editorial }, 0);
+      }
+      if (label) {
+        tl.to(
+          label,
+          {
+            clipPath: "inset(0% 0 0 0)",
+            autoAlpha: 1,
+            duration: 0.58,
+            ease: motion.ease.revealSoft,
+          },
+          0.1,
+        );
+      }
+      if (headline) {
+        if (mobile) {
+          tl.to(
             headline,
-            { opacity: 0, y: 18 },
-            { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" },
-            0.25
+            { autoAlpha: 1, y: 0, duration: motion.duration.long, ease: motion.ease.reveal },
+            0.2,
           );
         } else {
-          tl.fromTo(
+          tl.to(
             headline,
-            { clipPath: "inset(0 100% 0 0)" },
-            { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power3.inOut" },
-            0.3
+            {
+              clipPath: "inset(0 0% 0 0)",
+              duration: motion.duration.hero,
+              ease: motion.ease.editorial,
+            },
+            0.26,
           );
         }
       }
-
       if (body) {
-        tl.fromTo(
+        tl.to(
           body,
-          { opacity: 0, y: 22 },
-          { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
-          mobile ? 0.55 : 0.88
+          { autoAlpha: 1, y: 0, duration: motion.duration.medium, ease: motion.ease.reveal },
+          mobile ? 0.48 : 0.85,
         );
       }
-
       if (ctas.length) {
-        tl.fromTo(
+        tl.to(
           ctas,
-          { opacity: 0, y: 18 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.09 },
-          mobile ? 0.7 : 1.08
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: motion.duration.short,
+            ease: motion.ease.reveal,
+            stagger: 0.09,
+          },
+          mobile ? 0.62 : 1,
         );
       }
     }, ref);
-    }, 32);
 
     return () => {
-      clearTimeout(id);
       ctx?.revert();
+      showTargets(all);
     };
   }, []);
 

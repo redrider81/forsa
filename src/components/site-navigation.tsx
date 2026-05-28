@@ -13,7 +13,7 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
-import { prefersReducedMotion } from "@/lib/motion";
+import { motion, prefersReducedMotion, showTargets } from "@/lib/motion";
 import { localeFromPathname, stripLocaleFromPath, toLocalePath, type Locale } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 
@@ -28,7 +28,7 @@ const coachingPaths = [
 type CursorPosition = { left: number; width: number; opacity: number };
 
 const navCursorClass =
-  "pointer-events-none absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-full bg-[#f2f2f2]/65 backdrop-blur-sm motion-reduce:transition-none transition-[left,width,opacity] duration-200 ease-out";
+  "pointer-events-none absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-full bg-zinc-300/95 backdrop-blur-sm motion-reduce:transition-none transition-[left,width,opacity] duration-200 ease-out";
 
 function navTabClass(isActive: boolean, overlay = false) {
   const ringOffset = overlay
@@ -166,7 +166,7 @@ function NavChevron({ open }: { open?: boolean }) {
     <svg
       aria-hidden="true"
       viewBox="0 0 12 12"
-      className={`h-2.5 w-2.5 shrink-0 opacity-50 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+      className={`h-2.5 w-2.5 shrink-0 opacity-75 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
@@ -501,23 +501,32 @@ export default function SiteNavigation() {
 
   useEffect(() => {
     const el = headerRef.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
+
+    if (prefersReducedMotion()) {
+      showTargets(el);
+      return;
+    }
 
     let ctx: gsap.Context | undefined;
 
-    const id = setTimeout(() => {
-      ctx = gsap.context(() => {
-        gsap.fromTo(
-          el,
-          { y: -14, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.65, ease: "power3.out" }
-        );
-      });
-    }, 32);
+    ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { autoAlpha: 0, y: -8, force3D: true },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: motion.duration.medium,
+          ease: motion.ease.reveal,
+          force3D: true,
+        },
+      );
+    });
 
     return () => {
-      clearTimeout(id);
       ctx?.revert();
+      showTargets(el);
     };
   }, []);
 
@@ -561,8 +570,14 @@ export default function SiteNavigation() {
 
         gsap.fromTo(
           panel,
-          { opacity: 0, y: -10 },
-          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", overwrite: "auto" }
+          { opacity: 0, y: -8 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: motion.duration.short,
+            ease: motion.ease.revealSoft,
+            overwrite: "auto",
+          },
         );
       });
     } else {
@@ -576,9 +591,9 @@ export default function SiteNavigation() {
 
         gsap.to(panel, {
           opacity: 0,
-          y: -8,
-          duration: 0.28,
-          ease: "power2.in",
+          y: -6,
+          duration: 0.26,
+          ease: motion.ease.exit,
           overwrite: "auto",
           onComplete: () => {
             gsap.set(panel, { visibility: "hidden", pointerEvents: "none" });

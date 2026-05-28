@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import SiteNavigation from "@/components/site-navigation";
 import { localeFromPathname, stripLocaleFromPath } from "@/lib/i18n/config";
+import { refreshScrollTriggers } from "@/lib/motion";
 
 export default function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,6 +14,11 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => refreshScrollTriggers());
+    return () => cancelAnimationFrame(id);
+  }, [pathname]);
 
   return (
     <>

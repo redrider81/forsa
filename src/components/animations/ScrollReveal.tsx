@@ -4,7 +4,13 @@ import { useEffect, useRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { prefersReducedMotion } from "@/lib/motion";
+import {
+  motion,
+  prefersReducedMotion,
+  refreshScrollTriggers,
+  revealScrollTrigger,
+  showTargets,
+} from "@/lib/motion";
 
 type Variant = "fadeUp" | "splitColumn" | "staggerList" | "ctaStack";
 
@@ -12,6 +18,9 @@ type Props = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
   variant?: Variant;
 };
+
+const childSelectors =
+  "[data-list-item], [data-cta-heading], [data-cta-body], [data-cta-actions], [data-col-left], [data-col-right], [data-col-paragraph]";
 
 export default function ScrollReveal({
   children,
@@ -23,25 +32,29 @@ export default function ScrollReveal({
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
+
+    const childrenTargets = el.querySelectorAll(childSelectors);
+
+    if (prefersReducedMotion()) {
+      showTargets([el, ...childrenTargets]);
+      return;
+    }
 
     gsap.registerPlugin(ScrollTrigger);
     let ctx: gsap.Context | undefined;
 
-    const id = setTimeout(() => {
     ctx = gsap.context(() => {
       if (variant === "fadeUp") {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 28 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-            ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 86%", once: true },
-          }
-        );
+        gsap.set(el, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
+        gsap.to(el, {
+          autoAlpha: 1,
+          y: 0,
+          duration: motion.duration.long,
+          ease: motion.ease.reveal,
+          force3D: true,
+          scrollTrigger: revealScrollTrigger(el),
+        });
       }
 
       if (variant === "splitColumn") {
@@ -50,42 +63,46 @@ export default function ScrollReveal({
         const paragraphs = right?.querySelectorAll<HTMLElement>("[data-col-paragraph]");
         const rightHasCards = Boolean(right?.querySelector("[data-card]"));
 
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: el, start: "top 86%", once: true },
-        });
+        const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(el) });
 
         if (left) {
-          tl.from(left, {
-            opacity: 0,
-            x: -22,
-            duration: 0.75,
-            ease: "power3.out",
+          gsap.set(left, { autoAlpha: 0, x: -motion.reveal.x, force3D: true });
+          tl.to(left, {
+            autoAlpha: 1,
+            x: 0,
+            duration: motion.duration.long,
+            ease: motion.ease.reveal,
+            force3D: true,
           });
         }
 
         if (right && !rightHasCards) {
           if (paragraphs?.length) {
-            tl.from(
+            gsap.set(paragraphs, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+            tl.to(
               paragraphs,
               {
-                opacity: 0,
-                y: 16,
-                duration: 0.55,
-                ease: "power3.out",
+                autoAlpha: 1,
+                y: 0,
+                duration: motion.duration.medium,
+                ease: motion.ease.reveal,
                 stagger: 0.1,
+                force3D: true,
               },
-              "-=0.4",
+              left ? "-=0.45" : 0,
             );
           } else {
-            tl.from(
+            gsap.set(right, { autoAlpha: 0, y: motion.reveal.ySoft + 2, force3D: true });
+            tl.to(
               right,
               {
-                opacity: 0,
-                y: 20,
-                duration: 0.65,
-                ease: "power3.out",
+                autoAlpha: 1,
+                y: 0,
+                duration: motion.duration.medium,
+                ease: motion.ease.reveal,
+                force3D: true,
               },
-              "-=0.4",
+              left ? "-=0.45" : 0,
             );
           }
         }
@@ -94,18 +111,16 @@ export default function ScrollReveal({
       if (variant === "staggerList") {
         const items = el.querySelectorAll<HTMLElement>("[data-list-item]");
         if (items.length) {
-          gsap.fromTo(
-            items,
-            { opacity: 0, x: -16 },
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.5,
-              ease: "power2.out",
-              stagger: 0.07,
-              scrollTrigger: { trigger: el, start: "top 88%", once: true },
-            }
-          );
+          gsap.set(items, { autoAlpha: 0, x: -12, force3D: true });
+          gsap.to(items, {
+            autoAlpha: 1,
+            x: 0,
+            duration: motion.duration.medium,
+            ease: motion.ease.reveal,
+            stagger: 0.08,
+            force3D: true,
+            scrollTrigger: revealScrollTrigger(el),
+          });
         }
       }
 
@@ -114,51 +129,54 @@ export default function ScrollReveal({
         const body = el.querySelector<HTMLElement>("[data-cta-body]");
         const actions = el.querySelector<HTMLElement>("[data-cta-actions]");
 
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: el, start: "top 86%", once: true },
-        });
+        const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(el) });
 
         if (heading) {
-          tl.from(heading, {
-            opacity: 0,
-            y: 26,
-            duration: 0.75,
-            ease: "power3.out",
+          gsap.set(heading, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
+          tl.to(heading, {
+            autoAlpha: 1,
+            y: 0,
+            duration: motion.duration.long,
+            ease: motion.ease.reveal,
+            force3D: true,
           });
         }
-
         if (body) {
-          tl.from(
+          gsap.set(body, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+          tl.to(
             body,
             {
-              opacity: 0,
-              y: 18,
-              duration: 0.6,
-              ease: "power3.out",
+              autoAlpha: 1,
+              y: 0,
+              duration: motion.duration.medium,
+              ease: motion.ease.reveal,
+              force3D: true,
             },
-            "-=0.4",
+            "-=0.48",
           );
         }
-
         if (actions) {
-          tl.from(
+          gsap.set(actions, { autoAlpha: 0, y: 10, force3D: true });
+          tl.to(
             actions,
             {
-              opacity: 0,
-              y: 14,
-              duration: 0.55,
-              ease: "power2.out",
+              autoAlpha: 1,
+              y: 0,
+              duration: motion.duration.short,
+              ease: motion.ease.revealSoft,
+              force3D: true,
             },
-            "-=0.32",
+            "-=0.35",
           );
         }
       }
+
+      refreshScrollTriggers();
     }, ref);
-    }, 32);
 
     return () => {
-      clearTimeout(id);
       ctx?.revert();
+      showTargets([el, ...childrenTargets]);
     };
   }, [variant]);
 

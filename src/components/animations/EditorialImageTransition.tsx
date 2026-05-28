@@ -1,18 +1,24 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { prefersReducedMotion } from "@/lib/motion";
+import {
+  motion,
+  prefersReducedMotion,
+  refreshScrollTriggers,
+  revealScrollTrigger,
+  showTargets,
+} from "@/lib/motion";
 
 type Props = {
   src: string;
   alt: string;
   className?: string;
-  /** When false, skip viewport breakout (use inside an already full-bleed section). */
+  children?: ReactNode;
   breakout?: boolean;
-  /** Skip Next optimizer — use for large local PNGs in /public. */
   unoptimized?: boolean;
 };
 
@@ -20,6 +26,7 @@ export default function EditorialImageTransition({
   src,
   alt,
   className,
+  children,
   breakout = true,
   unoptimized = false,
 }: Props) {
@@ -27,61 +34,59 @@ export default function EditorialImageTransition({
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
 
-    gsap.registerPlugin(ScrollTrigger);
     const figure = el.querySelector<HTMLElement>("[data-editorial-image-figure]");
     const image = el.querySelector<HTMLElement>("[data-editorial-image]");
+    const content = el.querySelectorAll<HTMLElement>("[data-image-reveal-content]");
     if (!figure || !image) return;
 
+    if (prefersReducedMotion()) {
+      showTargets([figure, ...content]);
+      gsap.set(image, { yPercent: 0, clearProps: "transform" });
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
     let ctx: gsap.Context | undefined;
 
-    const id = setTimeout(() => {
-      ctx = gsap.context(() => {
-        gsap.set(figure, { opacity: 1, y: 0, scale: 1 });
+    ctx = gsap.context(() => {
+      gsap.set(figure, { autoAlpha: 0, y: 28, force3D: true });
+      if (content.length) gsap.set(content, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
 
-        gsap.fromTo(
-          figure,
-          { y: 34, scale: 0.988 },
+      const revealTl = gsap.timeline({
+        scrollTrigger: revealScrollTrigger(el),
+      });
+
+      revealTl.to(figure, {
+        autoAlpha: 1,
+        y: 0,
+        duration: motion.duration.image,
+        ease: motion.ease.reveal,
+        force3D: true,
+      });
+
+      if (content.length) {
+        revealTl.to(
+          content,
           {
+            autoAlpha: 1,
             y: 0,
-            scale: 1,
-            duration: 1,
-            ease: "power3.out",
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: el,
-              start: "top 88%",
-              once: true,
-              invalidateOnRefresh: true,
-            },
+            duration: motion.duration.medium,
+            ease: motion.ease.reveal,
+            stagger: 0.08,
+            force3D: true,
           },
+          "-=0.55",
         );
+      }
 
-        gsap.fromTo(
-          image,
-          { yPercent: -3 },
-          {
-            yPercent: 3,
-            ease: "none",
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: el,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.7,
-              invalidateOnRefresh: true,
-            },
-          },
-        );
-      }, ref);
-
-      ScrollTrigger.refresh();
-    }, 32);
+      refreshScrollTriggers();
+    }, ref);
 
     return () => {
-      clearTimeout(id);
       ctx?.revert();
+      showTargets([figure, ...content]);
     };
   }, []);
 
@@ -93,11 +98,12 @@ export default function EditorialImageTransition({
     <div
       ref={ref}
       data-editorial-image-transition
+      data-parallax-image
       className={`${layoutClass} ${className ?? ""}`.trim()}
     >
       <figure
         data-editorial-image-figure
-        className="relative aspect-[16/10] w-full overflow-hidden opacity-100 md:aspect-auto md:h-[min(72vh,720px)]"
+        className="relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:h-[min(72vh,720px)]"
       >
         <Image
           src={src}
@@ -110,6 +116,7 @@ export default function EditorialImageTransition({
           unoptimized={unoptimized}
         />
       </figure>
+      {children}
     </div>
   );
 }

@@ -4,7 +4,13 @@ import { useEffect, useRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { prefersReducedMotion } from "@/lib/motion";
+import {
+  motion,
+  prefersReducedMotion,
+  refreshScrollTriggers,
+  revealScrollTrigger,
+  showTargets,
+} from "@/lib/motion";
 
 type Props = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
@@ -15,35 +21,37 @@ export default function StaggerCards({ children, className, ...rest }: Props) {
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
+
+    const cards = el.querySelectorAll<HTMLElement>("[data-card]");
+
+    if (prefersReducedMotion()) {
+      showTargets(cards);
+      return;
+    }
+
+    if (!cards.length) return;
 
     gsap.registerPlugin(ScrollTrigger);
     let ctx: gsap.Context | undefined;
 
-    const id = setTimeout(() => {
     ctx = gsap.context(() => {
-      const cards = el.querySelectorAll<HTMLElement>("[data-card]");
-      if (!cards.length) return;
-
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 20, scale: 0.95 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.55,
-          ease: "back.out(1.2)",
-          stagger: 0.1,
-          scrollTrigger: { trigger: el, start: "top 88%", once: true },
-        }
-      );
+      gsap.set(cards, { autoAlpha: 0, y: 18, force3D: true });
+      gsap.to(cards, {
+        autoAlpha: 1,
+        y: 0,
+        duration: motion.duration.long,
+        ease: motion.ease.reveal,
+        stagger: 0.09,
+        force3D: true,
+        scrollTrigger: revealScrollTrigger(el),
+      });
+      refreshScrollTriggers();
     }, ref);
-    }, 32);
 
     return () => {
-      clearTimeout(id);
       ctx?.revert();
+      showTargets(cards);
     };
   }, []);
 

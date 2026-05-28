@@ -4,92 +4,107 @@ import { useEffect, useRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { prefersReducedMotion } from "@/lib/motion";
+import {
+  motion,
+  prefersReducedMotion,
+  refreshScrollTriggers,
+  revealScrollTrigger,
+  showTargets,
+} from "@/lib/motion";
 
 type Props = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
 };
-
-/** Fires when the element has entered the viewport (not before). */
-const visibleStart = "top 88%";
 
 export default function EditorialRowsReveal({ children, className, ...rest }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
+
+    const heading = el.querySelector<HTMLElement>("[data-section-heading]");
+    const rows = el.querySelectorAll<HTMLElement>("[data-editorial-row]");
+    const rowParts = el.querySelectorAll(
+      "[data-row-index], [data-row-title], [data-row-body]",
+    );
+
+    if (prefersReducedMotion()) {
+      showTargets([heading, ...rows, ...rowParts].filter(Boolean));
+      return;
+    }
+
+    if (!heading && !rows.length) return;
 
     gsap.registerPlugin(ScrollTrigger);
     let ctx: gsap.Context | undefined;
 
-    const id = setTimeout(() => {
-      ctx = gsap.context(() => {
-        const heading = el.querySelector<HTMLElement>("[data-section-heading]");
-        const rows = el.querySelectorAll<HTMLElement>("[data-editorial-row]");
-        if (!heading && !rows.length) return;
+    ctx = gsap.context(() => {
+      if (heading) {
+        gsap.set(heading, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+        gsap.to(heading, {
+          autoAlpha: 1,
+          y: 0,
+          duration: motion.duration.long,
+          ease: motion.ease.reveal,
+          force3D: true,
+          scrollTrigger: revealScrollTrigger(heading),
+        });
+      }
 
-        const scrollConfig = {
-          start: visibleStart,
-          once: true,
-          toggleActions: "play none none none" as const,
-        };
+      rows.forEach((row) => {
+        const index = row.querySelector<HTMLElement>("[data-row-index]");
+        const title = row.querySelector<HTMLElement>("[data-row-title]");
+        const body = row.querySelector<HTMLElement>("[data-row-body]");
 
-        if (heading) {
-          gsap.from(heading, {
-            opacity: 0,
-            y: 22,
-            duration: 0.7,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: heading,
-              ...scrollConfig,
-            },
+        const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(row) });
+
+        if (index) {
+          gsap.set(index, { autoAlpha: 0, x: -8, force3D: true });
+          tl.to(index, {
+            autoAlpha: 1,
+            x: 0,
+            duration: motion.duration.short,
+            ease: motion.ease.revealSoft,
+            force3D: true,
           });
         }
-
-        rows.forEach((row) => {
-          const index = row.querySelector<HTMLElement>("[data-row-index]");
-          const title = row.querySelector<HTMLElement>("[data-row-title]");
-          const body = row.querySelector<HTMLElement>("[data-row-body]");
-
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: row,
-              ...scrollConfig,
+        if (title) {
+          gsap.set(title, { autoAlpha: 0, y: 10, force3D: true });
+          tl.to(
+            title,
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: motion.duration.medium,
+              ease: motion.ease.reveal,
+              force3D: true,
             },
-          });
+            "-=0.3",
+          );
+        }
+        if (body) {
+          gsap.set(body, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+          tl.to(
+            body,
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: motion.duration.medium,
+              ease: motion.ease.reveal,
+              force3D: true,
+            },
+            "-=0.26",
+          );
+        }
+      });
 
-          if (index) {
-            tl.from(index, { opacity: 0, x: -10, duration: 0.45, ease: "power2.out" });
-          }
-          if (title) {
-            tl.from(
-              title,
-              { opacity: 0, y: 14, duration: 0.5, ease: "power3.out" },
-              "-=0.28",
-            );
-          }
-          if (body) {
-            tl.from(
-              body,
-              { opacity: 0, y: 18, duration: 0.55, ease: "power3.out" },
-              "-=0.22",
-            );
-          }
-        });
-
-        ScrollTrigger.refresh();
-      }, ref);
-    }, 32);
-
-    const onLoad = () => ScrollTrigger.refresh();
-    window.addEventListener("load", onLoad);
+      refreshScrollTriggers();
+    }, ref);
 
     return () => {
-      clearTimeout(id);
-      window.removeEventListener("load", onLoad);
       ctx?.revert();
+      showTargets([heading, ...rows, ...rowParts].filter(Boolean));
     };
   }, []);
 

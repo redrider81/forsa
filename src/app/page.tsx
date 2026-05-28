@@ -34,6 +34,7 @@ export default function HomePage() {
             fill
             sizes="100vw"
             className="object-cover object-center"
+            data-hero-image
             quality={90}
             priority
             aria-hidden="true"
@@ -302,7 +303,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white">
+        <section
+          data-parallax-image-only
+          className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white"
+        >
           <EditorialImageTransition
             src="/superoffice.png"
             alt="Professionellt kontor med arbetsyta, laptop och fokuserat arbete"
@@ -355,12 +359,14 @@ export default function HomePage() {
           </ScrollReveal>
         </section>
 
-        <EditorialImageTransition
-          src="/supermeeting.png"
-          alt="Ledningsgrupp i samtal runt konferensbord i modernt mötesrum"
-          className="mt-20 md:mt-24"
-          unoptimized
-        />
+        <section data-parallax-image-only>
+          <EditorialImageTransition
+            src="/supermeeting.png"
+            alt="Ledningsgrupp i samtal runt konferensbord i modernt mötesrum"
+            className="mt-20 md:mt-24"
+            unoptimized
+          />
+        </section>
 
         {/* CTA */}
         <section data-parallax-section id="kontakt" className="py-20 md:py-24">

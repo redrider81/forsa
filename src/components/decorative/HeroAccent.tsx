@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { prefersReducedMotion, isMobile } from "@/lib/motion";
+import { isMobile, motion, prefersReducedMotion } from "@/lib/motion";
 
 export default function HeroAccent() {
   const arcRef = useRef<SVGSVGElement>(null);
@@ -18,7 +18,7 @@ export default function HeroAccent() {
           rotation: 360,
           duration: 90,
           repeat: -1,
-          ease: "none",
+          ease: motion.ease.drift,
           transformOrigin: "50% 50%",
         });
       }

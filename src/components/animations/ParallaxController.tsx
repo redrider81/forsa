@@ -4,7 +4,14 @@ import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { isMobile, prefersReducedMotion } from "@/lib/motion";
+import {
+  bindParallaxRefresh,
+  isMobile,
+  motion,
+  parallaxScrollTrigger,
+  prefersReducedMotion,
+  refreshScrollTriggers,
+} from "@/lib/motion";
 
 type Props = {
   children: ReactNode;
@@ -18,44 +25,47 @@ export default function ParallaxController({ children }: Props) {
     if (!root || prefersReducedMotion()) return;
 
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
     let ctx: gsap.Context | undefined;
 
-    const id = setTimeout(() => {
-      ctx = gsap.context(() => {
-        const mobile = isMobile();
+    ctx = gsap.context(() => {
+      const mobile = isMobile();
+      const shift = mobile
+        ? motion.parallax.imageYPercent.mobile
+        : motion.parallax.imageYPercent.desktop;
+      const nestedShift = mobile
+        ? motion.parallax.imageYPercentNested.mobile
+        : motion.parallax.imageYPercentNested.desktop;
+      const scrub = mobile
+        ? motion.parallax.scrubImage.mobile
+        : motion.parallax.scrubImage.desktop;
 
-        const sections = root.querySelectorAll<HTMLElement>(
-          "[data-parallax-section]:not([data-hero-reveal-first])"
-        );
-        sections.forEach((section) => {
-          const shift = mobile ? 8 : 14;
-          const scrubDelay = mobile ? 1 : 1.35;
-          gsap.fromTo(
-            section,
-            { y: shift },
-            {
-              y: -shift,
-              ease: "none",
-              scrollTrigger: {
-                trigger: section,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: scrubDelay,
-              },
-            }
-          );
-        });
-      }, root);
+      root.querySelectorAll<HTMLElement>("[data-parallax-image]:not([data-hero-image])").forEach(
+        (block) => {
+          const inner = block.querySelector<HTMLElement>("[data-editorial-image]");
+          if (!inner) return;
 
-      ScrollTrigger.refresh();
-    }, 32);
+          const nested = Boolean(block.closest("[data-parallax-section]"));
+          const amount = nested ? nestedShift : shift;
 
-    const onResize = () => ScrollTrigger.refresh();
-    window.addEventListener("resize", onResize);
+          gsap.set(inner, { yPercent: -amount, force3D: true });
+          gsap.to(inner, {
+            yPercent: amount,
+            ease: motion.ease.drift,
+            force3D: true,
+            scrollTrigger: parallaxScrollTrigger(block, { scrub }),
+          });
+        },
+      );
+
+      refreshScrollTriggers();
+    }, root);
+
+    const unbindRefresh = bindParallaxRefresh(() => refreshScrollTriggers());
 
     return () => {
-      clearTimeout(id);
-      window.removeEventListener("resize", onResize);
+      unbindRefresh();
       ctx?.revert();
     };
   }, []);
