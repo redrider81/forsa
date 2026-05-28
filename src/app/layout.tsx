@@ -38,9 +38,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-zinc-100 text-zinc-900">
-        <a href="#main-content" className="skip-link">
-          Hoppa till innehåll
-        </a>
         <SiteShell>{children}</SiteShell>
         <SiteFooter />
       </body>

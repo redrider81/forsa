@@ -18,7 +18,7 @@ const relevanceList = [
 ];
 
 const focusList = [
-  "The team&apos;s shared purpose in daily work.",
+  "The team's shared purpose in daily work.",
   "Collaboration and ownership in tasks and delivery.",
   "Communication and feedback in the team.",
   "Psychological safety at work.",

@@ -773,12 +773,12 @@ export default function SiteNavigation() {
                         <li key={item.href}>
                           <Link
                             href={localizedHref(item.href)}
-                            aria-current={pathname === item.href ? "page" : undefined}
+                            aria-current={barePathname === item.href ? "page" : undefined}
                             className={megaBlockLink}
                           >
                             <span
                               className={`${megaBlockTitle} ${
-                                pathname === item.href ? "text-[#92753a]" : ""
+                                barePathname === item.href ? "text-[#92753a]" : ""
                               }`}
                             >
                               {item.label}
@@ -797,7 +797,7 @@ export default function SiteNavigation() {
                         <li key={item.href}>
                           <Link
                             href={localizedHref(item.href)}
-                            aria-current={pathname === item.href ? "page" : undefined}
+                            aria-current={barePathname === item.href ? "page" : undefined}
                             className={megaTextLink}
                           >
                             {item.label}

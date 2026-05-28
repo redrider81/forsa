@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const relevantWhen = [
   "The matter concerns leadership, accountability, or direction.",
-  "The decision affects the organization&apos;s next step.",
+  "The decision affects the organization's next step.",
   "There is a need for confidential external support.",
   "You want to move from discussion to clearer prioritization.",
 ];
