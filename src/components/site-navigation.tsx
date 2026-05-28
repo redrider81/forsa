@@ -307,49 +307,6 @@ function MobileHeaderLanguageDropdown({
   );
 }
 
-function MobileLanguageToggle({
-  locale,
-  onSelect,
-  ariaLabel,
-  englishLabel,
-  swedishLabel,
-}: {
-  locale: Locale;
-  onSelect: (nextLocale: Locale) => void;
-  ariaLabel: string;
-  englishLabel: string;
-  swedishLabel: string;
-}) {
-  return (
-    <div role="group" aria-label={ariaLabel} className="flex gap-2">
-      <button
-        type="button"
-        aria-pressed={locale === "sv"}
-        onClick={() => onSelect("sv")}
-        className={`rounded-full px-4 py-2 text-sm font-medium tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] ${
-          locale === "sv"
-            ? "bg-zinc-900 text-white"
-            : "border border-zinc-900/12 bg-white/80 text-zinc-700 hover:border-zinc-900/20"
-        }`}
-      >
-        {swedishLabel}
-      </button>
-      <button
-        type="button"
-        aria-pressed={locale === "en"}
-        onClick={() => onSelect("en")}
-        className={`rounded-full px-4 py-2 text-sm font-medium tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] ${
-          locale === "en"
-            ? "bg-zinc-900 text-white"
-            : "border border-zinc-900/12 bg-white/80 text-zinc-700 hover:border-zinc-900/20"
-        }`}
-      >
-        {englishLabel}
-      </button>
-    </div>
-  );
-}
-
 const mobileNavLinkClass =
   "block rounded-md px-0.5 py-3.5 text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.01em] text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]";
 
@@ -1057,20 +1014,7 @@ export default function SiteNavigation() {
             </li>
           </ul>
 
-          <div className="mt-10 border-t border-zinc-900/6 pt-8">
-            <p className={sectionLabelClass()}>{t.languageSwitcher.ariaLabel}</p>
-            <div className="mt-5">
-              <MobileLanguageToggle
-                locale={locale}
-                onSelect={handleLanguageChange}
-                ariaLabel={t.languageSwitcher.ariaLabel}
-                englishLabel={t.languageSwitcher.english}
-                swedishLabel={t.languageSwitcher.swedish}
-              />
-            </div>
-          </div>
-
-          <div className="mt-10 pb-2">
+          <div className="mt-10 border-t border-zinc-900/6 pt-8 pb-2">
             <CtaLink href={localizedHref("/kontakt")} variant="primary" onClick={closeMobileMenu}>
               {t.nav.bookFirstCall}
             </CtaLink>
