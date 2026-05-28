@@ -48,9 +48,7 @@ export default function EditorialImageTransition({
     }
 
     gsap.registerPlugin(ScrollTrigger);
-    let ctx: gsap.Context | undefined;
-
-    ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       gsap.set(figure, { autoAlpha: 0, y: 28, force3D: true });
       if (content.length) gsap.set(content, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
 

@@ -508,9 +508,7 @@ export default function SiteNavigation() {
       return;
     }
 
-    let ctx: gsap.Context | undefined;
-
-    ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       gsap.fromTo(
         el,
         { autoAlpha: 0, y: -8, force3D: true },

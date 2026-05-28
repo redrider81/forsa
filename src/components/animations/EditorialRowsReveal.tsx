@@ -37,9 +37,7 @@ export default function EditorialRowsReveal({ children, className, ...rest }: Pr
     if (!heading && !rows.length) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    let ctx: gsap.Context | undefined;
-
-    ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       if (heading) {
         gsap.set(heading, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
         gsap.to(heading, {

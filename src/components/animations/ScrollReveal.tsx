@@ -42,9 +42,7 @@ export default function ScrollReveal({
     }
 
     gsap.registerPlugin(ScrollTrigger);
-    let ctx: gsap.Context | undefined;
-
-    ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       if (variant === "fadeUp") {
         gsap.set(el, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
         gsap.to(el, {

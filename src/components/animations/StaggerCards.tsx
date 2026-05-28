@@ -33,9 +33,7 @@ export default function StaggerCards({ children, className, ...rest }: Props) {
     if (!cards.length) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    let ctx: gsap.Context | undefined;
-
-    ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       gsap.set(cards, { autoAlpha: 0, y: 18, force3D: true });
       gsap.to(cards, {
         autoAlpha: 1,

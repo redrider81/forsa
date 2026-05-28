@@ -27,9 +27,7 @@ export default function ParallaxController({ children }: Props) {
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.config({ ignoreMobileResize: true });
 
-    let ctx: gsap.Context | undefined;
-
-    ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       const mobile = isMobile();
       const shift = mobile
         ? motion.parallax.imageYPercent.mobile

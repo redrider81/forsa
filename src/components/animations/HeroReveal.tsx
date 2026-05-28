@@ -32,9 +32,7 @@ export default function HeroReveal({ children, className }: Props) {
     }
 
     const mobile = isMobile();
-    let ctx: gsap.Context | undefined;
-
-    ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       if (line) gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
       if (label) gsap.set(label, { clipPath: "inset(100% 0 0 0)", autoAlpha: 0 });
       if (headline) {
