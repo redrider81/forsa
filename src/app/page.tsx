@@ -197,9 +197,10 @@ export default function HomePage() {
           </div>
           </EditorialRowsReveal>
           <EditorialImageTransition
-            src="/section-vad-forsa-hjalper-med.png"
+            src="/supertable.png"
             alt="Professionellt mötesrum med anteckningar, laptop och ledare vid konferensbordet"
             className="mt-20 md:mt-24"
+            unoptimized
           />
         </section>
 
@@ -301,6 +302,15 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white">
+          <EditorialImageTransition
+            src="/superoffice.png"
+            alt="Professionellt kontor med arbetsyta, laptop och fokuserat arbete"
+            breakout={false}
+            unoptimized
+          />
+        </section>
+
         {/* Two-col: Så arbetar Forsa */}
         <section data-parallax-section className="py-20 md:py-24">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
@@ -346,9 +356,10 @@ export default function HomePage() {
         </section>
 
         <EditorialImageTransition
-          src="/section-cta-prelude.png"
+          src="/supermeeting.png"
           alt="Ledningsgrupp i samtal runt konferensbord i modernt mötesrum"
           className="mt-20 md:mt-24"
+          unoptimized
         />
 
         {/* CTA */}

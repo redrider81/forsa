@@ -198,9 +198,10 @@ export default function HomePageEn() {
                 </div>
               </EditorialRowsReveal>
               <EditorialImageTransition
-                src="/section-vad-forsa-hjalper-med.png"
+                src="/supertable.png"
                 alt="Professional meeting room with notes, laptop, and leaders at a conference table"
                 className="mt-20 md:mt-24"
+                unoptimized
               />
             </section>
 
@@ -290,6 +291,15 @@ export default function HomePageEn() {
               </div>
             </section>
 
+            <section className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white">
+              <EditorialImageTransition
+                src="/superoffice.png"
+                alt="Professional office workspace with laptop and focused work"
+                breakout={false}
+                unoptimized
+              />
+            </section>
+
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
@@ -334,9 +344,10 @@ export default function HomePageEn() {
             </section>
 
             <EditorialImageTransition
-              src="/section-cta-prelude.png"
+              src="/supermeeting.png"
               alt="Leadership team in discussion around a conference table in a modern meeting room"
               className="mt-20 md:mt-24"
+              unoptimized
             />
 
             <section data-parallax-section id="kontakt" className="py-20 md:py-24">
