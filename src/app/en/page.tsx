@@ -35,7 +35,7 @@ export default function HomePageEn() {
         >
           <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
             <Image
-              src="/section-hero.png"
+              src="/superhero.png"
               alt=""
               fill
               sizes="100vw"
