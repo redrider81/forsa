@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "@/lib/motion";
 
-type Variant = "fadeUp" | "splitColumn" | "staggerList";
+type Variant = "fadeUp" | "splitColumn" | "staggerList" | "ctaStack";
 
 type Props = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
@@ -47,34 +47,47 @@ export default function ScrollReveal({
       if (variant === "splitColumn") {
         const left = el.querySelector<HTMLElement>("[data-col-left]");
         const right = el.querySelector<HTMLElement>("[data-col-right]");
+        const paragraphs = right?.querySelectorAll<HTMLElement>("[data-col-paragraph]");
+        const rightHasCards = Boolean(right?.querySelector("[data-card]"));
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: el, start: "top 86%", once: true },
+        });
 
         if (left) {
-          gsap.fromTo(
-            left,
-            { opacity: 0, x: -30 },
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.75,
-              ease: "power3.out",
-              scrollTrigger: { trigger: el, start: "top 86%", once: true },
-            }
-          );
+          tl.from(left, {
+            opacity: 0,
+            x: -22,
+            duration: 0.75,
+            ease: "power3.out",
+          });
         }
 
-        if (right) {
-          gsap.fromTo(
-            right,
-            { opacity: 0, y: 22 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.65,
-              ease: "power3.out",
-              delay: 0.15,
-              scrollTrigger: { trigger: el, start: "top 86%", once: true },
-            }
-          );
+        if (right && !rightHasCards) {
+          if (paragraphs?.length) {
+            tl.from(
+              paragraphs,
+              {
+                opacity: 0,
+                y: 16,
+                duration: 0.55,
+                ease: "power3.out",
+                stagger: 0.1,
+              },
+              "-=0.4",
+            );
+          } else {
+            tl.from(
+              right,
+              {
+                opacity: 0,
+                y: 20,
+                duration: 0.65,
+                ease: "power3.out",
+              },
+              "-=0.4",
+            );
+          }
         }
       }
 
@@ -92,6 +105,51 @@ export default function ScrollReveal({
               stagger: 0.07,
               scrollTrigger: { trigger: el, start: "top 88%", once: true },
             }
+          );
+        }
+      }
+
+      if (variant === "ctaStack") {
+        const heading = el.querySelector<HTMLElement>("[data-cta-heading]");
+        const body = el.querySelector<HTMLElement>("[data-cta-body]");
+        const actions = el.querySelector<HTMLElement>("[data-cta-actions]");
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: el, start: "top 86%", once: true },
+        });
+
+        if (heading) {
+          tl.from(heading, {
+            opacity: 0,
+            y: 26,
+            duration: 0.75,
+            ease: "power3.out",
+          });
+        }
+
+        if (body) {
+          tl.from(
+            body,
+            {
+              opacity: 0,
+              y: 18,
+              duration: 0.6,
+              ease: "power3.out",
+            },
+            "-=0.4",
+          );
+        }
+
+        if (actions) {
+          tl.from(
+            actions,
+            {
+              opacity: 0,
+              y: 14,
+              duration: 0.55,
+              ease: "power2.out",
+            },
+            "-=0.32",
           );
         }
       }

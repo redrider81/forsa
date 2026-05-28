@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import SiteFooter from "@/components/site-footer";
-import SiteNavigation from "@/components/site-navigation";
+import SiteShell from "@/components/site-shell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,8 +41,7 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Hoppa till innehåll
         </a>
-        <SiteNavigation />
-        {children}
+        <SiteShell>{children}</SiteShell>
         <SiteFooter />
       </body>
     </html>

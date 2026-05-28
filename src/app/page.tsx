@@ -1,9 +1,13 @@
 import CtaLink from "@/components/cta-link";
-import Link from "next/link";
 import Image from "next/image";
+import SiteNavigation from "@/components/site-navigation";
 import HeroReveal from "@/components/animations/HeroReveal";
+import ParallaxController from "@/components/animations/ParallaxController";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
+import EditorialImageTransition from "@/components/animations/EditorialImageTransition";
 import StaggerCards from "@/components/animations/StaggerCards";
+import Link from "next/link";
 
 const relevancePoints = [
   "Ni står inför ett strategiskt vägval.",
@@ -17,109 +21,199 @@ const relevancePoints = [
 export default function HomePage() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
-      <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
-
-        {/* Hero */}
-        <section className="relative overflow-hidden border-b border-zinc-300 pb-16 pt-16 md:pb-24 md:pt-24">
+      <ParallaxController>
+      {/* Hero — sticky on desktop; first section scrolls over */}
+      <section
+        data-hero-sticky
+        className="relative z-0 min-h-[min(88svh,700px)] w-full overflow-hidden md:sticky md:top-0 md:aspect-[3/2] md:max-h-[92svh] md:min-h-0"
+      >
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <Image
-            src="/hero.jpg"
+            src="/section-hero.png"
             alt=""
             fill
+            sizes="100vw"
             className="object-cover object-center"
+            quality={90}
             priority
             aria-hidden="true"
           />
-          <div className="absolute inset-0 bg-white/20" aria-hidden="true" />
-          <div className="relative z-10">
-          <HeroReveal>
-            <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
-            <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
-              Executive coaching och ledningsstöd
-            </p>
-            <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              När ledningen behöver tänka klarare.
-            </h1>
-            <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Forsa arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning
-              behöver skärpas. Vi skapar ett konfidentiellt samtalsrum för klarare tänkande, skarpare
-              prioriteringar och beslut som håller i verkligheten.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <span data-hero-cta className="inline-flex">
-                <CtaLink href="/kontakt" variant="primary">Boka ett första samtal</CtaLink>
-              </span>
-              <span data-hero-cta className="inline-flex">
-                <CtaLink href="/executive-coaching" variant="secondary">Se executive coaching</CtaLink>
-              </span>
-            </div>
-          </HeroReveal>
+        </div>
+        <SiteNavigation />
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <div className="pointer-events-auto absolute left-6 right-6 top-[64%] w-full max-w-[19rem] -translate-y-1/2 md:left-[5.5vw] md:right-auto md:top-[66%] md:max-w-md lg:max-w-lg">
+            <HeroReveal className="relative flex flex-col">
+              <div className="relative max-w-[19rem] md:max-w-md lg:max-w-lg">
+                <h1
+                  data-hero-headline
+                  className="relative inline-block rounded-2xl bg-black/18 px-4 py-3 text-4xl font-medium leading-tight tracking-tight text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)] backdrop-blur-[8px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] md:px-5 md:py-4 md:text-5xl"
+                >
+                  När ledningen behöver tänka med skärpa.
+                </h1>
+              </div>
+              <div className="mt-8 mx-auto flex w-fit flex-wrap items-center justify-center gap-3 md:mt-10 md:gap-4">
+                <span data-hero-cta className="inline-flex">
+                  <CtaLink href="/kontakt" variant="primary" translucent>
+                    Boka ett första samtal
+                  </CtaLink>
+                </span>
+                <span data-hero-cta className="inline-flex">
+                  <CtaLink href="/executive-coaching" variant="secondary" translucent>
+                    Se executive coaching
+                  </CtaLink>
+                </span>
+              </div>
+            </HeroReveal>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Two-col: Kompetens */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">
+      <div className="relative z-10 isolate bg-zinc-100">
+      <div className="mx-auto max-w-6xl px-6 pb-24 md:px-10">
+
+        {/* Two-col: Kompetens — slides over hero */}
+        <section
+          data-hero-reveal-first
+          className="relative bg-gradient-to-b from-[#f8f7f4] via-zinc-100 to-[#f3f2ee] py-20 md:py-24"
+        >
+          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16 md:gap-y-10">
+            <h2
+              data-col-left
+              className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:pr-4 md:text-[2.1rem]"
+            >
               Kompetens finns ofta redan. Klarheten gör inte alltid det.
             </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>
+            <div
+              data-col-right
+              className="space-y-7 text-[1.0625rem] leading-[1.8] text-zinc-700 md:col-span-7 md:max-w-xl md:justify-self-end"
+            >
+              <p data-col-paragraph>
                 Ledningsgrupper har sällan brist på erfarenhet. Det som oftare saknas är gemensam
                 skärpa i vad som är viktigast nu.
               </p>
-              <p>
+              <p data-col-paragraph>
                 När trycket ökar blir friktionen tydlig. Prioriteringar glider. Beslut tas, men får
                 inte fullt fäste i genomförandet.
               </p>
-              <p>Forsa arbetar där det blir avgörande att tänka klart tillsammans.</p>
+              <p data-col-paragraph>
+                Forsa arbetar där det blir avgörande att tänka klart tillsammans.
+              </p>
             </div>
           </ScrollReveal>
         </section>
 
-        {/* Cards: Vad Forsa hjälper med */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Vad Forsa hjälper med</h2>
-          <StaggerCards className="mt-10 grid gap-8 md:grid-cols-3">
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <p className="text-xs tracking-[0.18em] text-zinc-500">01</p>
-              <h3 className="text-xl font-medium">Klarhet</h3>
-              <p className="mt-4 leading-7 text-zinc-700">
-                Kärnfrågan ringas in snabbt, och bruset hålls utanför. Fokus hamnar där det gör
-                verklig skillnad.
-              </p>
+        {/* Editorial: Vad Forsa hjälper med */}
+        <section
+          data-parallax-section
+          className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white pt-20 pb-0 md:pt-24"
+        >
+          <EditorialRowsReveal className="mx-auto max-w-6xl px-6 md:px-10">
+          <h2
+            data-section-heading
+            className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]"
+          >
+            Vad Forsa hjälper med
+          </h2>
+          <div className="mt-16 border-y border-zinc-200/80">
+            <article
+              data-editorial-row
+              className="border-b border-zinc-200/80 py-12 md:py-14"
+            >
+              <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
+                <p
+                  data-row-index
+                  className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
+                >
+                  01
+                </p>
+                <h3
+                  data-row-title
+                  className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                >
+                  Klarhet
+                </h3>
+                <p
+                  data-row-body
+                  className="text-[1.0625rem] leading-[1.85] text-zinc-600 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                >
+                  Kärnfrågan ringas in snabbt, och bruset hålls utanför. Fokus hamnar där det gör
+                  verklig skillnad.
+                </p>
+              </div>
             </article>
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <p className="text-xs tracking-[0.18em] text-zinc-500">02</p>
-              <h3 className="text-xl font-medium">Beslut</h3>
-              <p className="mt-4 leading-7 text-zinc-700">
-                Underlag, avvägningar och ansvar görs tydliga. Det ger beslut som håller även efter
-                mötet.
-              </p>
+            <article
+              data-editorial-row
+              className="border-b border-zinc-200/80 py-12 md:py-14"
+            >
+              <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
+                <p
+                  data-row-index
+                  className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
+                >
+                  02
+                </p>
+                <h3
+                  data-row-title
+                  className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                >
+                  Beslut
+                </h3>
+                <p
+                  data-row-body
+                  className="text-[1.0625rem] leading-[1.85] text-zinc-600 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                >
+                  Underlag, avvägningar och ansvar görs tydliga. Det ger beslut som håller även efter
+                  mötet.
+                </p>
+              </div>
             </article>
-            <article data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <p className="text-xs tracking-[0.18em] text-zinc-500">03</p>
-              <h3 className="text-xl font-medium">Riktning</h3>
-              <p className="mt-4 leading-7 text-zinc-700">
-                Ledningen håller kurs i komplexa lägen, utan att tappa tempo eller kvalitet i
-                genomförandet.
-              </p>
+            <article data-editorial-row className="py-12 md:py-14">
+              <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
+                <p
+                  data-row-index
+                  className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
+                >
+                  03
+                </p>
+                <h3
+                  data-row-title
+                  className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                >
+                  Riktning
+                </h3>
+                <p
+                  data-row-body
+                  className="text-[1.0625rem] leading-[1.85] text-zinc-600 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                >
+                  Ledningen håller kurs i komplexa lägen, utan att tappa tempo eller kvalitet i
+                  genomförandet.
+                </p>
+              </div>
             </article>
-          </StaggerCards>
+          </div>
+          </EditorialRowsReveal>
+          <EditorialImageTransition
+            src="/section-vad-forsa-hjalper-med.png"
+            alt="Professionellt mötesrum med anteckningar, laptop och ledare vid konferensbordet"
+            className="mt-20 md:mt-24"
+          />
         </section>
 
         {/* Two-col: När Forsa är relevant */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">
+        <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
+          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
               När Forsa är relevant
             </h2>
-            <div data-col-right className="md:col-span-7">
-              <h3 className="text-xl font-medium">När mycket står på spel</h3>
-              <ScrollReveal variant="staggerList" className="mt-5">
-                <ul className="space-y-3 text-zinc-700">
+            <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
+              <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
+                När mycket står på spel
+              </h3>
+              <ScrollReveal variant="staggerList" className="mt-8">
+                <ul className="space-y-5 text-[1.0625rem] leading-[1.8] text-zinc-700">
                   {relevancePoints.map((point) => (
-                    <li key={point} data-list-item className="flex items-start gap-3 leading-relaxed">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
+                    <li key={point} data-list-item className="flex items-start gap-4">
+                      <span className="mt-[0.7rem] h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -130,65 +224,69 @@ export default function HomePage() {
         </section>
 
         {/* Cards: Tjänster */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">
+        <section
+          data-parallax-section
+          className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white py-20 md:py-24"
+        >
+          <div className="mx-auto max-w-6xl px-6 md:px-10">
+          <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
             Coaching för ledare, team och organisationer
           </h2>
-          <StaggerCards className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Link data-card href="/executive-coaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+          <StaggerCards className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Link data-card href="/executive-coaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
               <h3 className="text-xl font-medium text-zinc-900">Executive coaching</h3>
-              <p className="mt-3 grow leading-7 text-zinc-600">
+              <p className="mt-3 grow leading-7 text-zinc-700">
                 För vd:ar, grundare och seniora ledare i komplexa beslut, ansvar och rollklarhet.
               </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
                 <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                   <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
             </Link>
-            <Link data-card href="/ledningsgruppscoaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+            <Link data-card href="/ledningsgruppscoaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
               <h3 className="text-xl font-medium text-zinc-900">Ledningsgruppscoaching</h3>
-              <p className="mt-3 grow leading-7 text-zinc-600">
+              <p className="mt-3 grow leading-7 text-zinc-700">
                 För ledningsgrupper som behöver tydligare beslut, ansvar och gemensam riktning.
               </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
                 <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                   <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
             </Link>
-            <Link data-card href="/individuell-coaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+            <Link data-card href="/individuell-coaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
               <h3 className="text-xl font-medium text-zinc-900">Individuell coaching</h3>
-              <p className="mt-3 grow leading-7 text-zinc-600">
+              <p className="mt-3 grow leading-7 text-zinc-700">
                 För ledare och nyckelpersoner som behöver klarhet i roll, prioritering och påverkan.
               </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
                 <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                   <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
             </Link>
-            <Link data-card href="/team-coaching" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer">
+            <Link data-card href="/team-coaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
               <h3 className="text-xl font-medium text-zinc-900">Team coaching</h3>
-              <p className="mt-3 grow leading-7 text-zinc-600">
+              <p className="mt-3 grow leading-7 text-zinc-700">
                 För team som behöver stärka samspel, ansvar och gemensamt lärande i arbetet.
               </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
                 <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                   <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
             </Link>
-            <Link data-card href="/coachande-ledarskap" className="group flex flex-col rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] hover:border-zinc-400 cursor-pointer md:col-span-2 lg:col-span-1">
+            <Link data-card href="/coachande-ledarskap" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer md:col-span-2 lg:col-span-1">
               <h3 className="text-xl font-medium text-zinc-900">Coachande ledarskap</h3>
-              <p className="mt-3 grow leading-7 text-zinc-600">
+              <p className="mt-3 grow leading-7 text-zinc-700">
                 För organisationer som vill utveckla chefers förmåga att leda genom samtal, frågor och ansvar.
               </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
                 Läs mer
                 <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                   <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -196,16 +294,19 @@ export default function HomePage() {
               </span>
             </Link>
           </StaggerCards>
+          </div>
         </section>
 
         {/* Two-col: Så arbetar Forsa */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">
+        <section data-parallax-section className="py-20 md:py-24">
+          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
               Så arbetar Forsa
             </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <h3 className="text-xl font-medium text-zinc-900">Konfidentiellt. Affärsnära. Precist.</h3>
+            <div data-col-right className="space-y-7 text-[1.0625rem] leading-[1.8] text-zinc-700 md:col-span-7 md:max-w-xl md:justify-self-end">
+              <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
+                Konfidentiellt. Affärsnära. Precist.
+              </h3>
               <p>
                 Arbetet sker i strukturerade samtal med tydlig koppling till ert faktiska läge. Vi
                 börjar i det som är svårt på riktigt: var det skaver, vad som står still och vad som
@@ -220,13 +321,13 @@ export default function HomePage() {
         </section>
 
         {/* Two-col: Förtroende */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-tight tracking-tight">
+        <section data-parallax-section className="py-20 md:py-24">
+          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
               Förtroende
             </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <h3 className="text-xl font-medium text-zinc-900">
+            <div data-col-right className="space-y-7 text-[1.0625rem] leading-[1.8] text-zinc-700 md:col-span-7 md:max-w-xl md:justify-self-end">
+              <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
                 Göteborgsbaserat stöd för svenska företagsledningar
               </h3>
               <p>
@@ -240,24 +341,31 @@ export default function HomePage() {
           </ScrollReveal>
         </section>
 
+        <EditorialImageTransition
+          src="/section-cta-prelude.png"
+          alt="Ledningsgrupp i samtal runt konferensbord i modernt mötesrum"
+          className="mt-20 md:mt-24"
+        />
+
         {/* CTA */}
-        <section id="kontakt" className="py-16 md:py-20">
-          <ScrollReveal variant="fadeUp">
-            <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
+        <section data-parallax-section id="kontakt" className="py-20 md:py-24">
+          <ScrollReveal variant="ctaStack">
+            <h2 data-cta-heading className="max-w-4xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.65rem]">
               När nästa beslut behöver bära längre än till nästa möte
             </h2>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
+            <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] leading-[1.8] text-zinc-700">
               Om ni vill ha större skärpa i ledningens prioriteringar, ansvar och beslut, börjar vi med
               ett konfidentiellt första samtal.
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div data-cta-actions className="mt-12 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">Boka ett första samtal</CtaLink>
-              <CtaLink href="mailto:kontakt@forsa.se" variant="secondary" external>Kontakta Forsa</CtaLink>
             </div>
           </ScrollReveal>
         </section>
 
       </div>
+      </div>
+      </ParallaxController>
     </main>
   );
 }

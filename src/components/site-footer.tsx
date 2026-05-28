@@ -74,14 +74,8 @@ export default function SiteFooter() {
 
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-zinc-200 pt-6 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs text-zinc-400">© 2025 Forsa. Alla rättigheter förbehållna.</p>
-          <Link
-            href="/kontakt"
-            className="text-xs text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
-          >
-            Boka ett första samtal →
-          </Link>
+        <div className="mt-12 border-t border-zinc-200 pt-6">
+          <p className="text-xs text-zinc-400">© 2026 Forsa. Alla rättigheter förbehållna.</p>
         </div>
       </div>
     </footer>

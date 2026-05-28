@@ -148,7 +148,6 @@ export default function IndividuellCoachingPage() {
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">Boka ett första samtal</CtaLink>
-              <CtaLink href="mailto:kontakt@forsa.se" variant="secondary" external>Kontakta Forsa</CtaLink>
             </div>
           </ScrollReveal>
         </section>

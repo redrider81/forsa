@@ -1,122 +1,92 @@
 import type { Metadata } from "next";
-import CtaLink from "@/components/cta-link";
+import ContactIntakeForm from "@/components/contact-intake-form";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
-import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
   title: "Kontakt | Forsa",
-  description: "Börja med ett konfidentiellt samtal med Forsa.",
+  description:
+    "Börja med rätt samtal. Forsa arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning behöver bli tydligare.",
 };
 
-const messagePoints = [
-  "Kort beskrivning av er situation och vad som är viktigast nu.",
-  "Vilka beslut eller prioriteringar som behöver större klarhet.",
-  "Om frågan gäller executive coaching eller ledningsgruppscoaching.",
+const passarNär = [
+  "Frågan rör ledning, ansvar eller riktning.",
+  "Beslut påverkar organisationens nästa steg.",
+  "Det finns behov av konfidentiellt externt stöd.",
+  "Ni vill gå från diskussion till tydligare prioritering.",
 ];
 
-const nextSteps = [
-  "Vi bekräftar mottagandet och återkommer med förslag på första samtal.",
-  "Samtalet används för att klargöra behov, läge och nästa steg.",
-  "Om det finns god matchning föreslår vi ett upplägg med tydlig inriktning.",
+const mindreRelevant = [
+  "Allmän inspiration utan tydlig ledningsfråga.",
+  "Korta motivationsinsatser utan uppföljning.",
+  "Frågor där riktning och beslut redan är fastlagda.",
 ];
 
 export default function KontaktPage() {
   return (
-    <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
+    <main id="main-content" className="min-h-screen bg-[#f6f6f4] text-zinc-900">
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
 
         {/* Hero */}
-        <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
+        <section className="relative overflow-hidden border-b border-zinc-300/80 pb-16 md:pb-20">
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
               Kontakt
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Börja med ett konfidentiellt samtal.
+              Börja med rätt samtal.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Kontakten med Forsa hålls enkel, diskret och tydlig från första meddelandet.
+              Forsa arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och
+              riktning behöver bli tydligare. För att första samtalet ska bli relevant, beskriv
+              kort vilket läge ni står i och vad som behöver klarna.
             </p>
           </HeroReveal>
         </section>
 
-        {/* Cards: contact options */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Kontaktalternativ</h2>
-          <StaggerCards className="mt-8 grid gap-4 md:grid-cols-2">
-            <div data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <p className="text-sm tracking-wide text-zinc-500">E-post</p>
-              <a className="mt-3 inline-block text-lg text-zinc-900" href="mailto:kontakt@forsa.se">
-                kontakt@forsa.se
-              </a>
-            </div>
-            <div data-card className="rounded-2xl border border-zinc-300 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <p className="text-sm tracking-wide text-zinc-500">Plats</p>
-              <p className="mt-3 text-lg text-zinc-900">Göteborg</p>
-            </div>
-          </StaggerCards>
-        </section>
-
-        {/* List: message */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">
-            Vad du kan inkludera i första meddelandet
-          </h2>
-          <ScrollReveal variant="staggerList" className="mt-8">
-            <ul className="space-y-3 text-zinc-700">
-              {messagePoints.map((item) => (
-                <li key={item} data-list-item className="flex items-start gap-3 leading-relaxed">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </ScrollReveal>
-        </section>
-
-        {/* List: next steps */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Vad som händer nästa steg</h2>
-          <ScrollReveal variant="staggerList" className="mt-8">
-            <ul className="space-y-3 text-zinc-700">
-              {nextSteps.map((item) => (
-                <li key={item} data-list-item className="flex items-start gap-3 leading-relaxed">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </ScrollReveal>
-        </section>
-
-        {/* Two-col: confidentiality */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Konfidentialitet
-            </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>
-                All inledande dialog hanteras med diskretion. Forsa arbetar i konfidentiella
-                samtalsformat där innehåll och sammanhang behandlas med omsorg.
-              </p>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        {/* CTA */}
+        {/* Form + advisory panel */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
-            <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              När ni vill inleda dialogen
-            </h2>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <CtaLink href="mailto:kontakt@forsa.se" variant="primary" external>
-                Skriv till kontakt@forsa.se
-              </CtaLink>
-              <CtaLink href="/" variant="secondary">Till startsidan</CtaLink>
+            <div className="grid gap-16 lg:grid-cols-12 lg:gap-14">
+              <div className="lg:col-span-7">
+                <p className="mb-10 max-w-xl text-[0.9375rem] leading-[1.7] text-zinc-600">
+                  Beskriv kort läget. Ju tydligare sammanhang, desto bättre kan första samtalet
+                  användas.
+                </p>
+                <ContactIntakeForm />
+              </div>
+
+              <aside className="border-t border-zinc-300/35 pt-12 lg:col-span-5 lg:border-t-0 lg:border-l lg:border-zinc-300/25 lg:pl-14 lg:pt-2">
+                <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
+                  Rådgivande ramverk
+                </p>
+                <h2 className="mt-4 text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
+                  Passar när
+                </h2>
+
+                <ul className="mt-10 divide-y divide-zinc-300/40 border-y border-zinc-300/35">
+                  {passarNär.map((item) => (
+                    <li
+                      key={item}
+                      className="py-5 text-[1.0625rem] leading-[1.65] text-zinc-800 first:pt-5 last:pb-5"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-12 border-t border-zinc-300/30 pt-10">
+                  <h3 className="text-sm font-normal tracking-wide text-zinc-500/90">
+                    Mindre rätt när
+                  </h3>
+                  <ul className="mt-5 space-y-3 text-sm leading-[1.65] text-zinc-500/85">
+                    {mindreRelevant.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </aside>
             </div>
           </ScrollReveal>
         </section>
