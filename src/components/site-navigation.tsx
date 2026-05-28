@@ -11,9 +11,11 @@ import {
   type FocusEvent,
   type ReactNode,
 } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import { prefersReducedMotion } from "@/lib/motion";
+import { localeFromPathname, stripLocaleFromPath, toLocalePath, type Locale } from "@/lib/i18n/config";
+import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 
 const coachingPaths = [
   "/executive-coaching",
@@ -21,32 +23,6 @@ const coachingPaths = [
   "/individuell-coaching",
   "/team-coaching",
   "/coachande-ledarskap",
-] as const;
-
-const coachingAudiences = [
-  {
-    href: "/ledningsgruppscoaching",
-    label: "För ledningsgrupper",
-    text: "När ansvar, riktning och beslut behöver skärpas.",
-  },
-  {
-    href: "/executive-coaching",
-    label: "För vd & grundare",
-    text: "Konfidentiellt stöd i komplexa beslut.",
-  },
-] as const;
-
-const coachingServices = [
-  { href: "/ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
-  { href: "/executive-coaching", label: "Executive coaching" },
-  { href: "/individuell-coaching", label: "Individuell coaching" },
-  { href: "/team-coaching", label: "Team coaching" },
-  { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
-] as const;
-
-const mobileCoachingLinks = [
-  ...coachingAudiences.map((item) => ({ href: item.href, label: item.label })),
-  ...coachingServices.map((item) => ({ href: item.href, label: item.label })),
 ] as const;
 
 type CursorPosition = { left: number; width: number; opacity: number };
@@ -200,6 +176,282 @@ function NavChevron({ open }: { open?: boolean }) {
   );
 }
 
+const mobileHeaderControlCluster =
+  "flex shrink-0 items-center gap-0 rounded-full border border-zinc-900/10 bg-white/50 p-0.5 shadow-[0_1px_3px_rgba(24,24,27,0.08)] backdrop-blur-md";
+
+const mobileHeaderIconButton =
+  "inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-800 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-[1.125rem] w-[1.125rem] text-current"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.35"
+    >
+      {open ? (
+        <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
+      ) : (
+        <>
+          <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+const mobileHeaderLangTrigger =
+  "inline-flex h-9 items-center gap-1 rounded-full px-2.5 text-[0.6875rem] font-medium tracking-[0.18em] text-zinc-800/90 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+function MobileHeaderLanguageDropdown({
+  locale,
+  pathname,
+}: {
+  locale: Locale;
+  pathname: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+  const t = getDictionaryForOptionalLocale(locale);
+
+  const languageOptions: { code: Locale; shortLabel: string; ariaLabel: string }[] = [
+    { code: "sv", shortLabel: "SV", ariaLabel: t.languageSwitcher.swedish },
+    { code: "en", shortLabel: "EN", ariaLabel: t.languageSwitcher.english },
+  ];
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handlePointerDown);
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("mousedown", handlePointerDown);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [open]);
+
+  return (
+    <div ref={menuRef} className="relative px-0.5">
+      <button
+        type="button"
+        aria-label={t.languageSwitcher.ariaLabel}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={menuId}
+        onClick={() => setOpen((prev) => !prev)}
+        className={mobileHeaderLangTrigger}
+      >
+        {locale === "sv" ? "SV" : "EN"}
+        <NavChevron open={open} />
+      </button>
+      <div
+        id={menuId}
+        role="listbox"
+        aria-label={t.languageSwitcher.ariaLabel}
+        className={`absolute right-0 top-[calc(100%+0.375rem)] z-[130] min-w-[4.5rem] overflow-hidden rounded-xl border border-zinc-900/10 bg-white/95 py-1 shadow-[0_8px_28px_-14px_rgba(24,24,27,0.28)] backdrop-blur-md ${
+          open ? "block" : "hidden"
+        }`}
+      >
+        {languageOptions.map((option) => {
+          const isActive = locale === option.code;
+          const optionClass =
+            "block px-3 py-2 text-center text-[0.6875rem] font-medium tracking-[0.18em]";
+
+          if (isActive) {
+            return (
+              <span
+                key={option.code}
+                role="option"
+                aria-selected="true"
+                aria-label={option.ariaLabel}
+                className={`${optionClass} text-zinc-950`}
+              >
+                {option.shortLabel}
+              </span>
+            );
+          }
+
+          return (
+            <Link
+              key={option.code}
+              href={toLocalePath(pathname, option.code)}
+              role="option"
+              aria-selected="false"
+              aria-label={option.ariaLabel}
+              onClick={() => setOpen(false)}
+              className={`${optionClass} text-zinc-600 transition-colors hover:bg-zinc-100/80 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-900/40`}
+            >
+              {option.shortLabel}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function MobileLanguageToggle({
+  locale,
+  onSelect,
+  ariaLabel,
+  englishLabel,
+  swedishLabel,
+}: {
+  locale: Locale;
+  onSelect: (nextLocale: Locale) => void;
+  ariaLabel: string;
+  englishLabel: string;
+  swedishLabel: string;
+}) {
+  return (
+    <div role="group" aria-label={ariaLabel} className="flex gap-2">
+      <button
+        type="button"
+        aria-pressed={locale === "sv"}
+        onClick={() => onSelect("sv")}
+        className={`rounded-full px-4 py-2 text-sm font-medium tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] ${
+          locale === "sv"
+            ? "bg-zinc-900 text-white"
+            : "border border-zinc-900/12 bg-white/80 text-zinc-700 hover:border-zinc-900/20"
+        }`}
+      >
+        {swedishLabel}
+      </button>
+      <button
+        type="button"
+        aria-pressed={locale === "en"}
+        onClick={() => onSelect("en")}
+        className={`rounded-full px-4 py-2 text-sm font-medium tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] ${
+          locale === "en"
+            ? "bg-zinc-900 text-white"
+            : "border border-zinc-900/12 bg-white/80 text-zinc-700 hover:border-zinc-900/20"
+        }`}
+      >
+        {englishLabel}
+      </button>
+    </div>
+  );
+}
+
+const mobileNavLinkClass =
+  "block rounded-md px-0.5 py-3.5 text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.01em] text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]";
+
+const mobileSubLinkClass =
+  "block rounded-md py-2.5 pl-3 text-[0.9375rem] leading-[1.45] text-zinc-600 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] aria-[current=page]:font-medium aria-[current=page]:text-[#92753a]";
+
+function LanguageMenu({
+  locale,
+  onSelect,
+  ariaLabel,
+  align = "right",
+}: {
+  locale: Locale;
+  onSelect: (nextLocale: Locale) => void;
+  ariaLabel: string;
+  align?: "left" | "right";
+}) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handlePointerDown);
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("mousedown", handlePointerDown);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [open]);
+
+  const alignClass = align === "left" ? "left-0" : "right-0";
+
+  return (
+    <div ref={menuRef} className="relative">
+      <button
+        type="button"
+        aria-label={ariaLabel}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={menuId}
+        onClick={() => setOpen((prev) => !prev)}
+        className="inline-flex items-center gap-1.5 rounded-full border border-zinc-900/80 bg-zinc-900/80 px-3 py-1.5 text-xs font-medium tracking-wide text-white transition-colors hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100"
+      >
+        {locale === "en" ? "EN" : "SV"}
+        <NavChevron open={open} />
+      </button>
+      <div
+        id={menuId}
+        role="menu"
+        aria-label={ariaLabel}
+        className={`absolute ${alignClass} z-[120] mt-2 min-w-[5rem] rounded-xl border border-zinc-900/20 bg-zinc-950/95 p-1.5 shadow-lg backdrop-blur ${
+          open ? "block" : "hidden"
+        }`}
+      >
+        <button
+          type="button"
+          role="menuitemradio"
+          aria-checked={locale === "en"}
+          onClick={() => {
+            onSelect("en");
+            setOpen(false);
+          }}
+          className={`block w-full rounded-lg px-2 py-1.5 text-left text-xs font-medium tracking-wide transition-colors ${
+            locale === "en" ? "bg-zinc-800 text-white" : "text-zinc-200 hover:bg-zinc-800/70"
+          }`}
+        >
+          EN
+        </button>
+        <button
+          type="button"
+          role="menuitemradio"
+          aria-checked={locale === "sv"}
+          onClick={() => {
+            onSelect("sv");
+            setOpen(false);
+          }}
+          className={`block w-full rounded-lg px-2 py-1.5 text-left text-xs font-medium tracking-wide transition-colors ${
+            locale === "sv" ? "bg-zinc-800 text-white" : "text-zinc-200 hover:bg-zinc-800/70"
+          }`}
+        >
+          SV
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function isCoachingActive(pathname: string) {
   return coachingPaths.some((path) => pathname === path);
 }
@@ -223,7 +475,57 @@ const megaTextLink = `group -mx-2 block rounded-sm px-2 py-1.5 text-[0.9375rem] 
 
 export default function SiteNavigation() {
   const pathname = usePathname();
+  const router = useRouter();
+  const locale = localeFromPathname(pathname);
+  const barePathname = stripLocaleFromPath(pathname);
+  const t = getDictionaryForOptionalLocale(locale);
+  const localizedHref = (path: string) => toLocalePath(path, locale);
+  const coachingAudiences =
+    locale === "sv"
+      ? [
+          {
+            href: "/ledningsgruppscoaching",
+            label: "För ledningsgrupper",
+            text: "När ansvar, riktning och beslut behöver skärpas.",
+          },
+          {
+            href: "/executive-coaching",
+            label: "För vd & grundare",
+            text: "Konfidentiellt stöd i komplexa beslut.",
+          },
+        ]
+      : [
+          {
+            href: "/ledningsgruppscoaching",
+            label: "For leadership teams",
+            text: "When accountability, direction, and decisions need sharper focus.",
+          },
+          {
+            href: "/executive-coaching",
+            label: "For CEOs & founders",
+            text: "Confidential support for complex decisions.",
+          },
+        ];
+  const coachingServices =
+    locale === "sv"
+      ? [
+          { href: "/ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
+          { href: "/executive-coaching", label: "Executive coaching" },
+          { href: "/individuell-coaching", label: "Individuell coaching" },
+          { href: "/team-coaching", label: "Team coaching" },
+          { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
+        ]
+      : [
+          { href: "/ledningsgruppscoaching", label: "Leadership Team Coaching" },
+          { href: "/executive-coaching", label: "Executive Coaching" },
+          { href: "/individuell-coaching", label: "Individual Coaching" },
+          { href: "/team-coaching", label: "Team Coaching" },
+          { href: "/coachande-ledarskap", label: "Coaching Leadership" },
+        ];
   const headerRef = useRef<HTMLElement>(null);
+  const mobileMenuId = useId();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileCoachingOpen, setMobileCoachingOpen] = useState(false);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const megaPanelRef = useRef<HTMLDivElement>(null);
   const coachingTabRef = useRef<HTMLLIElement>(null);
@@ -231,8 +533,8 @@ export default function SiteNavigation() {
   const coachingMenuId = useId();
   const [megaOpen, setMegaOpen] = useState(false);
   const [panelTop, setPanelTop] = useState(0);
-  const coachingActive = isCoachingActive(pathname);
-  const isHome = pathname === "/";
+  const coachingActive = isCoachingActive(barePathname);
+  const isHome = barePathname === "/";
 
   const updatePanelTop = useCallback(() => {
     if (headerRef.current) {
@@ -365,17 +667,68 @@ export default function SiteNavigation() {
     closeMega();
   };
 
+  const handleLanguageChange = (nextLocale: Locale) => {
+    if (nextLocale === locale) return;
+    router.push(toLocalePath(pathname, nextLocale));
+    setMobileOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileOpen((prev) => {
+      if (!prev) {
+        setMobileCoachingOpen(coachingActive);
+      }
+      return !prev;
+    });
+  };
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+      }
+    };
+
+    const handlePopState = () => {
+      setMobileOpen(false);
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEscape);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [mobileOpen]);
+
   const headerSurface = isHome
-    ? megaOpen
+    ? megaOpen || mobileOpen
       ? "border-zinc-900/10 bg-white/40"
       : "border-transparent bg-transparent"
     : "border-zinc-200/80 bg-zinc-50/90";
+
+  const mobileHeaderSurface = isHome
+    ? mobileOpen
+      ? "border-zinc-900/10 bg-white/90 backdrop-blur-md"
+      : "border-transparent bg-transparent"
+    : "border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-sm";
 
   const logoRingOffset = isHome
     ? "focus-visible:ring-offset-white/40"
     : "focus-visible:ring-offset-zinc-100";
 
   return (
+    <>
     <header
       ref={headerRef}
       className={`isolate z-[100] w-full backdrop-blur-[2px] transition-[background-color,border-color] duration-150 ${
@@ -384,26 +737,26 @@ export default function SiteNavigation() {
     >
       <div className="hidden w-full items-center justify-between px-6 py-5 md:flex md:px-10 lg:px-14 lg:py-6">
         <Link
-          href="/"
+          href={localizedHref("/")}
           className={`shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
           <span className="block text-lg font-semibold tracking-[0.22em] text-zinc-900 lg:text-xl">FORSA</span>
         </Link>
 
-        <nav aria-label="Huvudnavigation" className="ml-auto">
+        <nav aria-label={t.nav.mainAria} className="ml-auto">
           <DesktopNavTabs pathname={pathname} coachingActive={coachingActive}>
             {({ listRef, setPosition }) => (
               <>
                 <NavHoverTarget
                   as="link"
-                  href="/"
-                  aria-current={pathname === "/" ? "page" : undefined}
+                  href={localizedHref("/")}
+                  aria-current={barePathname === "/" ? "page" : undefined}
                   listRef={listRef}
                   setPosition={setPosition}
-                  dataNavActive={pathname === "/"}
-                  className={navTabClass(pathname === "/", isHome)}
+                  dataNavActive={barePathname === "/"}
+                  className={navTabClass(barePathname === "/", isHome)}
                 >
-                  Start
+                  {t.nav.home}
                 </NavHoverTarget>
 
                 <li
@@ -440,7 +793,7 @@ export default function SiteNavigation() {
                         }
                       }}
                     >
-                      Coaching
+                      {t.nav.coaching}
                       <NavChevron open={megaOpen} />
                     </button>
 
@@ -457,12 +810,12 @@ export default function SiteNavigation() {
               <div className="mx-auto max-w-6xl px-6 py-8 md:px-10 md:py-9">
                 <div className="grid gap-8 md:grid-cols-[1fr_1.2fr_0.7fr] md:gap-10">
                   <div>
-                    <p className={sectionLabelClass()}>För ledningen</p>
+                    <p className={sectionLabelClass()}>{t.nav.leadershipLabel}</p>
                     <ul className="mt-4 space-y-5">
                       {coachingAudiences.map((item) => (
                         <li key={item.href}>
                           <Link
-                            href={item.href}
+                            href={localizedHref(item.href)}
                             aria-current={pathname === item.href ? "page" : undefined}
                             className={megaBlockLink}
                           >
@@ -481,12 +834,12 @@ export default function SiteNavigation() {
                   </div>
 
                   <div>
-                    <p className={sectionLabelClass()}>Coaching</p>
+                    <p className={sectionLabelClass()}>{t.nav.coachingLabel}</p>
                     <ul className="mt-4 space-y-2.5">
                       {coachingServices.map((item) => (
                         <li key={item.href}>
                           <Link
-                            href={item.href}
+                            href={localizedHref(item.href)}
                             aria-current={pathname === item.href ? "page" : undefined}
                             className={megaTextLink}
                           >
@@ -498,17 +851,16 @@ export default function SiteNavigation() {
                   </div>
 
                   <div className="flex max-w-[16rem] flex-col md:max-w-none">
-                    <p className={sectionLabelClass()}>Börja här</p>
+                    <p className={sectionLabelClass()}>{t.nav.startHereLabel}</p>
                     <p className="mt-4 text-sm font-medium leading-snug tracking-tight text-zinc-900">
-                      Osäker på vilket stöd som passar?
+                      {t.nav.unsureTitle}
                     </p>
                     <p className="mt-3 text-sm leading-6 text-zinc-600">
-                      Boka ett första konfidentiellt samtal så ringar vi in var ledningen behöver
-                      mest klarhet.
+                      {t.nav.unsureBody}
                     </p>
                     <div className="mt-6">
-                      <CtaLink href="/kontakt" variant="secondary">
-                        Boka ett första samtal →
+                      <CtaLink href={localizedHref("/kontakt")} variant="secondary">
+                        {t.nav.bookFirstCall}
                       </CtaLink>
                     </div>
                   </div>
@@ -521,14 +873,14 @@ export default function SiteNavigation() {
 
                 <NavHoverTarget
                   as="link"
-                  href="/om-forsa"
-                  aria-current={pathname === "/om-forsa" ? "page" : undefined}
+                  href={localizedHref("/om-forsa")}
+                  aria-current={barePathname === "/om-forsa" ? "page" : undefined}
                   listRef={listRef}
                   setPosition={setPosition}
-                  dataNavActive={pathname === "/om-forsa"}
-                  className={navTabClass(pathname === "/om-forsa", isHome)}
+                  dataNavActive={barePathname === "/om-forsa"}
+                  className={navTabClass(barePathname === "/om-forsa", isHome)}
                 >
-                  Om Forsa
+                  {t.nav.about}
                 </NavHoverTarget>
 
                 <li aria-hidden="true" className="flex list-none items-center px-0.5">
@@ -537,116 +889,195 @@ export default function SiteNavigation() {
 
                 <NavHoverTarget
                   as="link"
-                  href="/kontakt"
-                  aria-current={pathname === "/kontakt" ? "page" : undefined}
+                  href={localizedHref("/kontakt")}
+                  aria-current={barePathname === "/kontakt" ? "page" : undefined}
                   listRef={listRef}
                   setPosition={setPosition}
-                  dataNavActive={pathname === "/kontakt"}
-                  className={navTabClass(pathname === "/kontakt", isHome)}
+                  dataNavActive={barePathname === "/kontakt"}
+                  className={navTabClass(barePathname === "/kontakt", isHome)}
                 >
-                  Kontakt
+                  {t.nav.contact}
                 </NavHoverTarget>
+                <li className="ml-2 list-none">
+                  <LanguageMenu
+                    locale={locale}
+                    onSelect={handleLanguageChange}
+                    ariaLabel={t.languageSwitcher.ariaLabel}
+                    align="right"
+                  />
+                </li>
               </>
             )}
           </DesktopNavTabs>
         </nav>
       </div>
 
-      <div className="flex w-full items-center justify-between border-b border-zinc-900/5 px-6 py-5 md:hidden md:px-10">
+      <div
+        className={`relative z-[120] flex w-full items-center gap-3 px-5 py-4 md:hidden md:px-10 ${mobileHeaderSurface}`}
+      >
         <Link
-          href="/"
-          className={`text-lg font-semibold tracking-[0.22em] text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
+          href={localizedHref("/")}
+          className={`min-w-0 shrink-0 text-[1.05rem] font-semibold tracking-[0.24em] text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
           FORSA
         </Link>
+        <div className={mobileHeaderControlCluster + " ml-auto"}>
+          <MobileHeaderLanguageDropdown locale={locale} pathname={pathname} />
+          <span aria-hidden="true" className="mx-0.5 h-4 w-px bg-zinc-900/12" />
+          <button
+            type="button"
+            aria-label={mobileOpen ? t.nav.menuClose : t.nav.menuOpen}
+            aria-expanded={mobileOpen}
+            aria-controls={mobileMenuId}
+            onClick={toggleMobileMenu}
+            className={mobileHeaderIconButton}
+          >
+            <MenuIcon open={mobileOpen} />
+          </button>
+        </div>
       </div>
+    </header>
 
+    <div
+      className={`fixed inset-0 z-[110] md:hidden motion-reduce:transition-none transition-[visibility,opacity] duration-200 ease-out ${
+        mobileOpen ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"
+      }`}
+      aria-hidden={!mobileOpen}
+    >
+      <button
+        type="button"
+        tabIndex={mobileOpen ? 0 : -1}
+        aria-label={t.nav.menuClose}
+        className="absolute inset-0 bg-zinc-950/35 backdrop-blur-[2px]"
+        onClick={closeMobileMenu}
+      />
       <nav
-        aria-label="Mobil navigation"
-        className={`border-t px-6 py-4 md:hidden ${
-          isHome ? "border-zinc-900/10 bg-white/30 backdrop-blur-sm" : "border-zinc-300"
+        id={mobileMenuId}
+        aria-label={t.nav.mobileAria}
+        role="dialog"
+        aria-modal="true"
+        className={`absolute inset-y-0 right-0 flex w-full max-w-[min(100%,22.5rem)] flex-col border-l border-zinc-900/8 bg-[#f7f6f3]/98 shadow-[-16px_0_48px_-28px_rgba(24,24,27,0.28)] motion-reduce:transition-none transition-transform duration-300 ease-out ${
+          mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <ul className="space-y-1 text-sm">
-          <li>
-            <Link
-              href="/"
-              aria-current={pathname === "/" ? "page" : undefined}
-              className={`inline-flex rounded-full px-3 py-1.5 ${
-                pathname === "/"
-                  ? "bg-zinc-200 text-zinc-900"
-                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-              }`}
-            >
-              Start
-            </Link>
-          </li>
-          <li>
-            <details className="group">
-              <summary
-                className={`cursor-pointer list-none rounded-full px-3 py-1.5 marker:content-none ${
-                  coachingActive
-                    ? "bg-zinc-200 text-zinc-900"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        <div className="flex items-center justify-between border-b border-zinc-900/6 px-6 py-5">
+          <span className="text-[0.8125rem] font-semibold tracking-[0.24em] text-zinc-900">FORSA</span>
+          <button
+            type="button"
+            aria-label={t.nav.menuClose}
+            onClick={closeMobileMenu}
+            className={`${mobileHeaderIconButton} border border-zinc-900/10 bg-white/60`}
+          >
+            <MenuIcon open />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-7">
+          <ul className="divide-y divide-zinc-900/6">
+            <li>
+              <Link
+                href={localizedHref("/")}
+                aria-current={barePathname === "/" ? "page" : undefined}
+                onClick={closeMobileMenu}
+                className={`${mobileNavLinkClass} ${barePathname === "/" ? "text-[#92753a]" : ""}`}
+              >
+                {t.nav.home}
+              </Link>
+            </li>
+            <li className="py-1">
+              <button
+                type="button"
+                aria-expanded={mobileCoachingOpen}
+                onClick={() => setMobileCoachingOpen((prev) => !prev)}
+                className={`flex w-full items-center justify-between rounded-lg px-1 py-3 text-left text-[1.0625rem] font-medium leading-snug text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 ${
+                  coachingActive ? "text-[#92753a]" : ""
                 }`}
               >
-                <span className="inline-flex items-center gap-2">
-                  Coaching
-                  <span
-                    aria-hidden="true"
-                    className="text-xs text-zinc-500 transition group-open:rotate-180"
-                  >
-                    ▾
-                  </span>
-                </span>
-              </summary>
-              <ul className="mt-2 space-y-1 border-l border-zinc-300 pl-4">
-                {mobileCoachingLinks.map((item) => (
-                  <li key={`${item.href}-${item.label}`}>
-                    <Link
-                      href={item.href}
-                      aria-current={pathname === item.href ? "page" : undefined}
-                      className={`inline-flex rounded-full px-3 py-1.5 ${
-                        pathname === item.href
-                          ? "bg-zinc-200 text-zinc-900"
-                          : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          </li>
-          <li>
-            <Link
-              href="/om-forsa"
-              aria-current={pathname === "/om-forsa" ? "page" : undefined}
-              className={`inline-flex rounded-full px-3 py-1.5 ${
-                pathname === "/om-forsa"
-                  ? "bg-zinc-200 text-zinc-900"
-                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-              }`}
-            >
-              Om Forsa
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/kontakt"
-              aria-current={pathname === "/kontakt" ? "page" : undefined}
-              className={`inline-flex rounded-full px-3 py-1.5 ${
-                pathname === "/kontakt"
-                  ? "bg-zinc-200 text-zinc-900"
-                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-              }`}
-            >
-              Kontakt
-            </Link>
-          </li>
-        </ul>
+                {t.nav.coaching}
+                <NavChevron open={mobileCoachingOpen} />
+              </button>
+              <div
+                className={`overflow-hidden motion-reduce:transition-none transition-[max-height,opacity] duration-200 ease-out ${
+                  mobileCoachingOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="pb-4 pl-1">
+                  <p className={`${sectionLabelClass()} pt-2`}>{t.nav.leadershipLabel}</p>
+                  <ul className="mt-2 space-y-0.5">
+                    {coachingAudiences.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={localizedHref(item.href)}
+                          aria-current={barePathname === item.href ? "page" : undefined}
+                          onClick={closeMobileMenu}
+                          className={mobileSubLinkClass}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className={`${sectionLabelClass()} mt-5`}>{t.nav.coachingLabel}</p>
+                  <ul className="mt-2 space-y-0.5">
+                    {coachingServices.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={localizedHref(item.href)}
+                          aria-current={barePathname === item.href ? "page" : undefined}
+                          onClick={closeMobileMenu}
+                          className={mobileSubLinkClass}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li>
+              <Link
+                href={localizedHref("/om-forsa")}
+                aria-current={barePathname === "/om-forsa" ? "page" : undefined}
+                onClick={closeMobileMenu}
+                className={`${mobileNavLinkClass} ${barePathname === "/om-forsa" ? "text-[#92753a]" : ""}`}
+              >
+                {t.nav.about}
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={localizedHref("/kontakt")}
+                aria-current={barePathname === "/kontakt" ? "page" : undefined}
+                onClick={closeMobileMenu}
+                className={`${mobileNavLinkClass} ${barePathname === "/kontakt" ? "text-[#92753a]" : ""}`}
+              >
+                {t.nav.contact}
+              </Link>
+            </li>
+          </ul>
+
+          <div className="mt-10 border-t border-zinc-900/6 pt-8">
+            <p className={sectionLabelClass()}>{t.languageSwitcher.ariaLabel}</p>
+            <div className="mt-5">
+              <MobileLanguageToggle
+                locale={locale}
+                onSelect={handleLanguageChange}
+                ariaLabel={t.languageSwitcher.ariaLabel}
+                englishLabel={t.languageSwitcher.english}
+                swedishLabel={t.languageSwitcher.swedish}
+              />
+            </div>
+          </div>
+
+          <div className="mt-10 pb-2">
+            <CtaLink href={localizedHref("/kontakt")} variant="primary" onClick={closeMobileMenu}>
+              {t.nav.bookFirstCall}
+            </CtaLink>
+          </div>
+        </div>
       </nav>
-    </header>
+    </div>
+    </>
   );
 }

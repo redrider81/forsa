@@ -1,0 +1,68 @@
+export const enDictionary = {
+  localeLabel: "English",
+  languageSwitcher: {
+    ariaLabel: "Select language",
+    english: "English",
+    swedish: "Svenska",
+    switchToEnglish: "Switch language to English",
+    switchToSwedish: "Switch language to Swedish",
+  },
+  nav: {
+    mainAria: "Main navigation",
+    mobileAria: "Mobile navigation",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    home: "Home",
+    coaching: "Coaching",
+    about: "About Forsa",
+    contact: "Contact",
+    leadershipLabel: "For leadership teams",
+    coachingLabel: "Coaching",
+    startHereLabel: "Start here",
+    unsureTitle: "Not sure which support fits best?",
+    unsureBody:
+      "Book a confidential first conversation and we will clarify where your leadership team needs the most focus.",
+    bookFirstCall: "Book an initial conversation →",
+  },
+  footer: {
+    description:
+      "Executive coaching and leadership support for CEOs, founders, and leadership teams when decisions, accountability, and direction need sharper focus.",
+    location: "Gothenburg, Sweden",
+    services: "Services",
+    about: "About Forsa",
+    copyright: "© 2026 Forsa. All rights reserved.",
+  },
+  form: {
+    generalError: "Please complete all required fields before submitting your request.",
+    emailError: "Enter a valid email address.",
+    fieldRequired: "This field is required.",
+    selectRequired: "Please choose an option.",
+    successMessage:
+      "Thank you. Your request has been received. Forsa will follow up after reviewing your situation.",
+    submitError: "Your request could not be sent right now. Please try again shortly.",
+    ariaLabel: "Contact form",
+    optional: "optional",
+    sections: {
+      contact: "Contact details",
+      situation: "Current situation",
+      nextStep: "Next step",
+    },
+    fields: {
+      name: "Name",
+      organization: "Organization",
+      role: "Role",
+      email: "Email",
+      phone: "Phone",
+      city: "Location / City",
+      question: "What do you need support with?",
+      phase: "What situation are you in right now?",
+      situation: "Briefly describe your situation",
+      clarity: "What needs to become clearer?",
+      timing: "When do you want to move forward?",
+    },
+    submit: {
+      idle: "Send request",
+      submitting: "Sending…",
+    },
+  },
+} as const;

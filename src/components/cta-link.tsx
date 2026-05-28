@@ -7,20 +7,24 @@ type CtaLinkProps = {
   variant?: "primary" | "secondary" | "gold";
   external?: boolean;
   translucent?: boolean;
+  onClick?: () => void;
 };
 
 const baseClass =
-  "inline-flex items-center rounded-full px-6 py-3 text-sm font-medium transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100";
+  "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium transition-[color,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100";
+
+const heroBaseClass =
+  "min-h-[2.875rem] w-auto max-w-[min(100%,20rem)] shrink-0 px-6 py-3 text-sm font-medium leading-tight tracking-[0.01em] sm:min-h-12 sm:px-7";
 
 const variants = {
   primary:
     "bg-zinc-900 !text-zinc-50 hover:bg-zinc-700 active:bg-zinc-800",
   primaryTranslucent:
-    "border border-white/28 bg-zinc-950/62 !text-zinc-50 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)] backdrop-blur-md hover:border-white/38 hover:bg-zinc-950/74 active:bg-zinc-950/82 focus-visible:ring-offset-white/40",
+    "border border-[#e8e0d4]/18 bg-[#1a1917]/94 !text-white shadow-[0_6px_28px_-10px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,248,242,0.14)] hover:border-[#efe8dc]/28 hover:bg-[#22211e]/96 active:bg-[#141312] focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30",
   secondary:
     "border border-zinc-400 !text-zinc-700 hover:border-zinc-600 hover:bg-zinc-100 active:border-zinc-700",
   secondaryTranslucent:
-    "border border-white/46 bg-black/24 !text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)] backdrop-blur-md hover:border-white/60 hover:bg-black/32 active:bg-black/40 focus-visible:ring-offset-white/40",
+    "border border-white/48 bg-zinc-950/58 !text-white shadow-[0_4px_22px_-12px_rgba(0,0,0,0.42),inset_0_1px_0_0_rgba(255,255,255,0.1)] backdrop-blur-[6px] hover:border-white/58 hover:bg-zinc-950/68 active:bg-zinc-950/74 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
   gold:
     "border border-transparent bg-[#92753a] !text-zinc-50 hover:bg-[#7d6432] active:bg-[#6f5829]",
   goldTranslucent:
@@ -42,8 +46,9 @@ export default function CtaLink({
   variant = "primary",
   external = false,
   translucent = false,
+  onClick,
 }: CtaLinkProps) {
-  const className = `${baseClass} ${variantClass(variant, translucent)}`;
+  const className = `${baseClass}${translucent ? ` ${heroBaseClass}` : ""} ${variantClass(variant, translucent)}`;
 
   if (external) {
     return (
@@ -54,7 +59,7 @@ export default function CtaLink({
   }
 
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} onClick={onClick}>
       {children}
     </Link>
   );

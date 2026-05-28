@@ -1,16 +1,11 @@
 "use client";
 
 import { type FormEvent, type ReactNode, useState } from "react";
+import { localeFromPathname } from "@/lib/i18n/config";
+import { getDictionaryForOptionalLocale } from "@/lib/i18n";
+import { usePathname } from "next/navigation";
 
 const selectChevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2352525b' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`;
-
-const GENERAL_ERROR =
-  "Fyll i de obligatoriska fälten innan du skickar förfrågan.";
-const EMAIL_ERROR = "Ange en giltig e-postadress.";
-const FIELD_REQUIRED = "Detta fält är obligatoriskt.";
-const SELECT_REQUIRED = "Välj ett alternativ.";
-const SUCCESS_MESSAGE =
-  "Tack. Din förfrågan har tagits emot. Forsa återkommer när läget har bedömts.";
 
 const REQUIRED_FIELDS = [
   "namn",
@@ -32,6 +27,7 @@ export type ContactIntakePayload = {
   roll: string;
   epost: string;
   telefon: string;
+  ort: string;
   fragan: string;
   lage: string;
   situation: string;
@@ -78,6 +74,7 @@ function buildPayload(data: FormData): ContactIntakePayload {
     roll: String(data.get("roll") ?? "").trim(),
     epost: String(data.get("epost") ?? "").trim(),
     telefon: String(data.get("telefon") ?? "").trim(),
+    ort: String(data.get("ort") ?? "").trim(),
     fragan: String(data.get("fragan") ?? "").trim(),
     lage: String(data.get("lage") ?? "").trim(),
     situation: String(data.get("situation") ?? "").trim(),
@@ -86,7 +83,10 @@ function buildPayload(data: FormData): ContactIntakePayload {
   };
 }
 
-function validateForm(data: FormData): Partial<Record<FieldName, string>> {
+function validateForm(
+  data: FormData,
+  messages: { emailError: string; fieldRequired: string; selectRequired: string }
+): Partial<Record<FieldName, string>> {
   const errors: Partial<Record<FieldName, string>> = {};
 
   for (const name of REQUIRED_FIELDS) {
@@ -95,16 +95,16 @@ function validateForm(data: FormData): Partial<Record<FieldName, string>> {
     if (!value) {
       errors[name] =
         name === "fragan" || name === "lage" || name === "tidpunkt"
-          ? SELECT_REQUIRED
-          : FIELD_REQUIRED;
+          ? messages.selectRequired
+          : messages.fieldRequired;
     }
   }
 
   const epost = String(data.get("epost") ?? "").trim();
   if (!epost) {
-    errors.epost = FIELD_REQUIRED;
+    errors.epost = messages.fieldRequired;
   } else if (!isValidEmail(epost)) {
-    errors.epost = EMAIL_ERROR;
+    errors.epost = messages.emailError;
   }
 
   return errors;
@@ -112,12 +112,13 @@ function validateForm(data: FormData): Partial<Record<FieldName, string>> {
 
 function validationSummary(
   errors: Partial<Record<FieldName, string>>,
+  messages: { emailError: string; generalError: string }
 ): string {
   const keys = Object.keys(errors) as FieldName[];
-  if (keys.length === 1 && errors.epost === EMAIL_ERROR) {
-    return EMAIL_ERROR;
+  if (keys.length === 1 && errors.epost === messages.emailError) {
+    return messages.emailError;
   }
-  return GENERAL_ERROR;
+  return messages.generalError;
 }
 
 /**
@@ -125,6 +126,7 @@ function validationSummary(
  * Must not claim external delivery until email/CRM integration is wired.
  */
 async function submitContactIntake(_payload: ContactIntakePayload): Promise<void> {
+  void _payload;
   // Temporary: acknowledge locally only — no mailto, no outbound email yet.
   await Promise.resolve();
 }
@@ -148,12 +150,14 @@ function FieldGroup({
   label,
   htmlFor,
   optional,
+  optionalLabel,
   error,
   children,
 }: {
   label: string;
   htmlFor: string;
   optional?: boolean;
+  optionalLabel?: string;
   error?: string;
   children: ReactNode;
 }) {
@@ -164,7 +168,7 @@ function FieldGroup({
       <label htmlFor={htmlFor} className={labelClass}>
         {label}
         {optional ? (
-          <span className="ml-1 font-normal text-zinc-500">(valfritt)</span>
+          <span className="ml-1 font-normal text-zinc-500">({optionalLabel ?? "valfritt"})</span>
         ) : null}
       </label>
       {children}
@@ -180,6 +184,63 @@ function FieldGroup({
 const selectStyle = { backgroundImage: selectChevron };
 
 export default function ContactIntakeForm() {
+  const pathname = usePathname();
+  const locale = localeFromPathname(pathname);
+  const t = getDictionaryForOptionalLocale(locale);
+  const questionOptions =
+    locale === "sv"
+      ? [
+          { value: "Executive coaching", label: "Executive coaching" },
+          { value: "Ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
+          { value: "Individuell coaching", label: "Individuell coaching" },
+          { value: "Teamcoaching", label: "Teamcoaching" },
+          { value: "Coachande ledarskap", label: "Coachande ledarskap" },
+          {
+            value: "Osäker / vill diskutera rätt stöd",
+            label: "Osäker / vill diskutera rätt stöd",
+          },
+        ]
+      : [
+          { value: "Executive Coaching", label: "Executive Coaching" },
+          { value: "Leadership Team Coaching", label: "Leadership Team Coaching" },
+          { value: "Individual Coaching", label: "Individual Coaching" },
+          { value: "Team Coaching", label: "Team Coaching" },
+          { value: "Coaching Leadership", label: "Coaching Leadership" },
+          {
+            value: "Unsure / want to discuss the right support",
+            label: "Unsure / want to discuss the right support",
+          },
+        ];
+  const phaseOptions =
+    locale === "sv"
+      ? [
+          { value: "Strategiskt vägval", label: "Strategiskt vägval" },
+          { value: "Oklara prioriteringar", label: "Oklara prioriteringar" },
+          { value: "Friktion i ledningen", label: "Friktion i ledningen" },
+          { value: "Tillväxt eller omställning", label: "Tillväxt eller omställning" },
+          { value: "Tryck från ägare eller styrelse", label: "Tryck från ägare eller styrelse" },
+          { value: "Annat", label: "Annat" },
+        ]
+      : [
+          { value: "Strategic crossroads", label: "Strategic crossroads" },
+          { value: "Unclear priorities", label: "Unclear priorities" },
+          { value: "Leadership team friction", label: "Leadership team friction" },
+          { value: "Growth or transition", label: "Growth or transition" },
+          { value: "Pressure from owners or board", label: "Pressure from owners or board" },
+          { value: "Other", label: "Other" },
+        ];
+  const timingOptions =
+    locale === "sv"
+      ? [
+          { value: "Så snart som möjligt", label: "Så snart som möjligt" },
+          { value: "Inom 1–3 månader", label: "Inom 1–3 månader" },
+          { value: "Längre fram", label: "Längre fram" },
+        ]
+      : [
+          { value: "As soon as possible", label: "As soon as possible" },
+          { value: "Within 1–3 months", label: "Within 1–3 months" },
+          { value: "Later on", label: "Later on" },
+        ];
   const [submitState, setSubmitState] = useState<
     "idle" | "submitting" | "success"
   >("idle");
@@ -193,11 +254,20 @@ export default function ContactIntakeForm() {
     if (submitState === "success" || submitState === "submitting") return;
 
     const data = new FormData(event.currentTarget);
-    const errors = validateForm(data);
+    const errors = validateForm(data, {
+      emailError: t.form.emailError,
+      fieldRequired: t.form.fieldRequired,
+      selectRequired: t.form.selectRequired,
+    });
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      setSummaryError(validationSummary(errors));
+      setSummaryError(
+        validationSummary(errors, {
+          emailError: t.form.emailError,
+          generalError: t.form.generalError,
+        })
+      );
       return;
     }
 
@@ -210,7 +280,7 @@ export default function ContactIntakeForm() {
       setSubmitState("success");
     } catch {
       setSummaryError(
-        "Förfrågan kunde inte skickas just nu. Försök igen om en stund.",
+        t.form.submitError,
       );
       setSubmitState("idle");
     }
@@ -224,7 +294,7 @@ export default function ContactIntakeForm() {
         aria-live="polite"
       >
         <p className="text-[1.0625rem] leading-[1.7] text-zinc-800">
-          {SUCCESS_MESSAGE}
+          {t.form.successMessage}
         </p>
       </div>
     );
@@ -237,11 +307,11 @@ export default function ContactIntakeForm() {
       onSubmit={handleSubmit}
       className="space-y-14"
       noValidate
-      aria-label="Kontaktformulär"
+      aria-label={t.form.ariaLabel}
     >
-      <FormSection title="Kontaktuppgifter">
+      <FormSection title={t.form.sections.contact}>
         <div className="grid gap-7 md:grid-cols-2 md:gap-x-10">
-          <FieldGroup label="Namn" htmlFor="namn" error={err("namn")}>
+          <FieldGroup label={t.form.fields.name} htmlFor="namn" error={err("namn")}>
             <input
               id="namn"
               name="namn"
@@ -253,7 +323,7 @@ export default function ContactIntakeForm() {
             />
           </FieldGroup>
           <FieldGroup
-            label="Organisation"
+            label={t.form.fields.organization}
             htmlFor="organisation"
             error={err("organisation")}
           >
@@ -275,7 +345,7 @@ export default function ContactIntakeForm() {
         </div>
 
         <div className="grid gap-7 md:grid-cols-2 md:gap-x-10">
-          <FieldGroup label="Roll" htmlFor="roll" error={err("roll")}>
+          <FieldGroup label={t.form.fields.role} htmlFor="roll" error={err("roll")}>
             <input
               id="roll"
               name="roll"
@@ -286,7 +356,7 @@ export default function ContactIntakeForm() {
               className={withFieldState(fieldClassBase, Boolean(err("roll")))}
             />
           </FieldGroup>
-          <FieldGroup label="E-post" htmlFor="epost" error={err("epost")}>
+          <FieldGroup label={t.form.fields.email} htmlFor="epost" error={err("epost")}>
             <input
               id="epost"
               name="epost"
@@ -299,8 +369,8 @@ export default function ContactIntakeForm() {
           </FieldGroup>
         </div>
 
-        <div className="md:max-w-[calc(50%-1.25rem)]">
-          <FieldGroup label="Telefon" htmlFor="telefon" optional>
+        <div className="grid gap-7 md:grid-cols-2 md:gap-x-10">
+          <FieldGroup label={t.form.fields.phone} htmlFor="telefon" optional optionalLabel={t.form.optional}>
             <input
               id="telefon"
               name="telefon"
@@ -309,13 +379,22 @@ export default function ContactIntakeForm() {
               className={withFieldState(fieldClassBase, false)}
             />
           </FieldGroup>
+          <FieldGroup label={t.form.fields.city} htmlFor="ort" optional optionalLabel={t.form.optional}>
+            <input
+              id="ort"
+              name="ort"
+              type="text"
+              autoComplete="address-level2"
+              className={withFieldState(fieldClassBase, false)}
+            />
+          </FieldGroup>
         </div>
       </FormSection>
 
-      <FormSection title="Situation">
+      <FormSection title={t.form.sections.situation}>
         <div className="grid gap-7 md:grid-cols-2 md:gap-x-10">
           <FieldGroup
-            label="Vad gäller frågan?"
+            label={t.form.fields.question}
             htmlFor="fragan"
             error={err("fragan")}
           >
@@ -329,19 +408,17 @@ export default function ContactIntakeForm() {
               style={selectStyle}
             >
               <option value="" disabled className="text-zinc-500">
-                Välj typ av stöd
+                {locale === "sv" ? "Välj typ av stöd" : "Select type of support"}
               </option>
-              <option value="Ledningsgruppscoaching">Ledningsgruppscoaching</option>
-              <option value="Executive coaching">Executive coaching</option>
-              <option value="Team coaching">Team coaching</option>
-              <option value="Coachande ledarskap">Coachande ledarskap</option>
-              <option value="Osäker / vill diskutera rätt stöd">
-                Osäker / vill diskutera rätt stöd
-              </option>
+              {questionOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </FieldGroup>
           <FieldGroup
-            label="Vilket läge står ni i?"
+            label={t.form.fields.phase}
             htmlFor="lage"
             error={err("lage")}
           >
@@ -355,22 +432,19 @@ export default function ContactIntakeForm() {
               style={selectStyle}
             >
               <option value="" disabled className="text-zinc-500">
-                Välj läge
+                {locale === "sv" ? "Välj läge" : "Select situation"}
               </option>
-              <option value="Strategiskt vägval">Strategiskt vägval</option>
-              <option value="Oklara prioriteringar">Oklara prioriteringar</option>
-              <option value="Friktion i ledningen">Friktion i ledningen</option>
-              <option value="Tillväxt eller omställning">Tillväxt eller omställning</option>
-              <option value="Tryck från ägare eller styrelse">
-                Tryck från ägare eller styrelse
-              </option>
-              <option value="Annat">Annat</option>
+              {phaseOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </FieldGroup>
         </div>
 
         <FieldGroup
-          label="Beskriv kort situationen"
+          label={t.form.fields.situation}
           htmlFor="situation"
           error={err("situation")}
         >
@@ -388,7 +462,7 @@ export default function ContactIntakeForm() {
         </FieldGroup>
 
         <FieldGroup
-          label="Vad behöver bli tydligare?"
+          label={t.form.fields.clarity}
           htmlFor="tydligare"
           error={err("tydligare")}
         >
@@ -406,10 +480,10 @@ export default function ContactIntakeForm() {
         </FieldGroup>
       </FormSection>
 
-      <FormSection title="Nästa steg">
+      <FormSection title={t.form.sections.nextStep}>
         <div className="md:max-w-md">
           <FieldGroup
-            label="När vill ni komma vidare?"
+            label={t.form.fields.timing}
             htmlFor="tidpunkt"
             error={err("tidpunkt")}
           >
@@ -426,11 +500,13 @@ export default function ContactIntakeForm() {
               style={selectStyle}
             >
               <option value="" disabled className="text-zinc-500">
-                Välj tidshorisont
+                {locale === "sv" ? "Välj tidshorisont" : "Select timeframe"}
               </option>
-              <option value="Så snart som möjligt">Så snart som möjligt</option>
-              <option value="Inom 1–3 månader">Inom 1–3 månader</option>
-              <option value="Längre fram">Längre fram</option>
+              {timingOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </FieldGroup>
         </div>
@@ -439,8 +515,9 @@ export default function ContactIntakeForm() {
       <div className="border-t border-zinc-300/45 pt-10">
         <div className="max-w-md space-y-5">
           <p className="text-sm leading-[1.7] text-zinc-600">
-            All kontakt hanteras konfidentiellt. Första samtalet används för att
-            förstå läget och avgöra om Forsa är rätt stöd.
+            {locale === "sv"
+              ? "All kontakt hanteras konfidentiellt. Första samtalet används för att förstå läget och avgöra om Forsa är rätt stöd."
+              : "All contact is handled confidentially. The first conversation is used to understand your situation and determine whether Forsa is the right support."}
           </p>
 
           {summaryError ? (
@@ -454,7 +531,7 @@ export default function ContactIntakeForm() {
             disabled={submitState === "submitting"}
             className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {submitState === "submitting" ? "Skickar…" : "Skicka förfrågan"}
+            {submitState === "submitting" ? t.form.submit.submitting : t.form.submit.idle}
           </button>
         </div>
       </div>

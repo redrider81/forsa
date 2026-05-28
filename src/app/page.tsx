@@ -25,7 +25,7 @@ export default function HomePage() {
       {/* Hero — sticky on desktop; first section scrolls over */}
       <section
         data-hero-sticky
-        className="relative z-0 min-h-[min(88svh,700px)] w-full overflow-hidden md:sticky md:top-0 md:aspect-[3/2] md:max-h-[92svh] md:min-h-0"
+        className="relative z-0 min-h-[100svh] w-full overflow-hidden md:sticky md:top-0 md:aspect-[3/2] md:max-h-[92svh] md:min-h-0"
       >
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <Image
@@ -41,23 +41,27 @@ export default function HomePage() {
         </div>
         <SiteNavigation />
         <div className="pointer-events-none absolute inset-0 z-0">
-          <div className="pointer-events-auto absolute left-6 right-6 top-[64%] w-full max-w-[19rem] -translate-y-1/2 md:left-[5.5vw] md:right-auto md:top-[66%] md:max-w-md lg:max-w-lg">
-            <HeroReveal className="relative flex flex-col">
-              <div className="relative max-w-[19rem] md:max-w-md lg:max-w-lg">
+          <div className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[clamp(2.5rem,8svh,4.5rem)] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
+            <div
+              className="w-full shrink-0 min-h-[min(50svh,28rem)] md:hidden"
+              aria-hidden="true"
+            />
+            <HeroReveal className="relative flex w-full max-w-[20rem] shrink-0 flex-col items-center text-center sm:max-w-[21rem] md:max-w-md md:items-start md:text-left lg:max-w-lg">
+              <div className="relative w-full md:max-w-md lg:max-w-lg">
                 <h1
                   data-hero-headline
-                  className="relative inline-block rounded-2xl bg-black/18 px-4 py-3 text-4xl font-medium leading-tight tracking-tight text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)] backdrop-blur-[8px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] md:px-5 md:py-4 md:text-5xl"
+                  className="relative mx-auto inline-block max-w-[18ch] rounded-2xl bg-black/18 px-4 py-3 text-[2rem] font-medium leading-[1.12] tracking-tight text-balance text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)] backdrop-blur-[8px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-4xl md:mx-0 md:max-w-none md:px-5 md:py-4 md:text-5xl md:leading-tight"
                 >
                   När ledningen behöver tänka med skärpa.
                 </h1>
               </div>
-              <div className="mt-8 mx-auto flex w-fit flex-wrap items-center justify-center gap-3 md:mt-10 md:gap-4">
-                <span data-hero-cta className="inline-flex">
+              <div className="mt-9 flex w-full flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center md:mt-10 md:w-fit md:items-start md:justify-start md:gap-3.5">
+                <span data-hero-cta className="inline-flex justify-center">
                   <CtaLink href="/kontakt" variant="primary" translucent>
                     Boka ett första samtal
                   </CtaLink>
                 </span>
-                <span data-hero-cta className="inline-flex">
+                <span data-hero-cta className="inline-flex justify-center">
                   <CtaLink href="/executive-coaching" variant="secondary" translucent>
                     Se executive coaching
                   </CtaLink>
