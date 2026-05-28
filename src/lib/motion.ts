@@ -1,6 +1,5 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { ScrollTrigger as ScrollTriggerVars } from "gsap/ScrollTrigger";
 
 export const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&
@@ -39,8 +38,8 @@ export const motion = {
 
 export function revealScrollTrigger(
   trigger: Element | string,
-  overrides?: Partial<ScrollTriggerVars.Vars>,
-): ScrollTriggerVars.Vars {
+  overrides?: Partial<ScrollTrigger.Vars>,
+): ScrollTrigger.Vars {
   return {
     trigger,
     start: motion.reveal.start,
@@ -51,8 +50,8 @@ export function revealScrollTrigger(
 
 export function parallaxScrollTrigger(
   trigger: Element | string,
-  overrides?: Partial<ScrollTriggerVars.Vars>,
-): ScrollTriggerVars.Vars {
+  overrides?: Partial<ScrollTrigger.Vars>,
+): ScrollTrigger.Vars {
   return {
     trigger,
     start: "top bottom",
