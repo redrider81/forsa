@@ -7,7 +7,9 @@ alwaysApply: true
 
 This is the canonical workspace for the Forsa website project:
 
-/Users/dimensiontraining/Projekt/forsa-site
+/Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site
+
+This Developer/Klarleid path is the single source of truth for all Forsa work. It holds the live Next.js source, the connected git repository, and the deployed history.
 
 The GitHub/Vercel-connected repository is:
 
@@ -23,15 +25,21 @@ This is a solo project. Work directly on main unless the user explicitly says ot
 
 Always verify that the current workspace is:
 
-/Users/dimensiontraining/Projekt/forsa-site
+/Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site
 
 Never work from these similarly named folders unless the user explicitly instructs it:
 
+/Users/dimensiontraining/Projekt/forsa-site
 /Users/dimensiontraining/Projekt/forsa
 /Users/dimensiontraining/Projekt/om-forsa
 /Users/dimensiontraining/Projekt/Website
 
-If the active workspace is not /Users/dimensiontraining/Projekt/forsa-site, stop immediately and tell the user that the wrong project is open.
+If the active workspace is not /Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site, stop immediately and tell the user that the wrong project is open.
+
+### Obsolete paths — do not use
+
+- WARNING: /Users/dimensiontraining/Projekt/forsa-site is NOT a real project. It is a stray, leftover `.next` build folder only (no `.git`, no `src`, no `package.json`). Never treat it as the source of truth, never edit it, and never run dev/build from it.
+- WARNING: /Users/dimensiontraining/Projekt/forsa is an older prototype repository with separate git history and no connected remote. It must not be used for active Forsa work. Do not edit, build, commit, or push from it.
 
 ## Required startup check
 
@@ -46,13 +54,15 @@ git remote -v
 
 Expected values:
 
-- project root: /Users/dimensiontraining/Projekt/forsa-site
+- project root: /Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site
 - branch: main
 - remote origin: https://github.com/redrider81/forsa.git
 - latest history should include the current Forsa commits, including:
-  - 4516311 Design polish: Playfair Display...
-  - fff0820 Add GSAP motion system to Forsa site
-  - 5eabdc6 Create Forsa site prototype
+  - 37edde4 fix: use ScrollTrigger.Vars from value import for CI build
+  - e3da655 Polish motion system, hero layout, and nav contrast.
+  - fde2d11 feat: add high-res editorial images and fix large PNG loading
+  - 533bb2e fix: use high-resolution native hero image for retina mobile
+  - fdfc74b feat: add bilingual site and mobile navigation
 
 If these expectations do not match, stop and report the mismatch before doing anything.
 
@@ -62,7 +72,7 @@ The correct project has a package.json with a dev script.
 
 When starting the dev server, use the correct project root:
 
-cd /Users/dimensiontraining/Projekt/forsa-site
+cd "/Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site"
 
 Then run:
 
@@ -72,7 +82,7 @@ If port 3000 is already in use, use:
 
 npm run dev -- -p 3001
 
-Do not attempt to run dev scripts from /Users/dimensiontraining/Projekt/forsa, because that is not the active Vercel-connected Forsa website repo.
+Do not attempt to run dev scripts from /Users/dimensiontraining/Projekt/forsa or /Users/dimensiontraining/Projekt/forsa-site, because neither is the active Vercel-connected Forsa website repo. The first is an old prototype; the second is only a stray `.next` folder.
 
 ## Existing work to preserve
 
