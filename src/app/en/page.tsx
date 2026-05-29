@@ -2,6 +2,7 @@ import CtaLink from "@/components/cta-link";
 import Image from "next/image";
 import SiteNavigation from "@/components/site-navigation";
 import HeroReveal from "@/components/animations/HeroReveal";
+import HeroImageReveal from "@/components/animations/HeroImageReveal";
 import ParallaxController from "@/components/animations/ParallaxController";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
@@ -31,11 +32,11 @@ export default function HomePageEn() {
       <ParallaxController>
         <section
           data-hero-sticky
-          className="relative z-0 min-h-[100svh] w-full overflow-hidden md:sticky md:top-0 md:aspect-[3/2] md:max-h-[92svh] md:min-h-0"
+          className="relative z-0 min-h-[100svh] w-full overflow-hidden md:sticky md:top-0 md:aspect-[16/9] md:max-h-[92svh] md:min-h-0"
         >
-          <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+          <HeroImageReveal className="absolute inset-0 overflow-hidden">
             <Image
-              src="/superhero.png"
+              src="/superhero1.png"
               alt=""
               fill
               sizes="100vw"
@@ -45,7 +46,7 @@ export default function HomePageEn() {
               priority
               aria-hidden="true"
             />
-          </div>
+          </HeroImageReveal>
           <SiteNavigation />
           <div className="pointer-events-none absolute inset-0 z-0">
             <div className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[clamp(2.5rem,8svh,4.5rem)] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
@@ -94,7 +95,7 @@ export default function HomePageEn() {
                 </h2>
                 <div
                   data-col-right
-                  className="space-y-7 text-[1.0625rem] leading-[1.8] text-zinc-700 md:col-span-7 md:max-w-xl md:justify-self-end"
+                  className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end"
                 >
                   <p data-col-paragraph>
                     Leadership teams rarely lack experience. What is often missing is shared sharpness
@@ -140,7 +141,7 @@ export default function HomePageEn() {
                       </h3>
                       <p
                         data-row-body
-                        className="text-[1.0625rem] leading-[1.85] text-zinc-600 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
                       >
                         The core question is identified quickly, and noise is kept outside. Focus
                         stays where it makes a real difference.
@@ -166,7 +167,7 @@ export default function HomePageEn() {
                       </h3>
                       <p
                         data-row-body
-                        className="text-[1.0625rem] leading-[1.85] text-zinc-600 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
                       >
                         Input, trade-offs, and ownership become explicit. That creates decisions that
                         hold beyond the meeting.
@@ -189,7 +190,7 @@ export default function HomePageEn() {
                       </h3>
                       <p
                         data-row-body
-                        className="text-[1.0625rem] leading-[1.85] text-zinc-600 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
                       >
                         Leadership stays on course in complex situations without losing pace or quality
                         in execution.
@@ -216,7 +217,7 @@ export default function HomePageEn() {
                     When the stakes are high
                   </h3>
                   <ScrollReveal variant="staggerList" className="mt-8">
-                    <ul className="space-y-5 text-[1.0625rem] leading-[1.8] text-zinc-700">
+                    <ul className="space-y-5 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
                       {relevancePoints.map((point) => (
                         <li key={point} data-list-item className="flex items-start gap-4">
                           <span className="mt-[0.7rem] h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
@@ -309,7 +310,7 @@ export default function HomePageEn() {
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   How Forsa works
                 </h2>
-                <div data-col-right className="space-y-7 text-[1.0625rem] leading-[1.8] text-zinc-700 md:col-span-7 md:max-w-xl md:justify-self-end">
+                <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
                   <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
                     Confidential. Business-near. Precise.
                   </h3>
@@ -331,7 +332,7 @@ export default function HomePageEn() {
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   Trust
                 </h2>
-                <div data-col-right className="space-y-7 text-[1.0625rem] leading-[1.8] text-zinc-700 md:col-span-7 md:max-w-xl md:justify-self-end">
+                <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
                   <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
                     Gothenburg-based support for Swedish leadership teams
                   </h3>
@@ -361,7 +362,7 @@ export default function HomePageEn() {
                 <h2 data-cta-heading className="max-w-4xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.65rem]">
                   When the next decision needs to last beyond the next meeting
                 </h2>
-                <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] leading-[1.8] text-zinc-700">
+                <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">
                   If you want sharper priorities, ownership, and decisions in your leadership team, we
                   start with a confidential first conversation.
                 </p>

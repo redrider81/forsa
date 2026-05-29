@@ -6,6 +6,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
+  isMobile,
   motion,
   prefersReducedMotion,
   refreshScrollTriggers,
@@ -48,19 +49,31 @@ export default function EditorialImageTransition({
     }
 
     gsap.registerPlugin(ScrollTrigger);
+    const mobile = isMobile();
+    const fromOpacity = mobile ? motion.opacity.imageFromMobile : motion.opacity.imageFrom;
+    const fromY = mobile ? motion.reveal.yImageMobile : motion.reveal.yImage;
+    const start = mobile ? motion.reveal.startImageMobile : motion.reveal.startImage;
+
     const ctx = gsap.context(() => {
-      gsap.set(figure, { autoAlpha: 0, y: 28, force3D: true });
+      gsap.set(figure, {
+        autoAlpha: fromOpacity,
+        y: fromY,
+        scale: motion.scale.imageFrom,
+        transformOrigin: "center center",
+        force3D: true,
+      });
       if (content.length) gsap.set(content, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
 
       const revealTl = gsap.timeline({
-        scrollTrigger: revealScrollTrigger(el),
+        scrollTrigger: revealScrollTrigger(el, { start }),
       });
 
       revealTl.to(figure, {
         autoAlpha: 1,
         y: 0,
+        scale: 1,
         duration: motion.duration.image,
-        ease: motion.ease.reveal,
+        ease: motion.ease.image,
         force3D: true,
       });
 

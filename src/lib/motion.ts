@@ -12,6 +12,7 @@ export const motion = {
   ease: {
     reveal: "power3.out",
     revealSoft: "power2.out",
+    image: "sine.out",
     editorial: "power3.inOut",
     exit: "power2.in",
     drift: "none",
@@ -21,18 +22,32 @@ export const motion = {
     medium: 0.75,
     long: 0.9,
     hero: 0.95,
-    image: 1,
+    image: 1.25,
   },
   reveal: {
     start: "top 88%",
+    startImage: "top 90%",
+    startImageMobile: "top 96%",
     y: 22,
     ySoft: 14,
+    yImage: 26,
+    yImageMobile: 34,
     x: 18,
   },
+  opacity: {
+    imageFrom: 0.65,
+    imageFromMobile: 0.55,
+    heroFrom: 0.8,
+  },
+  scale: {
+    imageFrom: 1.02,
+    heroFrom: 1.015,
+  },
   parallax: {
-    imageYPercent: { mobile: 3, desktop: 5 },
-    imageYPercentNested: { mobile: 2, desktop: 3.5 },
+    imageYPercent: { mobile: 6, desktop: 6 },
+    imageYPercentNested: { mobile: 4, desktop: 4 },
     scrubImage: { mobile: 0.85, desktop: 1 },
+    imageScale: 1.14,
   },
 } as const;
 
@@ -85,8 +100,13 @@ export function refreshScrollTriggers(): void {
 
 export function bindParallaxRefresh(onRefresh: () => void, delayMs = 200): () => void {
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let lastWidth = window.innerWidth;
 
   const handler = () => {
+    // Ignore mobile URL-bar show/hide, which only changes viewport height while
+    // scrolling. Reacting to those would re-run refresh logic mid-scroll.
+    if (window.innerWidth === lastWidth) return;
+    lastWidth = window.innerWidth;
     if (timer) clearTimeout(timer);
     timer = setTimeout(onRefresh, delayMs);
   };

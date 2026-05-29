@@ -47,7 +47,14 @@ export default function ParallaxController({ children }: Props) {
           const nested = Boolean(block.closest("[data-parallax-section]"));
           const amount = nested ? nestedShift : shift;
 
-          gsap.set(inner, { yPercent: -amount, force3D: true });
+          // Overscale the image so the vertical parallax shift never exposes the
+          // figure edges at the larger (mobile-perceptible) travel distances.
+          gsap.set(inner, {
+            yPercent: -amount,
+            scale: motion.parallax.imageScale,
+            transformOrigin: "center center",
+            force3D: true,
+          });
           gsap.to(inner, {
             yPercent: amount,
             ease: motion.ease.drift,
@@ -60,7 +67,9 @@ export default function ParallaxController({ children }: Props) {
       refreshScrollTriggers();
     }, root);
 
-    const unbindRefresh = bindParallaxRefresh(() => refreshScrollTriggers());
+    // On width changes only recompute positions; never force-complete reveals
+    // here (that would snap scroll reveals on resize, e.g. mobile orientation).
+    const unbindRefresh = bindParallaxRefresh(() => ScrollTrigger.refresh());
 
     return () => {
       unbindRefresh();
