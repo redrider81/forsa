@@ -24,9 +24,11 @@ export default function StaggerCards({ children, className, ...rest }: Props) {
     if (!el) return;
 
     const cards = el.querySelectorAll<HTMLElement>("[data-card]");
+    const accents = el.querySelectorAll<HTMLElement>("[data-card-accent]");
 
     if (prefersReducedMotion()) {
       showTargets(cards);
+      if (accents.length) gsap.set(accents, { clearProps: "transform" });
       return;
     }
 
@@ -44,6 +46,19 @@ export default function StaggerCards({ children, className, ...rest }: Props) {
         force3D: true,
         scrollTrigger: revealScrollTrigger(el),
       });
+
+      if (accents.length) {
+        gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
+        gsap.to(accents, {
+          scaleX: 1,
+          duration: motion.duration.medium,
+          ease: motion.ease.reveal,
+          stagger: 0.09,
+          force3D: true,
+          scrollTrigger: revealScrollTrigger(el),
+        });
+      }
+
       refreshScrollTriggers();
     }, ref);
 

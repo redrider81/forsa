@@ -238,56 +238,126 @@ export default function HomePageEn() {
                 <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   Coaching for leaders, teams, and organizations
                 </h2>
-                <StaggerCards className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  <Link data-card href="/en/executive-coaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
-                    <h3 className="text-xl font-medium text-zinc-900">Executive coaching</h3>
-                    <p className="mt-3 grow leading-7 text-zinc-700">
+                <StaggerCards className="mt-14 grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+                  <Link data-card href="/en/executive-coaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
+                    <div className="flex items-center gap-4">
+                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">01</span>
+                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
+                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
+                      </span>
+                    </div>
+                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Executive coaching</h3>
+                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                       For CEOs, founders, and senior leaders facing complex decisions, accountability,
                       and role clarity.
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
-                      Learn more
-                    </span>
+                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
+                        <span className="relative">
+                          Learn more
+                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
+                        </span>
+                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
                   </Link>
-                  <Link data-card href="/en/ledningsgruppscoaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
-                    <h3 className="text-xl font-medium text-zinc-900">Leadership Team Coaching</h3>
-                    <p className="mt-3 grow leading-7 text-zinc-700">
+                  <Link data-card href="/en/ledningsgruppscoaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
+                    <div className="flex items-center gap-4">
+                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">02</span>
+                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
+                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
+                      </span>
+                    </div>
+                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Leadership Team Coaching</h3>
+                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                       For leadership teams that need clearer decisions, stronger accountability, and
                       shared direction.
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
-                      Learn more
-                    </span>
+                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
+                        <span className="relative">
+                          Learn more
+                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
+                        </span>
+                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
                   </Link>
-                  <Link data-card href="/en/individuell-coaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
-                    <h3 className="text-xl font-medium text-zinc-900">Individual Coaching</h3>
-                    <p className="mt-3 grow leading-7 text-zinc-700">
+                  <Link data-card href="/en/individuell-coaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
+                    <div className="flex items-center gap-4">
+                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">03</span>
+                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
+                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
+                      </span>
+                    </div>
+                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Individual Coaching</h3>
+                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                       For leaders and key professionals who need sharper role clarity, prioritization,
                       and impact.
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
-                      Learn more
-                    </span>
+                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
+                        <span className="relative">
+                          Learn more
+                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
+                        </span>
+                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
                   </Link>
-                  <Link data-card href="/en/team-coaching" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer">
-                    <h3 className="text-xl font-medium text-zinc-900">Team Coaching</h3>
-                    <p className="mt-3 grow leading-7 text-zinc-700">
+                  <Link data-card href="/en/team-coaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
+                    <div className="flex items-center gap-4">
+                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">04</span>
+                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
+                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
+                      </span>
+                    </div>
+                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Team Coaching</h3>
+                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                       For teams that need to strengthen collaboration, accountability, and shared
                       learning in daily work.
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
-                      Learn more
-                    </span>
+                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
+                        <span className="relative">
+                          Learn more
+                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
+                        </span>
+                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
                   </Link>
-                  <Link data-card href="/en/coachande-ledarskap" className="group flex flex-col rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/60 p-7 transition-all duration-250 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_44px_-18px_rgba(24,24,27,0.28)] cursor-pointer md:col-span-2 lg:col-span-1">
-                    <h3 className="text-xl font-medium text-zinc-900">Coaching Leadership</h3>
-                    <p className="mt-3 grow leading-7 text-zinc-700">
+                  <Link data-card href="/en/coachande-ledarskap" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:col-span-2 md:p-9 lg:col-span-1">
+                    <div className="flex items-center gap-4">
+                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">05</span>
+                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
+                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
+                      </span>
+                    </div>
+                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Coaching Leadership</h3>
+                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                       For organizations developing managers who lead through dialogue, questions, and
                       clear accountability.
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors group-hover:text-zinc-800">
-                      Learn more
-                    </span>
+                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
+                        <span className="relative">
+                          Learn more
+                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
+                        </span>
+                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
                   </Link>
                 </StaggerCards>
               </div>
