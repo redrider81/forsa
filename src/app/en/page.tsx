@@ -203,7 +203,6 @@ export default function HomePageEn() {
                 src="/supertable.png"
                 alt="Professional meeting room with notes, laptop, and leaders at a conference table"
                 className="mt-20 md:mt-24"
-                unoptimized
               />
             </section>
 
@@ -371,7 +370,6 @@ export default function HomePageEn() {
                 src="/superoffice.png"
                 alt="Professional office workspace with laptop and focused work"
                 breakout={false}
-                unoptimized
               />
             </section>
 
@@ -423,7 +421,6 @@ export default function HomePageEn() {
                 src="/supermeeting.png"
                 alt="Leadership team in discussion around a conference table in a modern meeting room"
                 className="mt-20 md:mt-24"
-                unoptimized
               />
             </section>
 
