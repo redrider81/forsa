@@ -19,7 +19,6 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -32,6 +31,10 @@ html,
 body {
   margin: 0;
   padding: 0;
+  max-width: 100%;
+  /* clip (not hidden) prevents horizontal wobble without creating a
+     scroll container, so the sticky hero keeps working */
+  overflow-x: clip;
 }
 
 body {

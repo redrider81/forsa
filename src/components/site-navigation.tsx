@@ -909,7 +909,7 @@ export default function SiteNavigation() {
     </header>
 
     <div
-      className={`fixed inset-0 z-[110] md:hidden motion-reduce:transition-none transition-[visibility,opacity] duration-200 ease-out ${
+      className={`fixed inset-0 z-[110] overflow-hidden md:hidden motion-reduce:transition-none transition-[visibility,opacity] duration-200 ease-out ${
         mobileOpen ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"
       }`}
       aria-hidden={!mobileOpen}
