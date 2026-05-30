@@ -115,6 +115,10 @@ export default function EditorialImageTransition({
       <figure
         data-editorial-image-figure
         className="relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:h-[min(72vh,720px)]"
+        style={{
+          opacity: motion.opacity.imageFrom,
+          transform: `translateY(${motion.reveal.yImage}px) scale(${motion.scale.imageFrom})`,
+        }}
       >
         <Image
           src={src}
