@@ -5,86 +5,120 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  title: "About Forsa | Forsa",
+  title: "Om oss | CVB Coaching",
   description:
-    "Forsa is a senior and discreet thought partner for CEOs, founders, and leadership teams in complex business situations.",
+    "CVB Coaching är en senior och diskret samtalspartner för vd:ar, grundare och ledningsgrupper i komplexa affärslägen.",
 };
 
 const principles = [
-  "Confidentiality in all engagements.",
-  "Business-near perspective in every conversation.",
-  "Precision before generic advice.",
-  "Follow-up until decisions are visible in action.",
+  "Konfidentialitet i allt arbete.",
+  "Affärsnära perspektiv i varje samtal.",
+  "Precision före generella råd.",
+  "Uppföljning tills beslut syns i handling.",
 ];
 
 const audiences = [
-  "CEOs and founders under high decision pressure.",
-  "Leadership teams in growth, transition, or a new phase.",
-  "Senior leaders accountable for direction and execution.",
+  "Vd:ar och grundare med hög beslutspress.",
+  "Ledningsgrupper i tillväxt, omställning eller ny fas.",
+  "Seniora ledare med ansvar för riktning och genomförande.",
+  "Organisationer som vill utveckla flera ledare inom ett gemensamt program.",
 ];
 
-export default function AboutForsaPageEn() {
+export default function AboutPage() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
+
+        {/* Hero */}
         <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
-              About Forsa
+              Om CVB Coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Senior support for leadership in complex situations.
+              Seniort stöd för ledning i komplexa lägen.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Forsa exists for leadership teams that need an external, confidential, business-near
-              thinking space when decisions, accountability, and direction need sharper focus.
+              CVB Coaching finns för ledningar som behöver ett externt, konfidentiellt och affärsnära
+              samtalsrum när beslut, ansvar och riktning behöver skärpas.
             </p>
           </HeroReveal>
         </section>
 
+        {/* Two-col: why */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Why Forsa exists
+              Varför CVB Coaching finns
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                In many leadership environments, the capability is there, but the decision room is not
-                always clear enough. Forsa exists to bring that sharpness into concrete business
-                situations.
+                I många ledningsmiljöer finns kompetensen, men inte alltid det tydliga beslutsrummet.
+                CVB Coaching finns för att bidra med den skärpan i konkreta affärslägen.
               </p>
               <p>
-                The goal is not more words about leadership, but better decisions and clearer execution
-                in real business realities.
+                Målet är inte fler ord om ledarskap, utan bättre beslut och tydligare genomförande i
+                verkliga affärssituationer.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
+        {/* Grundare */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              How Forsa works
-            </h2>
+            <div data-col-left className="md:col-span-5">
+              <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#92753a]">
+                Grundare
+              </p>
+              <h2 className="mt-4 text-3xl font-medium leading-tight tracking-tight">
+                Carolina von Braun
+              </h2>
+              <p className="mt-3 text-lg leading-8 text-zinc-600">Grundare och coach</p>
+            </div>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                The work takes place in structured conversations with clear connection to your real
-                situation. Each engagement starts from what must be decided now and how decisions should
-                hold over time.
+                CVB Coaching grundades av Carolina von Braun. Hon arbetar med vd:ar, grundare och
+                seniora ledare, och leder de ledarutvecklings- och programuppdrag där flera deltagare
+                ingår.
               </p>
               <p>
-                Focus stays on questions that affect company pace, decision quality, and business
-                results.
+                Arbetet vilar på en professionell coachcertifiering och ett coachande förhållningssätt:
+                klienten äger sina mål, sina insikter och sina beslut. Coachens uppgift är att göra
+                tänkandet tydligare, inte att leverera svar.
+              </p>
+              <p>
+                Metod, struktur och uppföljning är densamma oavsett om uppdraget omfattar en enskild
+                ledare eller ett program för en hel organisation.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
+        {/* Two-col: how */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Principles
+              Hur CVB Coaching arbetar
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                Arbetet sker i strukturerade samtal med tydlig koppling till ert faktiska läge. Varje
+                uppdrag utgår från vad som behöver avgöras nu och hur besluten ska få fäste över tid.
+              </p>
+              <p>
+                Fokus ligger på frågor som påverkar bolagets tempo, beslutskraft och resultat.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* Cards: principles */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Principer
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {principles.map((item, index) => (
@@ -97,8 +131,9 @@ export default function AboutForsaPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* List: audience */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Who Forsa is right for</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Vem CVB Coaching är rätt för</h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
               {audiences.map((item) => (
@@ -111,36 +146,37 @@ export default function AboutForsaPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* Two-col: location */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Gothenburg / Sweden
+              Göteborg / Sverige
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>Forsa is based in Gothenburg and works with Swedish leadership teams.</p>
+              <p>CVB Coaching är baserat i Göteborg och arbetar med svenska företagsledningar.</p>
               <p>
-                Engagements are delivered with high discretion and close understanding of the business
-                reality leadership operates within.
+                Uppdrag genomförs med hög diskretion och nära förståelse för den affärsmässiga
+                verklighet som ledningen verkar i.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
+        {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              If you want to discuss a current leadership situation
+              Om du vill diskutera ett aktuellt ledningsläge
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              We begin with a confidential first conversation.
+              Vi börjar med ett konfidentiellt första samtal.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <CtaLink href="/en/kontakt" variant="primary">
-                Book an initial conversation
-              </CtaLink>
+              <CtaLink href="/kontakt" variant="primary">Boka ett första samtal</CtaLink>
             </div>
           </ScrollReveal>
         </section>
+
       </div>
     </main>
   );

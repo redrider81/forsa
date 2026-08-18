@@ -5,9 +5,9 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  title: "Leadership Team Coaching | Forsa",
+  title: "Leadership Team Coaching | CVB Coaching",
   description:
-    "Forsa supports leadership teams that need clearer priorities, stronger decision quality, and decisions that hold in execution.",
+    "CVB Coaching supports leadership teams that need clearer priorities, stronger decision quality, and decisions that hold in execution.",
 };
 
 const relevanceList = [
@@ -88,7 +88,7 @@ export default function LeadershipTeamCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              What Forsa works with
+              What CVB Coaching works with
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (

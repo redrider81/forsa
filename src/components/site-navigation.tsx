@@ -710,7 +710,7 @@ export default function SiteNavigation() {
           href={localizedHref("/")}
           className={`shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          <span className="block text-lg font-semibold tracking-[0.22em] text-zinc-900 lg:text-xl">FORSA</span>
+          <span className="block text-lg font-semibold tracking-[0.22em] text-zinc-900 lg:text-xl">CVB COACHING</span>
         </Link>
 
         <nav aria-label={t.nav.mainAria} className="ml-auto">
@@ -843,12 +843,12 @@ export default function SiteNavigation() {
 
                 <NavHoverTarget
                   as="link"
-                  href={localizedHref("/om-forsa")}
-                  aria-current={barePathname === "/om-forsa" ? "page" : undefined}
+                  href={localizedHref("/om-oss")}
+                  aria-current={barePathname === "/om-oss" ? "page" : undefined}
                   listRef={listRef}
                   setPosition={setPosition}
-                  dataNavActive={barePathname === "/om-forsa"}
-                  className={navTabClass(barePathname === "/om-forsa", isHome)}
+                  dataNavActive={barePathname === "/om-oss"}
+                  className={navTabClass(barePathname === "/om-oss", isHome)}
                 >
                   {t.nav.about}
                 </NavHoverTarget>
@@ -868,6 +868,18 @@ export default function SiteNavigation() {
                 >
                   {t.nav.contact}
                 </NavHoverTarget>
+                <li className="ml-1.5 list-none">
+                  <Link
+                    href="/logga-in"
+                    className={`inline-flex items-center rounded-full border px-3.5 py-1.5 text-xs font-medium tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${
+                      isHome
+                        ? "border-zinc-900/25 bg-white/55 text-zinc-800 hover:bg-white/80 focus-visible:ring-offset-white/40"
+                        : "border-zinc-300 text-zinc-700 hover:border-zinc-500 hover:bg-white focus-visible:ring-offset-zinc-100"
+                    }`}
+                  >
+                    {t.nav.login}
+                  </Link>
+                </li>
                 <li className="ml-2 list-none">
                   <LanguageMenu
                     locale={locale}
@@ -889,7 +901,7 @@ export default function SiteNavigation() {
           href={localizedHref("/")}
           className={`min-w-0 shrink-0 text-[1.05rem] font-semibold tracking-[0.24em] text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          FORSA
+          CVB COACHING
         </Link>
         <div className={mobileHeaderControlCluster + " ml-auto"}>
           <MobileHeaderLanguageDropdown locale={locale} pathname={pathname} />
@@ -931,7 +943,7 @@ export default function SiteNavigation() {
         }`}
       >
         <div className="flex items-center justify-between border-b border-zinc-900/6 px-6 py-5">
-          <span className="text-[0.8125rem] font-semibold tracking-[0.24em] text-zinc-900">FORSA</span>
+          <span className="text-[0.8125rem] font-semibold tracking-[0.24em] text-zinc-900">CVB COACHING</span>
           <button
             type="button"
             aria-label={t.nav.menuClose}
@@ -1007,10 +1019,10 @@ export default function SiteNavigation() {
             </li>
             <li>
               <Link
-                href={localizedHref("/om-forsa")}
-                aria-current={barePathname === "/om-forsa" ? "page" : undefined}
+                href={localizedHref("/om-oss")}
+                aria-current={barePathname === "/om-oss" ? "page" : undefined}
                 onClick={closeMobileMenu}
-                className={`${mobileNavLinkClass} ${barePathname === "/om-forsa" ? "text-[#92753a]" : ""}`}
+                className={`${mobileNavLinkClass} ${barePathname === "/om-oss" ? "text-[#92753a]" : ""}`}
               >
                 {t.nav.about}
               </Link>
@@ -1027,10 +1039,19 @@ export default function SiteNavigation() {
             </li>
           </ul>
 
-          <div className="mt-10 border-t border-zinc-900/6 pt-8 pb-2">
-            <CtaLink href={localizedHref("/kontakt")} variant="primary" onClick={closeMobileMenu}>
-              {t.nav.bookFirstCall}
-            </CtaLink>
+          <div className="mt-10 flex flex-col gap-3 border-t border-zinc-900/6 pt-8 pb-2">
+            <span className="block [&>a]:flex [&>a]:w-full [&>a]:min-h-11">
+              <CtaLink href={localizedHref("/kontakt")} variant="primary" onClick={closeMobileMenu}>
+                {t.nav.bookFirstCall}
+              </CtaLink>
+            </span>
+            <Link
+              href="/logga-in"
+              onClick={closeMobileMenu}
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]"
+            >
+              {t.nav.login}
+            </Link>
           </div>
         </div>
       </nav>

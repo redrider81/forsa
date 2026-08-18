@@ -4,9 +4,9 @@ import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
-  title: "Contact | Forsa",
+  title: "Contact | CVB Coaching",
   description:
-    "Start with the right conversation. Forsa works with CEOs, founders, and leadership teams when decisions, accountability, and direction need stronger clarity.",
+    "Start with the right conversation. CVB Coaching works with CEOs, founders, and leadership teams when decisions, accountability, and direction need stronger clarity.",
 };
 
 const relevantWhen = [
@@ -36,7 +36,7 @@ export default function ContactPageEn() {
               Start with the right conversation.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Forsa works with CEOs, founders, and leadership teams when decisions, accountability, and
+              CVB Coaching works with CEOs, founders, and leadership teams when decisions, accountability, and
               direction need stronger clarity. To make the first conversation truly relevant, briefly
               describe your situation and what needs to become clearer.
             </p>

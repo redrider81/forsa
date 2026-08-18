@@ -10,6 +10,8 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const locale = localeFromPathname(pathname);
   const isHome = stripLocaleFromPath(pathname) === "/";
+  // Portalen och inloggningen har egen navigation och egen ram.
+  const isPortal = pathname.startsWith("/portal") || pathname.startsWith("/logga-in");
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -19,6 +21,17 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     const id = requestAnimationFrame(() => refreshScrollTriggers());
     return () => cancelAnimationFrame(id);
   }, [pathname]);
+
+  if (isPortal) {
+    return (
+      <>
+        <a href="#main-content" className="skip-link">
+          Hoppa till innehåll
+        </a>
+        {children}
+      </>
+    );
+  }
 
   return (
     <>

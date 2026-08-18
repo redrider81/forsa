@@ -55,9 +55,13 @@ body {
   }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@layer base {
+  /* Ligger i base-lagret så att Tailwind-utilities (t.ex. text-zinc-50 på en
+     länkbaserad knapp) vinner över arvet. */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 a:focus-visible,

@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .claude/
+
+# lokala miljövariabler (mallen .env.example är versionerad)
+!.env.example

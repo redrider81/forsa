@@ -19,6 +19,24 @@ const relevancePoints = [
   "Beslut fattas i rummet men tappar kraft i verkligheten.",
 ];
 
+const engagementScale = [
+  {
+    index: "01",
+    title: "En ledare",
+    body: "Individuell executive coaching för en vd, grundare eller senior ledare med ett eget utvecklingsmål. Sex till åtta samtal över ett halvår.",
+  },
+  {
+    index: "02",
+    title: "En ledningsgrupp",
+    body: "Flera ledare i samma organisation, med separata coachingrelationer och ett gemensamt mål för ansvar och beslut.",
+  },
+  {
+    index: "03",
+    title: "En hel organisation",
+    body: "Ledarskapsprogram över flera affärsområden, med milstolpar, uppföljning och överenskommen rapportering till uppdragsgivaren.",
+  },
+];
+
 export default function HomePage() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
@@ -102,13 +120,13 @@ export default function HomePage() {
                 inte fullt fäste i genomförandet.
               </p>
               <p data-col-paragraph>
-                Forsa arbetar där det blir avgörande att tänka klart tillsammans.
+                CVB Coaching arbetar där det blir avgörande att tänka klart tillsammans.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
-        {/* Editorial: Vad Forsa hjälper med */}
+        {/* Editorial: Vad CVB Coaching hjälper med */}
         <section
           data-parallax-section
           className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white pt-20 pb-0 md:pt-24"
@@ -118,7 +136,7 @@ export default function HomePage() {
             data-section-heading
             className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]"
           >
-            Vad Forsa hjälper med
+            Vad CVB Coaching hjälper med
           </h2>
           <div className="mt-16 border-y border-zinc-200/80">
             <article
@@ -205,11 +223,11 @@ export default function HomePage() {
           />
         </section>
 
-        {/* Two-col: När Forsa är relevant */}
+        {/* Two-col: När CVB Coaching är relevant */}
         <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
             <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-              När Forsa är relevant
+              När CVB Coaching är relevant
             </h2>
             <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
               <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
@@ -358,6 +376,37 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Skala: individ → organisation */}
+        <section data-parallax-section className="py-20 md:py-24">
+          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+              Från en ledare till ett helt program
+            </h2>
+            <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
+              <ScrollReveal variant="staggerList">
+                <ul className="divide-y divide-zinc-200/80 border-y border-zinc-200/80">
+                  {engagementScale.map((item) => (
+                    <li key={item.title} data-list-item className="py-7">
+                      <p className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">
+                        {item.index}
+                      </p>
+                      <h3 className="mt-3 text-xl font-medium leading-tight tracking-tight text-zinc-900">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2.5 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
+                        {item.body}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </ScrollReveal>
+              <p className="mt-8 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
+                Metod, struktur och uppföljning är densamma. Det som skiljer är omfattningen.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
         <section
           data-parallax-image-only
           className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white"
@@ -369,11 +418,11 @@ export default function HomePage() {
           />
         </section>
 
-        {/* Two-col: Så arbetar Forsa */}
+        {/* Two-col: Så arbetar CVB Coaching */}
         <section data-parallax-section className="py-20 md:py-24">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
             <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-              Så arbetar Forsa
+              Så arbetar CVB Coaching
             </h2>
             <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
               <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
@@ -403,7 +452,7 @@ export default function HomePage() {
                 Göteborgsbaserat stöd för svenska företagsledningar
               </h3>
               <p>
-                Forsa är baserat i Göteborg och arbetar med svenska företagsledningar. Uppdragen
+                CVB Coaching är baserat i Göteborg och arbetar med svenska företagsledningar. Uppdragen
                 präglas av diskretion, senioritet och affärsförståelse.
               </p>
               <p>

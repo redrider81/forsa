@@ -5,7 +5,7 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  title: "Coachande ledarskap | Forsa",
+  title: "Coachande ledarskap | CVB Coaching",
   description:
     "För organisationer som vill stärka chefers förmåga att leda genom samtal, lyssnande, frågor, feedback och ansvar.",
 };
@@ -96,7 +96,7 @@ export default function CoachandeLedarskapPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Vad Forsa arbetar med
+              Vad CVB Coaching arbetar med
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (

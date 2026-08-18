@@ -516,8 +516,8 @@ export default function ContactIntakeForm() {
         <div className="max-w-md space-y-5">
           <p className="text-sm leading-[1.7] text-zinc-600">
             {locale === "sv"
-              ? "All kontakt hanteras konfidentiellt. Första samtalet används för att förstå läget och avgöra om Forsa är rätt stöd."
-              : "All contact is handled confidentially. The first conversation is used to understand your situation and determine whether Forsa is the right support."}
+              ? "All kontakt hanteras konfidentiellt. Första samtalet används för att förstå läget och avgöra om CVB Coaching är rätt stöd."
+              : "All contact is handled confidentially. The first conversation is used to understand your situation and determine whether CVB Coaching is the right support."}
           </p>
 
           {summaryError ? (

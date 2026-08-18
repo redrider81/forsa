@@ -12,9 +12,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Forsa | Executive coaching and leadership support",
+  title: "CVB Coaching | Executive coaching and leadership support",
   description:
-    "Forsa supports CEOs, founders, and leadership teams when decisions, accountability, and direction need sharper focus.",
+    "CVB Coaching supports CEOs, founders, and leadership teams when decisions, accountability, and direction need sharper focus.",
 };
 
 const relevancePoints = [
@@ -24,6 +24,24 @@ const relevancePoints = [
   "The company is in growth, transition, or a new phase.",
   "Pressure from owners or the board is increasing.",
   "Decisions are made in meetings but lose momentum in execution.",
+];
+
+const engagementScale = [
+  {
+    index: "01",
+    title: "One leader",
+    body: "Individual executive coaching for a CEO, founder, or senior leader with their own development goal. Six to eight conversations over half a year.",
+  },
+  {
+    index: "02",
+    title: "A leadership team",
+    body: "Several leaders in the same organisation, with separate coaching relationships and one shared goal for accountability and decisions.",
+  },
+  {
+    index: "03",
+    title: "An entire organisation",
+    body: "A leadership programme across business areas, with milestones, follow-up, and agreed reporting to the sponsor.",
+  },
 ];
 
 export default function HomePageEn() {
@@ -105,7 +123,7 @@ export default function HomePageEn() {
                     As pressure rises, friction becomes visible. Priorities drift. Decisions get made
                     but do not fully translate into execution.
                   </p>
-                  <p data-col-paragraph>Forsa works where it is critical to think clearly together.</p>
+                  <p data-col-paragraph>CVB Coaching works where it is critical to think clearly together.</p>
                 </div>
               </ScrollReveal>
             </section>
@@ -119,7 +137,7 @@ export default function HomePageEn() {
                   data-section-heading
                   className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]"
                 >
-                  What Forsa helps with
+                  What CVB Coaching helps with
                 </h2>
                 <div className="mt-16 border-y border-zinc-200/80">
                   <article
@@ -209,7 +227,7 @@ export default function HomePageEn() {
             <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  When Forsa is relevant
+                  When CVB Coaching is relevant
                 </h2>
                 <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
                   <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
@@ -362,6 +380,37 @@ export default function HomePageEn() {
               </div>
             </section>
 
+            {/* Scale: individual → organisation */}
+            <section data-parallax-section className="py-20 md:py-24">
+              <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                  From one leader to an entire programme
+                </h2>
+                <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
+                  <ScrollReveal variant="staggerList">
+                    <ul className="divide-y divide-zinc-200/80 border-y border-zinc-200/80">
+                      {engagementScale.map((item) => (
+                        <li key={item.title} data-list-item className="py-7">
+                          <p className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">
+                            {item.index}
+                          </p>
+                          <h3 className="mt-3 text-xl font-medium leading-tight tracking-tight text-zinc-900">
+                            {item.title}
+                          </h3>
+                          <p className="mt-2.5 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
+                            {item.body}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </ScrollReveal>
+                  <p className="mt-8 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
+                    Method, structure, and follow-up stay the same. Only the scope changes.
+                  </p>
+                </div>
+              </ScrollReveal>
+            </section>
+
             <section
               data-parallax-image-only
               className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white"
@@ -376,7 +425,7 @@ export default function HomePageEn() {
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  How Forsa works
+                  How CVB Coaching works
                 </h2>
                 <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
                   <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
@@ -405,7 +454,7 @@ export default function HomePageEn() {
                     Gothenburg-based support for Swedish leadership teams
                   </h3>
                   <p>
-                    Forsa is based in Gothenburg and works with Swedish leadership teams. Engagements
+                    CVB Coaching is based in Gothenburg and works with Swedish leadership teams. Engagements
                     are defined by discretion, seniority, and business understanding.
                   </p>
                   <p>

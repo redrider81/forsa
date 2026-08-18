@@ -5,7 +5,7 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  title: "Individual Coaching | Forsa",
+  title: "Individual Coaching | CVB Coaching",
   description:
     "Professional coaching for leaders, managers, and key professionals who need stronger role clarity, prioritization, and communication in their work.",
 };
@@ -76,7 +76,7 @@ export default function IndividualCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              What Forsa works with
+              What CVB Coaching works with
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (

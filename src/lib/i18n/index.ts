@@ -26,12 +26,15 @@ export type Dictionary = {
     unsureTitle: string;
     unsureBody: string;
     bookFirstCall: string;
+    login: string;
   };
   footer: {
     description: string;
     location: string;
     services: string;
     about: string;
+    portal: string;
+    login: string;
     copyright: string;
   };
   form: {

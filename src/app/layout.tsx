@@ -22,9 +22,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Forsa | Executive coaching och ledningsstöd",
+  title: "CVB Coaching | Executive coaching och ledningsstöd",
   description:
-    "Forsa arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning behöver skärpas.",
+    "CVB Coaching arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning behöver skärpas.",
 };
 
 export default function RootLayout({

@@ -4,9 +4,9 @@ import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
-  title: "Kontakt | Forsa",
+  title: "Kontakt | CVB Coaching",
   description:
-    "Börja med rätt samtal. Forsa arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning behöver bli tydligare.",
+    "Börja med rätt samtal. CVB Coaching arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning behöver bli tydligare.",
 };
 
 const passarNär = [
@@ -38,7 +38,7 @@ export default function KontaktPage() {
               Börja med rätt samtal.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Forsa arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och
+              CVB Coaching arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och
               riktning behöver bli tydligare. För att första samtalet ska bli relevant, beskriv
               kort vilket läge ni står i och vad som behöver klarna.
             </p>
