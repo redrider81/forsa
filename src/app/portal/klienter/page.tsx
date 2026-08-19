@@ -1,10 +1,10 @@
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
 import { listClients, listEngagements, listSessions } from "@/lib/portal/repository";
 import { formatDate } from "@/lib/portal/format";
 import { Avatar, Divider, PageHeading, Panel, RowLink, SectionLabel } from "@/components/portal/ui";
 
 export default async function ClientsPage() {
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
   const engagements = listEngagements(session.coachId);
@@ -14,10 +14,11 @@ export default async function ClientsPage() {
     <div className="space-y-7">
       <PageHeading
         label="Klienter"
-        title="Klienter och deltagare"
-        lead={`${clients.length} pågående coachingrelationer, fördelade på ${engagements.length} uppdrag.`}
+        title="Klienter"
+        lead={`${clients.length} aktiva coachingrelationer i ${engagements.length} uppdrag.`}
       />
 
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-start lg:gap-6">
       {engagements.map((engagement) => {
         const group = clients.filter((client) => client.engagementId === engagement.id);
         if (group.length === 0) return null;
@@ -53,6 +54,7 @@ export default async function ClientsPage() {
           </Panel>
         );
       })}
+      </div>
     </div>
   );
 }

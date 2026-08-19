@@ -1,26 +1,28 @@
 import Link from "next/link";
-import { readSession } from "@/lib/portal/session";
-import { getEngagementOverview, listEngagements } from "@/lib/portal/repository";
+import { readCoachSession } from "@/lib/portal/session";
+import { buildEngagementOverview, listEngagements } from "@/lib/portal/repository";
+import { readDemoState } from "@/lib/portal/store/demo-store";
 import { engagementStatusLabel, formatDate } from "@/lib/portal/format";
 import { PageHeading, Panel, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function EngagementsPage() {
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
   const engagements = listEngagements(session.coachId);
+  const demoState = await readDemoState();
 
   return (
     <div className="space-y-7">
       <PageHeading
         label="Uppdrag"
-        title="Aktiva uppdrag"
-        lead="Samma struktur bär en enskild klient och ett program med tolv deltagare."
+        title="Uppdrag"
+        lead="Aktiva uppdrag och programstatus."
       />
 
-      <div className="space-y-4">
+      <div className="grid gap-4 xl:grid-cols-2 xl:items-start xl:gap-6">
         {engagements.map((engagement) => {
-          const overview = getEngagementOverview(session.coachId, engagement.id);
+          const overview = buildEngagementOverview(session.coachId, engagement.id, demoState);
           if (!overview) return null;
           return (
             <Panel key={engagement.id} as="article" className="transition-colors hover:border-zinc-300">

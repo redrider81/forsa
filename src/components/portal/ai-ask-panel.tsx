@@ -92,7 +92,7 @@ export default function AiAskPanel({
               setQuestion(suggestion.question);
               void ask(suggestion.question);
             }}
-            className="min-h-9 rounded-full border border-zinc-200 bg-[#faf9f7] px-3.5 py-2 text-[0.8125rem] leading-tight text-zinc-700 transition-colors duration-200 hover:border-zinc-300 hover:bg-white disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="min-h-11 rounded-full border border-zinc-200 bg-[#faf9f7] px-3.5 py-2.5 text-[0.8125rem] leading-tight text-zinc-700 transition-colors duration-200 hover:border-zinc-300 hover:bg-white disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             {suggestion.label}
           </button>
@@ -119,7 +119,7 @@ export default function AiAskPanel({
           className="w-full resize-none rounded-2xl border border-zinc-200 bg-[#faf9f7] px-4 py-3.5 text-[0.9375rem] leading-[1.6] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
         />
         <div className="mt-3 flex items-center justify-between gap-3">
-          <p className="text-[0.75rem] text-zinc-400">Svaren bygger endast på detta underlag.</p>
+          <p className="text-[0.75rem] text-zinc-400">Endast aktuell kontext.</p>
           <button
             type="submit"
             disabled={loading || question.trim().length === 0}
@@ -133,11 +133,7 @@ export default function AiAskPanel({
       <div ref={resultRef} className="mt-6">
         {loading ? (
           <AiSkeleton
-            label={
-              contextType === "klient"
-                ? "Sammanställer underlag från klienthistoriken…"
-                : "Sammanställer underlag från uppdraget…"
-            }
+            label="Sammanställer underlag…"
           />
         ) : null}
 
@@ -182,8 +178,8 @@ export default function AiAskPanel({
                 ) : null}
                 <div className="mt-4">
                   <AiDisclaimer>
-                    AI-genererat underlag för coachens granskning. Sammanställningen ersätter inte din
-                    egen bedömning.
+                    AI-genererat underlag för granskning. Kan bygga på dina arbetsanteckningar och är
+                    inte avsett att delas vidare.
                   </AiDisclaimer>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2.5">

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AiPreparePanel from "@/components/portal/ai-prepare-panel";
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { formatDate, formatWeekdayDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
 import { Panel, PanelHeading, QuoteBlock, SectionLabel, Tag } from "@/components/portal/ui";
@@ -12,10 +12,10 @@ export default async function PrepareSessionPage({
   params: Promise<{ clientId: string }>;
 }) {
   const { clientId } = await params;
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
-  const dossier = getClientDossier(session.coachId, clientId);
+  const dossier = await getClientDossier(session.coachId, clientId);
   if (!dossier) notFound();
 
   const { client, upcomingSession, lastSession } = dossier;
@@ -33,13 +33,13 @@ export default async function PrepareSessionPage({
           href={`/portal/klienter/${client.id}`}
           className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
         >
-          ← {client.name}
+          {client.name}
         </Link>
         <div className="mt-4">
-          <SectionLabel>Förbered session</SectionLabel>
+          <SectionLabel>Förberedelse</SectionLabel>
         </div>
         <h1 className="mt-3 text-[1.75rem] font-medium leading-[1.15] tracking-tight text-balance text-zinc-900 md:text-[2rem]">
-          Inför samtalet med {firstName}
+          Inför session {upcomingSession ? upcomingSession.number : ""}
         </h1>
         {upcomingSession ? (
           <p className="mt-3.5 text-[1rem] leading-[1.7] text-zinc-600">
@@ -51,16 +51,16 @@ export default async function PrepareSessionPage({
 
       {upcomingSession ? (
         <Panel>
-          <PanelHeading label="Klientens förberedelse" title="Vad klienten har skickat inför sessionen" />
+          <PanelHeading label="Underlag mottaget" title="Klientens förberedelse" />
           <div className="mt-5 space-y-5">
             <div>
-              <SectionLabel>Vad vill du fokusera på idag?</SectionLabel>
+              <SectionLabel>Fokus inför sessionen</SectionLabel>
               <p className="mt-2.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
                 {upcomingSession.clientFocus}
               </p>
             </div>
             <div className="border-t border-zinc-200/70 pt-5">
-              <SectionLabel>Vad skulle göra det här samtalet värdefullt för dig?</SectionLabel>
+              <SectionLabel>Önskat resultat</SectionLabel>
               <p className="mt-2.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
                 {upcomingSession.desiredOutcome}
               </p>
@@ -99,7 +99,7 @@ export default async function PrepareSessionPage({
 
       {dossier.openCommitments.length > 0 ? (
         <Panel>
-          <PanelHeading label="Uppföljning" title="Åtaganden som inte är avslutade" />
+          <PanelHeading label="Uppföljning" title="Öppna åtaganden" />
           <div className="mt-5 space-y-4">
             {dossier.openCommitments.map((commitment) => (
               <div key={commitment.id} className="flex items-start justify-between gap-3">
@@ -118,7 +118,7 @@ export default async function PrepareSessionPage({
 
       {dossier.reflections[0] ? (
         <Panel>
-          <PanelHeading label="Senaste reflektionen" title={dossier.reflections[0].prompt} />
+          <PanelHeading label="Senaste reflektion" title={dossier.reflections[0].prompt} />
           <div className="mt-5">
             <QuoteBlock source={`${firstName}, ${formatDate(dossier.reflections[0].date)}`}>
               {dossier.reflections[0].text}

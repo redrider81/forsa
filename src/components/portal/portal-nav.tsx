@@ -6,8 +6,9 @@ import { useState, useTransition } from "react";
 
 const items = [
   { href: "/portal", label: "Översikt", exact: true },
-  { href: "/portal/uppdrag", label: "Uppdrag", exact: false },
+  { href: "/portal/kalender", label: "Kalender", exact: false },
   { href: "/portal/klienter", label: "Klienter", exact: false },
+  { href: "/portal/uppdrag", label: "Uppdrag", exact: false },
   { href: "/portal/profil", label: "Profil", exact: false },
 ] as const;
 
@@ -17,6 +18,9 @@ function Icon({ name, active }: { name: string; active: boolean }) {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" className="h-[1.3rem] w-[1.3rem]">
       {name === "Översikt" && <path d="M4 6h7v5H4zM13 6h7v3h-7zM13 11h7v7h-7zM4 13h7v5H4z" {...common} />}
+      {name === "Kalender" && (
+        <path d="M4.5 6.5h15v13h-15zM4.5 10.5h15M8.5 4.5v4M15.5 4.5v4" {...common} />
+      )}
       {name === "Uppdrag" && <path d="M4 8.5h16v10H4zM9 8.5V6.5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M4 13h16" {...common} />}
       {name === "Klienter" && (
         <>
@@ -46,7 +50,7 @@ export function PortalBottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200/90 bg-[#faf9f7]/95 backdrop-blur-md md:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <ul className="mx-auto flex max-w-md items-stretch justify-between px-2 py-1.5">
+      <ul className="mx-auto flex max-w-md items-stretch justify-between px-1 py-1.5">
         {items.map((item) => {
           const active = isActive(pathname, item.href, item.exact);
           return (
@@ -54,7 +58,7 @@ export function PortalBottomNav() {
               <Link
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-[0.6875rem] font-medium tracking-[0.01em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f7] ${
+                className={`flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl px-0.5 py-1.5 text-[0.625rem] font-medium tracking-[0.01em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f7] ${
                   active ? "text-[#92753a]" : "text-zinc-500 hover:text-zinc-800"
                 }`}
               >
@@ -104,7 +108,7 @@ export function LogoutButton({ className = "" }: { className?: string }) {
     setBusy(true);
     await fetch("/api/portal/auth/logout", { method: "POST" });
     startTransition(() => {
-      router.replace("/logga-in");
+      router.replace("/coach-login");
       router.refresh();
     });
   }

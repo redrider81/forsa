@@ -1,4 +1,5 @@
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
+import { readDemoState } from "@/lib/portal/store/demo-store";
 import { buildClientContext } from "@/lib/ai/context";
 import { getSession } from "@/lib/portal/repository";
 import { AiError, generate, hasApiKey } from "@/lib/ai/openai";
@@ -10,7 +11,7 @@ import { sessionSummarySystemPrompt } from "@/lib/ai/prompts";
  * granskar och godkänner.
  */
 export async function POST(request: Request) {
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) {
     return Response.json({ ok: false, error: "Sessionen har gått ut. Logga in igen." }, { status: 401 });
   }
@@ -41,8 +42,9 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Anteckningarna är för långa." }, { status: 400 });
   }
 
-  const coachingSession = getSession(session.coachId, clientId, sessionId);
-  const context = buildClientContext(session.coachId, clientId);
+  const demoState = await readDemoState();
+  const coachingSession = getSession(session.coachId, clientId, sessionId, demoState);
+  const context = buildClientContext(session.coachId, clientId, demoState, { includeCoachNotes: true });
   if (!coachingSession || !context) {
     return Response.json({ ok: false, error: "Sessionen kunde inte hittas." }, { status: 404 });
   }

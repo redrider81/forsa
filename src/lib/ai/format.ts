@@ -12,8 +12,13 @@ export type AiBlock =
 const KNOWN_HEADINGS = new Set(
   [
     "sammanfattning",
+    "underlag",
     "underlag från klienthistoriken",
     "underlag från uppdraget",
+    "aktuellt fokus",
+    "förändring sedan föregående session",
+    "öppna åtaganden",
+    "återkommande teman",
     "möjligt att utforska",
     "osäkerheter",
     "att förbereda",

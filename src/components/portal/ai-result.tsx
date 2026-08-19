@@ -6,7 +6,7 @@ export function AiResult({ text }: { text: string }) {
   const blocks = parseAiText(text);
 
   return (
-    <div className="space-y-3.5">
+    <div className="max-w-[68ch] space-y-3.5">
       {blocks.map((block, index) => {
         if (block.type === "heading") {
           return (

@@ -1,11 +1,16 @@
 import "server-only";
 
 import { createHash, timingSafeEqual } from "node:crypto";
+import type { PortalRole } from "@/lib/portal/token";
 
 /**
  * Demo-konton. Endast fiktiva uppgifter — inga verkliga användare.
+ *
  * Lösenordet sätts med PORTAL_DEMO_PASSWORD. Saknas variabeln används
  * demolösenordet nedan så att live-demon aldrig blockeras.
+ *
+ * Ingen publik registrering finns. I en produktionsversion ersätts detta av
+ * inbjudningsbaserad access: CVB skapar coachingrelationen och bjuder in klienten.
  */
 const DEMO_FALLBACK_PASSWORD = "cvb-demo-2026";
 
@@ -13,17 +18,28 @@ export type PortalUser = {
   id: string;
   email: string;
   name: string;
-  coachId: string;
-  role: "coach";
+  role: PortalRole;
+  /** coachId för coacher, clientId för klienter. */
+  subjectId: string;
 };
 
-const users: PortalUser[] = [
+const coachUsers: PortalUser[] = [
   {
     id: "user-carolina",
     email: "carolina@cvbcoaching.se",
     name: "Carolina von Braun",
-    coachId: "coach-cvb",
     role: "coach",
+    subjectId: "coach-cvb",
+  },
+];
+
+const clientUsers: PortalUser[] = [
+  {
+    id: "user-emma",
+    email: "emma@northlinestudio.se",
+    name: "Emma Lind",
+    role: "klient",
+    subjectId: "klient-emma-lind",
   },
 ];
 
@@ -38,9 +54,11 @@ function constantTimeEquals(a: string, b: string): boolean {
   return timingSafeEqual(ha, hb);
 }
 
-export function authenticate(email: string, password: string): PortalUser | null {
+/** Autentiserar mot rätt kontolista. En klient kan aldrig logga in som coach. */
+export function authenticate(email: string, password: string, role: PortalRole): PortalUser | null {
   const normalised = email.trim().toLowerCase();
-  const user = users.find((candidate) => candidate.email === normalised);
+  const pool = role === "coach" ? coachUsers : clientUsers;
+  const user = pool.find((candidate) => candidate.email === normalised);
   const passwordOk = constantTimeEquals(password, expectedPassword());
   if (!user || !passwordOk) return null;
   return user;
@@ -51,7 +69,8 @@ export function authenticate(email: string, password: string): PortalUser | null
  * använda utan instruktion. Stäng av med PORTAL_SHOW_DEMO_HINT=false.
  * Värdet ingår aldrig i klientbundlen — det skickas som renderad text.
  */
-export function demoHint(): { email: string; password: string } | null {
+export function demoHint(role: PortalRole): { email: string; password: string } | null {
   if (process.env.PORTAL_SHOW_DEMO_HINT === "false") return null;
-  return { email: users[0].email, password: expectedPassword() };
+  const user = role === "coach" ? coachUsers[0] : clientUsers[0];
+  return { email: user.email, password: expectedPassword() };
 }

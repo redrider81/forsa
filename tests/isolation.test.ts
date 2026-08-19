@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { buildClientContext, buildEngagementContext } from "@/lib/ai/context";
 import {
-  getClientDossier,
-  getClientPerspective,
-  getEngagementOverview,
+  buildClientDossier,
+  buildClientPerspective,
+  buildEngagementOverview,
   listClientsForEngagement,
 } from "@/lib/portal/repository";
 
@@ -11,13 +11,13 @@ const coachId = "coach-cvb";
 
 describe("accesskontroll", () => {
   it("nekar okänd coach", () => {
-    expect(getClientDossier("coach-okand", "klient-emma-lind")).toBeNull();
-    expect(getEngagementOverview("coach-okand", "eng-bergstrom")).toBeNull();
+    expect(buildClientDossier("coach-okand", "klient-emma-lind")).toBeNull();
+    expect(buildEngagementOverview("coach-okand", "eng-bergstrom")).toBeNull();
     expect(buildClientContext("coach-okand", "klient-emma-lind")).toBeNull();
   });
 
   it("nekar okänd klient och okänt uppdrag", () => {
-    expect(getClientDossier(coachId, "klient-finns-inte")).toBeNull();
+    expect(buildClientDossier(coachId, "klient-finns-inte")).toBeNull();
     expect(buildEngagementContext(coachId, "eng-finns-inte")).toBeNull();
   });
 
@@ -46,16 +46,15 @@ describe("AI-kontext för klient", () => {
     }
   });
 
-  it("innehåller aldrig coachens privata anteckningar", () => {
-    expect(context!.text).not.toContain("gick in i väggen");
+  it("utelämnar coachens privata anteckningar som standard", () => {
     expect(context!.text).not.toContain("Hon undvek styrelsefrågan tre gånger");
-    expect(context!.text).not.toContain("Egen reflektion");
+    expect(context!.text).not.toContain("COACH PRIVAT");
   });
 
   it("innehåller klientens egna formuleringar och åtaganden", () => {
     expect(context!.text).toContain("KLIENTENS EGNA REFLEKTIONER");
     expect(context!.text).toContain("KLIENTENS ÅTAGANDEN");
-    expect(context!.sources.join(" ")).toMatch(/genomförda sessioner/);
+    expect(context!.sources.join(" ")).toMatch(/Utvecklingsmål och coachningsöverenskommelse/);
   });
 });
 
@@ -78,7 +77,7 @@ describe("AI-kontext för organisation", () => {
 });
 
 describe("klientvy", () => {
-  const view = getClientPerspective(coachId, "klient-emma-lind");
+  const view = buildClientPerspective(coachId, "klient-emma-lind");
 
   it("saknar coachanteckningar", () => {
     expect(view).not.toBeNull();

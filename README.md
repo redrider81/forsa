@@ -34,14 +34,76 @@ src/lib/ai/                 OpenAI-integration, kontextbygge, kontextlås
 tests/                      enhetstester
 ```
 
+## Persistens — läs detta först
+
+Nuvarande klientdata är fiktiv demodata. Persistenslagret är avsiktligt begränsat
+tills CVB Coaching-konceptet är godkänt. Produktionsversionen ska använda ett
+separat persistent datalager med auth och RLS.
+
+Konkret:
+
+- **Seed-data** (`src/lib/portal/data/`) är statisk och deterministisk. Den är
+  källan för klienter, uppdrag, sessioner, insikter och dokument.
+- **Demo-state** är det klienten själv lägger till i portalen: reflektioner,
+  förberedelse inför nästa samtal och statusändringar på åtaganden. Det lagras
+  i en HMAC-signerad httpOnly-cookie (`cvb_demo_state`) och färdas med varje request.
+
+Cookien valdes för att den fungerar identiskt på varje serverless-instans. Ett
+filsystem gör inte det: på Vercel är filsystemet skrivskyddat, `/tmp` är
+instansbundet och processminne försvinner mellan anrop. Ingen del av koden antar
+att lokala filskrivningar överlever.
+
+| | Demo-state i cookie |
+| --- | --- |
+| Överlever refresh | Ja |
+| Överlever utloggning och ny inloggning | Ja |
+| Överlever omstart av webbläsaren | Ja (30 dagar) |
+| Fungerar på alla serverless-instanser | Ja |
+| Delas mellan klient- och coachinloggning i samma webbläsare | Ja — det är vad demoflödet bygger på |
+| **Synkas mellan olika enheter eller webbläsare** | **Nej** |
+
+Den sista raden är den verkliga begränsningen. Emma och Carolina måste
+demonstreras i samma webbläsare. Det är ett medvetet val, inte en bugg, och
+försvinner när ett riktigt datalager kopplas in.
+
+### Migrering till databas
+
+Data-access är abstraherat i `src/lib/portal/repository.ts`. Funktionerna finns
+i två former:
+
+- rena `build*`/`list*` som tar ett `DemoState` och är enhetstestade
+- tunna `get*`-omslag som läser tillståndet
+
+Vid migrering byts bara omslagen mot databasanrop. UI, domänmodell och AI-lager
+är oberoende av var datan kommer ifrån.
+
 ## Portalen
 
-Portalen nås via **Logga in** i navigationen eller direkt på `/logga-in`.
+Två separata ingångar, ingen publik registrering:
 
-Demokonto: `carolina@cvbcoaching.se`. Lösenordet styrs av `PORTAL_DEMO_PASSWORD`;
-utan variabel används `cvb-demo-2026`. Inloggningsvyn förifyller uppgifterna så
-att demon kan köras utan instruktion — sätt `PORTAL_SHOW_DEMO_HINT=false` för att
-stänga av det.
+| Roll | Väg | Demokonto |
+| --- | --- | --- |
+| Klient | **Klientportal** i huvudnavigationen → `/klient-login` → `/klient` | `emma@northlinestudio.se` |
+| Coach | Diskret i footern → `/coach-login` → `/portal` | `carolina@cvbcoaching.se` |
+
+`/logga-in` finns kvar som redirect till `/coach-login` så att bokmärken fungerar.
+
+Lösenordet styrs av `PORTAL_DEMO_PASSWORD`; utan variabel används `cvb-demo-2026`.
+Inloggningsvyerna förifyller uppgifterna så att demon kan köras utan instruktion —
+sätt `PORTAL_SHOW_DEMO_HINT=false` för att stänga av det.
+
+Rollen ligger i den signerade sessionen. En klientsession ger aldrig coachåtkomst,
+och ett klientkonto kan inte logga in via coachformuläret.
+
+### Demo reset
+
+```bash
+npm run reset:demo
+```
+
+Nollställer det klienten lagt till. Samma funktion finns för coachen under
+**Profil → Återställ demoläge**. Endpointen kräver coachsession — klienten kan
+aldrig anropa den.
 
 **All data i portalen är fiktiv.** Inga verkliga klientuppgifter förekommer.
 
@@ -53,8 +115,11 @@ stänga av det.
 | `coach_klient` | Utvecklingsmål, reflektioner, insikter, åtaganden, godkända sammanfattningar | Coach och klient |
 | `organisation` | Deltagande, sessionsantal, programstatus, milstolpar | Uppdragsgivare |
 
-Coachens privata anteckningar ingår aldrig i AI-underlag, klientvy eller
-organisationsrapporter.
+Coachens privata anteckningar ingår i AI-underlaget **endast** när Carolina
+arbetar med sin egen klient i coachläge — de är hennes arbetsmaterial och hjälper
+henne tänka. De når aldrig klientvyn, organisationsnivån, någon rapport eller
+någon annan klients kontext. Modellen instrueras uttryckligen att aldrig
+formulera dem som något som kan delas vidare.
 
 ## AI
 

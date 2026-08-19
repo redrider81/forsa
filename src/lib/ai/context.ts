@@ -1,6 +1,7 @@
 import "server-only";
 
-import { getClientDossier, getEngagementOverview } from "@/lib/portal/repository";
+import { buildClientDossier, buildEngagementOverview } from "@/lib/portal/repository";
+import { EMPTY_DEMO_STATE, type DemoState } from "@/lib/portal/store/demo-state";
 import { commitmentStatusLabel, formatDate, milestoneStatusLabel } from "@/lib/portal/format";
 
 /**
@@ -27,8 +28,18 @@ function block(title: string, lines: Array<string | null | undefined>): string {
   return `${title}\n${content.join("\n")}\n`;
 }
 
-export function buildClientContext(coachId: string, clientId: string): BuiltContext | null {
-  const dossier = getClientDossier(coachId, clientId);
+/**
+ * Coachens privata anteckningar får ingå — men endast här, i coachens arbete
+ * med den aktuella klienten. De når aldrig klientvyn, organisationsnivån eller
+ * någon annan klients kontext.
+ */
+export function buildClientContext(
+  coachId: string,
+  clientId: string,
+  state: DemoState = EMPTY_DEMO_STATE,
+  options: { includeCoachNotes?: boolean } = {},
+): BuiltContext | null {
+  const dossier = buildClientDossier(coachId, clientId, state);
   if (!dossier) return null;
 
   const { client, engagement, organisation } = dossier;
@@ -99,6 +110,9 @@ export function buildClientContext(coachId: string, clientId: string): BuiltCont
     } else {
       sessionLines.push("  Ingen godkänd sammanfattning finns för denna session.");
     }
+    if (options.includeCoachNotes && session.coachNotes) {
+      sessionLines.push(`  COACH PRIVAT — coachens egna arbetsanteckningar: ${session.coachNotes}`);
+    }
     sessionLines.push("");
   }
   sections.push(block("GENOMFÖRDA SESSIONER", sessionLines));
@@ -110,6 +124,23 @@ export function buildClientContext(coachId: string, clientId: string): BuiltCont
         `Session ${next.number} — ${formatDate(next.date)} kl. ${next.time} (${next.location})`,
         `Klientens fokus: ${next.clientFocus}`,
         `Klientens önskade resultat: ${next.desiredOutcome}`,
+      ]),
+    );
+  }
+
+  if (dossier.prep) {
+    // Det klienten själv har lämnat inför nästa samtal. Väger tyngst eftersom
+    // det är hennes senaste egna formuleringar.
+    sections.push(
+      block("KLIENTENS EGEN FÖRBEREDELSE INFÖR NÄSTA SAMTAL", [
+        `Lämnad ${formatDate(dossier.prep.updatedAt.slice(0, 10))}`,
+        dossier.prep.focus ? `Vad hon vill fokusera på: "${dossier.prep.focus}"` : null,
+        dossier.prep.desiredOutcome
+          ? `Vad som skulle göra samtalet värdefullt: "${dossier.prep.desiredOutcome}"`
+          : null,
+        dossier.prep.changed ? `Vad som förändrats sedan sist: "${dossier.prep.changed}"` : null,
+        dossier.prep.followUp ? `Vad hon vill att coachen följer upp: "${dossier.prep.followUp}"` : null,
+        "Detta är klientens senaste egna ord och ska väga tungt i sammanställningen.",
       ]),
     );
   }
@@ -152,27 +183,54 @@ export function buildClientContext(coachId: string, clientId: string): BuiltCont
   );
 
   sections.push(
-    block("SEKRETESS", [
-      "Coachens privata anteckningar ingår inte i detta underlag och får inte antas existera i sammanställningen.",
-      "Underlaget rör endast denna klient. Ingen annan klient, organisation eller uppdrag finns tillgängligt.",
-    ]),
+    block(
+      "SEKRETESS",
+      options.includeCoachNotes
+        ? [
+            "Detta underlag är coachens eget arbetsmaterial och innehåller rader märkta COACH PRIVAT.",
+            "Sådant material får användas för att hjälpa coachen tänka, men får aldrig formuleras som något som kan delas med klienten eller uppdragsgivaren. Citera det aldrig ordagrant tillbaka som om klienten hade sagt det.",
+            "Skilj tydligt på vad klienten själv har sagt och vad coachen har noterat.",
+            "Underlaget rör endast denna klient. Ingen annan klient, organisation eller uppdrag finns tillgängligt.",
+          ]
+        : [
+            "Coachens privata anteckningar ingår inte i detta underlag och får inte antas existera i sammanställningen.",
+            "Underlaget rör endast denna klient. Ingen annan klient, organisation eller uppdrag finns tillgängligt.",
+          ],
+    ),
   );
 
   const text = `UNDERLAG\n\n${sections.filter(Boolean).join("\n")}`;
 
-  const sources = [
-    `${dossier.completedSessions.length} genomförda sessioner`,
-    `${dossier.reflections.length} klientreflektioner`,
-    `${dossier.insights.length} registrerade insikter`,
-    `${dossier.commitments.length} åtaganden (varav ${dossier.openCommitments.length} ej avslutade)`,
-    "coachningsöverenskommelse och utvecklingsmål",
-  ];
+  const sources: string[] = [];
+  for (const session of dossier.completedSessions.slice(-3)) {
+    sources.push(`Session ${session.number}`);
+  }
+  for (const reflection of dossier.reflections.slice(0, 2)) {
+    sources.push(`Reflektion ${formatDate(reflection.date, false)}`);
+  }
+  if (dossier.openCommitments[0]) {
+    sources.push(`Åtagande från ${formatDate(dossier.openCommitments[0].date, false)}`);
+  }
+  if (dossier.prep) {
+    sources.push("Förberedelse inför nästa session");
+  }
+  sources.push("Utvecklingsmål och coachningsöverenskommelse");
+  if (options.includeCoachNotes) {
+    const noteCount = dossier.completedSessions.filter((item) => item.coachNotes).length;
+    if (noteCount > 0) {
+      sources.push(`Egna arbetsanteckningar (${noteCount} sessioner)`);
+    }
+  }
 
   return { text, sources, subject: client.name };
 }
 
-export function buildEngagementContext(coachId: string, engagementId: string): BuiltContext | null {
-  const overview = getEngagementOverview(coachId, engagementId);
+export function buildEngagementContext(
+  coachId: string,
+  engagementId: string,
+  state: DemoState = EMPTY_DEMO_STATE,
+): BuiltContext | null {
+  const overview = buildEngagementOverview(coachId, engagementId, state);
   if (!overview) return null;
 
   const { engagement, organisation, participants } = overview;
@@ -237,11 +295,11 @@ export function buildEngagementContext(coachId: string, engagementId: string): B
   const text = `UNDERLAG\n\n${sections.filter(Boolean).join("\n")}`;
 
   const sources = [
-    `${participants.length} deltagare`,
-    `${overview.totalCompletedSessions} genomförda sessioner totalt`,
-    `${overview.totalUpcomingSessions} bokade kommande sessioner`,
-    `${engagement.milestones.length} milstolpar`,
-    `${overview.documents.length} dokument på uppdragsnivå`,
+    `Deltagarförteckning (${participants.length})`,
+    `Genomförda sessioner (${overview.totalCompletedSessions})`,
+    `Bokade sessioner (${overview.totalUpcomingSessions})`,
+    `Milstolpar (${engagement.milestones.length})`,
+    `Dokument på uppdragsnivå (${overview.documents.length})`,
   ];
 
   return {

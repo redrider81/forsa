@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
 import { getClientPerspective } from "@/lib/portal/repository";
 import { commitmentStatusLabel, formatDate, formatWeekdayDate } from "@/lib/portal/format";
 import {
@@ -19,10 +19,10 @@ export default async function ClientViewPage({
   params: Promise<{ clientId: string }>;
 }) {
   const { clientId } = await params;
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
-  const view = getClientPerspective(session.coachId, clientId);
+  const view = await getClientPerspective(session.coachId, clientId);
   if (!view) notFound();
 
   const { client, goal } = view;
@@ -36,7 +36,7 @@ export default async function ClientViewPage({
           href={`/portal/klienter/${client.id}`}
           className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
         >
-          ← {client.name}
+          {client.name}
         </Link>
 
         <div
@@ -44,13 +44,13 @@ export default async function ClientViewPage({
           role="note"
         >
           <p className="text-[0.8125rem] leading-relaxed text-[#7d6432]">
-            Du ser portalen som {firstName} ser den. Dina privata anteckningar och allt som inte är
-            godkänt visas inte här.
+            Klientvy. Visar exakt vad {firstName} ser. Arbetsanteckningar och ej godkänt material
+            utelämnas.
           </p>
         </div>
 
         <div className="mt-6">
-          <SectionLabel>Min utveckling</SectionLabel>
+          <SectionLabel>Klientvy</SectionLabel>
         </div>
         <h1 className="mt-3 text-[1.75rem] font-medium leading-[1.15] tracking-tight text-balance text-zinc-900 md:text-[2rem]">
           {goal.headline}
@@ -58,14 +58,14 @@ export default async function ClientViewPage({
       </div>
 
       <Panel>
-        <PanelHeading label="Mitt utvecklingsmål" title="Så formulerade jag det" />
+        <PanelHeading label="Utvecklingsmål" title="Klientens formulering" />
         <div className="mt-5">
-          <QuoteBlock source={`Mina egna ord, ${formatDate(client.agreement.agreedAt)}`}>
+          <QuoteBlock source={`Klientens egna ord, ${formatDate(client.agreement.agreedAt)}`}>
             {goal.clientWording}
           </QuoteBlock>
         </div>
         <div className="mt-6 border-t border-zinc-200/80 pt-5">
-          <SectionLabel>Vad som gör målet uppnått</SectionLabel>
+          <SectionLabel>Framgångskriterier</SectionLabel>
           <ul className="mt-3 space-y-2.5">
             {goal.successCriteria.map((criterion) => (
               <li key={criterion} className="flex gap-3 text-[0.9375rem] leading-[1.7] text-zinc-700">
@@ -86,13 +86,13 @@ export default async function ClientViewPage({
           </p>
           <div className="mt-5 space-y-4 rounded-xl bg-[#faf9f7] p-4">
             <div>
-              <SectionLabel>Mitt fokus</SectionLabel>
+              <SectionLabel>Fokus</SectionLabel>
               <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">
                 {view.upcomingSession.clientFocus}
               </p>
             </div>
             <div className="border-t border-zinc-200/70 pt-4">
-              <SectionLabel>Vad jag vill få ut av samtalet</SectionLabel>
+              <SectionLabel>Önskat resultat</SectionLabel>
               <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">
                 {view.upcomingSession.desiredOutcome}
               </p>
@@ -102,10 +102,10 @@ export default async function ClientViewPage({
       ) : null}
 
       <Panel>
-        <PanelHeading label="Mina reflektioner" title="Det jag har skrivit" />
+        <PanelHeading label="Reflektioner" title="Klientens reflektioner" />
         <div className="mt-5 space-y-6">
           {view.reflections.length === 0 ? (
-            <EmptyState>Du har inte skrivit några reflektioner ännu.</EmptyState>
+            <EmptyState>Inga reflektioner registrerade.</EmptyState>
           ) : (
             view.reflections.map((reflection) => (
               <article key={reflection.id}>
@@ -122,7 +122,7 @@ export default async function ClientViewPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Mina åtaganden" title="Det jag har bestämt mig för" />
+        <PanelHeading label="Åtaganden" title="Aktuella åtaganden" />
         <div className="mt-5 space-y-5">
           {view.commitments.map((commitment) => (
             <article key={commitment.id} className="border-b border-zinc-200/70 pb-5 last:border-0 last:pb-0">
@@ -147,7 +147,7 @@ export default async function ClientViewPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Mina sessioner" title={`${completed.length} genomförda samtal`} />
+        <PanelHeading label="Sessioner" title={`${completed.length} genomförda`} />
         <div className="mt-4">
           {completed.map((item, index) => (
             <div key={item.id}>
@@ -163,7 +163,7 @@ export default async function ClientViewPage({
                   </p>
                 ) : (
                   <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-zinc-400">
-                    Sammanfattningen är inte delad ännu.
+                    Sammanfattning inte delad.
                   </p>
                 )}
               </div>
@@ -173,7 +173,7 @@ export default async function ClientViewPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Material" title="Mina dokument" />
+        <PanelHeading label="Material" title="Dokument och material" />
         <div className="mt-4">
           {view.documents.map((document, index) => (
             <div key={document.id}>

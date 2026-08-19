@@ -35,6 +35,8 @@ export type Dictionary = {
     about: string;
     portal: string;
     login: string;
+    clientPortal: string;
+    coachLogin: string;
     copyright: string;
   };
   form: {

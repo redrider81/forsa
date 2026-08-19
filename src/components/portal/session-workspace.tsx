@@ -6,10 +6,14 @@ import { Panel, PanelHeading, SectionLabel } from "@/components/portal/ui";
 
 type Stage = "idle" | "loading" | "draft" | "error";
 
+/**
+ * Insikten och åtagandet är klientens, inte coachens. Prefixen är formulerade
+ * så att anteckningen alltid pekar tillbaka på klientens eget ägarskap.
+ */
 const quickActions = [
-  { label: "Lägg till insikt", prefix: "Insikt: " },
-  { label: "Lägg till åtagande", prefix: "Åtagande: " },
-  { label: "Följ upp", prefix: "Att följa upp: " },
+  { label: "Klientens insikt", prefix: "Klientens insikt: " },
+  { label: "Klientens åtagande", prefix: "Klientens åtagande: " },
+  { label: "Att följa upp", prefix: "Att följa upp: " },
 ] as const;
 
 /**
@@ -82,8 +86,7 @@ export default function SessionWorkspace({
       <Panel>
         <PanelHeading label="Under sessionen" title="Anteckningar" />
         <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-          Dina anteckningar är privata. De delas varken med {clientFirstName} eller med någon
-          organisation.
+          Privata. Delas varken med {clientFirstName} eller uppdragsgivaren.
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
@@ -109,7 +112,7 @@ export default function SessionWorkspace({
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
           rows={8}
-          placeholder="Kort om vad klienten tog upp, vad som blev tydligt och vad hon själv sa att hon ska göra…"
+          placeholder="Fokus, klientens insikter, klientens åtaganden, uppföljning."
           className="mt-4 w-full resize-y rounded-2xl border border-zinc-200 bg-[#faf9f7] px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
         />
       </Panel>
@@ -117,8 +120,7 @@ export default function SessionWorkspace({
       <Panel>
         <PanelHeading label="Efter sessionen" title="Skapa sammanfattning" />
         <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-          AI:n strukturerar dina anteckningar. Du redigerar, granskar och godkänner innan något delas
-          med {clientFirstName}.
+          Struktureras från dina anteckningar. Redigera, granska och godkänn innan delning.
         </p>
 
         <button
@@ -132,7 +134,7 @@ export default function SessionWorkspace({
 
         {stage === "loading" ? (
           <div className="mt-5">
-            <AiSkeleton label="Strukturerar dina anteckningar…" />
+            <AiSkeleton label="Strukturerar underlag…" />
           </div>
         ) : null}
 
@@ -174,8 +176,7 @@ export default function SessionWorkspace({
 
             <div className="mt-4">
               <AiDisclaimer>
-                AI-genererat utkast utifrån dina anteckningar. Ingenting delas med klienten förrän du
-                har godkänt det.
+                AI-genererat utkast från dina anteckningar. Delas först efter godkännande.
               </AiDisclaimer>
             </div>
 
@@ -208,7 +209,7 @@ export default function SessionWorkspace({
 
             {approved ? (
               <p role="status" className="mt-3.5 text-[0.8125rem] leading-relaxed text-[#7d6432]">
-                Godkänd. Sammanfattningen är delad med {clientFirstName} och sparad i klientens material.
+                Godkänd och delad med {clientFirstName}.
               </p>
             ) : null}
           </article>

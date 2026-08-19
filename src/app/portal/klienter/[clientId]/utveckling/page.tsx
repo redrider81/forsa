@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { commitmentStatusLabel, formatDate } from "@/lib/portal/format";
 import { Panel, PanelHeading, QuoteBlock, SectionLabel, Tag } from "@/components/portal/ui";
@@ -11,14 +11,13 @@ export default async function DevelopmentReportPage({
   params: Promise<{ clientId: string }>;
 }) {
   const { clientId } = await params;
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
-  const dossier = getClientDossier(session.coachId, clientId);
+  const dossier = await getClientDossier(session.coachId, clientId);
   if (!dossier) notFound();
 
   const { client, completedSessions, insights, commitments, openCommitments } = dossier;
-  const firstName = client.name.split(" ")[0];
   const done = commitments.filter((item) => item.status === "genomfort");
 
   return (
@@ -28,7 +27,7 @@ export default async function DevelopmentReportPage({
           href={`/portal/klienter/${client.id}`}
           className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
         >
-          ← {client.name}
+          {client.name}
         </Link>
         <div className="mt-4">
           <SectionLabel>Rapport · coach och klient</SectionLabel>
@@ -44,7 +43,7 @@ export default async function DevelopmentReportPage({
       <Panel>
         <PanelHeading label="Ursprungligt mål" title={client.goal.headline} />
         <div className="mt-5">
-          <QuoteBlock source={`${firstName}s egna ord vid start`}>{client.goal.clientWording}</QuoteBlock>
+          <QuoteBlock source="Klientens egna ord vid start">{client.goal.clientWording}</QuoteBlock>
         </div>
         <p className="mt-5 text-[0.9375rem] leading-[1.7] text-zinc-700">{client.goal.baseline}</p>
       </Panel>
@@ -70,7 +69,7 @@ export default async function DevelopmentReportPage({
 
       {dossier.reflections.length > 0 ? (
         <Panel>
-          <PanelHeading label="Viktiga reflektioner" title="Klientens egna formuleringar" />
+          <PanelHeading label="Reflektioner" title="Klientens egna formuleringar" />
           <div className="mt-5 space-y-6">
             {dossier.reflections.slice(0, 3).map((reflection) => (
               <article key={reflection.id}>
@@ -88,7 +87,7 @@ export default async function DevelopmentReportPage({
 
       {insights.length > 0 ? (
         <Panel>
-          <PanelHeading label="Observerad utveckling" title="Ökad medvetenhet över tid" />
+          <PanelHeading label="Observerad utveckling" title="Insikter över tid" />
           <ol className="mt-5 space-y-4">
             {[...insights].reverse().map((insight) => (
               <li key={insight.id} className="flex gap-4">
@@ -108,7 +107,7 @@ export default async function DevelopmentReportPage({
       ) : null}
 
       <Panel>
-        <PanelHeading label="Åtaganden" title="Vad klienten själv har tagit sig an" />
+        <PanelHeading label="Åtaganden" title="Klientens åtaganden" />
         <div className="mt-5 space-y-4">
           {commitments.map((commitment) => (
             <div key={commitment.id} className="flex items-start justify-between gap-3">
@@ -156,8 +155,8 @@ export default async function DevelopmentReportPage({
       </Panel>
 
       <p className="px-1 text-[0.75rem] leading-relaxed text-zinc-400">
-        Översikten är avsedd för coach och klient. Coachens privata anteckningar ingår inte, och
-        innehållet delas inte med uppdragsgivaren.
+        För coach och klient. Coachens arbetsanteckningar ingår inte och innehållet delas inte med
+        uppdragsgivaren.
       </p>
     </div>
   );

@@ -57,8 +57,8 @@ export const sessionStatusLabel: Record<SessionStatus, string> = {
 };
 
 export const commitmentStatusLabel: Record<CommitmentStatus, string> = {
-  oppet: "Öppet",
-  pagar: "Pågår",
+  oppet: "Ej startat",
+  pagar: "Pågående",
   genomfort: "Genomfört",
 };
 

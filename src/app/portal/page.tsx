@@ -1,206 +1,168 @@
 import Link from "next/link";
-import { readSession } from "@/lib/portal/session";
-import { getCoach, getDashboardData } from "@/lib/portal/repository";
+import { readCoachSession } from "@/lib/portal/session";
+import { getDashboardData, getOperationsOverview } from "@/lib/portal/repository";
+import { formatDate, formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import {
-  formatShortDate,
-  formatWeekdayDate,
-  greeting,
-  relativeDayLabel,
-  todayIso,
-} from "@/lib/portal/format";
+  CompactCalendar,
+  MetricGrid,
+  OperationsRow,
+} from "@/components/portal/operations";
 import {
   Avatar,
   Divider,
   EmptyState,
-  MetaRow,
   Panel,
   PanelHeading,
   RowLink,
-  SectionLabel,
-  Tag,
 } from "@/components/portal/ui";
 
 export default async function PortalOverviewPage() {
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
-  const coach = getCoach();
   const today = todayIso();
-  const data = getDashboardData(session.coachId, today);
-  const firstName = coach.name.split(" ")[0];
-  const next = data.nextSession;
-  const thisWeek = data.upcomingSessions.slice(0, 4);
+  const [operations, data] = await Promise.all([
+    getOperationsOverview(session.coachId, today),
+    getDashboardData(session.coachId, today),
+  ]);
+
+  const { week } = operations;
 
   return (
     <div className="space-y-8">
-      <header>
-        <SectionLabel>Idag</SectionLabel>
-        <h1 className="mt-3 text-[1.85rem] font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.2rem]">
-          {greeting(new Date().getHours())}, {firstName}
+      <header className="pb-1">
+        <h1 className="text-[1.6rem] font-medium leading-[1.2] tracking-tight text-zinc-900 md:text-[1.9rem]">
+          Översikt
         </h1>
-        <p className="mt-3 text-[0.9375rem] leading-[1.7] text-zinc-600">
-          {data.sessionsWithinWeek === 1
-            ? "1 session den närmaste veckan"
-            : `${data.sessionsWithinWeek} sessioner den närmaste veckan`}{" "}
-          · {data.recentReflections.length} nya reflektioner ·{" "}
-          {data.openCommitments.length} åtaganden att följa upp
+        <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
+          {formatWeekdayDate(today)} · {week.activeClients} klienter · {week.activeEngagements} uppdrag
         </p>
       </header>
 
-      {next ? (
-        <Panel>
-          <SectionLabel>Nästa session</SectionLabel>
-          <div className="mt-4 flex items-start gap-4">
-            <Avatar initials={next.client.initials} size="lg" />
-            <div className="min-w-0 flex-1">
-              <h2 className="text-[1.35rem] font-medium leading-tight tracking-tight text-zinc-900">
-                {next.client.name}
-              </h2>
-              <p className="mt-1 text-[0.9375rem] leading-snug text-zinc-600">{next.client.role}</p>
-              <MetaRow
-                items={[
-                  next.engagement.kindLabel,
-                  `Session ${next.session.number}`,
-                ]}
-              />
-            </div>
-          </div>
-
-          <p className="mt-5 text-[0.9375rem] leading-relaxed text-zinc-700">
-            {formatWeekdayDate(next.session.date)} kl. {next.session.time} ·{" "}
-            {relativeDayLabel(next.session.date, today)}
-            <span className="block text-[0.8125rem] text-zinc-500">{next.session.location}</span>
-          </p>
-
-          <div className="mt-5 rounded-xl bg-[#faf9f7] p-4">
-            <SectionLabel>Klientens fokus</SectionLabel>
-            <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">
-              {next.session.clientFocus}
-            </p>
-          </div>
-
-          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
-            <Link
-              href={`/portal/klienter/${next.client.id}/forbered`}
-              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-            >
-              Förbered session
-            </Link>
-            <Link
-              href={`/portal/klienter/${next.client.id}`}
-              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-[#faf9f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-            >
-              Öppna klienten
-            </Link>
-          </div>
-        </Panel>
-      ) : null}
+      <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-x-8">
+      <div className="min-w-0 space-y-8 lg:col-span-7">
+      <Panel>
+        <PanelHeading
+          label="Dagens agenda"
+          title={operations.today.length === 1 ? "1 insats" : `${operations.today.length} insatser`}
+        />
+        <div className="mt-4">
+          {operations.today.length === 0 ? (
+            <EmptyState>Inga insatser i dag.</EmptyState>
+          ) : (
+            operations.today.map((item, index) => (
+              <div key={item.id}>
+                {index > 0 ? <Divider /> : null}
+                <OperationsRow item={item} />
+              </div>
+            ))
+          )}
+        </div>
+      </Panel>
 
       <Panel>
         <PanelHeading
-          label="Framåt"
-          title="Kommande sessioner"
-          action={
-            <span className="text-[0.75rem] text-zinc-400">
-              {data.upcomingSessions.length} bokade
-            </span>
+          label="Kräver åtgärd"
+          title={
+            operations.requiresAction.length === 1
+              ? "1 punkt"
+              : `${operations.requiresAction.length} punkter`
           }
         />
         <div className="mt-4">
-          {thisWeek.length === 0 ? (
-            <EmptyState>Inga bokade sessioner just nu.</EmptyState>
+          {operations.requiresAction.length === 0 ? (
+            <EmptyState>Inga öppna punkter.</EmptyState>
           ) : (
-            thisWeek.map((item, index) => (
-              <div key={item.session.id}>
+            operations.requiresAction.map((item, index) => (
+              <div key={item.id}>
                 {index > 0 ? <Divider /> : null}
-                <RowLink
-                  href={`/portal/klienter/${item.client.id}`}
-                  leading={<Avatar initials={item.client.initials} />}
-                  title={item.client.name}
-                  subtitle={item.client.role}
-                  meta={`${formatShortDate(item.session.date)} kl. ${item.session.time} · ${relativeDayLabel(item.session.date, today)}`}
-                />
+                <OperationsRow item={item} showDate />
               </div>
             ))
           )}
         </div>
       </Panel>
 
+      </div>
+
+      <div className="min-w-0 space-y-8 lg:col-span-5">
       <Panel>
-        <PanelHeading label="Uppdrag" title="Aktiva uppdrag" />
-        <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-          Från enskild executive coaching till ledarskapsprogram med tolv deltagare.
-        </p>
-        <div className="mt-4 space-y-3">
-          {data.engagements.map((engagement) => {
-            const participants = engagement.participantIds.length;
-            return (
-              <Link
-                key={engagement.id}
-                href={`/portal/uppdrag/${engagement.id}`}
-                className="block rounded-xl border border-zinc-200/80 bg-[#faf9f7] p-4 transition-[border-color,background-color] duration-200 hover:border-zinc-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="truncate text-[0.9875rem] font-medium leading-snug text-zinc-900">
-                      {engagement.title}
-                    </p>
-                    <p className="mt-1 text-[0.8125rem] leading-snug text-zinc-500">
-                      {engagement.kindLabel} · {engagement.periodLabel}
-                    </p>
-                  </div>
-                  <Tag>{participants === 1 ? "1 deltagare" : `${participants} deltagare`}</Tag>
-                </div>
-              </Link>
-            );
-          })}
+        <PanelHeading label="Veckostatus" title="Sju dagar framåt" />
+        <div className="mt-5">
+          <MetricGrid
+            columns={2}
+            metrics={[
+              { label: "Coachingsamtal", value: String(week.sessions) },
+              {
+                label: "Förberedelser",
+                value: String(week.preparationsReceived),
+                note: "mottagna",
+              },
+              { label: "Uppföljningar", value: String(week.followUpsRequired), note: "öppna" },
+              {
+                label: "Genomgångar",
+                value: String(week.programmeReviews),
+                note: "program, 21 dgr",
+              },
+            ]}
+          />
+        </div>
+        <div className="mt-6 border-t border-zinc-200/80 pt-4">
+          <MetricGrid
+            columns={2}
+            metrics={[
+              { label: "Genomförda", value: String(week.completedThisPeriod), note: "sessioner totalt" },
+              { label: "Uppdrag", value: String(week.activeEngagements), note: "aktiva" },
+              { label: "Klienter", value: String(week.activeClients), note: "aktiva" },
+            ]}
+          />
         </div>
       </Panel>
 
       <Panel>
-        <PanelHeading label="Att granska" title="Nya reflektioner" />
+        <PanelHeading
+          label="Kommande"
+          title="Planerade insatser"
+          action={
+            <Link
+              href="/portal/kalender"
+              className="text-[0.75rem] text-zinc-500 underline underline-offset-4 transition-colors hover:text-zinc-900"
+            >
+              Kalender
+            </Link>
+          }
+        />
         <div className="mt-4">
-          {data.recentReflections.length === 0 ? (
-            <EmptyState>Inga nya reflektioner.</EmptyState>
+          {operations.calendar.length === 0 ? (
+            <EmptyState>Inget planerat.</EmptyState>
           ) : (
-            data.recentReflections.map((item, index) => (
-              <div key={item.reflection.id}>
-                {index > 0 ? <Divider /> : null}
-                <RowLink
-                  href={`/portal/klienter/${item.client.id}`}
-                  leading={<Avatar initials={item.client.initials} />}
-                  title={item.client.name}
-                  subtitle={item.reflection.text.slice(0, 78).trim() + "…"}
-                  meta={`${formatShortDate(item.reflection.date)} · ${item.reflection.prompt}`}
-                />
-              </div>
-            ))
+            <CompactCalendar items={operations.calendar.slice(0, 6)} />
           )}
         </div>
       </Panel>
 
-      <Panel>
-        <PanelHeading label="Uppföljning" title="Öppna åtaganden" />
-        <div className="mt-4">
-          {data.openCommitments.length === 0 ? (
-            <EmptyState>Alla åtaganden är följda upp.</EmptyState>
-          ) : (
-            data.openCommitments.map((item, index) => (
-              <div key={item.commitment.id}>
+      {data.clientActivity.length > 0 ? (
+        <Panel>
+          <PanelHeading label="Inkommet" title="Sedan senaste inloggning" />
+          <div className="mt-4">
+            {data.clientActivity.map((item, index) => (
+              <div key={item.id}>
                 {index > 0 ? <Divider /> : null}
                 <RowLink
-                  href={`/portal/klienter/${item.client.id}`}
-                  leading={<Avatar initials={item.client.initials} />}
+                  href={`/portal/klienter/${item.clientId}`}
+                  leading={<Avatar initials={item.clientInitials} />}
                   multiline
-                  title={item.commitment.text}
-                  subtitle={`${item.client.name} · ${item.commitment.dueLabel}`}
-                  trailing={<Tag tone="open">Öppet</Tag>}
+                  title={item.label}
+                  subtitle={item.detail}
+                  meta={item.at ? formatDate(item.at, false) : undefined}
                 />
               </div>
-            ))
-          )}
-        </div>
-      </Panel>
+            ))}
+          </div>
+        </Panel>
+      ) : null}
+      </div>
+      </div>
     </div>
   );
 }

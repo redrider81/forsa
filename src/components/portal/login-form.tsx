@@ -5,8 +5,12 @@ import { useState } from "react";
 
 export default function LoginForm({
   demo,
+  role,
+  redirectTo,
 }: {
   demo: { email: string; password: string } | null;
+  role: "coach" | "klient";
+  redirectTo: string;
 }) {
   const router = useRouter();
   const [email, setEmail] = useState(demo?.email ?? "");
@@ -22,7 +26,7 @@ export default function LoginForm({
       const response = await fetch("/api/portal/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, role }),
       });
       const data = (await response.json()) as { ok: boolean; error?: string };
       if (!response.ok || !data.ok) {
@@ -30,7 +34,7 @@ export default function LoginForm({
         setLoading(false);
         return;
       }
-      router.replace("/portal");
+      router.replace(redirectTo);
       router.refresh();
     } catch {
       setError("Det gick inte att nå tjänsten just nu. Kontrollera uppkopplingen och försök igen.");

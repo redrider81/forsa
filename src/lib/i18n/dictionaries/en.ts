@@ -16,7 +16,7 @@ export const enDictionary = {
     coaching: "Coaching",
     about: "About us",
     contact: "Contact",
-    login: "Log in",
+    login: "Client portal",
     leadershipLabel: "For leadership teams",
     coachingLabel: "Coaching",
     startHereLabel: "Start here",
@@ -33,6 +33,8 @@ export const enDictionary = {
     about: "About us",
     portal: "Portal",
     login: "Log in",
+    clientPortal: "Client portal",
+    coachLogin: "Coach login",
     copyright: "© 2026 CVB Coaching. All rights reserved.",
   },
   form: {

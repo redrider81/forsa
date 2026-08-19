@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { authenticate } from "@/lib/portal/users";
 import { SESSION_COOKIE, createSessionToken, sessionCookieOptions } from "@/lib/portal/session";
+import type { PortalRole } from "@/lib/portal/token";
 
 /** Enkel skydd mot upprepade försök. Räcker för demon. */
 const attempts = new Map<string, { count: number; firstAt: number }>();
@@ -26,40 +27,42 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Ogiltig förfrågan." }, { status: 400 });
   }
 
-  const { email, password } = (body ?? {}) as { email?: unknown; password?: unknown };
+  const { email, password, role } = (body ?? {}) as {
+    email?: unknown;
+    password?: unknown;
+    role?: unknown;
+  };
 
   if (typeof email !== "string" || typeof password !== "string" || !email.trim() || !password) {
-    return Response.json(
-      { ok: false, error: "Fyll i både e-post och lösenord." },
-      { status: 400 },
-    );
+    return Response.json({ ok: false, error: "Fyll i både e-post och lösenord." }, { status: 400 });
   }
 
+  // Rollen avgör vilken kontolista som används. En klient kan aldrig logga in
+  // som coach även om hon skickar role: "coach" — kontot finns inte i den listan.
+  const requestedRole: PortalRole = role === "klient" ? "klient" : "coach";
+
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "lokal";
-  if (tooManyAttempts(`${ip}:${email.trim().toLowerCase()}`)) {
+  if (tooManyAttempts(`${ip}:${requestedRole}:${email.trim().toLowerCase()}`)) {
     return Response.json(
       { ok: false, error: "För många försök. Vänta en stund och försök igen." },
       { status: 429 },
     );
   }
 
-  const user = authenticate(email, password);
+  const user = authenticate(email, password, requestedRole);
   if (!user) {
-    return Response.json(
-      { ok: false, error: "Fel e-postadress eller lösenord." },
-      { status: 401 },
-    );
+    return Response.json({ ok: false, error: "Fel e-postadress eller lösenord." }, { status: 401 });
   }
 
   const token = createSessionToken({
     userId: user.id,
-    coachId: user.coachId,
     name: user.name,
     role: user.role,
+    subjectId: user.subjectId,
   });
 
   const store = await cookies();
   store.set(SESSION_COOKIE, token, sessionCookieOptions());
 
-  return Response.json({ ok: true });
+  return Response.json({ ok: true, role: user.role });
 }

@@ -58,3 +58,23 @@ export async function readSession(): Promise<PortalSession | null> {
   const store = await cookies();
   return verifySessionToken(store.get(SESSION_COOKIE)?.value);
 }
+
+export type CoachSession = { userId: string; name: string; coachId: string };
+export type ClientSession = { userId: string; name: string; clientId: string };
+
+/**
+ * Coachsession. En klientsession ger aldrig coachåtkomst — rollen kommer från
+ * den signerade token och kan inte sättas från klienten.
+ */
+export async function readCoachSession(): Promise<CoachSession | null> {
+  const session = await readSession();
+  if (!session || session.role !== "coach") return null;
+  return { userId: session.userId, name: session.name, coachId: session.subjectId };
+}
+
+/** Klientsession. Ger endast åtkomst till den egna coachingrelationen. */
+export async function readClientSession(): Promise<ClientSession | null> {
+  const session = await readSession();
+  if (!session || session.role !== "klient") return null;
+  return { userId: session.userId, name: session.name, clientId: session.subjectId };
+}

@@ -3,7 +3,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PortalBottomNav, PortalDesktopNav } from "@/components/portal/portal-nav";
 import { Avatar } from "@/components/portal/ui";
-import { readSession } from "@/lib/portal/session";
+import { LogoMark } from "@/components/brand/logo";
+import { readCoachSession } from "@/lib/portal/session";
 
 export const metadata: Metadata = {
   title: "CVB Coaching Portal",
@@ -12,9 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) {
-    redirect("/logga-in");
+    redirect("/coach-login");
   }
 
   const initials = session.name
@@ -30,12 +31,12 @@ export default async function PortalLayout({ children }: { children: React.React
         className="sticky top-0 z-30 border-b border-zinc-200/80 bg-[#faf9f7]/95 backdrop-blur-md"
         style={{ paddingTop: "env(safe-area-inset-top)" }}
       >
-        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-5 py-3.5 md:px-6">
+        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-5 py-3.5 md:px-6 lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[88rem]">
           <Link
             href="/portal"
-            className="text-[0.75rem] font-semibold tracking-[0.24em] text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f7] md:text-[0.8125rem]"
+            className="shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f7]"
           >
-            CVB COACHING
+            <LogoMark className="h-8 w-auto" priority />
           </Link>
           <span aria-hidden="true" className="h-4 w-px bg-zinc-900/12" />
           <span className="text-[0.75rem] tracking-[0.08em] text-zinc-500">Portal</span>
@@ -55,7 +56,7 @@ export default async function PortalLayout({ children }: { children: React.React
 
       <main
         id="main-content"
-        className="mx-auto w-full max-w-3xl flex-1 px-5 pb-28 pt-6 md:px-6 md:pb-16 md:pt-10"
+        className="mx-auto w-full max-w-3xl flex-1 px-5 pb-28 pt-6 md:px-6 md:pb-16 md:pt-10 lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[88rem]"
       >
         {children}
       </main>

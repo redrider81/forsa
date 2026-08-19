@@ -1,4 +1,5 @@
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
+import { readDemoState } from "@/lib/portal/store/demo-store";
 import { buildClientContext } from "@/lib/ai/context";
 import { AiError, generate, hasApiKey } from "@/lib/ai/openai";
 import { clientQuestionSystemPrompt, prepareSessionSystemPrompt } from "@/lib/ai/prompts";
@@ -12,7 +13,7 @@ import { OUT_OF_SCOPE_REPLY, isOutOfScope, validateQuestion } from "@/lib/ai/sco
  * att läsa data från en annan klient.
  */
 export async function POST(request: Request) {
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) {
     return Response.json({ ok: false, error: "Sessionen har gått ut. Logga in igen." }, { status: 401 });
   }
@@ -36,7 +37,10 @@ export async function POST(request: Request) {
 
   const requestMode = mode === "forbered" ? "forbered" : "fraga";
 
-  const context = buildClientContext(session.coachId, clientId);
+  const context = buildClientContext(session.coachId, clientId, await readDemoState(), {
+    // Coachens eget arbetsläge med sin egen klient.
+    includeCoachNotes: true,
+  });
   if (!context) {
     return Response.json({ ok: false, error: "Klienten kunde inte hittas." }, { status: 404 });
   }

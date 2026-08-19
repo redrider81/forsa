@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
 import { getEngagementOverview } from "@/lib/portal/repository";
 import { engagementStatusLabel, formatDate, milestoneStatusLabel } from "@/lib/portal/format";
 import { Divider, Panel, PanelHeading, SectionLabel, Tag } from "@/components/portal/ui";
@@ -11,10 +11,10 @@ export default async function ProgramReportPage({
   params: Promise<{ engagementId: string }>;
 }) {
   const { engagementId } = await params;
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
-  const overview = getEngagementOverview(session.coachId, engagementId);
+  const overview = await getEngagementOverview(session.coachId, engagementId);
   if (!overview) notFound();
 
   const { engagement, organisation, participants } = overview;
@@ -27,7 +27,7 @@ export default async function ProgramReportPage({
           href={`/portal/uppdrag/${engagement.id}`}
           className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
         >
-          ← {engagement.title}
+          {engagement.title}
         </Link>
         <div className="mt-4">
           <SectionLabel>Rapport · uppdragsgivare</SectionLabel>
@@ -94,7 +94,7 @@ export default async function ProgramReportPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Milstolpar" title="Programmets hållpunkter" />
+        <PanelHeading label="Milstolpar" title="Hållpunkter" />
         <ol className="mt-5 space-y-4">
           {engagement.milestones.map((milestone) => (
             <li key={milestone.id} className="flex items-start justify-between gap-3">
@@ -111,13 +111,12 @@ export default async function ProgramReportPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Sekretess" title="Vad rapporten innehåller" />
+        <PanelHeading label="Sekretess" title="Rapportens innehåll" />
         <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
           {engagement.sponsorReporting}
         </p>
         <p className="mt-4 text-[0.875rem] leading-relaxed text-zinc-500">
-          Rapporten innehåller inga individuella samtalsinnehåll, inga reflektioner, inga insikter och
-          inga coachanteckningar.
+          Inga individuella samtalsinnehåll, reflektioner, insikter eller coachanteckningar.
         </p>
       </Panel>
     </div>

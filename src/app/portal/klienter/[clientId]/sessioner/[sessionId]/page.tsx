@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SessionWorkspace from "@/components/portal/session-workspace";
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier, getSession } from "@/lib/portal/repository";
 import { formatWeekdayDate, formatDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
 import { Panel, PanelHeading, SectionLabel, Tag } from "@/components/portal/ui";
@@ -12,11 +12,11 @@ export default async function SessionPage({
   params: Promise<{ clientId: string; sessionId: string }>;
 }) {
   const { clientId, sessionId } = await params;
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
-  const dossier = getClientDossier(session.coachId, clientId);
-  const coachingSession = getSession(session.coachId, clientId, sessionId);
+  const dossier = await getClientDossier(session.coachId, clientId);
+  const coachingSession = await getSession(session.coachId, clientId, sessionId);
   if (!dossier || !coachingSession) notFound();
 
   const { client } = dossier;
@@ -31,7 +31,7 @@ export default async function SessionPage({
           href={`/portal/klienter/${client.id}`}
           className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
         >
-          ← {client.name}
+          {client.name}
         </Link>
 
         <div className="mt-5 flex items-start justify-between gap-4">
@@ -54,6 +54,8 @@ export default async function SessionPage({
         </div>
       </div>
 
+      <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-x-8">
+      <div className="min-w-0 space-y-7 lg:col-span-7">
       <Panel>
         <SectionLabel>Övergripande utvecklingsmål</SectionLabel>
         <p className="mt-2.5 text-[1.05rem] leading-[1.6] tracking-tight text-zinc-900">
@@ -62,10 +64,10 @@ export default async function SessionPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Fokus för sessionen" title={`Vad ${firstName} vill fokusera på`} />
+        <PanelHeading label="Fokus för sessionen" title="Klientens fokus" />
         <p className="mt-3.5 text-[1rem] leading-[1.7] text-zinc-700">{coachingSession.clientFocus}</p>
         <div className="mt-5 border-t border-zinc-200/80 pt-5">
-          <SectionLabel>Vad som skulle göra samtalet värdefullt</SectionLabel>
+          <SectionLabel>Önskat resultat</SectionLabel>
           <p className="mt-2.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
             {coachingSession.desiredOutcome}
           </p>
@@ -75,7 +77,7 @@ export default async function SessionPage({
       {summary ? (
         <Panel>
           <PanelHeading
-            label={summary.approved ? "Godkänd sammanfattning" : "Utkast"}
+            label={summary.approved ? "Godkänd" : "Utkast"}
             title="Sessionssammanfattning"
           />
           <div className="mt-5 space-y-5">
@@ -145,23 +147,28 @@ export default async function SessionPage({
         <Panel>
           <PanelHeading
             label="Coach privat"
-            title="Dina arbetsanteckningar"
+            title="Arbetsanteckningar"
             action={<Tag tone="private">Endast du</Tag>}
           />
           <p className="mt-4 text-[0.9375rem] leading-[1.75] text-zinc-700">
             {coachingSession.coachNotes}
           </p>
           <p className="mt-4 text-[0.75rem] leading-relaxed text-zinc-400">
-            Delas aldrig med klienten, med uppdragsgivaren eller med AI-underlaget.
+            Delas aldrig med klienten eller uppdragsgivaren.
           </p>
         </Panel>
       ) : null}
 
+      </div>
+
+      <div className="min-w-0 space-y-7 lg:col-span-5">
       <SessionWorkspace
         clientId={client.id}
         sessionId={coachingSession.id}
         clientFirstName={firstName}
       />
+      </div>
+      </div>
     </div>
   );
 }

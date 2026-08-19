@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ai": "node scripts/ai-qa.mjs"
+    "test:ai": "node scripts/ai-qa.mjs",
+    "reset:demo": "node scripts/reset-demo.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

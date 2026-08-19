@@ -57,11 +57,11 @@ export default function AiPreparePanel({
     <Panel>
       <SectionLabel>Förberedelse</SectionLabel>
       <h2 className="mt-2.5 text-[1.3rem] font-medium leading-[1.25] tracking-tight text-zinc-900">
-        Förbered nästa session
+        Förberedelse inför nästa session
       </h2>
       <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-        {nextSessionLabel} Sammanställningen bygger på {clientFirstName}s utvecklingsmål, sessioner,
-        egna reflektioner och åtaganden. Coachens privata anteckningar ingår aldrig.
+        {nextSessionLabel} Underlag: utvecklingsmål, sessioner, {clientFirstName}s reflektioner och
+        åtaganden samt dina arbetsanteckningar.
       </p>
 
       {status === "idle" ? (
@@ -76,7 +76,7 @@ export default function AiPreparePanel({
 
       {status === "loading" ? (
         <div className="mt-5">
-          <AiSkeleton label="Sammanställer underlag inför sessionen…" />
+          <AiSkeleton label="Sammanställer underlag…" />
         </div>
       ) : null}
 
@@ -127,7 +127,8 @@ export default function AiPreparePanel({
 
           <div className="mt-4">
             <AiDisclaimer>
-              AI-genererat underlag för coachens granskning. Inget skickas vidare utan ditt godkännande.
+              AI-genererat underlag för granskning. Kan bygga på dina arbetsanteckningar och är inte
+              avsett att delas med klienten.
             </AiDisclaimer>
           </div>
 
@@ -163,7 +164,7 @@ export default function AiPreparePanel({
               role="status"
               className="mt-3.5 text-[0.8125rem] leading-relaxed text-[#7d6432]"
             >
-              Godkänt. Underlaget är sparat i din förberedelse inför sessionen.
+              Godkänt.
             </p>
           ) : null}
         </article>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AiAskPanel from "@/components/portal/ai-ask-panel";
-import { readSession } from "@/lib/portal/session";
+import { readCoachSession } from "@/lib/portal/session";
 import { getEngagementOverview } from "@/lib/portal/repository";
 import { engagementStatusLabel, formatDate, milestoneStatusLabel } from "@/lib/portal/format";
 import {
@@ -21,10 +21,10 @@ export default async function EngagementPage({
   params: Promise<{ engagementId: string }>;
 }) {
   const { engagementId } = await params;
-  const session = await readSession();
+  const session = await readCoachSession();
   if (!session) return null;
 
-  const overview = getEngagementOverview(session.coachId, engagementId);
+  const overview = await getEngagementOverview(session.coachId, engagementId);
   if (!overview) notFound();
 
   const { engagement, organisation, participants } = overview;
@@ -37,7 +37,7 @@ export default async function EngagementPage({
           href="/portal/uppdrag"
           className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
         >
-          ← Uppdrag
+          Uppdrag
         </Link>
         <div className="mt-4">
           <SectionLabel>{organisation.name}</SectionLabel>
@@ -54,7 +54,7 @@ export default async function EngagementPage({
       </div>
 
       <Panel>
-        <PanelHeading label="Programstatus" title="Läget just nu" />
+        <PanelHeading label="Programstatus" title="Nuläge" />
         <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
           {[
             { term: "Deltagare", value: String(participants.length) },
@@ -104,7 +104,7 @@ export default async function EngagementPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Programaktivitet" title="Milstolpar" />
+        <PanelHeading label="Milstolpar" title="Programaktivitet" />
         <ol className="mt-5 space-y-4">
           {engagement.milestones.map((milestone) => (
             <li key={milestone.id} className="flex gap-4">
@@ -141,7 +141,7 @@ export default async function EngagementPage({
         <PanelHeading label="Dokument" title="Material på uppdragsnivå" />
         <div className="mt-4">
           {overview.documents.length === 0 ? (
-            <EmptyState>Inga dokument på uppdragsnivå ännu.</EmptyState>
+            <EmptyState>Inga dokument registrerade.</EmptyState>
           ) : (
             overview.documents.map((document, index) => (
               <div key={document.id}>
@@ -167,7 +167,7 @@ export default async function EngagementPage({
         contextType="organisation"
         contextId={engagement.id}
         title={`Fråga om ${organisation.name}`}
-        scopeNote="AI:n arbetar endast med detta uppdrag och endast med data som är tillåten på organisationsnivå. Individuella reflektioner, insikter och coachanteckningar ingår aldrig."
+        scopeNote="Endast detta uppdrag och endast data tillåten på organisationsnivå. Individuella reflektioner, insikter och coachanteckningar ingår aldrig."
         suggestions={[
           {
             label: "Sessioner framåt",
@@ -190,8 +190,7 @@ export default async function EngagementPage({
       <Panel>
         <PanelHeading label="Rapport" title="Programöversikt" />
         <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-          Sammanställning för uppdragsgivaren. Innehåller endast data som är tillåten på
-          organisationsnivå.
+          För uppdragsgivaren. Endast data tillåten på organisationsnivå.
         </p>
         <Link
           href={`/portal/uppdrag/${engagement.id}/programoversikt`}
@@ -202,7 +201,7 @@ export default async function EngagementPage({
       </Panel>
 
       <Panel>
-        <PanelHeading label="Sekretess" title="Vad som rapporteras" />
+        <PanelHeading label="Sekretess" title="Rapporteringsprinciper" />
         <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
           {engagement.sponsorReporting}
         </p>

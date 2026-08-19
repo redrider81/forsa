@@ -22,6 +22,7 @@ export const sessions: CoachingSession[] = [
       insights: [
         "Emma beskrev att hon är med på i stort sett alla kundavstämningar, utan att det är överenskommet med någon.",
         "Hon formulerade att det strategiska arbetet 'får plats när allt annat är klart, alltså sällan'.",
+        "Hennes egen formulering av problemet vid start: 'Jag behöver bli bättre på att delegera.'",
       ],
       awareness:
         "Emma satte ord på att hennes närvaro på kundmöten mer handlar om hennes egen trygghet än om kundens behov.",
@@ -92,6 +93,7 @@ export const sessions: CoachingSession[] = [
         "Emma såg att tomrummet efter det operativa arbetet inte automatiskt fylls av strategi — det måste väljas aktivt.",
       newPerspectives: [
         "Att ledningsgruppen klarar sig utan henne i detaljerna är ett resultat av hennes arbete, inte ett tecken på att hon blivit överflödig.",
+        "Emma formulerade om problemet: 'Jag tror egentligen inte att problemet är att jag delegerar för lite. Jag är osäker på om ledningsgruppen vet vilka beslut de faktiskt äger.'",
       ],
       commitments: [
         "Hålla nästa ledningsmöte utan att själv föredra punkterna.",
@@ -116,28 +118,33 @@ export const sessions: CoachingSession[] = [
     desiredOutcome:
       "Att se om jag rör mig åt rätt håll, och att vara ärlig om det jag skjuter framför mig.",
     coachNotes:
-      "Hon undvek styrelsefrågan tre gånger innan jag ställde den rakt. Då kom det: hon är rädd att ordföranden ska se henne som en grundare som inte växte med bolaget. Viktigt material. Jag noterade också att hon nu säger 'Northline' i stället för 'mitt bolag'. Det har hänt något. Egen reflektion: jag vill inte pressa styrelsefrågan — den är hennes att ta.",
+      "Följ upp hur Emma skiljer mellan ansvar och kontroll — hon använder orden som synonymer. Lindqvist-återfallet är det mest användbara som hänt i uppdraget; hon såg sig själv göra det. Utforska hennes egna formuleringar om vad hon tror förväntas av en vd. Notera skillnaden mellan generell delegering och reaktionen när kundrisk uppstår. Hon undvek styrelsefrågan tre gånger innan jag ställde den rakt. Då kom det: hon är rädd att ordföranden ska se henne som en grundare som inte växte med bolaget. Viktigt material. Jag noterade också att hon nu säger 'Northline' i stället för 'mitt bolag'. Det har hänt något. Egen reflektion: jag vill inte pressa styrelsefrågan — den är hennes att ta.",
     summary: {
       focus: "Halvtidsavstämning av utvecklingsmålet och vad som förändrats sedan mars.",
       insights: [
         "Emma konstaterade att kundavstämningarna nu ligger hos Nils och att inga leveranser försämrats.",
         "Hon beskrev att hon börjat säga 'Northline' i stället för 'mitt bolag'.",
         "Hon satte själv ord på att styrelsesamtalet är det hon skjuter framför sig.",
+        "Hon tog upp att hon gick in i Lindqvist-affären i slutskedet trots överenskommelsen med Nils: 'När en viktig kund är involverad tar jag fortfarande ofta tillbaka beslutet.'",
       ],
       awareness:
         "Emma blev medveten om att det som återstår inte är operativt, utan handlar om hur hon vill bli sedd i sin roll.",
       newPerspectives: [
         "Delegeringen visade sig handla mindre om kvalitet och mer om hennes egen plats i bolaget.",
+        "Emma prövade tanken att återfallet inte är ett misslyckande utan information om var gränsen faktiskt går.",
       ],
       commitments: [
         "Formulera vad Northline behöver av henne om tolv månader.",
         "Testa att inte svara i kundchatten före klockan tolv.",
+        "Skriva ihop ett förslag på vilka beslut ledningsgruppen äger själva.",
+        "Låta Nils äga kundavstämningen med Lindqvist hela vägen, även om det blir obekvämt.",
       ],
       followUp: [
         "Styrelsesamtalet är fortfarande inte bokat",
         "Hur formuleringen om tolv månader växer fram",
+        "Vad som händer nästa gång en viktig kund är inblandad",
       ],
-      possibleNextFocus: "Vad Emma behöver för att ta styrelsesamtalet.",
+      possibleNextFocus: "Skillnaden mellan att äga ansvaret och att äga beslutet, särskilt när kundrisk uppstår.",
       approved: true,
       approvedAt: "2026-06-19",
     },

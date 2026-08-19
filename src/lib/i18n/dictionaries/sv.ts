@@ -16,7 +16,7 @@ export const svDictionary = {
     coaching: "Coaching",
     about: "Om oss",
     contact: "Kontakt",
-    login: "Logga in",
+    login: "Klientportal",
     leadershipLabel: "För ledningen",
     coachingLabel: "Coaching",
     startHereLabel: "Börja här",
@@ -32,6 +32,8 @@ export const svDictionary = {
     about: "Om oss",
     portal: "Portal",
     login: "Logga in",
+    clientPortal: "Klientportal",
+    coachLogin: "Coachinloggning",
     copyright: "© 2026 CVB Coaching. Alla rättigheter förbehållna.",
   },
   form: {

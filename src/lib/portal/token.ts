@@ -7,11 +7,14 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 12;
 
+export type PortalRole = "coach" | "klient";
+
 export type PortalSession = {
   userId: string;
-  coachId: string;
   name: string;
-  role: "coach";
+  role: PortalRole;
+  /** coachId för en coach, clientId för en klient. */
+  subjectId: string;
   issuedAt: number;
 };
 
@@ -44,7 +47,8 @@ export function verifySessionToken(
 
   try {
     const parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as PortalSession;
-    if (typeof parsed?.userId !== "string" || typeof parsed?.coachId !== "string") return null;
+    if (typeof parsed?.userId !== "string" || typeof parsed?.subjectId !== "string") return null;
+    if (parsed.role !== "coach" && parsed.role !== "klient") return null;
     if (typeof parsed?.issuedAt !== "number") return null;
     if (now - parsed.issuedAt > SESSION_MAX_AGE_SECONDS * 1000) return null;
     return parsed;

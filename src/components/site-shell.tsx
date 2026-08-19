@@ -11,7 +11,12 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const locale = localeFromPathname(pathname);
   const isHome = stripLocaleFromPath(pathname) === "/";
   // Portalen och inloggningen har egen navigation och egen ram.
-  const isPortal = pathname.startsWith("/portal") || pathname.startsWith("/logga-in");
+  const isPortal =
+    pathname.startsWith("/portal") ||
+    pathname.startsWith("/klient") ||
+    pathname.startsWith("/logga-in") ||
+    pathname.startsWith("/coach-login") ||
+    pathname.startsWith("/klient-login");
 
   useEffect(() => {
     document.documentElement.lang = locale;

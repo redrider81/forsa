@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { LogoMark } from "@/components/brand/logo";
 import { localeFromPathname, toLocalePath } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 import { usePathname } from "next/navigation";
@@ -9,7 +10,12 @@ export default function SiteFooter() {
   const pathname = usePathname();
   const locale = localeFromPathname(pathname);
   const t = getDictionaryForOptionalLocale(locale);
-  const isPortal = pathname.startsWith("/portal") || pathname.startsWith("/logga-in");
+  const isPortal =
+    pathname.startsWith("/portal") ||
+    pathname.startsWith("/klient") ||
+    pathname.startsWith("/logga-in") ||
+    pathname.startsWith("/coach-login") ||
+    pathname.startsWith("/klient-login");
   const href = (path: string) => toLocalePath(path, locale);
   const services =
     locale === "sv"
@@ -46,7 +52,7 @@ export default function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-12">
 
           <div className="md:col-span-5">
-            <p className="text-sm font-semibold tracking-[0.18em] text-zinc-900">CVB COACHING</p>
+            <LogoMark className="h-14 w-auto" />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-zinc-600">
               {t.footer.description}
             </p>
@@ -101,12 +107,20 @@ export default function SiteFooter() {
 
         <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-zinc-200 pt-6">
           <p className="text-xs text-zinc-400">{t.footer.copyright}</p>
-          <Link
-            href="/logga-in"
-            className="text-xs text-zinc-500 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
-          >
-            {t.footer.portal} · {t.footer.login}
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link
+              href="/klient-login"
+              className="text-xs text-zinc-500 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
+            >
+              {t.footer.clientPortal}
+            </Link>
+            <Link
+              href="/coach-login"
+              className="text-xs text-zinc-400 transition-colors hover:text-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
+            >
+              {t.footer.coachLogin}
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
