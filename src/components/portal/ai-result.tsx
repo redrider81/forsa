@@ -1,6 +1,91 @@
 "use client";
 
-import { parseAiText } from "@/lib/ai/format";
+import { useState } from "react";
+import { parseAiText, formatAiTextPlain } from "@/lib/ai/format";
+import { portalOutlineButtonClass } from "@/components/portal/ui";
+
+export function AiResultActions({
+  text,
+  emailSubject,
+}: {
+  text: string;
+  emailSubject: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "ready" | "error">("idle");
+  const plain = formatAiTextPlain(text);
+
+  async function copyResult() {
+    try {
+      await navigator.clipboard.writeText(plain);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  async function sendEmail() {
+    setEmailStatus("sending");
+    try {
+      const response = await fetch("/api/portal/email-result", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject: emailSubject, body: plain }),
+      });
+      const data = (await response.json()) as { ok?: boolean; simulated?: boolean; error?: string };
+      if (!response.ok || !data.ok) {
+        setEmailStatus("error");
+        return;
+      }
+      setEmailStatus(data.simulated ? "ready" : "sent");
+      window.setTimeout(() => setEmailStatus("idle"), 2500);
+    } catch {
+      setEmailStatus("error");
+    }
+  }
+
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-2.5">
+      <button type="button" onClick={() => void copyResult()} className={portalOutlineButtonClass}>
+        Kopiera
+      </button>
+      <button
+        type="button"
+        onClick={() => void sendEmail()}
+        disabled={emailStatus === "sending"}
+        className={portalOutlineButtonClass}
+      >
+        Skicka via e-post
+      </button>
+      {copied ? (
+        <span role="status" aria-live="polite" className="text-[0.8125rem] text-zinc-500">
+          Kopierat
+        </span>
+      ) : null}
+      {emailStatus === "sending" ? (
+        <span role="status" aria-live="polite" className="text-[0.8125rem] text-zinc-500">
+          Skickar…
+        </span>
+      ) : null}
+      {emailStatus === "ready" ? (
+        <span role="status" aria-live="polite" className="text-[0.8125rem] text-zinc-500">
+          Redo att skickas
+        </span>
+      ) : null}
+      {emailStatus === "sent" ? (
+        <span role="status" aria-live="polite" className="text-[0.8125rem] text-zinc-500">
+          Skickat
+        </span>
+      ) : null}
+      {emailStatus === "error" ? (
+        <span role="status" aria-live="polite" className="text-[0.8125rem] text-red-600">
+          Kunde inte skicka
+        </span>
+      ) : null}
+    </div>
+  );
+}
 
 export function AiResult({ text }: { text: string }) {
   const blocks = parseAiText(text);

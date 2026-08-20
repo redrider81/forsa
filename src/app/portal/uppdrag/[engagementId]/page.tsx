@@ -168,6 +168,7 @@ export default async function EngagementPage({
       <AiAskPanel
         contextType="organisation"
         contextId={engagement.id}
+        emailSubject={`CVB Coaching – Underlag för ${organisation.name}`}
         title={`Fråga om ${organisation.name}`}
         scopeNote="Endast detta uppdrag och endast data tillåten på organisationsnivå. Individuella reflektioner, insikter och coachanteckningar ingår aldrig."
         suggestions={[

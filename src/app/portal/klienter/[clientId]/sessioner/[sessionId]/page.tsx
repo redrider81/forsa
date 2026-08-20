@@ -160,6 +160,7 @@ export default async function SessionPage({
       <SessionWorkspace
         clientId={client.id}
         sessionId={coachingSession.id}
+        clientName={client.name}
         clientFirstName={firstName}
       />
     </div>

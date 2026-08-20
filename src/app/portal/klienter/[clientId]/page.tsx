@@ -261,6 +261,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
       <AiAskPanel
         contextType="klient"
         contextId={client.id}
+        emailSubject={`CVB Coaching – Underlag för ${client.name}`}
         title={`Fråga om ${firstName}`}
         scopeNote={`Endast ${firstName}. Underlag: utvecklingsmål, sessioner, reflektioner, åtaganden och dina arbetsanteckningar. Privat material når aldrig klient eller uppdragsgivare.`}
         suggestions={[

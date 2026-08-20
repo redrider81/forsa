@@ -81,3 +81,24 @@ export function parseAiText(raw: string): AiBlock[] {
 
   return blocks;
 }
+
+/** Plain text for clipboard and e-post — headings, bullets, utan markdown. */
+export function formatAiTextPlain(raw: string): string {
+  const lines: string[] = [];
+
+  for (const block of parseAiText(raw)) {
+    if (block.type === "heading") {
+      if (lines.length > 0) lines.push("");
+      lines.push(block.text);
+      lines.push("");
+      continue;
+    }
+    if (block.type === "bullet") {
+      lines.push(`• ${block.text}`);
+      continue;
+    }
+    lines.push(block.text);
+  }
+
+  return lines.join("\n").trim();
+}

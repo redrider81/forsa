@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseAiText } from "@/lib/ai/format";
+import { formatAiTextPlain, parseAiText } from "@/lib/ai/format";
 
 describe("parseAiText", () => {
   it("tolkar rubriker, brödtext och punktlistor", () => {
@@ -30,5 +30,18 @@ describe("parseAiText", () => {
 
   it("hoppar över tomma rader", () => {
     expect(parseAiText("\n\n  \n")).toEqual([]);
+  });
+});
+
+describe("formatAiTextPlain", () => {
+  it("formats blocks for clipboard and e-post", () => {
+    const plain = formatAiTextPlain(
+      ["Sammanfattning", "Emma har flyttat fokus.", "- Nästa steg"].join("\n"),
+    );
+
+    expect(plain).toContain("Sammanfattning");
+    expect(plain).toContain("Emma har flyttat fokus.");
+    expect(plain).toContain("• Nästa steg");
+    expect(plain.toLowerCase()).not.toContain("ai");
   });
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
+import { AiDisclaimer, AiResult, AiResultActions, AiSkeleton } from "@/components/portal/ai-result";
 import {
   AiActionButton,
   AiSparkleIcon,
@@ -30,6 +30,7 @@ export default function AiAskPanel({
   scopeNote,
   suggestions,
   placeholder,
+  emailSubject,
 }: {
   contextType: ContextType;
   contextId: string;
@@ -37,6 +38,7 @@ export default function AiAskPanel({
   scopeNote: string;
   suggestions: Array<{ label: string; question: string }>;
   placeholder: string;
+  emailSubject: string;
 }) {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
@@ -166,6 +168,8 @@ export default function AiAskPanel({
 
             {!answer.refused ? (
               <>
+                <AiResultActions text={answer.text} emailSubject={emailSubject} />
+
                 {answer.sources.length > 0 ? (
                   <div className="mt-5 border-t border-[var(--klient-border-muted)] pt-4">
                     <SectionLabel>Underlag</SectionLabel>

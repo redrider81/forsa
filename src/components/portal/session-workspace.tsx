@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
+import { AiDisclaimer, AiResult, AiResultActions, AiSkeleton } from "@/components/portal/ai-result";
 import {
   AiActionButton,
   Panel,
@@ -33,10 +33,12 @@ const quickActions = [
 export default function SessionWorkspace({
   clientId,
   sessionId,
+  clientName,
   clientFirstName,
 }: {
   clientId: string;
   sessionId: string;
+  clientName: string;
   clientFirstName: string;
 }) {
   const [notes, setNotes] = useState("");
@@ -178,6 +180,11 @@ export default function SessionWorkspace({
             ) : (
               <AiResult text={draft} />
             )}
+
+            <AiResultActions
+              text={draft}
+              emailSubject={`CVB Coaching – Sessionssammanfattning för ${clientName}`}
+            />
 
             <div className="mt-4">
               <AiDisclaimer>

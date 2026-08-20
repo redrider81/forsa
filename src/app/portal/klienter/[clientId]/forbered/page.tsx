@@ -129,6 +129,7 @@ export default async function PrepareSessionPage({
 
       <AiPreparePanel
         clientId={client.id}
+        clientName={client.name}
         clientFirstName={firstName}
         nextSessionLabel={nextSessionLabel}
       />

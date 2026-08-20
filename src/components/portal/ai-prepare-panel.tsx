@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
+import { AiDisclaimer, AiResult, AiResultActions, AiSkeleton } from "@/components/portal/ai-result";
 import {
   AiActionButton,
   Panel,
@@ -16,10 +16,12 @@ type Status = "idle" | "loading" | "ready" | "error";
 
 export default function AiPreparePanel({
   clientId,
+  clientName,
   clientFirstName,
   nextSessionLabel,
 }: {
   clientId: string;
+  clientName: string;
   clientFirstName: string;
   nextSessionLabel: string;
 }) {
@@ -111,6 +113,11 @@ export default function AiPreparePanel({
           ) : (
             <AiResult text={draft} />
           )}
+
+          <AiResultActions
+            text={draft}
+            emailSubject={`CVB Coaching – Förberedelse inför samtal med ${clientName}`}
+          />
 
           {sources.length > 0 ? (
             <div className="mt-5 border-t border-[var(--klient-border-muted)] pt-4">
