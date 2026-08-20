@@ -68,7 +68,7 @@ export default async function ProgramReportPage({
           {participants.map((item, index) => (
             <div key={item.client.id}>
               {index > 0 ? <Divider /> : null}
-              <div className="-mx-3 flex items-start justify-between gap-3 px-3 py-3.5">
+              <div className="-mx-3 flex items-start justify-between gap-5 px-3 py-3.5">
                 <div className="min-w-0">
                   <p className="truncate text-[0.9375rem] font-medium leading-snug text-zinc-900">
                     {item.client.name}
@@ -97,7 +97,7 @@ export default async function ProgramReportPage({
         <PanelHeading label="Milstolpar" title="Hållpunkter" />
         <ol className="mt-5 space-y-4">
           {engagement.milestones.map((milestone) => (
-            <li key={milestone.id} className="flex items-start justify-between gap-3">
+            <li key={milestone.id} className="flex items-start justify-between gap-5">
               <div className="min-w-0">
                 <p className="text-[0.9375rem] leading-snug text-zinc-800">{milestone.label}</p>
                 <p className="mt-1 text-[0.8125rem] text-zinc-500">{formatDate(milestone.date)}</p>

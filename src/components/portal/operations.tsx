@@ -52,7 +52,7 @@ export function ActionRow({
   return (
     <Link
       href={item.subjectHref}
-      className="group -mx-3 grid min-w-0 grid-cols-1 gap-2 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:grid-cols-[4rem_minmax(0,1fr)] sm:items-start sm:gap-x-3 lg:grid-cols-[4.5rem_minmax(0,1fr)_auto] lg:gap-x-4"
+      className="group -mx-3 grid min-w-0 grid-cols-1 gap-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:grid-cols-[4rem_minmax(0,1fr)] sm:items-start sm:gap-x-4 lg:grid-cols-[4.5rem_minmax(0,1fr)_auto] lg:gap-x-6"
     >
       <span className="min-w-0 sm:pt-0.5">
         {mobileSchedule ? (
@@ -92,12 +92,12 @@ export function ActionRow({
         {meta ? (
           <span className="mt-1.5 block text-[0.8125rem] leading-snug text-zinc-500">{meta}</span>
         ) : null}
-        <span className="mt-2 inline-flex max-w-full lg:hidden">
+        <span className="mt-3.5 inline-flex max-w-full lg:hidden">
           <StatusTag status={item.status} />
         </span>
       </span>
 
-      <span className="hidden min-w-0 justify-end self-start pt-0.5 lg:flex">
+      <span className="hidden min-w-0 justify-end self-start pt-0.5 pl-2 lg:flex">
         <StatusTag status={item.status} />
       </span>
     </Link>

@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
 import {
+  AiActionButton,
   Panel,
-  portalButtonClass,
   portalButtonSmClass,
-  portalGhostButtonClass,
   portalInsetClass,
   portalOutlineButtonClass,
   portalTextareaClass,
@@ -74,13 +73,9 @@ export default function AiPreparePanel({
       </p>
 
       {status === "idle" ? (
-        <button
-          type="button"
-          onClick={() => void generate()}
-          className={`mt-5 w-full sm:w-auto ${portalButtonClass}`}
-        >
+        <AiActionButton onClick={() => void generate()} className="mt-5 w-full sm:w-auto">
           Förbered session
-        </button>
+        </AiActionButton>
       ) : null}
 
       {status === "loading" ? (
@@ -92,13 +87,9 @@ export default function AiPreparePanel({
       {status === "error" ? (
         <div className={`mt-5 ${portalInsetClass}`}>
           <p className="text-[0.9375rem] leading-relaxed text-zinc-700">{error}</p>
-          <button
-            type="button"
-            onClick={() => void generate()}
-            className={`mt-3 ${portalOutlineButtonClass}`}
-          >
+          <AiActionButton compact onClick={() => void generate()} className="mt-3">
             Försök igen
-          </button>
+          </AiActionButton>
         </div>
       ) : null}
 
@@ -159,13 +150,9 @@ export default function AiPreparePanel({
             >
               Godkänn
             </button>
-            <button
-              type="button"
-              onClick={() => void generate()}
-              className={portalGhostButtonClass}
-            >
+            <AiActionButton compact onClick={() => void generate()}>
               Generera om
-            </button>
+            </AiActionButton>
           </div>
 
           {approved ? (

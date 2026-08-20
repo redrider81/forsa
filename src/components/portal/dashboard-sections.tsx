@@ -129,13 +129,13 @@ export function WeekStatusModule({ week }: { week: OperationsOverview["week"] })
           </div>
         ))}
       </dl>
-      <div className="mt-6 border-t border-[var(--klient-border-muted)] pt-5">
+      <div className="mt-6 border-t border-[var(--klient-border-muted)] pt-5 pl-4 min-[420px]:pl-0">
         <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-zinc-900">
           Verksamhetsöversikt
         </p>
         <dl className="mt-3 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-3 sm:gap-3">
           {portfolio.map((metric) => (
-            <div key={metric.label} className="text-center">
+            <div key={metric.label} className="text-left min-[420px]:text-center">
               <dt className="text-[0.6875rem] uppercase tracking-[0.08em] text-zinc-400">
                 {metric.label}
               </dt>
@@ -168,7 +168,7 @@ export function UpcomingSection({ items }: { items: OperationsItem[] }) {
               {index > 0 ? <Divider /> : null}
               <Link
                 href={item.subjectHref}
-                className="group -mx-3 grid min-w-0 grid-cols-1 gap-2 rounded-xl px-3 py-3 transition-colors hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-x-4"
+                className="group -mx-3 grid min-w-0 grid-cols-1 gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-x-6"
               >
                 <span className="min-w-0">
                   <span className="block text-[0.9375rem] font-semibold leading-snug text-zinc-900">
@@ -181,7 +181,7 @@ export function UpcomingSection({ items }: { items: OperationsItem[] }) {
                     {formatWeekdayDate(item.date)}
                   </span>
                 </span>
-                <span className="inline-flex max-w-full md:justify-end">
+                <span className="inline-flex max-w-full md:justify-end md:pl-1">
                   <StatusTag status={item.status} />
                 </span>
               </Link>

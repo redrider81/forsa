@@ -12,13 +12,13 @@ import {
   todayIso,
 } from "@/lib/portal/format";
 import {
+  AiActionLink,
   Avatar,
   DefinitionList,
   Divider,
   EmptyState,
   Panel,
   PanelHeading,
-  portalButtonClass,
   portalOutlineButtonClass,
   portalPageStackClass,
   QuoteBlock,
@@ -62,7 +62,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-5 flex flex-wrap gap-3">
           <Tag>{engagement.kindLabel}</Tag>
           <Tag>{completedSessions.length} genomförda sessioner</Tag>
           <Tag tone={dossier.openCommitments.length > 0 ? "open" : "done"}>
@@ -99,12 +99,9 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           </div>
 
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
-            <Link
-              href={`/portal/klienter/${client.id}/forbered`}
-              className={`flex-1 ${portalButtonClass}`}
-            >
+            <AiActionLink href={`/portal/klienter/${client.id}/forbered`} className="flex-1">
               Förbered session
-            </Link>
+            </AiActionLink>
             <Link
               href={`/portal/klienter/${client.id}/sessioner/${upcomingSession.id}`}
               className={`flex-1 ${portalOutlineButtonClass} min-h-11 px-6 py-3 text-sm`}
@@ -147,7 +144,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           ) : (
             dossier.commitments.map((commitment) => (
               <article key={commitment.id} className="border-b border-zinc-200/70 pb-5 last:border-0 last:pb-0">
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-5">
                   <p className="text-[0.9375rem] leading-[1.6] text-zinc-800">{commitment.text}</p>
                   <Tag
                     tone={
@@ -243,7 +240,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
             <div key={document.id}>
               {index > 0 ? <Divider /> : null}
               <div className="-mx-3 px-3 py-3.5">
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-5">
                   <p className="text-[0.9375rem] font-medium leading-snug text-zinc-900">
                     {document.title}
                   </p>

@@ -48,7 +48,7 @@ export default async function EngagementPage({
           {engagement.title}
         </h1>
         <p className="mt-3.5 text-[1rem] leading-[1.7] text-zinc-600">{engagement.purpose}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-5 flex flex-wrap gap-3">
           <Tag>{engagement.kindLabel}</Tag>
           <Tag>{engagementStatusLabel[engagement.status]}</Tag>
           <Tag>{engagement.periodLabel}</Tag>

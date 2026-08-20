@@ -3,12 +3,11 @@
 import { useRef, useState } from "react";
 import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
 import {
+  AiActionButton,
   Panel,
   PanelHeading,
-  portalButtonClass,
   portalButtonSmClass,
   portalChipClass,
-  portalGhostButtonClass,
   portalInsetClass,
   portalOutlineButtonClass,
   portalTextareaClass,
@@ -134,14 +133,13 @@ export default function SessionWorkspace({
           Struktureras från dina anteckningar. Redigera, granska och godkänn innan delning.
         </p>
 
-        <button
-          type="button"
+        <AiActionButton
           onClick={() => void createSummary()}
           disabled={stage === "loading"}
-          className={`mt-5 w-full sm:w-auto ${portalButtonClass} disabled:cursor-not-allowed`}
+          className="mt-5 w-full sm:w-auto"
         >
           {stage === "loading" ? "Strukturerar…" : "Skapa sammanfattning"}
-        </button>
+        </AiActionButton>
 
         {stage === "loading" ? (
           <div className="mt-5">
@@ -152,13 +150,9 @@ export default function SessionWorkspace({
         {stage === "error" ? (
           <div className={`mt-5 ${portalInsetClass}`}>
             <p className="text-[0.9375rem] leading-relaxed text-zinc-700">{error}</p>
-            <button
-              type="button"
-              onClick={() => void createSummary()}
-              className={`mt-3 ${portalOutlineButtonClass}`}
-            >
+            <AiActionButton compact onClick={() => void createSummary()} className="mt-3">
               Försök igen
-            </button>
+            </AiActionButton>
           </div>
         ) : null}
 
@@ -209,13 +203,9 @@ export default function SessionWorkspace({
               >
                 Godkänn och dela
               </button>
-              <button
-                type="button"
-                onClick={() => void createSummary()}
-                className={portalGhostButtonClass}
-              >
+              <AiActionButton compact onClick={() => void createSummary()}>
                 Generera om
-              </button>
+              </AiActionButton>
             </div>
 
             {approved ? (

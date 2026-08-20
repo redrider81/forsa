@@ -38,7 +38,7 @@ export default async function EngagementsPage() {
                   {engagement.purpose}
                 </p>
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-3">
                   <Tag>{engagement.kindLabel}</Tag>
                   <Tag>
                     {overview.participants.length === 1

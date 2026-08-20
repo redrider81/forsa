@@ -7,6 +7,8 @@ import type { OperationsStatus } from "@/lib/portal/repository";
 export const cvbStatusTone = {
   /** Kräver handling — klient: oppet */
   action: "border-orange-400 bg-orange-400 text-white",
+  /** Förberedelse saknas — distinkt från uppföljning */
+  prep: "border-yellow-400 bg-yellow-400 text-white",
   /** Aktiv / pågående — klient: pagar */
   active: "border-emerald-500 bg-emerald-500 text-white",
   /** Klar / mottagen — klient: genomfort */
@@ -20,10 +22,11 @@ export const cvbStatusTone = {
 export const cvbStatusBadgeClass =
   "inline-flex max-w-full shrink-0 items-center rounded-full border px-2.5 py-1 text-[0.625rem] font-semibold uppercase leading-snug tracking-[0.06em] sm:leading-none sm:whitespace-nowrap";
 
-export type OperationsVisualState = "action" | "active" | "completed" | "neutral";
+export type OperationsVisualState = "action" | "prep" | "active" | "completed" | "neutral";
 
 export const visualStateTone: Record<OperationsVisualState, string> = {
   action: cvbStatusTone.action,
+  prep: cvbStatusTone.prep,
   active: cvbStatusTone.active,
   completed: cvbStatusTone.completed,
   neutral: cvbStatusTone.neutral,
@@ -32,7 +35,7 @@ export const visualStateTone: Record<OperationsVisualState, string> = {
 /** Business status → semantic visual state (separat från label och färg). */
 export const operationsStatusVisualState: Record<OperationsStatus, OperationsVisualState> = {
   "Uppföljning krävs": "action",
-  "Förberedelse saknas": "action",
+  "Förberedelse saknas": "prep",
   "Sammanfattning för granskning": "action",
   "Underlag saknas": "neutral",
   Programgenomgång: "active",

@@ -19,7 +19,7 @@ describe("operations status presentation", () => {
   it("locks full OperationsStatus → visual state mapping", () => {
     const expected: Record<OperationsStatus, string> = {
       "Uppföljning krävs": "action",
-      "Förberedelse saknas": "action",
+      "Förberedelse saknas": "prep",
       "Sammanfattning för granskning": "action",
       "Underlag saknas": "neutral",
       Programgenomgång: "active",
@@ -61,20 +61,21 @@ describe("operations status presentation", () => {
     expect(presentation.toneClass).toBe("border-emerald-700/20 bg-emerald-700/6 text-emerald-900");
   });
 
-  it("derives Förbered action tone when prep is missing", () => {
+  it("derives Förbered yellow prep tone when prep is missing", () => {
     const ops = buildOperationsOverview("coach-cvb", "2026-08-20", EMPTY_DEMO_STATE, 21);
     const johan = ops.calendar.find((item) => item.subject.includes("Johan"));
     expect(johan?.status).toBe("Förberedelse saknas");
 
     const presentation = getOperationsStatusPresentation(johan!.status);
     expect(presentation.label).toBe("Förbered");
-    expect(presentation.visualState).toBe("action");
-    expect(presentation.toneClass).toContain("orange");
+    expect(presentation.visualState).toBe("prep");
+    expect(presentation.toneClass).toBe("border-yellow-400 bg-yellow-400 text-white");
   });
 
   it("maps visual states to canonical tone classes", () => {
     const samples: Array<[OperationsStatus, string, string]> = [
       ["Uppföljning krävs", "action", "border-orange-400 bg-orange-400 text-white"],
+      ["Förberedelse saknas", "prep", "border-yellow-400 bg-yellow-400 text-white"],
       ["Programgenomgång", "active", "border-emerald-500 bg-emerald-500 text-white"],
       ["Förberedelse mottagen", "completed", "border-emerald-700/20 bg-emerald-700/6 text-emerald-900"],
       ["Session planerad", "neutral", "border-zinc-300/80 bg-zinc-50 text-zinc-700"],

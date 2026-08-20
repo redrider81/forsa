@@ -133,7 +133,7 @@ export default function ShareMaterialPanel({ clientId, materials }: Props) {
           <ul className="mt-3 space-y-3">
             {clientShared.map((item) => (
               <li key={item.id} className="rounded-xl bg-[var(--klient-text-block-bg)] p-4">
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-5">
                   <p className="text-[0.9375rem] font-medium text-zinc-900">{item.title}</p>
                   <Tag tone="open">Delat med dig</Tag>
                 </div>

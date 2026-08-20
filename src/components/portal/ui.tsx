@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react";
 import { cvbStatusTone } from "@/lib/portal/status-tones";
 
 /**
@@ -9,6 +9,72 @@ import { cvbStatusTone } from "@/lib/portal/status-tones";
 
 export const portalButtonClass =
   "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-6 py-3 text-sm font-medium text-[var(--klient-button-text)] transition-colors duration-150 hover:bg-[var(--klient-button-bg-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalAiPrepareButtonClass =
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-6 py-3 text-sm font-medium text-emerald-800 transition-colors duration-150 hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalAiButtonSmClass =
+  "inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-[0.8125rem] font-medium text-emerald-800 transition-colors duration-150 hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalAiChipClass =
+  "inline-flex min-h-11 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-[0.8125rem] font-medium text-emerald-800 transition-colors duration-150 hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+/** Solid black AI sparkle — filled silhouette, not stroke icon. */
+export function AiSparkleIcon({ className = "size-[18px]" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={`shrink-0 ${className}`}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill="#000000"
+        d="M9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5L9 4z"
+      />
+      <path
+        fill="#000000"
+        d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9z"
+      />
+    </svg>
+  );
+}
+
+type AiActionButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  compact?: boolean;
+};
+
+/** Primary/secondary coach-portal control that triggers AI. */
+export function AiActionButton({
+  children,
+  className = "",
+  compact = false,
+  type = "button",
+  ...props
+}: AiActionButtonProps) {
+  return (
+    <button
+      type={type}
+      {...props}
+      className={`${compact ? portalAiButtonSmClass : portalAiPrepareButtonClass} ${className}`.trim()}
+    >
+      {children}
+      <AiSparkleIcon className={compact ? "size-4" : undefined} />
+    </button>
+  );
+}
+
+type AiActionLinkProps = ComponentProps<typeof Link>;
+
+/** Link styled like the AI action button — e.g. navigate to prep flow. */
+export function AiActionLink({ children, className = "", ...props }: AiActionLinkProps) {
+  return (
+    <Link {...props} className={`${portalAiPrepareButtonClass} ${className}`.trim()}>
+      {children}
+      <AiSparkleIcon />
+    </Link>
+  );
+}
 
 export const portalButtonSmClass =
   "inline-flex min-h-9 items-center justify-center rounded-full border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-4 py-2 text-[0.8125rem] font-medium text-[var(--klient-button-text)] transition-colors duration-150 hover:bg-[var(--klient-button-bg-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
@@ -49,7 +115,7 @@ export const portalSegmentInactiveClass =
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-md border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[var(--klient-button-text)]">
+    <span className="mb-1.5 inline-flex w-fit items-center rounded-md border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[var(--klient-button-text)]">
       {children}
     </span>
   );
@@ -99,11 +165,11 @@ export function PortalSectionHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4">
+    <div className="flex items-start justify-between gap-6">
       <div className="min-w-0">
         {label ? <SectionLabel>{label}</SectionLabel> : null}
         <h2
-          className={`${label ? "mt-2.5" : ""} text-[1.35rem] font-medium leading-[1.25] tracking-tight text-zinc-900 md:text-[1.45rem]`}
+          className={`${label ? "mt-3.5" : ""} text-[1.35rem] font-medium leading-[1.25] tracking-tight text-zinc-900 md:text-[1.45rem]`}
         >
           {title}
         </h2>
@@ -133,7 +199,7 @@ export function Tag({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium tracking-[0.04em] ${toneClass[tone]}`}
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium tracking-[0.04em] ${toneClass[tone]}`}
     >
       {children}
     </span>
@@ -189,7 +255,7 @@ export function RowLink({
   return (
     <Link
       href={href}
-      className="group flex items-center gap-4 rounded-xl px-3 py-3.5 -mx-3 transition-colors duration-200 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+      className="group flex items-center gap-6 rounded-xl px-3 py-3.5 -mx-3 transition-colors duration-200 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
     >
       {leading}
       <span className="min-w-0 flex-1">

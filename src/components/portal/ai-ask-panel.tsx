@@ -3,12 +3,12 @@
 import { useRef, useState } from "react";
 import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
 import {
+  AiActionButton,
+  AiSparkleIcon,
   Panel,
-  portalButtonClass,
-  portalChipClass,
+  portalAiChipClass,
   portalGhostButtonClass,
   portalInsetClass,
-  portalOutlineButtonClass,
   portalTextareaClass,
   SectionLabel,
 } from "@/components/portal/ui";
@@ -101,9 +101,10 @@ export default function AiAskPanel({
               setQuestion(suggestion.question);
               void ask(suggestion.question);
             }}
-            className={`min-h-11 ${portalChipClass} disabled:opacity-50`}
+            className={portalAiChipClass}
           >
             {suggestion.label}
+            <AiSparkleIcon className="size-3.5" />
           </button>
         ))}
       </div>
@@ -129,13 +130,9 @@ export default function AiAskPanel({
         />
         <div className="mt-3 flex items-center justify-between gap-3">
           <p className="text-[0.75rem] text-zinc-400">Endast aktuell kontext.</p>
-          <button
-            type="submit"
-            disabled={loading || question.trim().length === 0}
-            className={`${portalButtonClass} disabled:cursor-not-allowed`}
-          >
+          <AiActionButton type="submit" disabled={loading || question.trim().length === 0}>
             {loading ? "Sammanställer…" : "Fråga"}
-          </button>
+          </AiActionButton>
         </div>
       </form>
 
@@ -150,13 +147,9 @@ export default function AiAskPanel({
           <div className={portalInsetClass}>
             <p className="text-[0.9375rem] leading-relaxed text-zinc-700">{error}</p>
             {askedQuestion ? (
-              <button
-                type="button"
-                onClick={() => void ask(askedQuestion)}
-                className={`mt-3 ${portalOutlineButtonClass}`}
-              >
+              <AiActionButton compact onClick={() => void ask(askedQuestion)} className="mt-3">
                 Försök igen
-              </button>
+              </AiActionButton>
             ) : null}
           </div>
         ) : null}
@@ -192,13 +185,13 @@ export default function AiAskPanel({
                   </AiDisclaimer>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2.5">
-                  <button
+                  <AiActionButton
+                    compact
                     type="button"
                     onClick={() => askedQuestion && void ask(askedQuestion)}
-                    className={portalOutlineButtonClass}
                   >
                     Generera om
-                  </button>
+                  </AiActionButton>
                   <button
                     type="button"
                     onClick={() => {

@@ -117,7 +117,7 @@ export default async function ClientViewPage({
                   key={commitment.id}
                   className="border-b border-[var(--klient-border-muted)]/70 pb-5 last:border-0 last:pb-0"
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-5">
                     <p className="text-[0.9375rem] leading-[1.6] text-zinc-800">{commitment.text}</p>
                     <StatusBadge status={commitment.status} />
                   </div>

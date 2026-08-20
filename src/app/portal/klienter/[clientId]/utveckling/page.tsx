@@ -110,7 +110,7 @@ export default async function DevelopmentReportPage({
         <PanelHeading label="Åtaganden" title="Klientens åtaganden" />
         <div className="mt-5 space-y-4">
           {commitments.map((commitment) => (
-            <div key={commitment.id} className="flex items-start justify-between gap-3">
+            <div key={commitment.id} className="flex items-start justify-between gap-5">
               <div className="min-w-0">
                 <p className="text-[0.9375rem] leading-[1.6] text-zinc-800">{commitment.text}</p>
                 <p className="mt-1 text-[0.75rem] text-zinc-400">{formatDate(commitment.date)}</p>

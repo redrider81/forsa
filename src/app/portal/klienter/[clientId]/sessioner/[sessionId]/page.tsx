@@ -34,7 +34,7 @@ export default async function SessionPage({
           {client.name}
         </Link>
 
-        <div className="mt-5 flex items-start justify-between gap-4">
+        <div className="mt-5 flex items-start justify-between gap-6">
           <div className="min-w-0">
             <SectionLabel>{client.name} · {client.role}</SectionLabel>
             <h1 className="mt-3 text-[1.75rem] font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2rem]">
