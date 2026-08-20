@@ -42,20 +42,51 @@ export function sortActionItems(items: OperationsItem[], today: string): Operati
   });
 }
 
-export function actionMetaLine(item: OperationsItem, today: string): string {
+type ActionMetaOptions = {
+  /** Kräver åtgärd — undvik att upprepa datum (visas i vänsterkolumn) och status (visas i badge). */
+  priority?: boolean;
+};
+
+export function actionMetaLine(
+  item: OperationsItem,
+  today: string,
+  options?: ActionMetaOptions,
+): string {
   const offset = dayOffset(item.date, today);
-  const kind = item.kind.toUpperCase();
+  const kind = item.kind;
+
+  if (options?.priority) {
+    if (item.status === "Uppföljning krävs" && offset < 0) {
+      return `Försenad sedan ${formatShortDate(item.date)}`;
+    }
+    if (item.status === "Förberedelse saknas") {
+      if (offset === 0) return "Session idag";
+      if (offset > 0 && offset <= 7) {
+        return `Inom ${offset} ${offset === 1 ? "dag" : "dagar"}`;
+      }
+    }
+    if (item.status === "Sammanfattning för granskning") {
+      return "Väntar granskning";
+    }
+    if (item.status === "Underlag mottaget") {
+      return "Underlag att granska";
+    }
+    if (item.status === "Programgenomgång") {
+      return kind;
+    }
+    return kind;
+  }
 
   if (item.status === "Uppföljning krävs" && offset < 0) {
-    return `${kind} · Försenad sedan ${formatShortDate(item.date)}`;
+    return `${kind} · försenad sedan ${formatShortDate(item.date)}`;
   }
   if (item.status === "Förberedelse saknas" && offset >= 0 && offset <= 7) {
     return offset === 0
-      ? `${kind} · Session idag`
-      : `${kind} · Inom ${offset} ${offset === 1 ? "dag" : "dagar"}`;
+      ? `${kind} · session idag`
+      : `${kind} · inom ${offset} ${offset === 1 ? "dag" : "dagar"}`;
   }
   if (item.status === "Session idag") {
-    return `${kind} · Idag`;
+    return `${kind} · idag`;
   }
   if (item.date) {
     return `${kind} · ${formatShortDate(item.date)}`;

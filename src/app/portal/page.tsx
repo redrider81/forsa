@@ -38,7 +38,7 @@ export default async function PortalOverviewPage() {
         activeEngagements={week.activeEngagements}
       />
 
-      <TodayAgendaSection items={operations.today} />
+      <TodayAgendaSection items={operations.today} today={today} />
 
       <RequiresActionSection items={operations.requiresAction} today={today} />
 

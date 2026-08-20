@@ -44,15 +44,13 @@ export function ExecutiveSummaryBand({
     >
       <dl className="grid grid-cols-2 gap-px bg-[var(--klient-border-muted)] max-sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:grid-cols-3 lg:grid-cols-5">
         {items.map((item) => (
-          <div key={item.label} className="min-w-0 bg-white px-4 py-4 sm:px-5 md:px-6 md:py-5">
-            <dt className="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-zinc-500 sm:text-[0.75rem] sm:tracking-[0.1em]">
-              {item.label}
-            </dt>
-            <dd className="mt-1.5 text-[1.5rem] font-medium leading-none tabular-nums tracking-tight text-zinc-900 sm:text-[1.75rem] md:text-[2rem]">
+          <div key={item.label} className="min-w-0 bg-white px-4 py-4 text-center sm:px-5 md:px-6 md:py-5">
+            <dt className="text-[0.8125rem] font-medium text-zinc-500">{item.label}</dt>
+            <dd className="mt-1.5 text-[1.625rem] font-medium leading-none tabular-nums tracking-tight text-zinc-900 sm:text-[1.75rem] md:text-[2rem]">
               {item.value}
             </dd>
             {item.note ? (
-              <p className="mt-1 text-[0.8125rem] text-zinc-500">{item.note}</p>
+              <p className="mt-1 text-[0.8125rem] text-zinc-400">{item.note}</p>
             ) : null}
           </div>
         ))}
@@ -61,7 +59,7 @@ export function ExecutiveSummaryBand({
   );
 }
 
-export function TodayAgendaSection({ items }: { items: OperationsItem[] }) {
+export function TodayAgendaSection({ items, today }: { items: OperationsItem[]; today: string }) {
   if (items.length === 0) {
     return (
       <section className="flex flex-col gap-3 rounded-2xl border border-[var(--klient-border-muted)] bg-[var(--klient-text-block-bg)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
@@ -93,7 +91,7 @@ export function TodayAgendaSection({ items }: { items: OperationsItem[] }) {
         {items.map((item, index) => (
           <div key={item.id}>
             {index > 0 ? <Divider /> : null}
-            <ActionRow item={item} />
+            <ActionRow item={item} today={today} />
           </div>
         ))}
       </div>
@@ -118,28 +116,26 @@ export function WeekStatusModule({ week }: { week: OperationsOverview["week"] })
   return (
     <Panel>
       <PortalSectionHeader label="Veckan" title="Sju dagar framåt" />
-      <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5">
+      <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 lg:grid-cols-4">
         {primary.map((metric) => (
-          <div key={metric.label}>
-            <dt className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-zinc-500">
-              {metric.label}
-            </dt>
-            <dd className="mt-1.5 text-[1.625rem] font-medium leading-none tabular-nums text-zinc-900">
+          <div key={metric.label} className="text-center">
+            <dt className="text-[0.8125rem] font-medium text-zinc-500">{metric.label}</dt>
+            <dd className="mt-1.5 text-[1.625rem] font-medium leading-none tabular-nums text-zinc-900 lg:text-[1.75rem]">
               {metric.value}
             </dd>
             {metric.note ? (
-              <p className="mt-1 text-[0.8125rem] text-zinc-500">{metric.note}</p>
+              <p className="mt-1 text-[0.8125rem] text-zinc-400">{metric.note}</p>
             ) : null}
           </div>
         ))}
       </dl>
       <div className="mt-6 border-t border-[var(--klient-border-muted)] pt-5">
-        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-zinc-900">
           Verksamhetsöversikt
         </p>
         <dl className="mt-3 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-3 sm:gap-3">
           {portfolio.map((metric) => (
-            <div key={metric.label}>
+            <div key={metric.label} className="text-center">
               <dt className="text-[0.6875rem] uppercase tracking-[0.08em] text-zinc-400">
                 {metric.label}
               </dt>
@@ -172,21 +168,20 @@ export function UpcomingSection({ items }: { items: OperationsItem[] }) {
               {index > 0 ? <Divider /> : null}
               <Link
                 href={item.subjectHref}
-                className="group -mx-3 block rounded-xl px-3 py-3 transition-colors hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+                className="group -mx-3 grid min-w-0 grid-cols-1 gap-2 rounded-xl px-3 py-3 transition-colors hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-x-4"
               >
-                <span className="block min-w-0">
+                <span className="min-w-0">
                   <span className="block text-[0.9375rem] font-semibold leading-snug text-zinc-900">
                     {item.time ? `${item.time} · ` : null}
                     {item.subject}
                   </span>
                   <span className="mt-0.5 block text-[0.8125rem] leading-snug text-zinc-600">
                     {item.context}
+                    <span className="text-zinc-400"> · </span>
+                    {formatWeekdayDate(item.date)}
                   </span>
                 </span>
-                <span className="mt-1.5 block text-[0.75rem] text-zinc-500">
-                  {formatWeekdayDate(item.date)}
-                </span>
-                <span className="mt-2 inline-flex max-w-full">
+                <span className="inline-flex max-w-full md:justify-end">
                   <StatusTag status={item.status} />
                 </span>
               </Link>

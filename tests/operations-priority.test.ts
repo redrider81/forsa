@@ -55,7 +55,19 @@ describe("operations-priority", () => {
       status: "Uppföljning krävs",
     });
 
-    expect(actionMetaLine(overdue, today)).toContain("Försenad sedan");
-    expect(actionMetaLine(overdue, today)).toContain("UPPFÖLJNING");
+    expect(actionMetaLine(overdue, today)).toContain("försenad sedan");
+    expect(actionMetaLine(overdue, today)).toContain("Uppföljning");
+    expect(actionMetaLine(overdue, today)).not.toMatch(/UPPFÖLJNING/);
+  });
+
+  it("undviker redundant metadata i prioriterad vy", () => {
+    const overdue = item({
+      id: "a",
+      date: "2026-05-21",
+      kind: "Uppföljning",
+      status: "Uppföljning krävs",
+    });
+
+    expect(actionMetaLine(overdue, today, { priority: true })).toBe("Försenad sedan 21 maj");
   });
 });

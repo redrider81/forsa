@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { cvbStatusTone } from "@/lib/portal/status-tones";
 
 /**
  * Delade portalprimitiver. Följer samma formspråk som klientportalen:
@@ -116,11 +117,11 @@ export function PortalSectionHeader({
 }
 
 const toneClass = {
-  neutral: "border-zinc-300/90 bg-zinc-50 text-zinc-900",
-  open: "border-orange-400 bg-orange-400 text-white",
-  progress: "border-emerald-500 bg-emerald-500 text-white",
-  done: "border-emerald-700/20 bg-emerald-700/6 text-emerald-900",
-  private: "border-zinc-300/80 bg-zinc-50 text-zinc-700",
+  neutral: cvbStatusTone.neutral,
+  open: cvbStatusTone.action,
+  progress: cvbStatusTone.active,
+  done: cvbStatusTone.completed,
+  private: cvbStatusTone.private,
 } as const;
 
 export function Tag({

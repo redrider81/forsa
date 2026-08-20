@@ -2,58 +2,20 @@ import Link from "next/link";
 import type { OperationsItem, OperationsStatus } from "@/lib/portal/repository";
 import { actionMetaLine } from "@/lib/portal/operations-priority";
 import { formatShortDate, formatWeekdayDate } from "@/lib/portal/format";
-
-/** Läsbara statusfärger med tydlig kontrast. */
-const NEUTRAL = "border-zinc-300/90 bg-zinc-50 text-zinc-700";
-const ATTENTION = "border-orange-300/90 bg-orange-100 text-orange-900";
-const WARNING = "border-amber-300/90 bg-amber-100 text-amber-950";
-const PROGRESS = "border-emerald-300/90 bg-emerald-100 text-emerald-900";
-const SETTLED = "border-emerald-700/20 bg-emerald-700/8 text-emerald-900";
-const PLANNED = "border-zinc-300/80 bg-zinc-50 text-zinc-600";
-
-const statusTone: Record<OperationsStatus, string> = {
-  "Förberedelse mottagen": SETTLED,
-  "Förberedelse saknas": WARNING,
-  "Session planerad": PLANNED,
-  "Session idag": ATTENTION,
-  "Session genomförd": SETTLED,
-  "Uppföljning krävs": ATTENTION,
-  "Underlag mottaget": SETTLED,
-  "Underlag saknas": NEUTRAL,
-  Programgenomgång: PROGRESS,
-  "Sammanfattning för granskning": ATTENTION,
-  "Åtagande uppdaterat": NEUTRAL,
-  "Ny reflektion": NEUTRAL,
-};
-
-const statusLabel: Record<OperationsStatus, string> = {
-  "Förberedelse mottagen": "Förberedelse mottagen",
-  "Förberedelse saknas": "Förberedelse saknas",
-  "Session planerad": "Session planerad",
-  "Session idag": "Session idag",
-  "Session genomförd": "Session genomförd",
-  "Uppföljning krävs": "Uppföljning krävs",
-  "Underlag mottaget": "Underlag mottaget",
-  "Underlag saknas": "Underlag saknas",
-  Programgenomgång: "Programgenomgång",
-  "Sammanfattning för granskning": "Sammanfattning för granskning",
-  "Åtagande uppdaterat": "Åtagande uppdaterat",
-  "Ny reflektion": "Ny reflektion",
-};
+import { cvbStatusBadgeClass, getOperationsStatusPresentation } from "@/lib/portal/status-tones";
 
 export function StatusTag({ status }: { status: OperationsStatus }) {
+  const { label, toneClass } = getOperationsStatusPresentation(status);
   return (
-    <span
-      className={`inline-flex max-w-full shrink-0 items-center rounded-md border px-2.5 py-1 text-[0.625rem] font-semibold uppercase leading-snug tracking-[0.04em] sm:text-[0.6875rem] sm:leading-none sm:tracking-[0.05em] sm:whitespace-nowrap ${statusTone[status]}`}
-    >
-      <span className="min-w-0 break-words sm:break-normal">{statusLabel[status]}</span>
+    <span className={`${cvbStatusBadgeClass} ${toneClass}`}>
+      <span className="min-w-0 break-words sm:break-normal">{label}</span>
     </span>
   );
 }
 
 function mobileScheduleLabel(item: OperationsItem, showDate: boolean, variant: "default" | "priority") {
   if (variant === "priority" && item.date) {
-    return formatShortDate(item.date);
+    return item.time ? `${item.time} · ${formatShortDate(item.date)}` : formatShortDate(item.date);
   }
   if (item.time && showDate && item.date) {
     return `${item.time} · ${formatShortDate(item.date)}`;
@@ -75,52 +37,67 @@ export function ActionRow({
   today?: string;
   showDate?: boolean;
 }) {
-  const meta =
-    variant === "priority" && today
-      ? actionMetaLine(item, today)
-      : `${item.kind.toUpperCase()}${showDate && item.date ? ` · ${formatShortDate(item.date)}` : ""}`;
+  const isPriority = variant === "priority" && Boolean(today);
+  const meta = isPriority
+    ? actionMetaLine(item, today!, { priority: true })
+    : today
+      ? actionMetaLine(item, today, { priority: false })
+      : showDate && item.date
+        ? `${item.kind} · ${formatShortDate(item.date)}`
+        : item.kind;
 
   const mobileSchedule = mobileScheduleLabel(item, showDate, variant);
+  const showLeftDate = isPriority ? Boolean(item.date) : showDate || isPriority;
 
   return (
     <Link
       href={item.subjectHref}
-      className="group -mx-3 grid min-w-0 grid-cols-1 gap-2 rounded-xl px-3 py-3.5 transition-colors duration-200 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:grid-cols-[4rem_minmax(0,1fr)] sm:items-start sm:gap-x-3 lg:grid-cols-[4.5rem_minmax(0,1fr)_auto] lg:gap-x-4"
+      className="group -mx-3 grid min-w-0 grid-cols-1 gap-2 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:grid-cols-[4rem_minmax(0,1fr)] sm:items-start sm:gap-x-3 lg:grid-cols-[4.5rem_minmax(0,1fr)_auto] lg:gap-x-4"
     >
       <span className="min-w-0 sm:pt-0.5">
         {mobileSchedule ? (
-          <span className="mb-1 block text-[0.75rem] font-medium tabular-nums text-zinc-500 sm:hidden">
+          <span className="mb-1 block text-[0.8125rem] font-medium tabular-nums text-zinc-500 sm:hidden">
             {mobileSchedule}
           </span>
         ) : null}
         <span className="hidden sm:block">
-          <span className="block text-[0.8125rem] font-medium tabular-nums text-zinc-900">
-            {item.time || "—"}
-          </span>
-          {(showDate || variant === "priority") && item.date ? (
-            <span className="mt-0.5 block text-[0.75rem] tabular-nums text-zinc-500">
-              {formatShortDate(item.date)}
+          {item.time && !isPriority ? (
+            <span className="block text-[0.8125rem] font-medium tabular-nums text-zinc-900">
+              {item.time}
             </span>
           ) : null}
+          {showLeftDate && item.date ? (
+            <span
+              className={`block tabular-nums text-zinc-500 ${
+                item.time && !isPriority
+                  ? "mt-0.5 text-[0.75rem]"
+                  : "text-[0.8125rem] font-medium text-zinc-600"
+              }`}
+            >
+              {formatShortDate(item.date)}
+            </span>
+          ) : item.time && !isPriority ? null : (
+            <span className="block text-[0.8125rem] font-medium tabular-nums text-zinc-400">—</span>
+          )}
         </span>
       </span>
 
       <span className="min-w-0">
-        <span className="block text-[0.9375rem] font-semibold leading-snug text-zinc-900 sm:text-[0.9875rem]">
+        <span className="block text-[0.9375rem] font-semibold leading-snug text-zinc-900 sm:text-base">
           {item.subject}
         </span>
         <span className="mt-0.5 block text-[0.8125rem] leading-relaxed text-zinc-600">
           {item.context}
         </span>
-        <span className="mt-2 block text-[0.75rem] font-medium uppercase tracking-[0.08em] text-zinc-500">
-          {meta}
-        </span>
+        {meta ? (
+          <span className="mt-1.5 block text-[0.8125rem] leading-snug text-zinc-500">{meta}</span>
+        ) : null}
         <span className="mt-2 inline-flex max-w-full lg:hidden">
           <StatusTag status={item.status} />
         </span>
       </span>
 
-      <span className="hidden min-w-0 justify-end pt-0.5 lg:flex">
+      <span className="hidden min-w-0 justify-end self-start pt-0.5 lg:flex">
         <StatusTag status={item.status} />
       </span>
     </Link>
@@ -197,9 +174,7 @@ export function MetricGrid({
     >
       {metrics.map((metric) => (
         <div key={metric.label} className="min-w-0">
-          <dt className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-zinc-500 break-words">
-            {metric.label}
-          </dt>
+          <dt className="break-words text-[0.8125rem] font-medium text-zinc-500">{metric.label}</dt>
           <dd className="mt-1.5 text-[1.5rem] font-medium leading-none tabular-nums tracking-tight text-zinc-900">
             {metric.value}
           </dd>
