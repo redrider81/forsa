@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { OperationsStatus } from "@/lib/portal/repository";
+import { buildOperationsOverview, type OperationsStatus } from "@/lib/portal/repository";
 import {
   getOperationsStatusPresentation,
   operationsStatusVisualState,
 } from "@/lib/portal/status-tones";
+import { EMPTY_DEMO_STATE } from "@/lib/portal/store/demo-state";
 
 describe("operations status presentation", () => {
   it("maps Förberedelse mottagen to completed tone, not action", () => {
@@ -34,6 +35,41 @@ describe("operations status presentation", () => {
     for (const [status, visualState] of Object.entries(expected)) {
       expect(operationsStatusVisualState[status as OperationsStatus]).toBe(visualState);
     }
+  });
+
+  it("derives Förberedd from Johan prep in operations overview", () => {
+    const state = {
+      ...EMPTY_DEMO_STATE,
+      prep: {
+        "klient-johan-bergstrom": {
+          clientId: "klient-johan-bergstrom",
+          focus: "Test",
+          desiredOutcome: "Test",
+          changed: "",
+          followUp: "",
+          updatedAt: "2026-08-20T08:00:00.000Z",
+        },
+      },
+    };
+    const ops = buildOperationsOverview("coach-cvb", "2026-08-20", state, 21);
+    const johan = ops.calendar.find((item) => item.subject.includes("Johan"));
+    expect(johan?.status).toBe("Förberedelse mottagen");
+
+    const presentation = getOperationsStatusPresentation(johan!.status);
+    expect(presentation.label).toBe("Förberedd");
+    expect(presentation.visualState).toBe("completed");
+    expect(presentation.toneClass).toBe("border-emerald-700/20 bg-emerald-700/6 text-emerald-900");
+  });
+
+  it("derives Förbered action tone when prep is missing", () => {
+    const ops = buildOperationsOverview("coach-cvb", "2026-08-20", EMPTY_DEMO_STATE, 21);
+    const johan = ops.calendar.find((item) => item.subject.includes("Johan"));
+    expect(johan?.status).toBe("Förberedelse saknas");
+
+    const presentation = getOperationsStatusPresentation(johan!.status);
+    expect(presentation.label).toBe("Förbered");
+    expect(presentation.visualState).toBe("action");
+    expect(presentation.toneClass).toContain("orange");
   });
 
   it("maps visual states to canonical tone classes", () => {
