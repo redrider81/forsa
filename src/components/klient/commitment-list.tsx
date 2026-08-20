@@ -1,9 +1,9 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Card, CardTitle, Empty, Label, StatusPill } from "@/components/klient/klient-ui";
-import { commitmentStatusLabel } from "@/lib/portal/format";
+import StatusControl from "@/components/klient/status-control";
+import { Empty, MetaLabel, SectionTitle, ZoneTag, klientButtonSmClass } from "@/components/klient/klient-ui";
 import type { CommitmentStatus } from "@/lib/portal/types";
 
 export type ClientCommitment = {
@@ -12,21 +12,68 @@ export type ClientCommitment = {
   dueLabel: string;
   status: CommitmentStatus;
   clientNote?: string;
+  sessionLabel?: string;
+  completedAt?: string;
 };
 
-const options: Array<{ value: CommitmentStatus; label: string }> = [
-  { value: "oppet", label: "Ej startat" },
-  { value: "pagar", label: "Pågående" },
-  { value: "genomfort", label: "Genomfört" },
-];
+function sortByRelevance(items: ClientCommitment[]): ClientCommitment[] {
+  const statusOrder: Record<CommitmentStatus, number> = {
+    pagar: 0,
+    oppet: 1,
+    genomfort: 2,
+  };
+
+  return [...items].sort((a, b) => {
+    const statusDiff = statusOrder[a.status] - statusOrder[b.status];
+    if (statusDiff !== 0) return statusDiff;
+    return (b.completedAt ?? "").localeCompare(a.completedAt ?? "");
+  });
+}
+
+function selectOverviewCommitments(
+  items: ClientCommitment[],
+  limit: number,
+): { visible: ClientCommitment[]; hidden: ClientCommitment[] } {
+  const sorted = sortByRelevance(items);
+  const ongoing = sorted.filter((item) => item.status === "pagar");
+  const open = sorted.filter((item) => item.status === "oppet");
+  const completed = sorted.filter((item) => item.status === "genomfort");
+
+  const picked: ClientCommitment[] = [];
+  for (const item of [...ongoing, ...open, ...completed]) {
+    if (picked.length >= limit) break;
+    if (!picked.some((entry) => entry.id === item.id)) picked.push(item);
+  }
+
+  const hidden = sorted.filter((item) => !picked.some((entry) => entry.id === item.id));
+  return { visible: picked, hidden };
+}
+
+type Props = {
+  commitments: ClientCommitment[];
+  activeCount: number;
+  /** When set, only the most relevant commitments are shown until expanded. */
+  overviewLimit?: number;
+};
 
 /** Klientägda åtaganden. Klienten uppdaterar själv — inget prestationsspråk. */
-export default function CommitmentList({ commitments }: { commitments: ClientCommitment[] }) {
+export default function CommitmentList({ commitments, activeCount, overviewLimit }: Props) {
   const router = useRouter();
   const [busyId, setBusyId] = useState<string | null>(null);
   const [noteFor, setNoteFor] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
+
+  const sorted = useMemo(() => sortByRelevance(commitments), [commitments]);
+  const overview = useMemo(
+    () => (overviewLimit ? selectOverviewCommitments(commitments, overviewLimit) : null),
+    [commitments, overviewLimit],
+  );
+
+  const displayed =
+    overviewLimit && overview && !expanded ? overview.visible : sorted;
+  const hiddenCount = overview?.hidden.length ?? 0;
 
   async function update(id: string, status: CommitmentStatus, clientNote?: string) {
     setBusyId(id);
@@ -52,10 +99,18 @@ export default function CommitmentList({ commitments }: { commitments: ClientCom
     }
   }
 
+  const activeLabel =
+    activeCount === 0
+      ? "Inga aktiva just nu"
+      : activeCount === 1
+        ? "1 aktivt just nu"
+        : `${activeCount} aktiva just nu`;
+
   return (
-    <Card>
-      <Label>Mina åtaganden</Label>
-      <CardTitle>Aktuella åtaganden</CardTitle>
+    <>
+      <ZoneTag>Aktuellt fokus</ZoneTag>
+      <SectionTitle id="commitments-heading">Dina åtaganden</SectionTitle>
+      <p className="mt-1.5 text-[0.8125rem] text-zinc-500">{activeLabel}</p>
 
       {error ? (
         <p role="alert" className="mt-4 text-[0.8125rem] text-zinc-700">
@@ -63,88 +118,110 @@ export default function CommitmentList({ commitments }: { commitments: ClientCom
         </p>
       ) : null}
 
-      <div className="mt-6 space-y-6">
-        {commitments.length === 0 ? (
-          <Empty>Inga registrerade åtaganden.</Empty>
+      <div className="mt-5">
+        {displayed.length === 0 ? (
+          <Empty>Inga aktuella åtaganden just nu.</Empty>
         ) : (
-          commitments.map((commitment) => (
-            <article
-              key={commitment.id}
-              className="border-b border-[#ece7dc] pb-6 last:border-0 last:pb-0"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-[0.9375rem] leading-[1.65] text-zinc-800">{commitment.text}</p>
-                <StatusPill status={commitment.status}>
-                  {commitmentStatusLabel[commitment.status]}
-                </StatusPill>
-              </div>
-              <p className="mt-1.5 text-[0.75rem] text-zinc-400">{commitment.dueLabel}</p>
+          <ul className="divide-y divide-[var(--klient-border-muted)]">
+            {displayed.map((commitment) => (
+              <li
+                key={commitment.id}
+                className="py-4 transition-colors duration-150 first:pt-0 last:pb-0 hover:bg-zinc-50/40 md:px-2 md:-mx-2 md:rounded-lg motion-reduce:transition-none"
+              >
+                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-5">
+                  <p className="flex-1 text-[0.9375rem] font-medium leading-[1.6] text-zinc-900">
+                    {commitment.text}
+                  </p>
 
-              {commitment.clientNote ? (
-                <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-                  ”{commitment.clientNote}”
-                </p>
-              ) : null}
-
-              <div className="mt-3.5 flex flex-wrap gap-2">
-                {options.map((option) => {
-                  const active = commitment.status === option.value;
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      disabled={busyId === commitment.id}
-                      onClick={() => void update(commitment.id, option.value, commitment.clientNote)}
-                      aria-pressed={active}
-                      className={`inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-[0.8125rem] font-medium transition-colors duration-200 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
-                        active
-                          ? "border-zinc-900 bg-zinc-900 text-zinc-50"
-                          : "border-[#e6e0d3] bg-[#fbfaf7] text-zinc-700 hover:border-zinc-300 hover:bg-white"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {noteFor === commitment.id ? (
-                <div className="mt-3.5">
-                  <label htmlFor={`note-${commitment.id}`} className="sr-only">
-                    Kort reflektion om åtagandet
-                  </label>
-                  <textarea
-                    id={`note-${commitment.id}`}
-                    value={note}
-                    onChange={(event) => setNote(event.target.value)}
-                    rows={3}
-                    placeholder="Kort notering."
-                    className="w-full resize-y rounded-2xl border border-[#e6e0d3] bg-[#fbfaf7] px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+                  <StatusControl
+                    commitmentId={commitment.id}
+                    status={commitment.status}
+                    disabled={busyId === commitment.id}
+                    align="right"
+                    onChange={(nextStatus) =>
+                      void update(commitment.id, nextStatus, commitment.clientNote)
+                    }
                   />
+                </div>
+
+                {(commitment.sessionLabel || commitment.dueLabel) && (
+                  <dl className="mt-2.5 flex flex-wrap gap-x-6 gap-y-2">
+                    {commitment.sessionLabel ? (
+                      <div>
+                        <MetaLabel>Kopplat till</MetaLabel>
+                        <dd className="mt-0.5 text-[0.8125rem] text-zinc-500">
+                          {commitment.sessionLabel}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {commitment.dueLabel ? (
+                      <div>
+                        <MetaLabel>Tidsram</MetaLabel>
+                        <dd className="mt-0.5 text-[0.8125rem] text-zinc-500">
+                          {commitment.dueLabel}
+                        </dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                )}
+
+                {commitment.clientNote ? (
+                  <div className="mt-2.5">
+                    <MetaLabel>Notering</MetaLabel>
+                    <p className="mt-0.5 text-[0.875rem] leading-relaxed text-zinc-500">
+                      ”{commitment.clientNote}”
+                    </p>
+                  </div>
+                ) : null}
+
+                {noteFor === commitment.id ? (
+                  <div className="mt-3">
+                    <label htmlFor={`note-${commitment.id}`} className="sr-only">
+                      Kort reflektion om åtagandet
+                    </label>
+                    <textarea
+                      id={`note-${commitment.id}`}
+                      value={note}
+                      onChange={(event) => setNote(event.target.value)}
+                      rows={3}
+                      placeholder="Kort notering."
+                      className="w-full resize-y rounded-xl border border-[#e6e0d3] bg-white px-4 py-3 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => void update(commitment.id, commitment.status, note)}
+                      className={`mt-4 ${klientButtonSmClass}`}
+                    >
+                      Spara
+                    </button>
+                  </div>
+                ) : (
                   <button
                     type="button"
-                    onClick={() => void update(commitment.id, commitment.status, note)}
-                    className="mt-2.5 inline-flex min-h-11 items-center rounded-full bg-zinc-900 px-5 py-2.5 text-[0.8125rem] font-medium text-zinc-50 transition-colors hover:bg-zinc-700"
+                    onClick={() => {
+                      setNoteFor(commitment.id);
+                      setNote(commitment.clientNote ?? "");
+                    }}
+                    className={`mt-5 ${klientButtonSmClass}`}
                   >
-                    Spara
+                    {commitment.clientNote ? "Ändra notering" : "Lägg till notering"}
                   </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNoteFor(commitment.id);
-                    setNote(commitment.clientNote ?? "");
-                  }}
-                  className="mt-3 text-[0.8125rem] text-zinc-500 underline underline-offset-4 transition-colors hover:text-zinc-800"
-                >
-                  {commitment.clientNote ? "Ändra notering" : "Lägg till notering"}
-                </button>
-              )}
-            </article>
-          ))
+                )}
+              </li>
+            ))}
+          </ul>
         )}
+
+        {overviewLimit && hiddenCount > 0 ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((value) => !value)}
+            className={`mt-6 ${klientButtonSmClass}`}
+          >
+            {expanded ? "Visa färre" : `Visa alla åtaganden (${commitments.length})`}
+          </button>
+        ) : null}
       </div>
-    </Card>
+    </>
   );
 }

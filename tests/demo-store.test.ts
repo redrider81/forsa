@@ -9,6 +9,7 @@ const state: DemoState = {
   ],
   prep: {},
   commitments: {},
+  profile: {},
 };
 
 beforeEach(() => {

@@ -45,6 +45,7 @@ const stateWithInput: DemoState = {
   commitments: {
     "ata-emma-5": { status: "genomfort", clientNote: "Bokade samtalet till sist.", updatedAt: "2026-08-19T08:05:00.000Z" },
   },
+  profile: {},
 };
 
 describe("demo-state", () => {
@@ -165,5 +166,49 @@ describe("klientens eget perspektiv", () => {
     const dossier = buildClientDossier(coachId, emma, stateWithInput);
     expect(dossier!.prep?.focus).toBe(view!.prep?.focus);
     expect(dossier!.clientWrittenReflectionIds).toEqual(["refl-egen-1"]);
+  });
+});
+
+describe("klienten kan uppdatera sin profil", () => {
+  const profileState: DemoState = {
+    ...stateWithInput,
+    profile: {
+      [emma]: {
+        name: "Emma Lindström",
+        role: "VD och grundare",
+        updatedAt: "2026-08-20T08:00:00.000Z",
+      },
+    },
+  };
+
+  it("visar uppdaterat namn och roll i klientvy", () => {
+    const view = buildClientPerspective(coachId, emma, profileState);
+    expect(view!.client.name).toBe("Emma Lindström");
+    expect(view!.client.role).toBe("VD och grundare");
+    expect(view!.client.initials).toBe("EL");
+  });
+
+  it("visar samma profil för coachen", () => {
+    const dossier = buildClientDossier(coachId, emma, profileState);
+    expect(dossier!.client.name).toBe("Emma Lindström");
+    expect(dossier!.client.role).toBe("VD och grundare");
+  });
+
+  it("visar uppdaterade kontaktuppgifter", () => {
+    const contactState: DemoState = {
+      ...stateWithInput,
+      profile: {
+        [emma]: {
+          name: "Emma Lind",
+          role: "Grundare och vd",
+          email: "emma.ny@northlinestudio.se",
+          phone: "+46 70 999 88 77",
+          updatedAt: "2026-08-20T09:00:00.000Z",
+        },
+      },
+    };
+    const view = buildClientPerspective(coachId, emma, contactState);
+    expect(view!.client.email).toBe("emma.ny@northlinestudio.se");
+    expect(view!.client.phone).toBe("+46 70 999 88 77");
   });
 });

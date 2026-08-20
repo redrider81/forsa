@@ -3,7 +3,7 @@ import { readCoachSession } from "@/lib/portal/session";
 import { getCoach, listClients, listEngagements } from "@/lib/portal/repository";
 import { LogoutButton } from "@/components/portal/portal-nav";
 import DemoResetButton from "@/components/portal/demo-reset-button";
-import { Avatar, DefinitionList, PageHeading, Panel, PanelHeading } from "@/components/portal/ui";
+import { Avatar, DefinitionList, PageHeading, Panel, PanelHeading, portalPageStackClass } from "@/components/portal/ui";
 
 export default async function ProfilePage() {
   const session = await readCoachSession();
@@ -14,7 +14,7 @@ export default async function ProfilePage() {
   const clients = listClients(session.coachId);
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <PageHeading label="Profil" title="Profil" />
 
       <Panel>
@@ -47,7 +47,7 @@ export default async function ProfilePage() {
           {[
             {
               level: "Coach privat",
-              text: "Arbetsanteckningar. Syns endast för dig. Används i ditt eget AI-underlag men delas aldrig med klient eller uppdragsgivare.",
+              text: "Arbetsanteckningar. Syns endast för dig. Används i ditt eget arbetsunderlag men delas aldrig med klient eller uppdragsgivare.",
             },
             {
               level: "Coach och klient",
@@ -71,7 +71,7 @@ export default async function ProfilePage() {
       <Panel>
         <PanelHeading label="Miljö" title="Testmiljö" />
         <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
-          Fiktivt testmaterial. Inga verkliga klientuppgifter. AI körs server-side och arbetar endast
+          Fiktivt testmaterial. Inga verkliga klientuppgifter. Sammanställning sker server-side och arbetar endast
           med öppnad klient eller öppnat uppdrag.
         </p>
       </Panel>
@@ -91,7 +91,7 @@ export default async function ProfilePage() {
         <LogoutButton className="flex-1" />
         <Link
           href="/"
-          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
         >
           cvbcoaching.se
         </Link>

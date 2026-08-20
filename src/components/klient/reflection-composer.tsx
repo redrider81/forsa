@@ -2,10 +2,29 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Card, CardTitle, Label, Muted } from "@/components/klient/klient-ui";
+import {
+  Chapter,
+  Label,
+  SectionTitle,
+  klientButtonClass,
+  klientButtonSmClass,
+  ZoneTag,
+} from "@/components/klient/klient-ui";
+
+type Props = {
+  prompt?: string;
+  /** Lighter inline prompt for the overview page. */
+  variant?: "default" | "overview";
+  /** Render without outer surface — parent owns the chapter zone. */
+  embedded?: boolean;
+};
 
 /** Klienten skriver en egen reflektion. Ingen mall, inga betyg — hennes egna ord. */
-export default function ReflectionComposer({ prompt }: { prompt?: string }) {
+export default function ReflectionComposer({
+  prompt,
+  variant = "default",
+  embedded = false,
+}: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
@@ -44,36 +63,65 @@ export default function ReflectionComposer({ prompt }: { prompt?: string }) {
   }
 
   if (!open) {
-    return (
-      <Card>
-        <Label>Reflektion</Label>
-        <CardTitle>Ny reflektion</CardTitle>
-        <div className="mt-2.5">
-          <Muted>Dokumentera en reflektion mellan sessionerna. Delas endast med Carolina.</Muted>
+    if (variant === "overview") {
+      return (
+        <div>
+          <ZoneTag tone="muted">Reflektion</ZoneTag>
+          <SectionTitle>Vad har hänt sedan sist?</SectionTitle>
+          <p className="mt-2 max-w-prose text-[0.8125rem] leading-relaxed text-zinc-500">
+            En kort reflektion mellan sessionerna. Delas endast med Carolina.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(true);
+              setSaved(false);
+            }}
+            className={`mt-4 w-full sm:w-auto ${klientButtonClass}`}
+          >
+            Skriv en reflektion
+          </button>
+          {saved ? (
+            <p role="status" className="mt-3 text-[0.8125rem] text-[#7d6432]">
+              Reflektion sparad.
+            </p>
+          ) : null}
         </div>
+      );
+    }
+
+    return (
+      <Chapter surface="primary">
+        <Label>Reflektion</Label>
+        <SectionTitle>Ny reflektion</SectionTitle>
+        <p className="mt-2 text-[0.8125rem] leading-relaxed text-zinc-500">
+          Dokumentera en reflektion mellan sessionerna. Delas endast med Carolina.
+        </p>
         <button
           type="button"
           onClick={() => {
             setOpen(true);
             setSaved(false);
           }}
-          className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className={`mt-4 w-full sm:w-auto ${klientButtonClass}`}
         >
           Ny reflektion
         </button>
         {saved ? (
-          <p role="status" className="mt-3.5 text-[0.8125rem] text-[#7d6432]">
+          <p role="status" className="mt-3 text-[0.8125rem] text-[#7d6432]">
             Reflektion sparad.
           </p>
         ) : null}
-      </Card>
+      </Chapter>
     );
   }
 
-  return (
-    <Card>
-      <Label>Ny reflektion</Label>
-      <CardTitle>{prompt ?? "Ny reflektion"}</CardTitle>
+  const formContent = (
+    <>
+      <ZoneTag tone={variant === "overview" ? "muted" : "gold"}>Reflektion</ZoneTag>
+      <SectionTitle>
+        {prompt ?? (variant === "overview" ? "Vad har hänt sedan sist?" : "Ny reflektion")}
+      </SectionTitle>
 
       <label htmlFor="reflection-text" className="sr-only">
         Din reflektion
@@ -85,7 +133,7 @@ export default function ReflectionComposer({ prompt }: { prompt?: string }) {
         rows={7}
         autoFocus
         placeholder="Dina egna ord."
-        className="mt-5 w-full resize-y rounded-2xl border border-[#e6e0d3] bg-[#fbfaf7] px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+        className="mt-4 w-full resize-y rounded-xl border border-[#e6e0d3] bg-white px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
       />
 
       {error ? (
@@ -99,7 +147,7 @@ export default function ReflectionComposer({ prompt }: { prompt?: string }) {
           type="button"
           onClick={() => void save()}
           disabled={saving}
-          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 disabled:bg-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className={`flex-1 ${klientButtonClass}`}
         >
           {saving ? "Sparar…" : "Spara"}
         </button>
@@ -109,11 +157,17 @@ export default function ReflectionComposer({ prompt }: { prompt?: string }) {
             setOpen(false);
             setError(null);
           }}
-          className="inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-800"
+          className={klientButtonSmClass}
         >
           Avbryt
         </button>
       </div>
-    </Card>
+    </>
   );
+
+  if (variant === "overview" && embedded) {
+    return <div>{formContent}</div>;
+  }
+
+  return <Chapter surface="primary">{formContent}</Chapter>;
 }

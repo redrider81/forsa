@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { commitmentStatusLabel, formatDate } from "@/lib/portal/format";
-import { Panel, PanelHeading, QuoteBlock, SectionLabel, Tag } from "@/components/portal/ui";
+import { Panel, PanelHeading, portalPageStackClass, QuoteBlock, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function DevelopmentReportPage({
   params,
@@ -21,11 +21,11 @@ export default async function DevelopmentReportPage({
   const done = commitments.filter((item) => item.status === "genomfort");
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <div>
         <Link
           href={`/portal/klienter/${client.id}`}
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
         >
           {client.name}
         </Link>
@@ -148,7 +148,7 @@ export default async function DevelopmentReportPage({
           )}
         </div>
         {dossier.upcomingSession ? (
-          <p className="mt-5 rounded-xl bg-[#faf9f7] px-4 py-3.5 text-[0.875rem] leading-relaxed text-zinc-600">
+          <p className="mt-5 rounded-xl bg-[var(--klient-text-block-bg)] px-4 py-3.5 text-[0.875rem] leading-relaxed text-zinc-600">
             Nästa session {formatDate(dossier.upcomingSession.date)}: {dossier.upcomingSession.clientFocus}
           </p>
         ) : null}

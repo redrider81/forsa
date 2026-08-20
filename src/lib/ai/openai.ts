@@ -197,7 +197,7 @@ export async function generate({
     throw new AiError(
       "missing_key",
       "OPENAI_API_KEY saknas i miljön.",
-      "AI-funktionerna är inte aktiverade i den här miljön ännu.",
+      "Sammanställningsfunktionen är inte aktiverad i den här miljön ännu.",
     );
   }
 

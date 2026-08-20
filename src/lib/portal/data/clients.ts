@@ -1,5 +1,15 @@
 import type { Client, CoachingAgreement, DevelopmentGoal } from "@/lib/portal/types";
 
+type ClientSeed = Omit<Client, "email" | "phone"> & { email?: string; phone?: string };
+
+function seedClient(client: ClientSeed): Client {
+  return {
+    ...client,
+    email: client.email ?? "",
+    phone: client.phone ?? "",
+  };
+}
+
 /** Standardvillkor som används i samtliga coachningsöverenskommelser i demon. */
 const standardEthics =
   "Arbetet följer professionell coachingetik. Coachen arbetar med ett coachande förhållningssätt, gör inga bedömningar av person och ger inga diagnoser. Klienten äger sina val.";
@@ -30,13 +40,15 @@ function overviewGoal(headline: string, clientWording: string): DevelopmentGoal 
 }
 
 export const clients: Client[] = [
-  {
+  seedClient({
     id: "klient-emma-lind",
     engagementId: "eng-northline",
     organisationId: "org-northline",
     name: "Emma Lind",
     initials: "EL",
     role: "Grundare och vd",
+    email: "emma@northlinestudio.se",
+    phone: "+46 70 123 45 67",
     headline: "Från operativ grundare till strategisk vd",
     startedAt: "2026-03-05",
     depth: "full",
@@ -75,8 +87,8 @@ export const clients: Client[] = [
       ],
       horizon: "Sex månader, mars – september 2026",
     },
-  },
-  {
+  }),
+  seedClient({
     id: "klient-johan-bergstrom",
     engagementId: "eng-bergstrom",
     organisationId: "org-bergstrom",
@@ -117,8 +129,8 @@ export const clients: Client[] = [
       ],
       horizon: "Uppdragsperioden februari – oktober 2026",
     },
-  },
-  {
+  }),
+  seedClient({
     id: "klient-sara-nyqvist",
     engagementId: "eng-bergstrom",
     organisationId: "org-bergstrom",
@@ -159,8 +171,8 @@ export const clients: Client[] = [
       ],
       horizon: "Uppdragsperioden februari – oktober 2026",
     },
-  },
-  {
+  }),
+  seedClient({
     id: "klient-ali-demir",
     engagementId: "eng-bergstrom",
     organisationId: "org-bergstrom",
@@ -179,8 +191,8 @@ export const clients: Client[] = [
       "Tydligare prioritering i en pressad verksamhet.",
       "Jag vill kunna säga vad som är viktigast just nu utan att känna att jag sviker något annat.",
     ),
-  },
-  {
+  }),
+  seedClient({
     id: "klient-petra-sund",
     engagementId: "eng-bergstrom",
     organisationId: "org-bergstrom",
@@ -199,8 +211,8 @@ export const clients: Client[] = [
       "Att ta plats med egen riktning i ledningsgruppen.",
       "Jag vill bidra med mer än processer. Jag vill att min bild av organisationen ska väga.",
     ),
-  },
-  {
+  }),
+  seedClient({
     id: "klient-helena-waller",
     engagementId: "eng-nordic-industrial",
     organisationId: "org-nordic-industrial",
@@ -241,8 +253,8 @@ export const clients: Client[] = [
       ],
       horizon: "Programperioden februari – november 2026",
     },
-  },
-  {
+  }),
+  seedClient({
     id: "klient-markus-ek",
     engagementId: "eng-nordic-industrial",
     organisationId: "org-nordic-industrial",
@@ -283,7 +295,7 @@ export const clients: Client[] = [
       ],
       horizon: "Programperioden februari – november 2026",
     },
-  },
+  }),
   ...([
     ["klient-anette-rosen", "Anette Rosén", "AR", "VP Finance", "Att göra ekonomistyrning till ett ledarverktyg"],
     ["klient-david-lindqvist", "David Lindqvist", "DL", "Fabrikschef, Trollhättan", "Att leda en verksamhet i omställning"],
@@ -295,21 +307,23 @@ export const clients: Client[] = [
     ["klient-mattias-holm", "Mattias Holm", "MH", "Fabrikschef, Sandviken", "Att bygga tillit i en ny ledningsgrupp"],
     ["klient-nina-berglund", "Nina Berglund", "NB", "VP Legal", "Att gå från rådgivare till medbeslutare"],
     ["klient-oskar-wikstrom", "Oskar Wikström", "OW", "Affärsområdeschef, Industry", "Att prioritera mellan goda alternativ"],
-  ] as const).map(([id, name, initials, role, headline]): Client => ({
-    id,
-    engagementId: "eng-nordic-industrial",
-    organisationId: "org-nordic-industrial",
-    name,
-    initials,
-    role,
-    headline,
-    startedAt: "2026-02-25",
-    depth: "oversikt",
-    recurringThemes: [],
-    agreement: overviewAgreement(
-      `Att stödja ${name.split(" ")[0]} i sitt ledarskap inom ramen för Executive Leadership Programme.`,
-      "Sponsor får endast programstatus, deltagande och övergripande teman. Inget individuellt innehåll rapporteras.",
-    ),
-    goal: overviewGoal(headline, "Utvecklingsmålet formulerades vid coachningsöverenskommelsen."),
-  })),
+  ] as const).map(([id, name, initials, role, headline]): Client =>
+    seedClient({
+      id,
+      engagementId: "eng-nordic-industrial",
+      organisationId: "org-nordic-industrial",
+      name,
+      initials,
+      role,
+      headline,
+      startedAt: "2026-02-25",
+      depth: "oversikt",
+      recurringThemes: [],
+      agreement: overviewAgreement(
+        `Att stödja ${name.split(" ")[0]} i sitt ledarskap inom ramen för Executive Leadership Programme.`,
+        "Sponsor får endast programstatus, deltagande och övergripande teman. Inget individuellt innehåll rapporteras.",
+      ),
+      goal: overviewGoal(headline, "Utvecklingsmålet formulerades vid coachningsöverenskommelsen."),
+    }),
+  ),
 ];

@@ -5,30 +5,30 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  title: "Team coaching | CVB Coaching",
+  title: "Teamcoaching för team och projektgrupper | CVB Coaching",
   description:
-    "Team coaching för team, projektgrupper och specialistgrupper som behöver starkare samspel, ansvar och gemensamt lärande i arbetet.",
+    "För grupper med höga krav och outtalat arbetssätt. Vi arbetar med samspel, ansvar och gemensamt lärande i det operativa arbetet.",
 };
 
 const relevanceList = [
-  "Teamet har höga krav men otydligt gemensamt arbetssätt.",
-  "Ansvar faller mellan stolar i vardagens samarbete.",
-  "Kommunikation och feedback fungerar ojämnt.",
-  "Gruppen behöver gå från individer till fungerande team.",
+  "Teamet har höga krav men inget gemensamt arbetssätt.",
+  "Ansvar faller mellan stolar i det dagliga samarbetet.",
+  "Feedback ges ojämnt, eller inte alls.",
+  "Gruppen fungerar som individer, inte som team.",
 ];
 
 const focusList = [
   "Teamets gemensamma syfte i det dagliga arbetet.",
   "Samspel och ansvar i uppgifter och leveranser.",
-  "Kommunikation och feedback i teamet.",
-  "Psykologisk trygghet i arbetet.",
-  "Från grupp till fungerande team.",
+  "Kommunikation och feedback inom teamet.",
+  "Förutsättningar för att svåra frågor tas upp i tid.",
+  "Vägen från grupp till fungerande team.",
 ];
 
 const valueList = [
-  "Tydligare ansvar i teamets samarbete.",
-  "Bättre kommunikation i det gemensamma arbetet.",
-  "Starkare lärande i hur teamet arbetar tillsammans.",
+  "Ett uttalat ansvar i teamets samarbete.",
+  "Feedback som ges i tid och tas emot.",
+  "Ett arbetssätt teamet kan upprepa utan stöd.",
 ];
 
 export default function TeamCoachingPage() {
@@ -41,21 +41,23 @@ export default function TeamCoachingPage() {
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
-              Team coaching
+              Teamcoaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Team coaching för starkare samspel och gemensamt ansvar.
+              Från grupp till team med gemensamt ansvar.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              För team, projektgrupper och specialistgrupper som behöver utveckla sitt samarbete,
-              ansvarstagande och lärande i arbetet.
+              För team, projektgrupper och specialistgrupper där kraven är höga men arbetssättet är
+              outtalat.
             </p>
           </HeroReveal>
         </section>
 
         {/* List */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">När team coaching är relevant</h2>
+          <h2 className="text-3xl font-medium tracking-tight">
+            Fyra lägen där teamcoaching är relevant
+          </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
               {relevanceList.map((item) => (
@@ -72,7 +74,7 @@ export default function TeamCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Vad CVB Coaching arbetar med
+              Vad vi arbetar med
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -88,11 +90,11 @@ export default function TeamCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Hur team coaching fungerar
+              Så arbetar vi
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Arbetet sker i strukturerade team-samtal där teamet tränar på att lyssna, ställa frågor,
+                Arbetet sker i strukturerade teamsamtal där teamet tränar på att lyssna, ställa frågor,
                 ge feedback och ta gemensamt ansvar.
               </p>
               <p>
@@ -113,7 +115,7 @@ export default function TeamCoachingPage() {
                 Ledningsgruppscoaching handlar om ledningens beslut, mandat och riktning i organisationen.
               </p>
               <p>
-                Team coaching handlar om teamets samspel, ansvar och gemensamma arbetssätt i det operativa
+                Teamcoaching handlar om teamets samspel, ansvar och gemensamma arbetssätt i det operativa
                 arbetet.
               </p>
             </div>
@@ -122,27 +124,48 @@ export default function TeamCoachingPage() {
 
         {/* Cards: value */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Förväntat värde</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Förväntat utfall</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
-            {valueList.map((item) => (
+            {valueList.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+                <p className="text-xs tracking-[0.18em] text-zinc-500">{`0${index + 1}`}</p>
                 {item}
               </div>
             ))}
           </StaggerCards>
         </section>
 
+        {/* Pricing */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Omfattning och investering
+            </h2>
+            <div data-col-right className="space-y-6 md:col-span-7">
+              <p className="text-lg leading-8 text-zinc-700">
+                Omfattningen sätts efter teamets storlek och uppdragets längd. Offereras per uppdrag
+                efter ett första samtal om nuläget.
+              </p>
+              <CtaLink href="/#uppdrag" variant="secondary">
+                Så ser ett uppdrag ut →
+              </CtaLink>
+            </div>
+          </ScrollReveal>
+        </section>
+
         {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              När teamet behöver arbeta mer samlat
+              Nästa steg
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Börja med ett första samtal om teamets nuläge och behov.
+              Beskriv kort teamets nuläge och vad som behöver fungera bättre.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <CtaLink href="/kontakt" variant="primary">Boka ett första samtal</CtaLink>
+              <CtaLink href="/kontakt" variant="primary">
+                Boka ett första samtal
+              </CtaLink>
             </div>
           </ScrollReveal>
         </section>

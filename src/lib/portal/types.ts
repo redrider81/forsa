@@ -151,6 +151,55 @@ export type PortalDocument = {
   visibility: ConfidentialityLevel;
 };
 
+/** Kategori för coachingmaterial — inte filsystemstyp. */
+export type MaterialCategory =
+  | "arbetsmaterial"
+  | "underlag"
+  | "utvardering"
+  | "anteckning"
+  | "ovrigt";
+
+/** Var materialet kommer ifrån. */
+export type MaterialSource = "client_upload" | "client_note" | "coach_shared";
+
+/**
+ * Delningsnivå för klientägt material.
+ * - `private`: endast klienten
+ * - `shared_coach`: klienten + coachen
+ */
+export type MaterialSharingLevel = "private" | "shared_coach";
+
+/** Valfri koppling till coachingprocessen. */
+export type MaterialLinkType = "goal" | "next_session" | "session" | "commitment" | "none";
+
+/**
+ * Coachingmaterial — filer, anteckningar och coach-delat innehåll.
+ * Separat från PortalDocument (statiska uppdragsdokument).
+ */
+export type CoachingMaterial = {
+  id: string;
+  ownerClientId: string;
+  createdByRole: "klient" | "coach";
+  createdById: string;
+  title: string;
+  fileName?: string;
+  mimeType?: string;
+  sizeBytes?: number;
+  category: MaterialCategory;
+  /** Textinnehåll när source === client_note. */
+  noteText?: string;
+  createdAt: string;
+  updatedAt: string;
+  sharingLevel: MaterialSharingLevel;
+  source: MaterialSource;
+  linkType: MaterialLinkType;
+  linkedSessionId?: string;
+  linkedCommitmentId?: string;
+  comment?: string;
+  /** Sant om klienten kan lagra filbytes lokalt (uppladdad fil). */
+  hasFilePayload?: boolean;
+};
+
 export type Client = {
   id: string;
   engagementId: string;
@@ -158,6 +207,8 @@ export type Client = {
   name: string;
   initials: string;
   role: string;
+  email: string;
+  phone: string;
   headline: string;
   startedAt: string;
   /** `full` = rik historik i demon, `oversikt` = deltagare utan djup historik. */

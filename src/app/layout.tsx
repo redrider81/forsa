@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import SiteFooter from "@/components/site-footer";
 import SiteShell from "@/components/site-shell";
+import JsonLd, { professionalServiceSchema } from "@/components/json-ld";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,9 +23,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "CVB Coaching | Executive coaching och ledningsstöd",
+  title: "Executive coaching Göteborg | CVB Coaching",
   description:
-    "CVB Coaching arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och riktning behöver skärpas.",
+    "Konfidentiellt beslutsstöd för vd:ar, grundare och ledningsgrupper i Göteborg. Definierade mål, fast rytm och uppföljning tills besluten syns i genomförandet.",
 };
 
 export default function RootLayout({
@@ -38,6 +39,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-zinc-100 text-zinc-900">
+        <JsonLd data={professionalServiceSchema} />
         <SiteShell>{children}</SiteShell>
         <SiteFooter />
       </body>

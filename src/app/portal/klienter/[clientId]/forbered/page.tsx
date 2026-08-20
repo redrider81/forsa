@@ -4,7 +4,7 @@ import AiPreparePanel from "@/components/portal/ai-prepare-panel";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { formatDate, formatWeekdayDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
-import { Panel, PanelHeading, QuoteBlock, SectionLabel, Tag } from "@/components/portal/ui";
+import { Panel, PanelHeading, portalPageStackClass, QuoteBlock, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function PrepareSessionPage({
   params,
@@ -27,11 +27,11 @@ export default async function PrepareSessionPage({
     : "Ingen session är bokad ännu.";
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <div>
         <Link
           href={`/portal/klienter/${client.id}`}
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
         >
           {client.name}
         </Link>

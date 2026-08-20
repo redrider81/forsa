@@ -2,15 +2,55 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 /**
- * Delade portalprimitiver. Följer samma formspråk som cvbcoaching.se:
- * varm off-white, zinc-skala, guldaccent #92753a, rundade ytor, låg täthet.
+ * Delade portalprimitiver. Följer samma formspråk som klientportalen:
+ * ljusgrå sida, vita kort, kapslar och pill-knappar.
  */
+
+export const portalButtonClass =
+  "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-6 py-3 text-sm font-medium text-[var(--klient-button-text)] transition-colors duration-150 hover:bg-[var(--klient-button-bg-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalButtonSmClass =
+  "inline-flex min-h-9 items-center justify-center rounded-full border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-4 py-2 text-[0.8125rem] font-medium text-[var(--klient-button-text)] transition-colors duration-150 hover:bg-[var(--klient-button-bg-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalLinkButtonClass =
+  "inline-flex min-h-9 items-center justify-center rounded-full border border-zinc-900 bg-white px-4 py-2 text-[0.8125rem] font-medium text-zinc-900 transition-colors duration-150 hover:bg-zinc-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalPageStackClass = "space-y-8 md:space-y-10";
+
+export const portalChipClass =
+  "inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[var(--klient-border-muted)] bg-[var(--klient-text-block-bg)] px-3.5 py-2 text-[0.8125rem] text-zinc-700 transition-colors duration-150 hover:border-zinc-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalFieldClass =
+  "w-full rounded-xl border border-[var(--klient-border-muted)] bg-[var(--klient-text-block-bg)] px-4 py-3 text-[0.9375rem] text-zinc-900 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15";
+
+export const portalTextareaClass = `${portalFieldClass} resize-y leading-[1.7]`;
+
+export const portalInsetClass =
+  "rounded-2xl border border-[var(--klient-border-muted)] bg-[var(--klient-text-block-bg)] p-4 md:p-5";
+
+export const portalOutlineButtonClass =
+  "inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors duration-150 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalGhostButtonClass =
+  "inline-flex min-h-10 items-center rounded-full px-4 py-2 text-[0.8125rem] font-medium text-zinc-500 transition-colors hover:text-zinc-800";
+
+export const portalQuietLinkClass =
+  "inline-flex items-center gap-1 text-[0.8125rem] font-medium text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2";
+
+export const portalSegmentClass =
+  "inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-[0.8125rem] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalSegmentActiveClass =
+  "border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] text-[var(--klient-button-text)]";
+
+export const portalSegmentInactiveClass =
+  "border-zinc-300 bg-white text-zinc-700 hover:border-zinc-500";
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-[#92753a]">
+    <span className="inline-flex items-center rounded-md border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[var(--klient-button-text)]">
       {children}
-    </p>
+    </span>
   );
 }
 
@@ -25,7 +65,7 @@ export function Panel({
 }) {
   return (
     <Tag
-      className={`rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(24,24,27,0.04)] md:p-6 ${className}`}
+      className={`rounded-2xl border border-[var(--klient-border-soft)] bg-white p-5 shadow-[var(--klient-shadow-soft)] md:p-7 min-w-0 overflow-hidden ${className}`}
     >
       {children}
     </Tag>
@@ -42,12 +82,33 @@ export function PanelHeading({
   action?: ReactNode;
 }) {
   return (
+    <PortalSectionHeader label={label} title={title} action={action} />
+  );
+}
+
+export function PortalSectionHeader({
+  label,
+  title,
+  context,
+  action,
+}: {
+  label?: string;
+  title: string;
+  context?: string;
+  action?: ReactNode;
+}) {
+  return (
     <div className="flex items-start justify-between gap-4">
       <div className="min-w-0">
         {label ? <SectionLabel>{label}</SectionLabel> : null}
-        <h2 className={`${label ? "mt-2.5" : ""} text-[1.3rem] font-medium leading-[1.25] tracking-tight text-zinc-900`}>
+        <h2
+          className={`${label ? "mt-2.5" : ""} text-[1.35rem] font-medium leading-[1.25] tracking-tight text-zinc-900 md:text-[1.45rem]`}
+        >
           {title}
         </h2>
+        {context ? (
+          <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-zinc-600">{context}</p>
+        ) : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>
@@ -55,11 +116,11 @@ export function PanelHeading({
 }
 
 const toneClass = {
-  neutral: "border-zinc-200 bg-zinc-50 text-zinc-600",
-  open: "border-[#92753a]/25 bg-[#92753a]/8 text-[#7d6432]",
-  progress: "border-zinc-300 bg-white text-zinc-700",
-  done: "border-emerald-700/18 bg-emerald-700/7 text-emerald-800",
-  private: "border-zinc-800/15 bg-zinc-900/5 text-zinc-700",
+  neutral: "border-zinc-300/90 bg-zinc-50 text-zinc-900",
+  open: "border-orange-400 bg-orange-400 text-white",
+  progress: "border-emerald-500 bg-emerald-500 text-white",
+  done: "border-emerald-700/20 bg-emerald-700/6 text-emerald-900",
+  private: "border-zinc-300/80 bg-zinc-50 text-zinc-700",
 } as const;
 
 export function Tag({
@@ -99,7 +160,7 @@ export function Avatar({ initials, size = "md" }: { initials: string; size?: "sm
   return (
     <span
       aria-hidden="true"
-      className={`inline-flex shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-[#f4f2ed] font-medium tracking-[0.06em] text-zinc-600 ${sizeClass}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full border border-[var(--klient-border-soft)] bg-[var(--klient-text-block-bg)] font-medium tracking-[0.06em] text-zinc-600 ${sizeClass}`}
     >
       {initials}
     </span>
@@ -127,7 +188,7 @@ export function RowLink({
   return (
     <Link
       href={href}
-      className="group flex items-center gap-4 rounded-xl px-3 py-3.5 -mx-3 transition-colors duration-200 hover:bg-[#f4f2ed]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+      className="group flex items-center gap-4 rounded-xl px-3 py-3.5 -mx-3 transition-colors duration-200 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
     >
       {leading}
       <span className="min-w-0 flex-1">
@@ -162,12 +223,12 @@ export function RowLink({
 }
 
 export function Divider() {
-  return <hr className="my-1 border-t border-zinc-200/80" />;
+  return <hr className="my-1 border-t border-[var(--klient-border-muted)]" />;
 }
 
 export function EmptyState({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-xl border border-dashed border-zinc-200 bg-[#faf9f7] px-4 py-5 text-[0.875rem] leading-relaxed text-zinc-500">
+    <p className="rounded-xl border border-dashed border-[#e6e0d3] bg-[var(--klient-text-block-bg)] px-4 py-5 text-[0.875rem] leading-relaxed text-zinc-500">
       {children}
     </p>
   );
@@ -175,10 +236,10 @@ export function EmptyState({ children }: { children: ReactNode }) {
 
 export function QuoteBlock({ children, source }: { children: ReactNode; source?: string }) {
   return (
-    <figure className="border-l-2 border-[#92753a]/35 pl-4">
-      <blockquote className="text-[0.9875rem] leading-[1.7] text-zinc-700">{children}</blockquote>
+    <figure className="rounded-xl border border-[var(--klient-border-soft)]/70 bg-[var(--klient-text-block-bg)] px-5 py-4 md:px-6 md:py-5">
+      <blockquote className="font-serif text-[1.0625rem] leading-[1.72] text-zinc-700">{children}</blockquote>
       {source ? (
-        <figcaption className="mt-2 text-[0.75rem] text-zinc-400">{source}</figcaption>
+        <figcaption className="mt-2.5 text-[0.75rem] text-zinc-600">{source}</figcaption>
       ) : null}
     </figure>
   );
@@ -186,7 +247,7 @@ export function QuoteBlock({ children, source }: { children: ReactNode; source?:
 
 export function DefinitionList({ items }: { items: Array<{ term: string; value: string }> }) {
   return (
-    <dl className="divide-y divide-zinc-200/70">
+    <dl className="divide-y divide-[var(--klient-border-muted)]">
       {items.map((item) => (
         <div key={item.term} className="py-3.5 first:pt-0 last:pb-0">
           <dt className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-zinc-400">
@@ -212,12 +273,14 @@ export function PageHeading({
     <header className="pb-2">
       {label ? <SectionLabel>{label}</SectionLabel> : null}
       <h1
-        className={`${label ? "mt-3" : ""} text-[1.75rem] font-medium leading-[1.15] tracking-tight text-balance text-zinc-900 md:text-[2.1rem]`}
+        className={`${label ? "mt-3" : ""} font-serif text-[1.75rem] font-medium leading-[1.15] tracking-tight text-balance text-zinc-900 md:text-[2rem]`}
       >
         {title}
       </h1>
       {lead ? (
-        <p className="mt-3.5 max-w-2xl text-[1rem] leading-[1.7] text-zinc-600">{lead}</p>
+        <p className="mt-3.5 max-w-2xl text-balance text-[0.9375rem] leading-[1.65] text-zinc-600 sm:text-[1rem] sm:leading-[1.7]">
+          {lead}
+        </p>
       ) : null}
     </header>
   );

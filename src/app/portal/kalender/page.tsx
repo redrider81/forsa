@@ -3,7 +3,7 @@ import { readCoachSession } from "@/lib/portal/session";
 import { getOperationsOverview } from "@/lib/portal/repository";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { CompactCalendar, MetricGrid } from "@/components/portal/operations";
-import { EmptyState, PageHeading, Panel, PanelHeading } from "@/components/portal/ui";
+import { EmptyState, PageHeading, Panel, PanelHeading, portalPageStackClass, portalSegmentActiveClass, portalSegmentClass, portalSegmentInactiveClass } from "@/components/portal/ui";
 
 const ranges = {
   idag: { label: "Idag", days: 1, title: "Idag" },
@@ -28,7 +28,7 @@ export default async function CalendarPage({
   const operations = await getOperationsOverview(session.coachId, today, ranges[active].days);
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <div>
         <PageHeading label="Kalender" title="Planerade insatser" />
         <p className="mt-3.5 text-[0.875rem] leading-relaxed text-zinc-500">
@@ -40,10 +40,8 @@ export default async function CalendarPage({
               key={key}
               href={key === "vecka" ? "/portal/kalender" : `/portal/kalender?period=${key}`}
               aria-current={key === active ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-[0.8125rem] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4] ${
-                key === active
-                  ? "border-zinc-900 bg-zinc-900 text-zinc-50"
-                  : "border-zinc-300 bg-white text-zinc-700 hover:border-zinc-500"
+              className={`${portalSegmentClass} ${
+                key === active ? portalSegmentActiveClass : portalSegmentInactiveClass
               }`}
             >
               {ranges[key].label}
@@ -52,9 +50,7 @@ export default async function CalendarPage({
         </nav>
       </div>
 
-      <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-x-8">
-      <div className="min-w-0 lg:order-2 lg:col-span-4">
-      <Panel className="lg:sticky lg:top-24">
+      <Panel>
         <PanelHeading label="Period" title={ranges[active].title} />
         <div className="mt-5">
           <MetricGrid
@@ -69,9 +65,6 @@ export default async function CalendarPage({
         </div>
       </Panel>
 
-      </div>
-
-      <div className="min-w-0 lg:order-1 lg:col-span-8">
       <Panel>
         <PanelHeading label="Schema" title="Dag för dag" />
         <div className="mt-4">
@@ -82,8 +75,6 @@ export default async function CalendarPage({
           )}
         </div>
       </Panel>
-      </div>
-      </div>
     </div>
   );
 }

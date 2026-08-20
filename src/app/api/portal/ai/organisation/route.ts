@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         error:
-          "AI-funktionerna är inte aktiverade i den här miljön ännu.",
+          "Sammanställningsfunktionen är inte aktiverad i den här miljön ännu.",
       },
       { status: 503 },
     );

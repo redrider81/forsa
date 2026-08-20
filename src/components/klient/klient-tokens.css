@@ -1,0 +1,36 @@
+/**
+ * Portal — lokala design tokens.
+ * Delas av klient- och coachportalen.
+ */
+[data-klient-portal],
+[data-portal] {
+  --klient-page-bg: #f0f1f3;
+  --klient-surface-primary: #ffffff;
+  --klient-surface-strategic: #ffffff;
+  --klient-surface-reflection: #ffffff;
+  --klient-surface-neutral: #ffffff;
+  --klient-surface-inset: #e8eaed;
+  --klient-border-soft: #e2e4e8;
+  --klient-border-muted: #dce0e4;
+  --klient-accent-gold: #92753a;
+  --klient-accent-gold-muted: #7d6432;
+  --klient-text-primary: #18181b;
+  --klient-text-secondary: #71717a;
+  --klient-status-active: #52525b;
+  --klient-status-idle: #7d6432;
+  --klient-status-done: #166534;
+  --klient-shadow-soft: 0 2px 10px -2px rgb(24 24 27 / 0.07);
+  --klient-shadow-lift: 0 4px 18px -4px rgb(24 24 27 / 0.1);
+  --klient-button-bg: #f0f4f5;
+  --klient-button-bg-hover: #e4eaec;
+  --klient-button-border: #d5dfe3;
+  --klient-button-text: #3d4f56;
+  --klient-text-block-bg: #f0f2f5;
+  --klient-transition: 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-klient-portal] {
+    --klient-transition: 0ms;
+  }
+}

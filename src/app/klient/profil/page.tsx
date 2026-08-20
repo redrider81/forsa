@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { KlientLogoutButton } from "@/components/klient/klient-nav";
+import ProfileEditor from "@/components/klient/profile-editor";
 import { Body, Card, CardTitle, Label, Muted } from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
 import { getClientPerspective, getCoach } from "@/lib/portal/repository";
@@ -17,14 +18,15 @@ export default async function ClientProfilePage() {
 
   return (
     <div className="space-y-6">
-      <header className="pb-1">
-        <h1 className="text-[1.75rem] font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2rem]">
-          {client.name}
-        </h1>
-        <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-          {client.role} · {view.organisation.name}
-        </p>
-      </header>
+      <ProfileEditor
+        initial={{
+          name: client.name,
+          role: client.role,
+          email: client.email,
+          phone: client.phone,
+          organisation: view.organisation.name,
+        }}
+      />
 
       <Card>
         <Label>Min coach</Label>
@@ -63,7 +65,33 @@ export default async function ClientProfilePage() {
         <div className="mt-5 space-y-4">
           <Body>{client.agreement.confidentiality}</Body>
           <Body>{client.agreement.sponsorSharing}</Body>
-          <div className="rounded-xl bg-[#fbfaf7] p-4">
+          <dl className="divide-y divide-[#ece7dc] rounded-xl bg-[var(--klient-text-block-bg)] px-4">
+            {[
+              {
+                term: "Privat för mig",
+                value:
+                  "Material och anteckningar du markerar som privata syns bara för dig. De når aldrig Carolina.",
+              },
+              {
+                term: "Delat med Carolina",
+                value:
+                  "Material du uttryckligen delar syns i Carolinas klientvy och kan användas i ert coachingarbete.",
+              },
+              {
+                term: "Material från Carolina",
+                value:
+                  "Material Carolina delar till dig visas under Material → Delat med mig.",
+              },
+            ].map((item) => (
+              <div key={item.term} className="py-4 first:pt-4 last:pb-4">
+                <dt className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-zinc-400">
+                  {item.term}
+                </dt>
+                <dd className="mt-1.5 text-[0.875rem] leading-[1.65] text-zinc-600">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="rounded-xl bg-[var(--klient-text-block-bg)] p-4">
             <Muted>
               Reflektioner, förberedelser och noteringar delas endast med Carolina. Hennes egna
               arbetsanteckningar visas inte här.

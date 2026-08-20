@@ -27,10 +27,10 @@ export type Dictionary = {
     unsureBody: string;
     bookFirstCall: string;
     login: string;
+    teamCoaching: string;
   };
   footer: {
     description: string;
-    location: string;
     services: string;
     about: string;
     portal: string;
@@ -38,6 +38,13 @@ export type Dictionary = {
     clientPortal: string;
     coachLogin: string;
     copyright: string;
+    teamCoaching: string;
+  };
+  cta: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+    engagementLink: string;
   };
   form: {
     generalError: string;
@@ -48,8 +55,21 @@ export type Dictionary = {
     submitError: string;
     ariaLabel: string;
     optional: string;
+    continue: string;
+    submitAnyway: string;
+    confidentialityNote: string;
+    schedulingHint: string;
+    timeSlotAria: string;
+    timeWindows: {
+      "08_10": string;
+      "10_12": string;
+      "12_14": string;
+      "14_16": string;
+      "16_17": string;
+    };
     sections: {
       contact: string;
+      scheduling: string;
       situation: string;
       nextStep: string;
     };
@@ -65,6 +85,8 @@ export type Dictionary = {
       situation: string;
       clarity: string;
       timing: string;
+      preferredDate: string;
+      preferredTime: string;
     };
     submit: {
       idle: string;

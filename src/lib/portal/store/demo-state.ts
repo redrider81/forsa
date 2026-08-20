@@ -55,6 +55,14 @@ export type DemoCommitmentUpdate = {
   updatedAt: string;
 };
 
+export type DemoClientProfile = {
+  name: string;
+  role: string;
+  email?: string;
+  phone?: string;
+  updatedAt: string;
+};
+
 export type DemoState = {
   v: number;
   /** Reflektioner som klienten själv har skrivit i portalen. */
@@ -63,6 +71,8 @@ export type DemoState = {
   prep: Record<string, DemoSessionPrep>;
   /** Statusändringar på åtaganden, per åtagande-id. */
   commitments: Record<string, DemoCommitmentUpdate>;
+  /** Profiluppdateringar som klienten själv har gjort. */
+  profile: Record<string, DemoClientProfile>;
 };
 
 export const EMPTY_DEMO_STATE: DemoState = {
@@ -70,13 +80,15 @@ export const EMPTY_DEMO_STATE: DemoState = {
   reflections: [],
   prep: {},
   commitments: {},
+  profile: {},
 };
 
 export function isEmptyDemoState(state: DemoState): boolean {
   return (
     state.reflections.length === 0 &&
     Object.keys(state.prep).length === 0 &&
-    Object.keys(state.commitments).length === 0
+    Object.keys(state.commitments).length === 0 &&
+    Object.keys(state.profile).length === 0
   );
 }
 
@@ -136,7 +148,22 @@ export function normaliseDemoState(input: unknown): DemoState {
     }
   }
 
-  return { v: DEMO_STATE_VERSION, reflections, prep, commitments };
+  const profile: Record<string, DemoClientProfile> = {};
+  if (raw.profile && typeof raw.profile === "object") {
+    for (const [clientId, value] of Object.entries(raw.profile)) {
+      if (!value || typeof value !== "object") continue;
+      const entry = value as Partial<DemoClientProfile>;
+      profile[clientId] = {
+        name: typeof entry.name === "string" ? entry.name : "",
+        role: typeof entry.role === "string" ? entry.role : "",
+        email: typeof entry.email === "string" ? entry.email : undefined,
+        phone: typeof entry.phone === "string" ? entry.phone : undefined,
+        updatedAt: typeof entry.updatedAt === "string" ? entry.updatedAt : "",
+      };
+    }
+  }
+
+  return { v: DEMO_STATE_VERSION, reflections, prep, commitments, profile };
 }
 
 /**

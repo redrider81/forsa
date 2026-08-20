@@ -33,7 +33,7 @@ export default async function ClientSessionsPage() {
           <div className="mt-2">
             <Muted>{view.upcomingSession.location}</Muted>
           </div>
-          <div className="mt-5 rounded-xl bg-[#fbfaf7] p-4">
+          <div className="mt-5 rounded-xl bg-[var(--klient-text-block-bg)] p-4">
             <Label>Fokus</Label>
             <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">
               {view.upcomingSession.clientFocus}

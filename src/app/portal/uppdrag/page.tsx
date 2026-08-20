@@ -3,7 +3,7 @@ import { readCoachSession } from "@/lib/portal/session";
 import { buildEngagementOverview, listEngagements } from "@/lib/portal/repository";
 import { readDemoState } from "@/lib/portal/store/demo-store";
 import { engagementStatusLabel, formatDate } from "@/lib/portal/format";
-import { PageHeading, Panel, SectionLabel, Tag } from "@/components/portal/ui";
+import { PageHeading, Panel, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function EngagementsPage() {
   const session = await readCoachSession();
@@ -13,14 +13,14 @@ export default async function EngagementsPage() {
   const demoState = await readDemoState();
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <PageHeading
         label="Uppdrag"
         title="Uppdrag"
         lead="Aktiva uppdrag och programstatus."
       />
 
-      <div className="grid gap-4 xl:grid-cols-2 xl:items-start xl:gap-6">
+      <div className="space-y-6">
         {engagements.map((engagement) => {
           const overview = buildEngagementOverview(session.coachId, engagement.id, demoState);
           if (!overview) return null;

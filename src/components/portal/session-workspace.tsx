@@ -2,7 +2,18 @@
 
 import { useRef, useState } from "react";
 import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
-import { Panel, PanelHeading, SectionLabel } from "@/components/portal/ui";
+import {
+  Panel,
+  PanelHeading,
+  portalButtonClass,
+  portalButtonSmClass,
+  portalChipClass,
+  portalGhostButtonClass,
+  portalInsetClass,
+  portalOutlineButtonClass,
+  portalTextareaClass,
+  SectionLabel,
+} from "@/components/portal/ui";
 
 type Stage = "idle" | "loading" | "draft" | "error";
 
@@ -95,7 +106,7 @@ export default function SessionWorkspace({
               key={action.label}
               type="button"
               onClick={() => addLine(action.prefix)}
-              className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-zinc-200 bg-[#faf9f7] px-3.5 py-2 text-[0.8125rem] text-zinc-700 transition-colors duration-200 hover:border-zinc-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className={portalChipClass}
             >
               <span aria-hidden="true" className="text-zinc-400">+</span>
               {action.label}
@@ -113,7 +124,7 @@ export default function SessionWorkspace({
           onChange={(event) => setNotes(event.target.value)}
           rows={8}
           placeholder="Fokus, klientens insikter, klientens åtaganden, uppföljning."
-          className="mt-4 w-full resize-y rounded-2xl border border-zinc-200 bg-[#faf9f7] px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+          className={`mt-4 ${portalTextareaClass} rounded-2xl px-4 py-3.5 placeholder:text-zinc-400`}
         />
       </Panel>
 
@@ -127,7 +138,7 @@ export default function SessionWorkspace({
           type="button"
           onClick={() => void createSummary()}
           disabled={stage === "loading"}
-          className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-300 sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className={`mt-5 w-full sm:w-auto ${portalButtonClass} disabled:cursor-not-allowed`}
         >
           {stage === "loading" ? "Strukturerar…" : "Skapa sammanfattning"}
         </button>
@@ -139,12 +150,12 @@ export default function SessionWorkspace({
         ) : null}
 
         {stage === "error" ? (
-          <div className="mt-5 rounded-2xl border border-zinc-200 bg-[#faf9f7] p-4">
+          <div className={`mt-5 ${portalInsetClass}`}>
             <p className="text-[0.9375rem] leading-relaxed text-zinc-700">{error}</p>
             <button
               type="button"
               onClick={() => void createSummary()}
-              className="mt-3 inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors hover:border-zinc-500 hover:bg-white"
+              className={`mt-3 ${portalOutlineButtonClass}`}
             >
               Försök igen
             </button>
@@ -152,7 +163,7 @@ export default function SessionWorkspace({
         ) : null}
 
         {stage === "draft" ? (
-          <article className="mt-5 rounded-2xl border border-zinc-200/90 bg-[#faf9f7] p-4 md:p-5">
+          <article className={`mt-5 ${portalInsetClass}`}>
             <div className="mb-4">
               <SectionLabel>{approved ? "Godkänd sammanfattning" : "Utkast · ej godkänt"}</SectionLabel>
             </div>
@@ -167,7 +178,7 @@ export default function SessionWorkspace({
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
                   rows={16}
-                  className="w-full resize-y rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-800 focus:border-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+                  className={`${portalTextareaClass} bg-white`}
                 />
               </>
             ) : (
@@ -176,7 +187,7 @@ export default function SessionWorkspace({
 
             <div className="mt-4">
               <AiDisclaimer>
-                AI-genererat utkast från dina anteckningar. Delas först efter godkännande.
+                Genererat utkast från dina anteckningar. Delas först efter godkännande.
               </AiDisclaimer>
             </div>
 
@@ -184,7 +195,7 @@ export default function SessionWorkspace({
               <button
                 type="button"
                 onClick={() => setEditing((value) => !value)}
-                className="inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors hover:border-zinc-500 hover:bg-white"
+                className={portalOutlineButtonClass}
               >
                 {editing ? "Klar med redigering" : "Redigera"}
               </button>
@@ -194,14 +205,14 @@ export default function SessionWorkspace({
                   setApproved(true);
                   setEditing(false);
                 }}
-                className="inline-flex min-h-10 items-center rounded-full bg-zinc-900 px-4 py-2 text-[0.8125rem] font-medium text-zinc-50 transition-colors hover:bg-zinc-700"
+                className={portalButtonSmClass}
               >
                 Godkänn och dela
               </button>
               <button
                 type="button"
                 onClick={() => void createSummary()}
-                className="inline-flex min-h-10 items-center rounded-full px-4 py-2 text-[0.8125rem] font-medium text-zinc-500 transition-colors hover:text-zinc-800"
+                className={portalGhostButtonClass}
               >
                 Generera om
               </button>

@@ -1,40 +1,43 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
+import { ServicePricingSection } from "@/components/pricing-block";
 
 export const metadata: Metadata = {
-  title: "Executive coaching | CVB Coaching",
+  title: "Executive coaching för vd och grundare | CVB Coaching",
   description:
-    "Ett konfidentiellt samtal för vd:ar, grundare och seniora ledare när beslut, ansvar och riktning behöver skärpas.",
+    "Ett externt samtalsrum utan intern agenda, för beslut som fattas med ofullständig information och höga konsekvenser. Sex till åtta samtal över ett halvår.",
 };
 
 const relevanceList = [
-  "Beslut behöver tas med ofullständig information och höga konsekvenser.",
-  "Ansvarsfrågor i ledarrollen blir otydliga eller tynger mer än tidigare.",
-  "Viktiga prioriteringar konkurrerar med varandra och skapar intern friktion.",
-  "Förändringstakten ökar och kräver större precision i vad som ska göras nu.",
+  "Beslutet måste fattas innan informationen är komplett.",
+  "Ansvaret i rollen har vuxit fortare än mandatet.",
+  "Två prioriteringar utesluter varandra och båda har starka förespråkare.",
+  "Förändringstakten kräver att fel beslut upptäcks tidigare än förut.",
 ];
 
 const focusList = [
-  "Beslutsstöd för vd och seniora ledare.",
-  "Rollklarhet och ledarskapsansvar i förändring.",
-  "Strategiska vägval under osäkerhet.",
-  "Svåra samtal och ledningskommunikation.",
-  "Ledarskap under press med bibehållen riktning.",
+  "Vi prövar beslutsunderlaget innan beslutet fattas, särskilt när informationen är ofullständig.",
+  "Vi klargör var rollens ansvar börjar och slutar i förhållande till ägare, styrelse och ledningsgrupp.",
+  "Vi går igenom strategiska vägval under osäkerhet och gör avvägningarna explicita.",
+  "Vi förbereder svåra samtal och kommunikation som inte tål att missförstås.",
+  "Vi arbetar med hur riktningen hålls när belastningen i rollen är hög.",
 ];
 
 const nonGoals = [
   "Inte terapi eller bearbetning av privata frågor.",
-  "Inte motivationssamtal utan tydlig affärskoppling.",
-  "Inte generiska coachmodeller utan förankring i ert faktiska läge.",
+  "Inte managementkonsultation med färdiga rekommendationer.",
+  "Inte motivationssamtal utan koppling till affären.",
+  "Inte generiska coachmodeller utan förankring i ert läge.",
 ];
 
 const valuePoints = [
-  "Snabbare väg från osäkerhet till tydligt nästa steg.",
-  "Beslut som håller bättre över tid och i genomförande.",
-  "Större lugn i ledarskapet när mycket står på spel.",
+  "Från öppen fråga till definierat nästa steg, normalt inom två samtal.",
+  "Beslut som håller i genomförandet, med ägare och tidpunkt.",
+  "Lägre belastning i rollen när besluten väger tungt.",
 ];
 
 export default function ExecutiveCoachingPage() {
@@ -50,12 +53,19 @@ export default function ExecutiveCoachingPage() {
               Executive coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Ett konfidentiellt samtal när besluten väger tungt.
+              Ett rum utan intern agenda.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              För vd:ar, grundare och seniora ledare som behöver tänka klarare när trycket ökar.
-              Samtalet är konfidentiellt och affärsnära, med fokus på beslut, rollklarhet och ansvar i
-              lägen där konsekvenserna är höga.
+              För vd:ar, grundare och seniora ledare som fattar beslut med ofullständig information och
+              höga konsekvenser. Konfidentiellt, affärsnära och kopplat till det som faktiskt ska avgöras.
+            </p>
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
+              Detta är för vd, grundare och ledningsgruppsmedlemmar. För chefer och nyckelpersoner under
+              ledningsnivå, se{" "}
+              <Link href="/individuell-coaching" className="underline underline-offset-2 hover:text-zinc-900">
+                Individuell coaching
+              </Link>
+              .
             </p>
           </HeroReveal>
         </section>
@@ -64,14 +74,17 @@ export default function ExecutiveCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              När ledarrollen behöver ett skarpare samtalsrum
+              I toppen finns erfarenheten. Det som saknas är motståndet.
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                I seniora roller finns ofta erfarenheten redan. Det som saknas i pressade lägen är
-                utrymme för skarp reflektion utan intern agenda.
+                Seniora ledare har sällan brist på analys. Det som saknas i pressade lägen är någon som
+                prövar resonemanget utan egen agenda i frågan.
               </p>
-              <p>Ett externt samtal skärper avvägningar och beslut när belastningen i rollen är hög.</p>
+              <p>
+                Internt är varje samtalspartner part i målet. Externt går det att tänka färdigt innan
+                beslutet blir offentligt.
+              </p>
             </div>
           </ScrollReveal>
         </section>
@@ -79,7 +92,7 @@ export default function ExecutiveCoachingPage() {
         {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium tracking-tight">
-            När ett konfidentiellt ledningsstöd behövs
+            Fyra lägen där samtalet gör störst skillnad
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -97,7 +110,7 @@ export default function ExecutiveCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Vad CVB Coaching arbetar med
+              Vad vi arbetar med
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -113,19 +126,17 @@ export default function ExecutiveCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Hur arbetet sker
+              Så arbetar vi
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Arbetet sker i strukturerade samtal med tydlig rytm och uppföljning. Vi utgår från ert
-                faktiska läge, inte från teoretiska ideal.
+                Arbetet sker i strukturerade samtal med fast rytm och uppföljning. Vi utgår från ert
+                faktiska läge, inte från teoretiska modeller. Varje samtal avslutas med ett definierat
+                nästa steg.
               </p>
               <p>
-                Fokus ligger på att ringa in kärnfrågan, skärpa beslutet och tydliggöra nästa steg i
-                genomförandet.
-              </p>
-              <p>
-                Det är ett konfidentiellt coachingsamtal för reflektion och ansvar, inte strategikonsultation.
+                Det är ett konfidentiellt coachingsamtal för reflektion och ansvar, inte
+                strategikonsultation. Klienten äger sina mål, sina insikter och sina beslut.
               </p>
             </div>
           </ScrollReveal>
@@ -148,7 +159,7 @@ export default function ExecutiveCoachingPage() {
 
         {/* Cards: value */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Förväntat värde</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Förväntat utfall</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
             {valuePoints.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
@@ -159,17 +170,40 @@ export default function ExecutiveCoachingPage() {
           </StaggerCards>
         </section>
 
+        {/* Pricing */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Omfattning och investering
+            </h2>
+            <div data-col-right className="space-y-6 md:col-span-7">
+              <ServicePricingSection
+                locale="sv"
+                lines={[
+                  { text: "Sex till åtta samtal över ett halvår, med fast rytm." },
+                  { text: "Investering:", priceKey: "individual" },
+                ]}
+              />
+              <CtaLink href="/#uppdrag" variant="secondary">
+                Så ser ett uppdrag ut →
+              </CtaLink>
+            </div>
+          </ScrollReveal>
+        </section>
+
         {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              När du behöver ett tydligare beslutsunderlag i ledarrollen
+              Nästa steg
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Vi börjar med ett konfidentiellt första samtal om var skärpa behövs mest just nu.
+              Beskriv kort vilken fråga som ligger på bordet. Samtalet är konfidentiellt.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <CtaLink href="/kontakt" variant="primary">Boka ett första samtal</CtaLink>
+              <CtaLink href="/kontakt" variant="primary">
+                Boka ett första samtal
+              </CtaLink>
             </div>
           </ScrollReveal>
         </section>

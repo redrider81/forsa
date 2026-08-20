@@ -3,30 +3,32 @@ import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
+import JsonLd, { carolinaPersonSchema } from "@/components/json-ld";
 
 export const metadata: Metadata = {
-  title: "About us | CVB Coaching",
+  title: "About CVB Coaching – Carolina von Braun | CVB Coaching",
   description:
-    "CVB Coaching is a senior and discreet thought partner for CEOs, founders, and leadership teams in complex business situations.",
+    "CVB Coaching was founded by Carolina von Braun in Gothenburg. Commercial background from capital markets and board work, qualified coach.",
 };
 
 const principles = [
-  "Confidentiality in all engagements.",
-  "Business-near perspective in every conversation.",
+  "Confidentiality in all work.",
+  "Business-near perspective in every session.",
   "Precision before generic advice.",
   "Follow-up until decisions are visible in action.",
 ];
 
 const audiences = [
   "CEOs and founders under high decision pressure.",
-  "Leadership teams in growth, transition, or a new phase.",
+  "Executive teams in growth, transition or a new ownership phase.",
   "Senior leaders accountable for direction and execution.",
-  "Organisations developing several leaders within one programme.",
+  "Organisations developing several managers within one programme.",
 ];
 
 export default function AboutPageEn() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
+      <JsonLd data={carolinaPersonSchema} />
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
         <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
           <HeroReveal>
@@ -35,13 +37,31 @@ export default function AboutPageEn() {
               About CVB Coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Senior support for leadership in complex situations.
+              An external decision forum for Swedish executive teams.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              CVB Coaching exists for leadership teams that need an external, confidential, business-near
-              thinking space when decisions, accountability, and direction need sharper focus.
+              CVB Coaching works with CEOs, founders and executive teams when decisions,
+              accountability and direction need sharper focus.
             </p>
           </HeroReveal>
+        </section>
+
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Why CVB Coaching exists
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                In many leadership environments, the capability is there, but the explicit decision
+                forum is not. CVB Coaching exists to provide it in concrete business situations.
+              </p>
+              <p>
+                The goal is not more words about leadership, but better decisions and clearer
+                execution in real business situations.
+              </p>
+            </div>
+          </ScrollReveal>
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
@@ -55,56 +75,24 @@ export default function AboutPageEn() {
             </div>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                CVB Coaching was founded by Carolina von Braun. She works with CEOs, founders, and
-                senior leaders, and leads the leadership development and programme engagements that
-                involve several participants.
+                Carolina von Braun founded CVB Coaching in Gothenburg. She works with CEOs,
+                founders and executive teams when decisions, accountability and direction need to
+                become clearer.
               </p>
               <p>
-                The work rests on a professional coaching certification and a coaching mindset: the
-                client owns their goals, their insights, and their decisions. The coach makes the
-                thinking clearer rather than delivering answers.
+                Her background is commercial. It includes securities trading at Nordea and four board
+                assignments in property management and investment. It is also the starting point in
+                sessions: decisions are tested in business terms.
               </p>
               <p>
-                Method, structure, and follow-up stay the same whether the engagement covers one
-                leader or a programme for an entire organisation.
-              </p>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Why CVB Coaching exists
-            </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>
-                In many leadership environments, the capability is there, but the decision room is not
-                always clear enough. CVB Coaching exists to bring that sharpness into concrete business
-                situations.
+                She studied marketing at the School of Business, Economics and Law, University of
+                Gothenburg, from 1996 to 2002. In 2025 she completed coaching diplomas at Gothia
+                Akademi, levels 1 and 2, and serves as a teaching assistant on the academy&apos;s
+                leadership programmes.
               </p>
               <p>
-                The goal is not more words about leadership, but better decisions and clearer execution
-                in real business realities.
-              </p>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              How CVB Coaching works
-            </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>
-                The work takes place in structured conversations with clear connection to your real
-                situation. Each engagement starts from what must be decided now and how decisions should
-                hold over time.
-              </p>
-              <p>
-                Focus stays on questions that affect company pace, decision quality, and business
-                results.
+                The approach is coaching: the client owns their objectives, their insights and their
+                decisions. The coach&apos;s task is to make thinking clearer, not to deliver answers.
               </p>
             </div>
           </ScrollReveal>
@@ -127,6 +115,27 @@ export default function AboutPageEn() {
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Confidentiality
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>What is said in the session stays in the session.</p>
+              <p>
+                When the engagement is commissioned by someone other than the participant, exactly
+                what is reported back is agreed in writing in advance: normally objective fulfilment
+                and attendance, never session content.
+              </p>
+              <p>
+                Notes are stored separately from the sponsor&apos;s systems and deleted no later than
+                twelve months after the engagement closes. Personal data is processed in accordance
+                with the General Data Protection Regulation.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
+        <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium tracking-tight">Who CVB Coaching is right for</h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -143,13 +152,12 @@ export default function AboutPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Gothenburg / Sweden
+              Gothenburg, with engagements across Sweden
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>CVB Coaching is based in Gothenburg and works with Swedish leadership teams.</p>
               <p>
-                Engagements are delivered with high discretion and close understanding of the business
-                reality leadership operates within.
+                CVB Coaching is based in Gothenburg and works with Swedish executive teams.
+                Sessions take place on site or digitally.
               </p>
             </div>
           </ScrollReveal>
@@ -158,10 +166,10 @@ export default function AboutPageEn() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              If you want to discuss a current leadership situation
+              Next step
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              We begin with a confidential first conversation.
+              Briefly describe the leadership situation that is current.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">

@@ -7,42 +7,43 @@ import ParallaxController from "@/components/animations/ParallaxController";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import EditorialImageTransition from "@/components/animations/EditorialImageTransition";
-import StaggerCards from "@/components/animations/StaggerCards";
-import Link from "next/link";
+import CoachingServicesGrid from "@/components/coaching-services-grid";
+import EngagementSection from "@/components/engagement-section";
 import type { Metadata } from "next";
+import { HomePricingFooter, HomePricingTable } from "@/components/pricing-block";
+
+import { enDictionary } from "@/lib/i18n/dictionaries/en";
 
 export const metadata: Metadata = {
-  title: "CVB Coaching | Executive coaching and leadership support",
+  title: "Executive coaching Gothenburg | CVB Coaching",
   description:
-    "CVB Coaching supports CEOs, founders, and leadership teams when decisions, accountability, and direction need sharper focus.",
+    "Confidential decision support for CEOs, founders and executive teams in Gothenburg. Defined objectives, fixed cadence and follow-up until decisions show up in execution.",
 };
 
 const relevancePoints = [
-  "You are facing a strategic turning point.",
-  "Priorities are unclear or shift too often.",
-  "Friction in the leadership team is slowing key decisions.",
-  "The company is in growth, transition, or a new phase.",
-  "Pressure from owners or the board is increasing.",
-  "Decisions are made in meetings but lose momentum in execution.",
+  "A strategic choice must be made with incomplete information.",
+  "Priorities shift more often than the organisation can adjust.",
+  "Friction in the executive team is slowing decisions that cannot wait.",
+  "The company is entering growth, transition or a new ownership phase.",
+  "Pressure from owners or the board is increasing the pace of demands and reporting.",
+  "Decisions are made in the room but lose force in day-to-day work.",
 ];
 
-const engagementScale = [
-  {
-    index: "01",
-    title: "One leader",
-    body: "Individual executive coaching for a CEO, founder, or senior leader with their own development goal. Six to eight conversations over half a year.",
-  },
-  {
-    index: "02",
-    title: "A leadership team",
-    body: "Several leaders in the same organisation, with separate coaching relationships and one shared goal for accountability and decisions.",
-  },
-  {
-    index: "03",
-    title: "An entire organisation",
-    body: "A leadership programme across business areas, with milestones, follow-up, and agreed reporting to the sponsor.",
-  },
+
+const rightFitWhen = [
+  "The question concerns leadership, accountability or direction.",
+  "The decision affects the organisation's next step.",
+  "You need confidential external support.",
+  "You want to move from discussion to a decision made.",
 ];
+
+const lessSuitedWhen = [
+  "The need is general inspiration without a clear leadership question.",
+  "The intervention should be short with no follow-up.",
+  "Direction and decisions are already settled.",
+];
+
+const t = enDictionary;
 
 export default function HomePageEn() {
   return (
@@ -50,26 +51,25 @@ export default function HomePageEn() {
       <ParallaxController>
         <section
           data-hero-sticky
-          className="relative z-0 min-h-[100svh] w-full overflow-hidden md:sticky md:top-0 md:aspect-[16/9] md:max-h-[92svh] md:min-h-0"
+          className="relative z-0 min-h-[100svh] w-full overflow-x-clip overflow-y-visible md:sticky md:top-0 md:aspect-[16/9] md:max-h-[92svh] md:min-h-0 md:overflow-hidden"
         >
           <HeroImageReveal className="absolute inset-0 overflow-hidden">
             <Image
               src="/superhero1.png"
-              alt=""
+              alt="Executive team in a decision meeting – executive coaching in Gothenburg"
               fill
               sizes="100vw"
               className="object-cover object-center"
               data-hero-image
               quality={90}
               priority
-              aria-hidden="true"
             />
           </HeroImageReveal>
           <SiteNavigation />
           <div className="pointer-events-none absolute inset-0 z-0">
-            <div className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[clamp(2.5rem,8svh,4.5rem)] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
+            <div className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[max(clamp(2.5rem,8svh,4.5rem),env(safe-area-inset-bottom,0px))] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
               <div
-                className="w-full shrink-0 min-h-[min(50svh,28rem)] md:hidden"
+                className="w-full shrink-0 min-h-[min(38svh,22rem)] md:hidden"
                 aria-hidden="true"
               />
               <HeroReveal className="relative flex w-full max-w-[20rem] shrink-0 flex-col items-center text-center sm:max-w-[21rem] md:max-w-md md:items-start md:text-left lg:max-w-lg">
@@ -78,18 +78,18 @@ export default function HomePageEn() {
                     data-hero-headline
                     className="relative mx-auto inline-block max-w-[18ch] rounded-2xl bg-black/18 px-4 py-3 text-[2rem] font-medium leading-[1.12] tracking-tight text-balance text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)] backdrop-blur-[8px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-4xl md:mx-0 md:max-w-none md:px-5 md:py-4 md:text-5xl md:leading-tight"
                   >
-                    When leadership needs sharper thinking.
+                    Decisions that outlast the meeting.
                   </h1>
                 </div>
-                <div className="mt-9 flex w-full flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center md:mt-10 md:w-fit md:items-start md:justify-start md:gap-3.5">
+                <div className="mt-9 flex w-full flex-col items-center gap-4 md:mt-10 md:w-fit md:flex-row md:flex-wrap md:items-start md:justify-start md:gap-3.5">
                   <span data-hero-cta className="inline-flex justify-center">
                     <CtaLink href="/en/kontakt" variant="primary" translucent>
-                      Book an initial conversation
+                      {t.cta.primary}
                     </CtaLink>
                   </span>
                   <span data-hero-cta className="inline-flex justify-center">
-                    <CtaLink href="/en/executive-coaching" variant="secondary" translucent>
-                      Explore executive coaching
+                    <CtaLink href="/en#uppdrag" variant="secondary" translucent>
+                      {t.cta.secondary}
                     </CtaLink>
                   </span>
                 </div>
@@ -109,21 +109,21 @@ export default function HomePageEn() {
                   data-col-left
                   className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:pr-4 md:text-[2.1rem]"
                 >
-                  Capability is often already there. Clarity is not always.
+                  The capability is there. The decision mechanics do not always follow.
                 </h2>
                 <div
                   data-col-right
                   className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end"
                 >
                   <p data-col-paragraph>
-                    Leadership teams rarely lack experience. What is often missing is shared sharpness
-                    on what matters most right now.
+                    When pressure rises, teams often lack a shared picture of what is decided now, by
+                    whom and when. Priorities drift and decisions made in the room do not take hold in
+                    execution.
                   </p>
                   <p data-col-paragraph>
-                    As pressure rises, friction becomes visible. Priorities drift. Decisions get made
-                    but do not fully translate into execution.
+                    CVB Coaching works in that situation as an external and confidential decision forum
+                    for leadership.
                   </p>
-                  <p data-col-paragraph>CVB Coaching works where it is critical to think clearly together.</p>
                 </div>
               </ScrollReveal>
             </section>
@@ -137,7 +137,7 @@ export default function HomePageEn() {
                   data-section-heading
                   className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]"
                 >
-                  What CVB Coaching helps with
+                  Three things we do concretely
                 </h2>
                 <div className="mt-16 border-y border-zinc-200/80">
                   <article
@@ -161,8 +161,8 @@ export default function HomePageEn() {
                         data-row-body
                         className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
                       >
-                        The core question is identified quickly, and noise is kept outside. Focus
-                        stays where it makes a real difference.
+                        We identify the question that actually determines the next step and set the
+                        rest aside. Normally within the first two sessions.
                       </p>
                     </div>
                   </article>
@@ -187,8 +187,8 @@ export default function HomePageEn() {
                         data-row-body
                         className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
                       >
-                        Input, trade-offs, and ownership become explicit. That creates decisions that
-                        hold beyond the meeting.
+                        We make input, trade-offs and accountability explicit before the decision is
+                        made. Every decision gets an owner, a date and a measure.
                       </p>
                     </div>
                   </article>
@@ -210,8 +210,8 @@ export default function HomePageEn() {
                         data-row-body
                         className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
                       >
-                        Leadership stays on course in complex situations without losing pace or quality
-                        in execution.
+                        We follow up between sessions until decisions show up in execution. Direction
+                        is measured in action, not in minutes.
                       </p>
                     </div>
                   </article>
@@ -219,7 +219,7 @@ export default function HomePageEn() {
               </EditorialRowsReveal>
               <EditorialImageTransition
                 src="/supertable.png"
-                alt="Professional meeting room with notes, laptop, and leaders at a conference table"
+                alt="Preparation for a strategic choice in an executive team"
                 className="mt-20 md:mt-24"
               />
             </section>
@@ -227,17 +227,44 @@ export default function HomePageEn() {
             <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  When CVB Coaching is relevant
+                  Six situations where an external decision forum pays off
                 </h2>
                 <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
-                  <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
-                    When the stakes are high
-                  </h3>
-                  <ScrollReveal variant="staggerList" className="mt-8">
+                  <ScrollReveal variant="staggerList" className="mt-0">
                     <ul className="space-y-5 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
                       {relevancePoints.map((point) => (
                         <li key={point} data-list-item className="flex items-start gap-4">
                           <span className="mt-[0.7rem] h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </ScrollReveal>
+                </div>
+              </ScrollReveal>
+            </section>
+
+            <section data-parallax-section className="py-20 md:py-24">
+              <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                  How we decide if it is the right engagement
+                </h2>
+                <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
+                  <ScrollReveal variant="staggerList">
+                    <h3 className="text-lg font-medium text-zinc-900">Right fit when</h3>
+                    <ul className="mt-4 space-y-3 text-[1.0625rem] leading-[1.7] text-zinc-800">
+                      {rightFitWhen.map((point) => (
+                        <li key={point} data-list-item className="flex items-start gap-3">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <h3 className="mt-8 text-lg font-medium text-zinc-900">Less suited when</h3>
+                    <ul className="mt-4 space-y-3 text-[1.0625rem] leading-[1.7] text-zinc-700">
+                      {lessSuitedWhen.map((point) => (
+                        <li key={point} data-list-item className="flex items-start gap-3">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-400" aria-hidden />
                           <span>{point}</span>
                         </li>
                       ))}
@@ -253,160 +280,30 @@ export default function HomePageEn() {
             >
               <div className="mx-auto max-w-6xl px-6 md:px-10">
                 <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  Coaching for leaders, teams, and organizations
+                  Coaching for leaders, teams and organisations
                 </h2>
-                <StaggerCards className="mt-14 grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-                  <Link data-card href="/en/executive-coaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
-                    <div className="flex items-center gap-4">
-                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">01</span>
-                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
-                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
-                      </span>
-                    </div>
-                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Executive coaching</h3>
-                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
-                      For CEOs, founders, and senior leaders facing complex decisions, accountability,
-                      and role clarity.
-                    </p>
-                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
-                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
-                        <span className="relative">
-                          Learn more
-                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
-                        </span>
-                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </Link>
-                  <Link data-card href="/en/ledningsgruppscoaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
-                    <div className="flex items-center gap-4">
-                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">02</span>
-                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
-                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
-                      </span>
-                    </div>
-                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Leadership Team Coaching</h3>
-                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
-                      For leadership teams that need clearer decisions, stronger accountability, and
-                      shared direction.
-                    </p>
-                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
-                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
-                        <span className="relative">
-                          Learn more
-                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
-                        </span>
-                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </Link>
-                  <Link data-card href="/en/individuell-coaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
-                    <div className="flex items-center gap-4">
-                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">03</span>
-                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
-                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
-                      </span>
-                    </div>
-                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Individual Coaching</h3>
-                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
-                      For leaders and key professionals who need sharper role clarity, prioritization,
-                      and impact.
-                    </p>
-                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
-                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
-                        <span className="relative">
-                          Learn more
-                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
-                        </span>
-                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </Link>
-                  <Link data-card href="/en/team-coaching" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9">
-                    <div className="flex items-center gap-4">
-                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">04</span>
-                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
-                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
-                      </span>
-                    </div>
-                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Team Coaching</h3>
-                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
-                      For teams that need to strengthen collaboration, accountability, and shared
-                      learning in daily work.
-                    </p>
-                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
-                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
-                        <span className="relative">
-                          Learn more
-                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
-                        </span>
-                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </Link>
-                  <Link data-card href="/en/coachande-ledarskap" className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:col-span-2 md:p-9 lg:col-span-1">
-                    <div className="flex items-center gap-4">
-                      <span aria-hidden="true" className="text-[0.6875rem] font-semibold tabular-nums tracking-[0.4em] text-zinc-500">05</span>
-                      <span data-card-accent aria-hidden="true" className="block h-px w-12 origin-left">
-                        <span className="block h-px w-full origin-left bg-zinc-900 transition-transform duration-500 ease-out group-hover:scale-x-[1.85] motion-reduce:transition-none" />
-                      </span>
-                    </div>
-                    <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">Coaching Leadership</h3>
-                    <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
-                      For organizations developing managers who lead through dialogue, questions, and
-                      clear accountability.
-                    </p>
-                    <div className="mt-8 border-t border-zinc-200 pt-5 transition-colors duration-300 group-hover:border-zinc-300">
-                      <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900">
-                        <span className="relative">
-                          Learn more
-                          <span aria-hidden="true" className="absolute -bottom-1 left-0 block h-px w-full origin-left scale-x-0 bg-zinc-900 transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none" />
-                        </span>
-                        <svg className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </Link>
-                </StaggerCards>
+                <div className="mt-14">
+                  <CoachingServicesGrid locale="en" />
+                </div>
               </div>
             </section>
 
-            {/* Scale: individual → organisation */}
-            <section data-parallax-section className="py-20 md:py-24">
+            <EngagementSection locale="en" />
+
+            <section id="investering" data-parallax-section className="pt-12 pb-20 md:pt-14 md:pb-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  From one leader to an entire programme
+                  Scope and investment
                 </h2>
                 <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
-                  <ScrollReveal variant="staggerList">
-                    <ul className="divide-y divide-zinc-200/80 border-y border-zinc-200/80">
-                      {engagementScale.map((item) => (
-                        <li key={item.title} data-list-item className="py-7">
-                          <p className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">
-                            {item.index}
-                          </p>
-                          <h3 className="mt-3 text-xl font-medium leading-tight tracking-tight text-zinc-900">
-                            {item.title}
-                          </h3>
-                          <p className="mt-2.5 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
-                            {item.body}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </ScrollReveal>
-                  <p className="mt-8 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
-                    Method, structure, and follow-up stay the same. Only the scope changes.
+                  <p className="text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
+                    Price follows scope, not title. The figures below are starting points. An exact
+                    quote is provided after the first session, when objectives and scope are defined.
                   </p>
+                  <div className="mt-8">
+                    <HomePricingTable locale="en" />
+                  </div>
+                  <HomePricingFooter locale="en" />
                 </div>
               </ScrollReveal>
             </section>
@@ -417,7 +314,7 @@ export default function HomePageEn() {
             >
               <EditorialImageTransition
                 src="/superoffice.png"
-                alt="Professional office workspace with laptop and focused work"
+                alt="Individual coaching for managers and key professionals"
                 breakout={false}
               />
             </section>
@@ -425,41 +322,16 @@ export default function HomePageEn() {
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  How CVB Coaching works
+                  Gothenburg, with engagements across Sweden
                 </h2>
                 <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
-                  <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
-                    Confidential. Business-near. Precise.
-                  </h3>
                   <p>
-                    The work happens through structured conversations closely linked to your real
-                    situation. We start where it is genuinely difficult: where friction appears, what
-                    has stalled, and what needs to be decided.
+                    CVB Coaching is based in Gothenburg and works with Swedish executive teams.
+                    Sessions take place on site or digitally.
                   </p>
                   <p>
-                    From there, priorities, ownership, and decisions become sharper, with follow-up
-                    until direction is visible in action.
-                  </p>
-                </div>
-              </ScrollReveal>
-            </section>
-
-            <section data-parallax-section className="py-20 md:py-24">
-              <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
-                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  Trust
-                </h2>
-                <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
-                  <h3 className="text-[1.65rem] font-medium leading-tight tracking-tight text-zinc-900">
-                    Gothenburg-based support for Swedish leadership teams
-                  </h3>
-                  <p>
-                    CVB Coaching is based in Gothenburg and works with Swedish leadership teams. Engagements
-                    are defined by discretion, seniority, and business understanding.
-                  </p>
-                  <p>
-                    We work close to leadership on issues that shape company direction, pace, and
-                    results.
+                    Engagements are delivered with high discretion. What is said in the room stays in
+                    the room. What is reported to the sponsor is agreed in writing in advance.
                   </p>
                 </div>
               </ScrollReveal>
@@ -468,7 +340,7 @@ export default function HomePageEn() {
             <section data-parallax-image-only>
               <EditorialImageTransition
                 src="/supermeeting.png"
-                alt="Leadership team in discussion around a conference table in a modern meeting room"
+                alt="Executive team coaching in a confidential session"
                 className="mt-20 md:mt-24"
               />
             </section>
@@ -476,15 +348,15 @@ export default function HomePageEn() {
             <section data-parallax-section id="kontakt" className="py-20 md:py-24">
               <ScrollReveal variant="ctaStack">
                 <h2 data-cta-heading className="max-w-4xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.65rem]">
-                  When the next decision needs to last beyond the next meeting
+                  Next step
                 </h2>
                 <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">
-                  If you want sharper priorities, ownership, and decisions in your leadership team, we
-                  start with a confidential first conversation.
+                  Briefly describe the situation your leadership team is in. The conversation is
+                  confidential.
                 </p>
                 <div data-cta-actions className="mt-12 flex flex-wrap gap-4">
                   <CtaLink href="/en/kontakt" variant="primary">
-                    Book an initial conversation
+                    {t.cta.primary}
                   </CtaLink>
                 </div>
               </ScrollReveal>

@@ -63,8 +63,8 @@ export function AiSkeleton({ label }: { label: string }) {
 
 export function AiDisclaimer({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex items-start gap-2 rounded-xl bg-[#f4f2ed]/80 px-3.5 py-2.5 text-[0.75rem] leading-relaxed text-zinc-500">
-      <span aria-hidden="true" className="mt-[0.3rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#92753a]/60" />
+    <p className="flex items-start gap-2 rounded-xl bg-[var(--klient-text-block-bg)] px-3.5 py-2.5 text-[0.75rem] leading-relaxed text-zinc-500">
+      <span aria-hidden="true" className="mt-[0.3rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--klient-accent-gold-muted)]" />
       <span>{children}</span>
     </p>
   );

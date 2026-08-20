@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { portalButtonClass } from "@/components/portal/ui";
 
 export default function LoginForm({
   demo,
@@ -43,7 +44,7 @@ export default function LoginForm({
   }
 
   const fieldClass =
-    "mt-2 w-full rounded-xl border border-zinc-200 bg-[#faf9f7] px-4 py-3.5 text-[1rem] leading-tight text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15";
+    "mt-2 w-full rounded-xl border border-[#e6e0d3] bg-[var(--klient-text-block-bg)] px-4 py-3.5 text-[1rem] leading-tight text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15";
 
   return (
     <form onSubmit={submit} noValidate>
@@ -81,16 +82,12 @@ export default function LoginForm({
       </div>
 
       {error ? (
-        <p role="alert" className="mt-4 rounded-xl bg-[#f4f2ed] px-4 py-3 text-[0.875rem] leading-relaxed text-zinc-700">
+        <p role="alert" className="mt-4 rounded-xl bg-[var(--klient-text-block-bg)] px-4 py-3 text-[0.875rem] leading-relaxed text-zinc-700">
           {error}
         </p>
       ) : null}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-      >
+      <button type="submit" disabled={loading} className={`mt-7 w-full ${portalButtonClass}`}>
         {loading ? "Loggar in…" : "Logga in"}
       </button>
     </form>

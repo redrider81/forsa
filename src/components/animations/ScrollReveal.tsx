@@ -60,6 +60,7 @@ export default function ScrollReveal({
         const right = el.querySelector<HTMLElement>("[data-col-right]");
         const paragraphs = right?.querySelectorAll<HTMLElement>("[data-col-paragraph]");
         const rightHasCards = Boolean(right?.querySelector("[data-card]"));
+        const rightHasListItems = Boolean(right?.querySelector("[data-list-item]"));
 
         const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(el) });
 
@@ -74,7 +75,7 @@ export default function ScrollReveal({
           });
         }
 
-        if (right && !rightHasCards) {
+        if (right && !rightHasCards && !rightHasListItems) {
           if (paragraphs?.length) {
             gsap.set(paragraphs, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
             tl.to(

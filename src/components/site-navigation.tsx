@@ -181,7 +181,24 @@ const mobileHeaderControlCluster =
   "flex shrink-0 items-center gap-0 rounded-full border border-zinc-900/10 bg-white/50 p-0.5 shadow-[0_1px_3px_rgba(24,24,27,0.08)] backdrop-blur-md";
 
 const mobileHeaderIconButton =
-  "inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-800 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "inline-flex h-11 w-11 items-center justify-center rounded-full text-zinc-800 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+function LoginIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-3.5 w-3.5 shrink-0 text-current"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+    >
+      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" strokeLinecap="round" />
+      <path d="M10 17l5-5-5-5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M15 12H3" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -205,7 +222,7 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const mobileHeaderLangTrigger =
-  "inline-flex h-9 items-center gap-1 rounded-full px-2.5 text-[0.6875rem] font-medium tracking-[0.18em] text-zinc-800/90 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "inline-flex h-11 items-center gap-1 rounded-full px-3 text-[0.6875rem] font-medium tracking-[0.18em] text-zinc-800/90 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 function MobileHeaderLanguageDropdown({
   locale,
@@ -309,10 +326,18 @@ function MobileHeaderLanguageDropdown({
 }
 
 const mobileNavLinkClass =
-  "block rounded-md px-0.5 py-3.5 text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.01em] text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]";
+  "block rounded-md px-0.5 py-4 text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.01em] text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]";
 
 const mobileSubLinkClass =
   "block rounded-md py-2.5 pl-3 text-[0.9375rem] leading-[1.45] text-zinc-600 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] aria-[current=page]:font-medium aria-[current=page]:text-[#92753a]";
+
+const mobileAudienceLinkClass =
+  "block rounded-md py-3.5 pl-3 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] aria-[current=page]:text-[#92753a]";
+
+const mobileAudienceTitleClass =
+  "block text-[0.9375rem] font-medium leading-[1.45] text-zinc-900 aria-[current=page]:text-[#92753a]";
+
+const mobileAudienceDescClass = "mt-1 block text-sm leading-6 text-zinc-600";
 
 function LanguageMenu({
   locale,
@@ -470,14 +495,14 @@ export default function SiteNavigation() {
           { href: "/ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
           { href: "/executive-coaching", label: "Executive coaching" },
           { href: "/individuell-coaching", label: "Individuell coaching" },
-          { href: "/team-coaching", label: "Team coaching" },
+          { href: "/team-coaching", label: "Teamcoaching" },
           { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
         ]
       : [
           { href: "/ledningsgruppscoaching", label: "Leadership Team Coaching" },
           { href: "/executive-coaching", label: "Executive Coaching" },
           { href: "/individuell-coaching", label: "Individual Coaching" },
-          { href: "/team-coaching", label: "Team Coaching" },
+          { href: "/team-coaching", label: "Team coaching" },
           { href: "/coachande-ledarskap", label: "Coaching Leadership" },
         ];
   const headerRef = useRef<HTMLElement>(null);
@@ -711,7 +736,7 @@ export default function SiteNavigation() {
           href={localizedHref("/")}
           className={`shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          <LogoMark className="h-10 w-auto lg:h-11" priority />
+          <LogoMark className="block h-14 w-auto translate-y-2 lg:h-16" priority />
         </Link>
 
         <nav aria-label={t.nav.mainAria} className="ml-auto">
@@ -830,7 +855,7 @@ export default function SiteNavigation() {
                       {t.nav.unsureBody}
                     </p>
                     <div className="mt-6">
-                      <CtaLink href={localizedHref("/kontakt")} variant="secondary">
+                      <CtaLink href={localizedHref("/kontakt")} variant="primary">
                         {t.nav.bookFirstCall}
                       </CtaLink>
                     </div>
@@ -854,10 +879,6 @@ export default function SiteNavigation() {
                   {t.nav.about}
                 </NavHoverTarget>
 
-                <li aria-hidden="true" className="flex list-none items-center px-0.5">
-                  <span className="h-4 w-px bg-zinc-900/15" />
-                </li>
-
                 <NavHoverTarget
                   as="link"
                   href={localizedHref("/kontakt")}
@@ -872,12 +893,13 @@ export default function SiteNavigation() {
                 <li className="ml-1.5 list-none">
                   <Link
                     href="/klient-login"
-                    className={`inline-flex items-center rounded-full border px-3.5 py-1.5 text-xs font-medium tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border border-zinc-900 bg-zinc-900 px-3.5 py-1.5 text-xs font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-800 hover:border-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${
                       isHome
-                        ? "border-zinc-900/25 bg-white/55 text-zinc-800 hover:bg-white/80 focus-visible:ring-offset-white/40"
-                        : "border-zinc-300 text-zinc-700 hover:border-zinc-500 hover:bg-white focus-visible:ring-offset-zinc-100"
+                        ? "focus-visible:ring-offset-white/40"
+                        : "focus-visible:ring-offset-zinc-100"
                     }`}
                   >
+                    <LoginIcon />
                     {t.nav.login}
                   </Link>
                 </li>
@@ -902,7 +924,7 @@ export default function SiteNavigation() {
           href={localizedHref("/")}
           className={`min-w-0 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          <LogoMark className="h-9 w-auto" priority />
+          <LogoMark className="mt-1.5 block h-12 w-auto" priority />
         </Link>
         <div className={mobileHeaderControlCluster + " ml-auto"}>
           <MobileHeaderLanguageDropdown locale={locale} pathname={pathname} />
@@ -981,21 +1003,22 @@ export default function SiteNavigation() {
               </button>
               <div
                 className={`overflow-hidden motion-reduce:transition-none transition-[max-height,opacity] duration-200 ease-out ${
-                  mobileCoachingOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
+                  mobileCoachingOpen ? "max-h-[48rem] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
                 <div className="pb-4 pl-1">
                   <p className={`${sectionLabelClass()} pt-2`}>{t.nav.leadershipLabel}</p>
-                  <ul className="mt-2 space-y-0.5">
+                  <ul className="mt-2 space-y-1">
                     {coachingAudiences.map((item) => (
                       <li key={item.href}>
                         <Link
                           href={localizedHref(item.href)}
                           aria-current={barePathname === item.href ? "page" : undefined}
                           onClick={closeMobileMenu}
-                          className={mobileSubLinkClass}
+                          className={mobileAudienceLinkClass}
                         >
-                          {item.label}
+                          <span className={mobileAudienceTitleClass}>{item.label}</span>
+                          <span className={mobileAudienceDescClass}>{item.text}</span>
                         </Link>
                       </li>
                     ))}
@@ -1015,6 +1038,13 @@ export default function SiteNavigation() {
                       </li>
                     ))}
                   </ul>
+                  <div className="mt-8 border-t border-zinc-900/6 pt-6">
+                    <p className={sectionLabelClass()}>{t.nav.startHereLabel}</p>
+                    <p className="mt-4 text-sm font-medium leading-snug tracking-tight text-zinc-900">
+                      {t.nav.unsureTitle}
+                    </p>
+                    <p className="mt-3 text-sm leading-6 text-zinc-600">{t.nav.unsureBody}</p>
+                  </div>
                 </div>
               </div>
             </li>
@@ -1049,8 +1079,9 @@ export default function SiteNavigation() {
             <Link
               href="/klient-login"
               onClick={closeMobileMenu}
-              className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]"
             >
+              <LoginIcon />
               {t.nav.login}
             </Link>
           </div>

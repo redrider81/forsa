@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AiAskPanel from "@/components/portal/ai-ask-panel";
+import ShareMaterialPanel from "@/components/portal/share-material-panel";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import {
@@ -17,6 +18,9 @@ import {
   EmptyState,
   Panel,
   PanelHeading,
+  portalButtonClass,
+  portalOutlineButtonClass,
+  portalPageStackClass,
   QuoteBlock,
   RowLink,
   SectionLabel,
@@ -36,11 +40,11 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
   const today = todayIso();
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <div>
         <Link
           href="/portal/klienter"
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
         >
           Klienter
         </Link>
@@ -67,8 +71,6 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
         </div>
       </div>
 
-      <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-x-8">
-      <div className="min-w-0 space-y-7 lg:col-span-7">
       {upcomingSession ? (
         <Panel>
           <SectionLabel>Nästa session</SectionLabel>
@@ -81,7 +83,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
             <span className="block text-[0.8125rem] text-zinc-500">{upcomingSession.location}</span>
           </p>
 
-          <div className="mt-5 space-y-4 rounded-xl bg-[#faf9f7] p-4">
+          <div className="mt-5 space-y-4 rounded-xl bg-[var(--klient-text-block-bg)] p-4">
             <div>
               <SectionLabel>Klientens fokus</SectionLabel>
               <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">
@@ -99,45 +101,19 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
             <Link
               href={`/portal/klienter/${client.id}/forbered`}
-              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className={`flex-1 ${portalButtonClass}`}
             >
               Förbered session
             </Link>
             <Link
               href={`/portal/klienter/${client.id}/sessioner/${upcomingSession.id}`}
-              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-[#faf9f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className={`flex-1 ${portalOutlineButtonClass} min-h-11 px-6 py-3 text-sm`}
             >
               Öppna sessionsvy
             </Link>
           </div>
         </Panel>
       ) : null}
-
-      <AiAskPanel
-        contextType="klient"
-        contextId={client.id}
-        title={`Fråga om ${firstName}`}
-        scopeNote={`Endast ${firstName}. Underlag: utvecklingsmål, sessioner, reflektioner, åtaganden och dina arbetsanteckningar. Privat material når aldrig klient eller uppdragsgivare.`}
-        suggestions={[
-          {
-            label: "Vad har förändrats?",
-            question: `Vad har förändrats för ${firstName} sedan föregående session?`,
-          },
-          {
-            label: "Öppna åtaganden",
-            question: "Vilka åtaganden är fortfarande öppna och vad har vi ännu inte följt upp?",
-          },
-          {
-            label: "Sammanfatta utvecklingen",
-            question: `Sammanfatta ${firstName}s utveckling hittills.`,
-          },
-          {
-            label: "Frågor att utforska",
-            question: `Ge tre möjliga utforskande frågor inför nästa session, utifrån ${firstName}s egna formuleringar.`,
-          },
-        ]}
-        placeholder="Fråga om klientens mål, sessioner, reflektioner, åtaganden eller utveckling…"
-      />
 
       <Panel>
         <PanelHeading label="Utvecklingsmål" title={client.goal.headline} />
@@ -162,68 +138,6 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           </ul>
         </div>
       </Panel>
-
-      <Panel>
-        <PanelHeading label="Sessioner" title="Genomförda och planerade" />
-        <div className="mt-4">
-          {dossier.sessions.length === 0 ? (
-            <EmptyState>Inga sessioner registrerade.</EmptyState>
-          ) : (
-            [...dossier.sessions].reverse().map((item, index) => (
-              <div key={item.id}>
-                {index > 0 ? <Divider /> : null}
-                <RowLink
-                  href={`/portal/klienter/${client.id}/sessioner/${item.id}`}
-                  title={`Session ${item.number} · ${item.clientFocus}`}
-                  subtitle={`${formatDate(item.date)} · ${item.location}`}
-                  trailing={
-                    <Tag tone={item.status === "kommande" ? "open" : "neutral"}>
-                      {item.status === "kommande" ? "Kommande" : "Genomförd"}
-                    </Tag>
-                  }
-                />
-              </div>
-            ))
-          )}
-        </div>
-      </Panel>
-
-      <Panel>
-        <PanelHeading label="Reflektion" title="Klientens reflektioner" />
-        <div className="mt-5 space-y-6">
-          {dossier.reflections.length === 0 ? (
-            <EmptyState>Inga reflektioner registrerade.</EmptyState>
-          ) : (
-            dossier.reflections.map((reflection) => (
-              <article key={reflection.id}>
-                <p className="text-[0.75rem] uppercase tracking-[0.1em] text-zinc-400">
-                  {formatDate(reflection.date)} · {reflection.prompt}
-                </p>
-                <div className="mt-3">
-                  <QuoteBlock>{reflection.text}</QuoteBlock>
-                </div>
-              </article>
-            ))
-          )}
-        </div>
-      </Panel>
-
-      </div>
-
-      <div className="min-w-0 space-y-7 lg:col-span-5">
-      {dossier.insights.length > 0 ? (
-        <Panel>
-          <PanelHeading label="Insikter" title="Klientens egna formuleringar" />
-          <ul className="mt-5 space-y-4">
-            {dossier.insights.map((insight) => (
-              <li key={insight.id}>
-                <p className="text-[0.9375rem] leading-[1.7] text-zinc-700">”{insight.text}”</p>
-                <p className="mt-1 text-[0.75rem] text-zinc-400">{formatDate(insight.date)}</p>
-              </li>
-            ))}
-          </ul>
-        </Panel>
-      ) : null}
 
       <Panel>
         <PanelHeading label="Åtaganden" title="Klientens åtaganden" />
@@ -261,26 +175,69 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
         </div>
       </Panel>
 
+      {dossier.insights.length > 0 ? (
+        <Panel>
+          <PanelHeading label="Insikter" title="Klientens egna formuleringar" />
+          <ul className="mt-5 space-y-4">
+            {dossier.insights.map((insight) => (
+              <li key={insight.id}>
+                <p className="text-[0.9375rem] leading-[1.7] text-zinc-700">”{insight.text}”</p>
+                <p className="mt-1 text-[0.75rem] text-zinc-400">{formatDate(insight.date)}</p>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      ) : null}
+
       <Panel>
-        <PanelHeading label="Överenskommelse" title="Coachningsöverenskommelse" />
-        <div className="mt-5">
-          <DefinitionList
-            items={[
-              { term: "Ingången", value: formatDate(client.agreement.agreedAt) },
-              { term: "Syfte", value: client.agreement.purpose },
-              { term: "Omfattning", value: client.agreement.scope },
-              { term: "Form", value: client.agreement.cadence },
-              { term: "Sekretess", value: client.agreement.confidentiality },
-              { term: "Delning med uppdragsgivare", value: client.agreement.sponsorSharing },
-              { term: "Etisk ram", value: client.agreement.ethics },
-              { term: "Klientens ansvar", value: client.agreement.clientResponsibility },
-            ]}
-          />
+        <PanelHeading label="Reflektion" title="Klientens reflektioner" />
+        <div className="mt-5 space-y-6">
+          {dossier.reflections.length === 0 ? (
+            <EmptyState>Inga reflektioner registrerade.</EmptyState>
+          ) : (
+            dossier.reflections.map((reflection) => (
+              <article key={reflection.id}>
+                <p className="text-[0.75rem] uppercase tracking-[0.1em] text-zinc-400">
+                  {formatDate(reflection.date)} · {reflection.prompt}
+                </p>
+                <div className="mt-3">
+                  <QuoteBlock>{reflection.text}</QuoteBlock>
+                </div>
+              </article>
+            ))
+          )}
         </div>
       </Panel>
 
       <Panel>
-        <PanelHeading label="Material" title="Dokument och material" />
+        <PanelHeading label="Sessioner" title="Genomförda och planerade" />
+        <div className="mt-4">
+          {dossier.sessions.length === 0 ? (
+            <EmptyState>Inga sessioner registrerade.</EmptyState>
+          ) : (
+            [...dossier.sessions].reverse().map((item, index) => (
+              <div key={item.id}>
+                {index > 0 ? <Divider /> : null}
+                <RowLink
+                  href={`/portal/klienter/${client.id}/sessioner/${item.id}`}
+                  title={`Session ${item.number} · ${item.clientFocus}`}
+                  subtitle={`${formatDate(item.date)} · ${item.location}`}
+                  trailing={
+                    <Tag tone={item.status === "kommande" ? "open" : "neutral"}>
+                      {item.status === "kommande" ? "Kommande" : "Genomförd"}
+                    </Tag>
+                  }
+                />
+              </div>
+            ))
+          )}
+        </div>
+      </Panel>
+
+      <ShareMaterialPanel clientId={client.id} materials={dossier.materials} />
+
+      <Panel>
+        <PanelHeading label="Uppdrag" title="Dokument och material" />
         <div className="mt-4">
           {dossier.documents.map((document, index) => (
             <div key={document.id}>
@@ -304,6 +261,50 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
         </div>
       </Panel>
 
+      <AiAskPanel
+        contextType="klient"
+        contextId={client.id}
+        title={`Fråga om ${firstName}`}
+        scopeNote={`Endast ${firstName}. Underlag: utvecklingsmål, sessioner, reflektioner, åtaganden och dina arbetsanteckningar. Privat material når aldrig klient eller uppdragsgivare.`}
+        suggestions={[
+          {
+            label: "Vad har förändrats?",
+            question: `Vad har förändrats för ${firstName} sedan föregående session?`,
+          },
+          {
+            label: "Öppna åtaganden",
+            question: "Vilka åtaganden är fortfarande öppna och vad har vi ännu inte följt upp?",
+          },
+          {
+            label: "Sammanfatta utvecklingen",
+            question: `Sammanfatta ${firstName}s utveckling hittills.`,
+          },
+          {
+            label: "Frågor att utforska",
+            question: `Ge tre möjliga utforskande frågor inför nästa session, utifrån ${firstName}s egna formuleringar.`,
+          },
+        ]}
+        placeholder="Fråga om klientens mål, sessioner, reflektioner, åtaganden eller utveckling…"
+      />
+
+      <Panel>
+        <PanelHeading label="Överenskommelse" title="Coachningsöverenskommelse" />
+        <div className="mt-5">
+          <DefinitionList
+            items={[
+              { term: "Ingången", value: formatDate(client.agreement.agreedAt) },
+              { term: "Syfte", value: client.agreement.purpose },
+              { term: "Omfattning", value: client.agreement.scope },
+              { term: "Form", value: client.agreement.cadence },
+              { term: "Sekretess", value: client.agreement.confidentiality },
+              { term: "Delning med uppdragsgivare", value: client.agreement.sponsorSharing },
+              { term: "Etisk ram", value: client.agreement.ethics },
+              { term: "Klientens ansvar", value: client.agreement.clientResponsibility },
+            ]}
+          />
+        </div>
+      </Panel>
+
       <Panel>
         <PanelHeading label="Rapporter" title="Utvecklingsöversikt och klientvy" />
         <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
@@ -312,20 +313,18 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
         <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
           <Link
             href={`/portal/klienter/${client.id}/utveckling`}
-            className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-[#faf9f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className={`flex-1 ${portalOutlineButtonClass} min-h-11 px-6 py-3 text-sm`}
           >
             Utvecklingsöversikt
           </Link>
           <Link
             href={`/portal/klienter/${client.id}/klientvy`}
-            className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-[#faf9f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className={`flex-1 ${portalOutlineButtonClass} min-h-11 px-6 py-3 text-sm`}
           >
             Visa som klient
           </Link>
         </div>
       </Panel>
-      </div>
-      </div>
     </div>
   );
 }

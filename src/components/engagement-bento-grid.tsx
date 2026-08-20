@@ -1,0 +1,332 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { Locale } from "@/lib/i18n/config";
+import { isMobile, motion, prefersReducedMotion, refreshScrollTriggers, revealScrollTrigger, showTargets } from "@/lib/motion";
+
+type Step = {
+  index: string;
+  title: string;
+  body: string;
+  layout: string;
+};
+
+const stepsSv: Step[] = [
+  {
+    index: "01",
+    title: "Första samtalet",
+    body: "Konfidentiellt. Vi avgör tillsammans om frågan hör hemma här.",
+    layout: "md:col-span-6 lg:col-span-7",
+  },
+  {
+    index: "02",
+    title: "Kontrakt och mål",
+    body: "Mål, omfattning, sekretess och rapportering till uppdragsgivaren fastställs skriftligt innan arbetet börjar.",
+    layout: "md:col-span-6 lg:col-span-5",
+  },
+  {
+    index: "03",
+    title: "Genomförande",
+    body: "Sex till åtta samtal över ett halvår, med fast rytm och avstämd agenda.",
+    layout: "md:col-span-4 lg:col-span-4",
+  },
+  {
+    index: "04",
+    title: "Halvtidsavstämning",
+    body: "Avstämning mot målen tillsammans med uppdragsgivaren, inom ramen för överenskommen sekretess.",
+    layout: "md:col-span-4 lg:col-span-4",
+  },
+  {
+    index: "05",
+    title: "Avslut",
+    body: "Utvärdering mot de mål som sattes vid start, och beslut om fortsättning eller avslut.",
+    layout: "md:col-span-4 lg:col-span-4",
+  },
+];
+
+const stepsEn: Step[] = [
+  {
+    index: "01",
+    title: "First session",
+    body: "Confidential. We decide together whether the question belongs here.",
+    layout: "md:col-span-6 lg:col-span-7",
+  },
+  {
+    index: "02",
+    title: "Contract and objectives",
+    body: "Objectives, scope, confidentiality and sponsor reporting are agreed in writing before work begins.",
+    layout: "md:col-span-6 lg:col-span-5",
+  },
+  {
+    index: "03",
+    title: "Delivery",
+    body: "Six to eight sessions over six months, with a fixed cadence and agreed agenda.",
+    layout: "md:col-span-4 lg:col-span-4",
+  },
+  {
+    index: "04",
+    title: "Midpoint review",
+    body: "Review against objectives together with the sponsor, within agreed confidentiality.",
+    layout: "md:col-span-4 lg:col-span-4",
+  },
+  {
+    index: "05",
+    title: "Close",
+    body: "Evaluation against the objectives set at the start, and decision on continuation or close.",
+    layout: "md:col-span-4 lg:col-span-4",
+  },
+];
+
+const footnotes: Record<Locale, string> = {
+  sv: "Metod, struktur och uppföljning är densamma oavsett omfattning. Det som skiljer är antalet ledare och antalet samtal.",
+  en: "Method, structure and follow-up stay the same regardless of scope. What differs is the number of leaders and the number of sessions.",
+};
+
+const tileClass =
+  "group relative flex flex-col rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-[0_1px_2px_rgba(24,24,27,0.04)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-[0_16px_40px_-28px_rgba(24,24,27,0.28)] motion-reduce:transition-none md:p-7";
+
+type Props = {
+  locale: Locale;
+};
+
+function buildMobileReveal(
+  panel: HTMLElement,
+  cards: NodeListOf<HTMLElement>,
+  steps: NodeListOf<HTMLElement>,
+  lines: NodeListOf<HTMLElement>,
+  accents: NodeListOf<HTMLElement>,
+  footnote: HTMLElement | null,
+) {
+  gsap.set(steps, { autoAlpha: 1, opacity: 0.35, force3D: true });
+  gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
+  gsap.set(steps[0], { opacity: 1 });
+  gsap.set(cards, { autoAlpha: 0, y: 14, force3D: true });
+  gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
+  gsap.set(accents[0], { scaleX: 1 });
+  if (footnote) {
+    gsap.set(footnote, { autoAlpha: 0, y: 10, force3D: true });
+  }
+
+  const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(panel) });
+
+  tl.to(
+    cards,
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: motion.duration.medium,
+      ease: motion.ease.reveal,
+      stagger: 0.07,
+      force3D: true,
+    },
+    0,
+  );
+  tl.to(
+    lines,
+    { scaleX: 1, duration: motion.duration.medium, ease: motion.ease.reveal, stagger: 0.05, force3D: true },
+    0.05,
+  );
+  tl.to(steps, { opacity: 1, duration: 0.12, stagger: 0.04, ease: "none" }, 0.08);
+  tl.to(
+    accents,
+    { scaleX: 1, duration: motion.duration.short, ease: motion.ease.reveal, stagger: 0.05, force3D: true },
+    0.1,
+  );
+  if (footnote) {
+    tl.to(
+      footnote,
+      { autoAlpha: 1, y: 0, duration: motion.duration.medium, ease: motion.ease.reveal },
+      0.15,
+    );
+  }
+}
+
+function buildProgressTimeline(
+  panel: HTMLElement,
+  cards: NodeListOf<HTMLElement>,
+  steps: NodeListOf<HTMLElement>,
+  lines: NodeListOf<HTMLElement>,
+  accents: NodeListOf<HTMLElement>,
+  footnote: HTMLElement | null,
+) {
+  gsap.set(steps, { autoAlpha: 1, y: 0, opacity: 0.35, force3D: true });
+  gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
+  gsap.set(steps[0], { opacity: 1 });
+
+  cards.forEach((card, index) => {
+    if (index === 0) {
+      gsap.set(card, { autoAlpha: 1, x: 0, y: 0, force3D: true });
+      return;
+    }
+    gsap.set(card, { autoAlpha: 0, x: -12, y: 16, force3D: true });
+  });
+
+  gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
+  gsap.set(accents[0], { scaleX: 1 });
+
+  if (footnote) {
+    gsap.set(footnote, { autoAlpha: 0, y: 12, force3D: true });
+  }
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top 72%",
+      end: "bottom 18%",
+      scrub: 0.55,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  cards.forEach((card, index) => {
+    if (index === 0) return;
+
+    const segmentStart = (index - 1) * 0.2 + 0.05;
+
+    const line = lines[index - 1];
+    if (line) {
+      tl.to(line, { scaleX: 1, duration: 0.22, ease: motion.ease.reveal }, segmentStart);
+    }
+
+    tl.to(
+      steps[index],
+      { opacity: 1, duration: 0.1, ease: "none" },
+      segmentStart + 0.1,
+    );
+
+    tl.to(
+      card,
+      { autoAlpha: 1, x: 0, y: 0, duration: 0.26, ease: motion.ease.reveal },
+      segmentStart + 0.04,
+    );
+
+    const accent = accents[index];
+    if (accent) {
+      tl.to(accent, { scaleX: 1, duration: 0.18, ease: motion.ease.reveal }, segmentStart + 0.1);
+    }
+  });
+
+  if (footnote) {
+    tl.to(
+      footnote,
+      { autoAlpha: 1, y: 0, duration: 0.24, ease: motion.ease.reveal },
+      0.82,
+    );
+  }
+
+  tl.to({}, { duration: 0.12 });
+}
+
+export default function EngagementBentoGrid({ locale }: Props) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const steps = locale === "en" ? stepsEn : stepsSv;
+
+  useEffect(() => {
+    const root = rootRef.current;
+    const panel = panelRef.current;
+    if (!root || !panel) return;
+
+    const progressSteps = panel.querySelectorAll<HTMLElement>("[data-progress-step]");
+    const progressLines = panel.querySelectorAll<HTMLElement>("[data-progress-line]");
+    const cards = panel.querySelectorAll<HTMLElement>("[data-bento-card]");
+    const accents = panel.querySelectorAll<HTMLElement>("[data-bento-accent]");
+    const footnote = panel.querySelector<HTMLElement>("[data-bento-footnote]");
+
+    const targets = [
+      ...progressSteps,
+      ...progressLines,
+      ...cards,
+      ...accents,
+      footnote,
+    ].filter(Boolean) as HTMLElement[];
+
+    if (prefersReducedMotion()) {
+      showTargets(targets);
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      if (isMobile()) {
+        buildMobileReveal(panel, cards, progressSteps, progressLines, accents, footnote);
+      } else {
+        buildProgressTimeline(
+          panel,
+          cards,
+          progressSteps,
+          progressLines,
+          accents,
+          footnote,
+        );
+      }
+      refreshScrollTriggers();
+    }, root);
+
+    return () => {
+      ctx.revert();
+      showTargets(targets);
+    };
+  }, []);
+
+  return (
+    <div ref={rootRef}>
+      <div ref={panelRef}>
+        <ol
+          aria-hidden="true"
+          className="mb-8 hidden max-w-2xl items-center md:flex"
+        >
+          {steps.map((step, index) => (
+            <li key={step.index} className="flex flex-1 items-center last:flex-none">
+              <span
+                data-progress-step
+                className="text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 transition-opacity duration-200 md:text-[0.9375rem]"
+              >
+                {step.index}
+              </span>
+              {index < steps.length - 1 ? (
+                <span className="mx-3 h-2 flex-1 overflow-hidden rounded-full bg-zinc-200/90">
+                  <span data-progress-line className="block h-full w-full rounded-full bg-[#92753a]" />
+                </span>
+              ) : null}
+            </li>
+          ))}
+        </ol>
+
+        <div className="grid grid-cols-1 gap-3.5 md:grid-cols-12 md:gap-4">
+            {steps.map((step) => (
+              <article
+                key={step.index}
+                data-bento-card
+                className={`${tileClass} ${step.layout}`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 md:text-[0.9375rem]">
+                    {step.index}
+                  </span>
+                  <span data-bento-accent aria-hidden="true" className="block h-0.5 w-10 origin-left overflow-hidden rounded-full md:w-14">
+                    <span className="block h-full w-full rounded-full bg-[#92753a]" />
+                  </span>
+                </div>
+                <h3 className="mt-5 text-lg font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.2rem]">
+                  {step.title}
+                </h3>
+                <p className="mt-2.5 text-[0.98rem] font-[450] leading-[1.65] text-zinc-700 md:text-[1.02rem]">
+                  {step.body}
+                </p>
+              </article>
+            ))}
+
+            <p
+              data-bento-footnote
+              className="rounded-2xl border border-zinc-200/70 bg-zinc-900/[0.025] px-6 py-5 text-[0.98rem] font-[450] leading-[1.65] text-zinc-800 md:col-span-12 md:px-7 md:py-6 md:text-[1.02rem]"
+            >
+              {footnotes[locale]}
+            </p>
+        </div>
+      </div>
+    </div>
+  );
+}

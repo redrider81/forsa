@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 type CtaLinkProps = {
   href: string;
   children: ReactNode;
-  variant?: "primary" | "secondary" | "gold";
+  variant?: "primary" | "secondary" | "tertiary" | "gold";
   external?: boolean;
   translucent?: boolean;
   onClick?: () => void;
@@ -25,6 +25,10 @@ const variants = {
     "border border-zinc-400 !text-zinc-700 hover:border-zinc-600 hover:bg-zinc-100 active:border-zinc-700",
   secondaryTranslucent:
     "border border-white/48 bg-zinc-950/58 !text-white shadow-[0_4px_22px_-12px_rgba(0,0,0,0.42),inset_0_1px_0_0_rgba(255,255,255,0.1)] backdrop-blur-[6px] hover:border-white/58 hover:bg-zinc-950/68 active:bg-zinc-950/74 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
+  tertiary:
+    "border border-zinc-300 !text-zinc-700 hover:border-zinc-500 hover:bg-zinc-50 active:border-zinc-600",
+  tertiaryTranslucent:
+    "border border-white/35 bg-white/10 !text-white backdrop-blur-[6px] hover:border-white/50 hover:bg-white/15 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
   gold:
     "border border-transparent bg-[#92753a] !text-zinc-50 hover:bg-[#7d6432] active:bg-[#6f5829]",
   goldTranslucent:
@@ -35,6 +39,7 @@ function variantClass(variant: NonNullable<CtaLinkProps["variant"]>, translucent
   if (translucent) {
     if (variant === "primary") return variants.primaryTranslucent;
     if (variant === "secondary") return variants.secondaryTranslucent;
+    if (variant === "tertiary") return variants.tertiaryTranslucent;
     if (variant === "gold") return variants.goldTranslucent;
   }
   return variants[variant];

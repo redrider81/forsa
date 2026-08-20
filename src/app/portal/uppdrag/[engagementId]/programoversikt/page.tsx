@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { readCoachSession } from "@/lib/portal/session";
 import { getEngagementOverview } from "@/lib/portal/repository";
 import { engagementStatusLabel, formatDate, milestoneStatusLabel } from "@/lib/portal/format";
-import { Divider, Panel, PanelHeading, SectionLabel, Tag } from "@/components/portal/ui";
+import { Divider, Panel, PanelHeading, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function ProgramReportPage({
   params,
@@ -21,11 +21,11 @@ export default async function ProgramReportPage({
   const openFollowUps = participants.reduce((sum, item) => sum + item.openCommitments, 0);
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <div>
         <Link
           href={`/portal/uppdrag/${engagement.id}`}
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
         >
           {engagement.title}
         </Link>

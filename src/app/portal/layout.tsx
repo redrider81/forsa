@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import "@/components/klient/klient-tokens.css";
 import { PortalBottomNav, PortalDesktopNav } from "@/components/portal/portal-nav";
 import { Avatar } from "@/components/portal/ui";
 import { LogoMark } from "@/components/brand/logo";
+import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { readCoachSession } from "@/lib/portal/session";
 
 export const metadata: Metadata = {
@@ -18,6 +20,7 @@ export default async function PortalLayout({ children }: { children: React.React
     redirect("/coach-login");
   }
 
+  const today = todayIso();
   const initials = session.name
     .split(" ")
     .filter(Boolean)
@@ -26,37 +29,46 @@ export default async function PortalLayout({ children }: { children: React.React
     .slice(0, 3);
 
   return (
-    <div className="flex min-h-[100svh] flex-col bg-[#f6f6f4] text-zinc-900">
+    <div data-portal className="flex min-h-[100svh] flex-col bg-[var(--klient-page-bg)] text-zinc-900">
       <header
-        className="sticky top-0 z-30 border-b border-zinc-200/80 bg-[#faf9f7]/95 backdrop-blur-md"
+        className="sticky top-0 z-30 border-b border-[var(--klient-border-muted)] bg-[var(--klient-page-bg)]/98 backdrop-blur-md"
         style={{ paddingTop: "env(safe-area-inset-top)" }}
       >
-        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-5 py-3.5 md:px-6 lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[88rem]">
-          <Link
-            href="/portal"
-            className="shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f7]"
-          >
-            <LogoMark className="h-8 w-auto" priority />
-          </Link>
-          <span aria-hidden="true" className="h-4 w-px bg-zinc-900/12" />
-          <span className="text-[0.75rem] tracking-[0.08em] text-zinc-500">Portal</span>
-
-          <div className="ml-auto flex items-center gap-3">
-            <PortalDesktopNav />
+        <div className="mx-auto w-full max-w-4xl px-5 md:px-6 xl:max-w-5xl">
+          <div className="flex items-center justify-between gap-3 py-3.5">
             <Link
-              href="/portal/profil"
-              aria-label="Profil"
-              className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f7]"
+              href="/portal"
+              className="shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
             >
-              <Avatar initials={initials} size="sm" />
+              <LogoMark className="h-10 w-auto" priority />
             </Link>
+
+            <div className="flex items-center gap-3">
+              <time
+                dateTime={today}
+                className="shrink-0 text-right text-[0.6875rem] font-normal leading-snug text-zinc-500 md:hidden"
+              >
+                {formatWeekdayDate(today)}
+              </time>
+              <Link
+                href="/portal/profil"
+                aria-label="Profil"
+                className="hidden rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)] md:inline-flex"
+              >
+                <Avatar initials={initials} size="sm" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="hidden border-t border-[var(--klient-border-muted)] pb-3 pt-3 md:block">
+            <PortalDesktopNav />
           </div>
         </div>
       </header>
 
       <main
         id="main-content"
-        className="mx-auto w-full max-w-3xl flex-1 px-5 pb-28 pt-6 md:px-6 md:pb-16 md:pt-10 lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[88rem]"
+        className="mx-auto w-full min-w-0 max-w-4xl flex-1 overflow-x-clip px-5 pb-36 pt-6 md:px-6 md:pb-16 md:pt-10 xl:max-w-5xl"
       >
         {children}
       </main>

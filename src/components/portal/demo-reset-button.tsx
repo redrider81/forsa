@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { portalButtonClass, portalButtonSmClass } from "@/components/portal/ui";
 
 /** Coachverktyg. Exponeras aldrig i klientportalen. */
 export default function DemoResetButton() {
@@ -26,17 +27,13 @@ export default function DemoResetButton() {
   if (state === "confirm") {
     return (
       <div className="flex flex-col gap-2.5 sm:flex-row">
-        <button
-          type="button"
-          onClick={() => void reset()}
-          className="inline-flex min-h-11 items-center justify-center rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-50 transition-colors hover:bg-zinc-700"
-        >
+        <button type="button" onClick={() => void reset()} className={portalButtonClass}>
           Ja, återställ demoläget
         </button>
         <button
           type="button"
           onClick={() => setState("idle")}
-          className="inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-800"
+          className={`${portalButtonSmClass} text-zinc-500 hover:text-zinc-800`}
         >
           Avbryt
         </button>
@@ -50,7 +47,7 @@ export default function DemoResetButton() {
         type="button"
         disabled={state === "busy"}
         onClick={() => setState("confirm")}
-        className="inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-white disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        className={portalButtonSmClass}
       >
         {state === "busy" ? "Återställer…" : "Återställ demoläge"}
       </button>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import "@/components/klient/klient-tokens.css";
 import { LogoMark } from "@/components/brand/logo";
 import { redirect } from "next/navigation";
 import LoginForm from "@/components/portal/login-form";
@@ -17,12 +18,12 @@ export default async function CoachLoginPage() {
   if (session?.role === "coach") redirect("/portal");
 
   return (
-    <main id="main-content" className="flex min-h-[100svh] flex-col bg-[#f6f6f4] text-zinc-900">
+    <main id="main-content" data-portal className="flex min-h-[100svh] flex-col bg-[var(--klient-page-bg)] text-zinc-900">
       <div className="flex flex-1 items-center justify-center px-5 py-12 md:py-20">
         <div className="w-full max-w-[26rem]">
           <Link
             href="/"
-            className="inline-block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+            className="inline-block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
           >
             <LogoMark className="h-16 w-auto" priority />
           </Link>
@@ -34,7 +35,7 @@ export default async function CoachLoginPage() {
             Tillgång till klienter, uppdrag, sessioner och förberedelser.
           </p>
 
-          <div className="mt-8 rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-[0_1px_2px_rgba(24,24,27,0.04)] md:p-7">
+          <div className="mt-8 rounded-2xl border border-[var(--klient-border-soft)] bg-white p-6 shadow-[var(--klient-shadow-soft)] md:p-7">
             <LoginForm demo={demoHint("coach")} role="coach" redirectTo="/portal" />
           </div>
 

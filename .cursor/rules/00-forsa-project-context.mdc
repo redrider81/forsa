@@ -1,17 +1,23 @@
 ---
-description: Forsa project context and startup verification
+description: Forsa / CVB Coaching project context and startup verification
 alwaysApply: true
 ---
 
-# Forsa Project Context Rule
+# Forsa / CVB Coaching Project Context Rule
 
-This is the canonical workspace for the Forsa website project:
+This is the canonical git and Next.js root for the CVB Coaching website (repository still named Forsa):
 
-/Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site
+/Users/redrider/Nordleid-Dev/Kundprojekt/Forsa/forsa
 
-This Developer/Klarleid path is the single source of truth for all Forsa work. It holds the live Next.js source, the connected git repository, and the deployed history.
+Cursor may be opened at the parent wrapper:
 
-The GitHub/Vercel-connected repository is:
+/Users/redrider/Nordleid-Dev/Kundprojekt/Forsa
+
+That parent folder is not a git repository. It only contains this `forsa/` checkout and `.claude/launch.json`. All edits, git commands, and npm scripts must run inside `forsa/`.
+
+This checkout holds the live Next.js source, the connected git repository, and the deployed history.
+
+The GitHub-connected repository is:
 
 https://github.com/redrider81/forsa.git
 
@@ -21,29 +27,43 @@ main
 
 This is a solo project. Work directly on main unless the user explicitly says otherwise. Do not create branches or worktrees unless explicitly instructed.
 
+## Brand
+
+The live product brand is **CVB Coaching** (Carolina von Braun), after a rebrand from Forsa.
+
+- Repo, GitHub remote, package name (`forsa-site`), and folder names still say Forsa.
+- `docs/` is pre-rebrand reference material for tone and copy. Do not treat those files as current brand copy.
+- Public site and portal UI, metadata, and i18n dictionaries use CVB Coaching.
+- `/om-forsa` and `/en/om-forsa` permanently redirect to `/om-oss` and `/en/om-oss`.
+
 ## Critical path rule
 
-Always verify that the current workspace is:
+Always verify that git toplevel is:
 
-/Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site
+/Users/redrider/Nordleid-Dev/Kundprojekt/Forsa/forsa
 
-Never work from these similarly named folders unless the user explicitly instructs it:
+If `pwd` is the parent wrapper, `cd forsa` before any git or npm command.
 
-/Users/dimensiontraining/Projekt/forsa-site
-/Users/dimensiontraining/Projekt/forsa
-/Users/dimensiontraining/Projekt/om-forsa
-/Users/dimensiontraining/Projekt/Website
+Never treat these as the source of truth:
 
-If the active workspace is not /Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site, stop immediately and tell the user that the wrong project is open.
+- /Users/redrider/Nordleid-Dev/Kundprojekt/Forsa (wrapper only — no `.git`)
+- /Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site (other machine; does not exist here)
+- /Users/dimensiontraining/Projekt/forsa-site
+- /Users/dimensiontraining/Projekt/forsa
+- /Users/dimensiontraining/Projekt/om-forsa
+- /Users/dimensiontraining/Projekt/Website
+
+If git toplevel is not `/Users/redrider/Nordleid-Dev/Kundprojekt/Forsa/forsa`, stop and tell the user that the wrong project is open.
 
 ### Obsolete paths — do not use
 
-- WARNING: /Users/dimensiontraining/Projekt/forsa-site is NOT a real project. It is a stray, leftover `.next` build folder only (no `.git`, no `src`, no `package.json`). Never treat it as the source of truth, never edit it, and never run dev/build from it.
-- WARNING: /Users/dimensiontraining/Projekt/forsa is an older prototype repository with separate git history and no connected remote. It must not be used for active Forsa work. Do not edit, build, commit, or push from it.
+- WARNING: `/Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site` was the canonical path on another machine. It is not present on this computer.
+- WARNING: `/Users/dimensiontraining/Projekt/forsa-site` is not a real project on that other machine (stray `.next` only). Never edit or run it.
+- WARNING: `/Users/dimensiontraining/Projekt/forsa` is an older prototype with separate git history. Never use it for active work.
 
 ## Required startup check
 
-Before making any change, always run:
+Before making any change, always run from the git root:
 
 pwd
 git rev-parse --show-toplevel
@@ -54,46 +74,69 @@ git remote -v
 
 Expected values:
 
-- project root: /Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site
+- project root: /Users/redrider/Nordleid-Dev/Kundprojekt/Forsa/forsa
 - branch: main
 - remote origin: https://github.com/redrider81/forsa.git
-- latest history should include the current Forsa commits, including:
-  - 37edde4 fix: use ScrollTrigger.Vars from value import for CI build
-  - e3da655 Polish motion system, hero layout, and nav contrast.
-  - fde2d11 feat: add high-res editorial images and fix large PNG loading
-  - 533bb2e fix: use high-resolution native hero image for retina mobile
-  - fdfc74b feat: add bilingual site and mobile navigation
+- latest history should include:
+  - b08ac88 Restructure the clients view as a vertical series of engagements
+  - a6f5d0e Add client portal, demo persistence, executive copy, and CVB logo
+  - 7acf2b5 Rebrand to CVB Coaching and add coaching portal with OpenAI
+  - ae219d8 Fix editorial image reveal flash
+  - 723f23b Fix editorial image loading performance
+
+Older Forsa commits (37edde4, e3da655, fde2d11, 533bb2e, fdfc74b) must still be in history.
 
 If these expectations do not match, stop and report the mismatch before doing anything.
 
+## Stack and layout
+
+- Next.js 16 App Router, React 19, Tailwind CSS v4, GSAP, TypeScript
+- Public site: Swedish default routes plus `/en` (see `src/lib/i18n/`)
+- Coach portal: `/coach-login` → `/portal`
+- Client portal: `/klient-login` → `/klient`
+- `/logga-in` redirects to `/coach-login`
+- Portal data: seed in `src/lib/portal/data/`; demo mutations in HMAC-signed cookie `cvb_demo_state`
+- Access layer: `src/lib/portal/repository.ts`
+- AI: server-only OpenAI in `src/lib/ai/` with context lock in `src/lib/ai/scope.ts`
+- Tests: Vitest under `tests/`
+
+Demo accounts (password from `PORTAL_DEMO_PASSWORD`, otherwise `cvb-demo-2026`):
+
+- Client: `emma@northlinestudio.se` → `/klient`
+- Coach: `carolina@cvbcoaching.se` → `/portal`
+
+Portal data is fictional. Do not introduce real client data.
+
 ## Dev server rule
 
-The correct project has a package.json with a dev script.
+The correct project has a `package.json` with a `dev` script.
 
-When starting the dev server, use the correct project root:
+When starting the dev server, use:
 
-cd "/Users/dimensiontraining/Developer/Klarleid - Projekt/forsa-site"
-
-Then run:
-
+cd "/Users/redrider/Nordleid-Dev/Kundprojekt/Forsa/forsa"
 npm run dev
 
 If port 3000 is already in use, use:
 
 npm run dev -- -p 3001
 
-Do not attempt to run dev scripts from /Users/dimensiontraining/Projekt/forsa or /Users/dimensiontraining/Projekt/forsa-site, because neither is the active Vercel-connected Forsa website repo. The first is an old prototype; the second is only a stray `.next` folder.
+From the parent wrapper, `npm --prefix forsa run dev` is also valid (see `.claude/launch.json`).
+
+Do not start the server unless the user asks. Do not run build, test, or lint unless the user asks.
 
 ## Existing work to preserve
 
 Do not remove or rewrite the existing GSAP motion system.
 
 Preserve:
-- GSAP animation setup
+
+- GSAP animation setup (`src/lib/motion.ts`, `src/components/animations/`)
 - Playfair Display heading styling
 - sticky blur navigation
 - full footer
 - linked home service cards
+- bilingual public site
+- portal architecture (session, demo-state cookie, repository, AI context lock)
 - Vercel/GitHub connection
 - main branch workflow
 
@@ -102,19 +145,22 @@ Do not replace GSAP with Framer Motion or any other animation library.
 ## Git workflow
 
 Before edits:
+
 - confirm working tree state with git status --short
 - do not overwrite unrelated changes
 - do not reformat unrelated files
 
 After edits:
-- run npm run build
+
 - show git status --short
 - show git diff --stat
 - do not commit or push until user approval
+- do not run build/test/lint unless the user asks
 
 After creating/updating this rule file, verify:
 
 pwd
+git rev-parse --show-toplevel
 git status --short
 find .cursor -maxdepth 4 -type f | sort
 

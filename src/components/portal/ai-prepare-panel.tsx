@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
-import { Panel, SectionLabel } from "@/components/portal/ui";
+import {
+  Panel,
+  portalButtonClass,
+  portalButtonSmClass,
+  portalGhostButtonClass,
+  portalInsetClass,
+  portalOutlineButtonClass,
+  portalTextareaClass,
+  SectionLabel,
+} from "@/components/portal/ui";
 
 type Status = "idle" | "loading" | "ready" | "error";
 
@@ -68,7 +77,7 @@ export default function AiPreparePanel({
         <button
           type="button"
           onClick={() => void generate()}
-          className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className={`mt-5 w-full sm:w-auto ${portalButtonClass}`}
         >
           Förbered session
         </button>
@@ -81,12 +90,12 @@ export default function AiPreparePanel({
       ) : null}
 
       {status === "error" ? (
-        <div className="mt-5 rounded-2xl border border-zinc-200 bg-[#faf9f7] p-4">
+        <div className={`mt-5 ${portalInsetClass}`}>
           <p className="text-[0.9375rem] leading-relaxed text-zinc-700">{error}</p>
           <button
             type="button"
             onClick={() => void generate()}
-            className="mt-3 inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors hover:border-zinc-500 hover:bg-white"
+            className={`mt-3 ${portalOutlineButtonClass}`}
           >
             Försök igen
           </button>
@@ -94,7 +103,7 @@ export default function AiPreparePanel({
       ) : null}
 
       {status === "ready" ? (
-        <article className="mt-5 rounded-2xl border border-zinc-200/90 bg-[#faf9f7] p-4 md:p-5">
+        <article className={`mt-5 ${portalInsetClass}`}>
           {editing ? (
             <>
               <label htmlFor="prepare-draft" className="sr-only">
@@ -105,7 +114,7 @@ export default function AiPreparePanel({
                 value={draft}
                 onChange={(event) => setDraft(event.target.value)}
                 rows={16}
-                className="w-full resize-y rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-800 focus:border-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+                className={`${portalTextareaClass} bg-white`}
               />
             </>
           ) : (
@@ -113,7 +122,7 @@ export default function AiPreparePanel({
           )}
 
           {sources.length > 0 ? (
-            <div className="mt-5 border-t border-zinc-200 pt-4">
+            <div className="mt-5 border-t border-[var(--klient-border-muted)] pt-4">
               <SectionLabel>Underlag</SectionLabel>
               <ul className="mt-2.5 space-y-1.5">
                 {sources.map((source) => (
@@ -127,7 +136,7 @@ export default function AiPreparePanel({
 
           <div className="mt-4">
             <AiDisclaimer>
-              AI-genererat underlag för granskning. Kan bygga på dina arbetsanteckningar och är inte
+              Genererat underlag för granskning. Kan bygga på dina arbetsanteckningar och är inte
               avsett att delas med klienten.
             </AiDisclaimer>
           </div>
@@ -136,7 +145,7 @@ export default function AiPreparePanel({
             <button
               type="button"
               onClick={() => setEditing((value) => !value)}
-              className="inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors hover:border-zinc-500 hover:bg-white"
+              className={portalOutlineButtonClass}
             >
               {editing ? "Klar med redigering" : "Redigera"}
             </button>
@@ -146,14 +155,14 @@ export default function AiPreparePanel({
                 setApproved(true);
                 setEditing(false);
               }}
-              className="inline-flex min-h-10 items-center rounded-full bg-zinc-900 px-4 py-2 text-[0.8125rem] font-medium text-zinc-50 transition-colors hover:bg-zinc-700"
+              className={portalButtonSmClass}
             >
               Godkänn
             </button>
             <button
               type="button"
               onClick={() => void generate()}
-              className="inline-flex min-h-10 items-center rounded-full px-4 py-2 text-[0.8125rem] font-medium text-zinc-500 transition-colors hover:text-zinc-800"
+              className={portalGhostButtonClass}
             >
               Generera om
             </button>

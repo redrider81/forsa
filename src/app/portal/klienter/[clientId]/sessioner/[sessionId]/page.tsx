@@ -4,7 +4,7 @@ import SessionWorkspace from "@/components/portal/session-workspace";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier, getSession } from "@/lib/portal/repository";
 import { formatWeekdayDate, formatDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
-import { Panel, PanelHeading, SectionLabel, Tag } from "@/components/portal/ui";
+import { Panel, PanelHeading, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function SessionPage({
   params,
@@ -25,11 +25,11 @@ export default async function SessionPage({
   const summary = coachingSession.summary;
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <div>
         <Link
           href={`/portal/klienter/${client.id}`}
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
         >
           {client.name}
         </Link>
@@ -54,8 +54,6 @@ export default async function SessionPage({
         </div>
       </div>
 
-      <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-x-8">
-      <div className="min-w-0 space-y-7 lg:col-span-7">
       <Panel>
         <SectionLabel>Övergripande utvecklingsmål</SectionLabel>
         <p className="mt-2.5 text-[1.05rem] leading-[1.6] tracking-tight text-zinc-900">
@@ -159,16 +157,11 @@ export default async function SessionPage({
         </Panel>
       ) : null}
 
-      </div>
-
-      <div className="min-w-0 space-y-7 lg:col-span-5">
       <SessionWorkspace
         clientId={client.id}
         sessionId={coachingSession.id}
         clientFirstName={firstName}
       />
-      </div>
-      </div>
     </div>
   );
 }

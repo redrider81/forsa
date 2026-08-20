@@ -3,12 +3,16 @@ import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
+import JsonLd, { carolinaPersonSchema } from "@/components/json-ld";
+import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 
 export const metadata: Metadata = {
-  title: "Om oss | CVB Coaching",
+  title: "Om CVB Coaching – Carolina von Braun | CVB Coaching",
   description:
-    "CVB Coaching är en senior och diskret samtalspartner för vd:ar, grundare och ledningsgrupper i komplexa affärslägen.",
+    "CVB Coaching grundades av Carolina von Braun i Göteborg. Kommersiell bakgrund från kapitalmarknad och styrelsearbete, diplomerad coach.",
 };
+
+const t = svDictionary;
 
 const principles = [
   "Konfidentialitet i allt arbete.",
@@ -19,17 +23,17 @@ const principles = [
 
 const audiences = [
   "Vd:ar och grundare med hög beslutspress.",
-  "Ledningsgrupper i tillväxt, omställning eller ny fas.",
+  "Ledningsgrupper i tillväxt, omställning eller ny ägarfas.",
   "Seniora ledare med ansvar för riktning och genomförande.",
-  "Organisationer som vill utveckla flera ledare inom ett gemensamt program.",
+  "Organisationer som vill utveckla flera chefer inom ett gemensamt program.",
 ];
 
 export default function AboutPage() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
+      <JsonLd data={carolinaPersonSchema} />
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
 
-        {/* Hero */}
         <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
@@ -37,16 +41,15 @@ export default function AboutPage() {
               Om CVB Coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Seniort stöd för ledning i komplexa lägen.
+              Ett externt beslutsrum för svenska företagsledningar.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              CVB Coaching finns för ledningar som behöver ett externt, konfidentiellt och affärsnära
-              samtalsrum när beslut, ansvar och riktning behöver skärpas.
+              CVB Coaching arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och
+              riktning behöver skärpas.
             </p>
           </HeroReveal>
         </section>
 
-        {/* Two-col: why */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
@@ -54,8 +57,8 @@ export default function AboutPage() {
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                I många ledningsmiljöer finns kompetensen, men inte alltid det tydliga beslutsrummet.
-                CVB Coaching finns för att bidra med den skärpan i konkreta affärslägen.
+                I många ledningsmiljöer finns kompetensen, men inte det uttalade beslutsrummet. CVB
+                Coaching finns för att tillföra det i konkreta affärslägen.
               </p>
               <p>
                 Målet är inte fler ord om ledarskap, utan bättre beslut och tydligare genomförande i
@@ -65,7 +68,6 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        {/* Grundare */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <div data-col-left className="md:col-span-5">
@@ -79,42 +81,27 @@ export default function AboutPage() {
             </div>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                CVB Coaching grundades av Carolina von Braun. Hon arbetar med vd:ar, grundare och
-                seniora ledare, och leder de ledarutvecklings- och programuppdrag där flera deltagare
-                ingår.
+                Carolina von Braun grundade CVB Coaching i Göteborg. Hon arbetar med vd:ar, grundare
+                och ledningsgrupper när beslut, ansvar och riktning behöver bli tydligare.
               </p>
               <p>
-                Arbetet vilar på en professionell coachcertifiering och ett coachande förhållningssätt:
-                klienten äger sina mål, sina insikter och sina beslut. Coachens uppgift är att göra
-                tänkandet tydligare, inte att leverera svar.
+                Bakgrunden är kommersiell. Den omfattar värdepappershandel på Nordea och fyra
+                styrelseuppdrag inom fastighetsförvaltning och investeringar. Det är också
+                utgångspunkten i samtalen: besluten prövas i affärsmässiga termer.
               </p>
               <p>
-                Metod, struktur och uppföljning är densamma oavsett om uppdraget omfattar en enskild
-                ledare eller ett program för en hel organisation.
+                Hon studerade marknadsföring vid Handelshögskolan vid Göteborgs universitet
+                1996–2002. År 2025 diplomerades hon i coachning vid Gothia Akademi, steg 1 och 2,
+                och medverkar som utbildningsassistent i akademins ledarskapsutbildningar.
+              </p>
+              <p>
+                Förhållningssättet är coachande: klienten äger sina mål, sina insikter och sina
+                beslut. Coachens uppgift är att göra tänkandet klarare, inte att leverera svar.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
-        {/* Two-col: how */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Hur CVB Coaching arbetar
-            </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>
-                Arbetet sker i strukturerade samtal med tydlig koppling till ert faktiska läge. Varje
-                uppdrag utgår från vad som behöver avgöras nu och hur besluten ska få fäste över tid.
-              </p>
-              <p>
-                Fokus ligger på frågor som påverkar bolagets tempo, beslutskraft och resultat.
-              </p>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        {/* Cards: principles */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
@@ -131,7 +118,26 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        {/* List: audience */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Konfidentialitet
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>Vad som sägs i samtalet stannar i samtalet.</p>
+              <p>
+                När uppdraget beställs av någon annan än deltagaren avtalas skriftligt i förväg exakt
+                vad som återrapporteras: normalt måluppfyllelse och närvaro, aldrig samtalsinnehåll.
+              </p>
+              <p>
+                Anteckningar förvaras separat från uppdragsgivarens system och raderas senast tolv
+                månader efter avslutat uppdrag. Personuppgifter behandlas enligt
+                dataskyddsförordningen.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium tracking-tight">Vem CVB Coaching är rätt för</h2>
           <ScrollReveal variant="staggerList" className="mt-8">
@@ -146,33 +152,30 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        {/* Two-col: location */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Göteborg / Sverige
+              Göteborg, med uppdrag i hela Sverige
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>CVB Coaching är baserat i Göteborg och arbetar med svenska företagsledningar.</p>
               <p>
-                Uppdrag genomförs med hög diskretion och nära förståelse för den affärsmässiga
-                verklighet som ledningen verkar i.
+                CVB Coaching är baserat i Göteborg och arbetar med svenska företagsledningar.
+                Samtalen hålls på plats eller sker digitalt.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
-        {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              Om du vill diskutera ett aktuellt ledningsläge
+              Nästa steg
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Vi börjar med ett konfidentiellt första samtal.
+              Beskriv kort vilket ledningsläge som är aktuellt.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <CtaLink href="/kontakt" variant="primary">Boka ett första samtal</CtaLink>
+              <CtaLink href="/kontakt" variant="primary">{t.cta.primary}</CtaLink>
             </div>
           </ScrollReveal>
         </section>

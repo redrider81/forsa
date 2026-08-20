@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PrepForm from "@/components/klient/prep-form";
-import { Card, CardTitle, Label, Muted } from "@/components/klient/klient-ui";
+import { Card, CardTitle, Label, Muted, klientLinkButtonClass } from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
 import { getClientPerspective, getCoach } from "@/lib/portal/repository";
 import { formatWeekdayDate } from "@/lib/portal/format";
@@ -16,11 +16,8 @@ export default async function PrepPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link
-          href="/klient"
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf8f4]"
-        >
-          Min utveckling
+        <Link href="/klient" className={klientLinkButtonClass}>
+          Översikt
         </Link>
       </div>
 
@@ -43,6 +40,7 @@ export default async function PrepPage() {
           changed: view.prep?.changed ?? "",
           followUp: view.prep?.followUp ?? "",
         }}
+        materials={view.materials}
       />
     </div>
   );

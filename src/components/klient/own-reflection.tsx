@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { klientButtonSmClass } from "@/components/klient/klient-ui";
 
 /**
  * Klienten äger sitt eget material och ska kunna ta bort det hon själv skrivit.
@@ -31,14 +32,14 @@ export default function OwnReflectionControls({ id }: { id: string }) {
           type="button"
           disabled={busy}
           onClick={() => void remove()}
-          className="inline-flex min-h-11 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors hover:border-zinc-500 hover:bg-white disabled:opacity-60"
+          className={klientButtonSmClass}
         >
           {busy ? "Tar bort…" : "Ja, ta bort"}
         </button>
         <button
           type="button"
           onClick={() => setConfirming(false)}
-          className="text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800"
+          className={klientButtonSmClass}
         >
           Behåll
         </button>
@@ -50,7 +51,7 @@ export default function OwnReflectionControls({ id }: { id: string }) {
     <button
       type="button"
       onClick={() => setConfirming(true)}
-      className="mt-3 text-[0.8125rem] text-zinc-400 underline underline-offset-4 transition-colors hover:text-zinc-700"
+      className={`mt-3 ${klientButtonSmClass}`}
     >
       Ta bort
     </button>

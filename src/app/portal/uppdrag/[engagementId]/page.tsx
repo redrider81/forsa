@@ -10,6 +10,8 @@ import {
   EmptyState,
   Panel,
   PanelHeading,
+  portalOutlineButtonClass,
+  portalPageStackClass,
   RowLink,
   SectionLabel,
   Tag,
@@ -31,11 +33,11 @@ export default async function EngagementPage({
   const openFollowUps = participants.reduce((sum, item) => sum + item.openCommitments, 0);
 
   return (
-    <div className="space-y-7">
+    <div className={portalPageStackClass}>
       <div>
         <Link
           href="/portal/uppdrag"
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]"
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
         >
           Uppdrag
         </Link>
@@ -130,7 +132,7 @@ export default async function EngagementPage({
           ))}
         </ol>
         {engagement.nextReview ? (
-          <p className="mt-6 rounded-xl bg-[#faf9f7] px-4 py-3.5 text-[0.875rem] leading-relaxed text-zinc-600">
+          <p className="mt-6 rounded-xl bg-[var(--klient-text-block-bg)] px-4 py-3.5 text-[0.875rem] leading-relaxed text-zinc-600">
             Nästa programgenomgång: {engagement.nextReview.label} ·{" "}
             {formatDate(engagement.nextReview.date)}
           </p>
@@ -194,7 +196,7 @@ export default async function EngagementPage({
         </p>
         <Link
           href={`/portal/uppdrag/${engagement.id}/programoversikt`}
-          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-[#faf9f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className={`mt-5 ${portalOutlineButtonClass} min-h-11 px-6 py-3 text-sm`}
         >
           Öppna programöversikt
         </Link>

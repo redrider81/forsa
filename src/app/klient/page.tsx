@@ -1,8 +1,21 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import CommitmentList from "@/components/klient/commitment-list";
+import DevelopmentOverview from "@/components/klient/development-overview";
 import ReflectionComposer from "@/components/klient/reflection-composer";
-import { Body, Card, CardTitle, Empty, Label, Muted, OwnWords } from "@/components/klient/klient-ui";
+import {
+  Body,
+  Chapter,
+  Empty,
+  InnerFocus,
+  Muted,
+  OwnWords,
+  PrimaryButton,
+  QuoteBlock,
+  QuietLink,
+  SectionTitle,
+  SerifHeading,
+  ZoneTag,
+} from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
 import { getClientPerspective, getCoach } from "@/lib/portal/repository";
 import { formatDate, formatWeekdayDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
@@ -14,89 +27,152 @@ export default async function ClientOverviewPage() {
   const view = await getClientPerspective(getCoach().id, session.clientId);
   if (!view) notFound();
 
-    const today = todayIso();
+  const today = todayIso();
   const latestReflection = view.reflections[0];
   const latestSummary = [...view.completedSessions].reverse().find((item) => item.summary);
+  const sessionLabels = Object.fromEntries(
+    view.sessions.map((item) => [item.id, `Session ${item.number}`]),
+  );
+
+  const completedSessionsCount = view.completedSessions.length;
+  const activeCommitmentsCount = view.commitments.filter(
+    (item) => item.status === "pagar" || item.status === "oppet",
+  ).length;
+  const completedCommitmentsCount = view.commitments.filter(
+    (item) => item.status === "genomfort",
+  ).length;
+  const reflectionsCount = view.reflections.length;
 
   return (
-    <div className="space-y-6">
-      <header className="pb-1">
-        <h1 className="text-[1.75rem] font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2rem]">
-          Min utveckling
-        </h1>
-        <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
+    <div className="klient-overview space-y-8 md:space-y-10">
+      <header className="max-w-prose">
+        <h1 className="sr-only">{view.client.name}</h1>
+        <span className="inline-flex items-center rounded-full border border-[var(--klient-border-muted)] bg-white px-5 py-2.5 text-[1rem] font-medium leading-relaxed text-zinc-700 shadow-[0_1px_3px_rgba(24,24,27,0.06)] md:px-6 md:py-3 md:text-[1.0625rem]">
           {view.client.name} · {view.organisation.name}
-        </p>
+        </span>
       </header>
 
+      <DevelopmentOverview
+        completedSessions={completedSessionsCount}
+        activeCommitments={activeCommitmentsCount}
+        completedCommitments={completedCommitmentsCount}
+        reflections={reflectionsCount}
+      />
+
       {view.upcomingSession ? (
-        <Card>
-          <Label>Nästa session</Label>
-          <CardTitle>
-            {formatWeekdayDate(view.upcomingSession.date)} kl. {view.upcomingSession.time}
-          </CardTitle>
-          <div className="mt-2">
-            <Muted>
-              {relativeDayLabel(view.upcomingSession.date, today)} · {view.upcomingSession.location}
-            </Muted>
-          </div>
+        <Chapter surface="primary" aria-labelledby="next-session-heading">
+          <ZoneTag>Nästa session</ZoneTag>
+          <SerifHeading id="next-session-heading">
+            {formatWeekdayDate(view.upcomingSession.date)}
+          </SerifHeading>
+          <p className="mt-2 text-[0.9375rem] leading-relaxed text-zinc-600">
+            {view.upcomingSession.time} · {view.upcomingSession.location}
+          </p>
+          <p className="mt-1 text-[0.8125rem] text-zinc-400">
+            {relativeDayLabel(view.upcomingSession.date, today)}
+          </p>
 
-          <div className="mt-5 rounded-xl bg-[#fbfaf7] p-4">
-            <Label>Fokus inför nästa session</Label>
-            <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">
-              {view.upcomingSession.clientFocus}
-            </p>
-          </div>
+          <InnerFocus label="Fokus inför sessionen">
+            {view.upcomingSession.clientFocus}
+          </InnerFocus>
 
-          <Link
-            href="/klient/infor-nasta-samtal"
-            className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-          >
-            {view.prep ? "Uppdatera förberedelse" : "Förbered session"}
-          </Link>
+          <div className="mt-6">
+            <PrimaryButton href="/klient/infor-nasta-samtal">
+              {view.prep ? "Uppdatera förberedelse" : "Förbered session"}
+            </PrimaryButton>
+          </div>
 
           {view.prep ? (
-            <p className="mt-3.5 text-[0.8125rem] leading-relaxed text-[#7d6432]">
+            <p className="mt-3 text-[0.8125rem] leading-relaxed text-[var(--klient-accent-gold-muted)]">
               Förberedelse sparad och delad med Carolina.
             </p>
           ) : null}
-        </Card>
+
+          {view.nextSessionMaterialCount > 0 ? (
+            <div className="mt-5 space-y-4">
+              <p className="flex items-baseline gap-3 text-[0.9375rem] font-bold leading-relaxed text-zinc-500">
+                <span aria-hidden="true" className="text-[1.375rem] leading-none">
+                  ·
+                </span>
+                <span>
+                  {view.nextSessionMaterialCount}{" "}
+                  {view.nextSessionMaterialCount === 1 ? "material kopplat" : "material kopplade"} till
+                  nästa session.
+                </span>
+              </p>
+              <QuietLink href="/klient/material">Visa material</QuietLink>
+            </div>
+          ) : null}
+        </Chapter>
       ) : null}
 
-      <ReflectionComposer />
-
-      <CommitmentList
-        commitments={view.commitments.map((item) => ({
-          id: item.id,
-          text: item.text,
-          dueLabel: item.dueLabel,
-          status: item.status,
-          clientNote: item.clientNote,
-        }))}
-      />
-
-      <Card>
-        <Label>Senaste reflektion</Label>
-        <CardTitle>Mina egna ord</CardTitle>
-        <div className="mt-5">
-          {latestReflection ? (
-            <OwnWords source={formatDate(latestReflection.date)}>{latestReflection.text}</OwnWords>
-          ) : (
-            <Empty>Ingen reflektion registrerad.</Empty>
-          )}
+      <Chapter surface="strategic" aria-labelledby="goal-heading" className="max-w-none">
+        <ZoneTag>Utvecklingsmål</ZoneTag>
+        <SectionTitle id="goal-heading">Min riktning</SectionTitle>
+        <p className="mt-3 max-w-prose text-[1.0625rem] leading-[1.65] text-zinc-800 md:text-[1.125rem]">
+          {view.goal.headline}
+        </p>
+        <div className="max-w-prose">
+          <QuoteBlock source={`Mina egna ord, ${formatDate(view.client.agreement.agreedAt)}`}>
+            {view.goal.clientWording}
+          </QuoteBlock>
         </div>
-        <Link
-          href="/klient/reflektioner"
-          className="mt-5 inline-block text-[0.875rem] text-zinc-600 underline underline-offset-4 transition-colors hover:text-zinc-900"
-        >
-          Visa alla reflektioner
-        </Link>
-      </Card>
+      </Chapter>
 
-      <Card>
-        <Label>Uppföljning</Label>
-        <CardTitle>Senaste sammanfattning</CardTitle>
-        <div className="mt-5">
+      <Chapter
+        id="aktuellt-fokus"
+        surface="primary"
+        aria-labelledby="commitments-heading"
+        className="scroll-mt-6"
+      >
+        <CommitmentList
+          overviewLimit={3}
+          activeCount={activeCommitmentsCount}
+          commitments={view.commitments.map((item) => ({
+            id: item.id,
+            text: item.text,
+            dueLabel: item.dueLabel,
+            status: item.status,
+            clientNote: item.clientNote,
+            completedAt: item.completedAt,
+            sessionLabel: sessionLabels[item.sessionId],
+          }))}
+        />
+      </Chapter>
+
+      <Chapter surface="reflection" aria-labelledby="reflection-zone-heading">
+        <h2 id="reflection-zone-heading" className="sr-only">
+          Reflektion
+        </h2>
+        <ReflectionComposer variant="overview" embedded />
+
+        <div className="mt-7 border-t border-[var(--klient-border-muted)]/90 pt-7">
+          <ZoneTag tone="muted">Senaste reflektion</ZoneTag>
+          <SectionTitle id="latest-reflection-heading" className="mt-2">
+            Dina egna ord
+          </SectionTitle>
+          <div className="mt-4 max-w-prose">
+            {latestReflection ? (
+              <OwnWords source={formatDate(latestReflection.date)}>
+                {latestReflection.text}
+              </OwnWords>
+            ) : (
+              <Empty>Ingen reflektion registrerad ännu.</Empty>
+            )}
+          </div>
+          <div className="mt-4">
+            <QuietLink href="/klient/reflektioner">Visa alla reflektioner</QuietLink>
+          </div>
+        </div>
+      </Chapter>
+
+      <Chapter surface="neutral" aria-labelledby="latest-session-heading" className="max-w-prose">
+        <ZoneTag tone="neutral">Session</ZoneTag>
+        <SectionTitle id="latest-session-heading">Från senaste sessionen</SectionTitle>
+        <Muted>
+          Sammanfattning delad efter coaching — inte din egen reflektion.
+        </Muted>
+        <div className="mt-4">
           {latestSummary?.summary ? (
             <>
               <Body>{latestSummary.summary.awareness}</Body>
@@ -108,23 +184,10 @@ export default async function ClientOverviewPage() {
             <Empty>Ingen sammanfattning delad ännu.</Empty>
           )}
         </div>
-        <Link
-          href="/klient/sessioner"
-          className="mt-5 inline-block text-[0.875rem] text-zinc-600 underline underline-offset-4 transition-colors hover:text-zinc-900"
-        >
-          Visa alla sessioner
-        </Link>
-      </Card>
-
-      <Card>
-        <Label>Mitt utvecklingsmål</Label>
-        <CardTitle>{view.goal.headline}</CardTitle>
-        <div className="mt-5">
-          <OwnWords source={`Mina egna ord, ${formatDate(view.client.agreement.agreedAt)}`}>
-            {view.goal.clientWording}
-          </OwnWords>
+        <div className="mt-4">
+          <QuietLink href="/klient/sessioner">Visa alla sessioner</QuietLink>
         </div>
-      </Card>
+      </Chapter>
     </div>
   );
 }

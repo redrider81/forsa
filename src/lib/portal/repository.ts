@@ -27,6 +27,16 @@ import {
   type DemoState,
 } from "@/lib/portal/store/demo-state";
 import { readDemoState } from "@/lib/portal/store/demo-store";
+import {
+  EMPTY_DEMO_MATERIALS_STATE,
+  type DemoMaterialsState,
+} from "@/lib/portal/store/demo-materials-state";
+import { readDemoMaterialsState } from "@/lib/portal/store/demo-materials-store";
+import {
+  countMaterialsLinkedToNextSession,
+  listClientMaterials,
+} from "@/lib/portal/materials-repository";
+import type { CoachingMaterial } from "@/lib/portal/types";
 
 /**
  * Accesslager. All läsning av klient- och uppdragsdata går via detta lager och
@@ -67,19 +77,53 @@ export function getOrganisation(coachId: string, organisationId: string): Organi
   return organisations.find((item) => item.id === organisationId) ?? null;
 }
 
-export function listClients(coachId: string): Client[] {
-  if (!coachHasAccess(coachId)) return [];
-  return [...clients];
-}
-
 export function getClient(coachId: string, clientId: string): Client | null {
   if (!coachHasAccess(coachId)) return null;
   return clients.find((item) => item.id === clientId) ?? null;
 }
 
-export function listClientsForEngagement(coachId: string, engagementId: string): Client[] {
+/** Klientens egna profiluppdateringar läggs ovanpå seed-datan. */
+export function deriveClientInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0]![0] ?? ""}${parts[parts.length - 1]![0] ?? ""}`.toUpperCase();
+  }
+  return name.trim().slice(0, 2).toUpperCase();
+}
+
+export function resolveClient(client: Client, state: DemoState = EMPTY_DEMO_STATE): Client {
+  const profile = state.profile[client.id];
+  if (!profile) return client;
+
+  const name = profile.name.trim() || client.name;
+  const role = profile.role.trim() || client.role;
+  const email = profile.email !== undefined ? profile.email.trim() : client.email;
+  const phone = profile.phone !== undefined ? profile.phone.trim() : client.phone;
+
+  return {
+    ...client,
+    name,
+    role,
+    email,
+    phone,
+    initials: deriveClientInitials(name),
+  };
+}
+
+export function listClients(coachId: string, state: DemoState = EMPTY_DEMO_STATE): Client[] {
+  if (!coachHasAccess(coachId)) return [];
+  return clients.map((client) => resolveClient(client, state));
+}
+
+export function listClientsForEngagement(
+  coachId: string,
+  engagementId: string,
+  state: DemoState = EMPTY_DEMO_STATE,
+): Client[] {
   if (!getEngagement(coachId, engagementId)) return [];
-  return clients.filter((item) => item.engagementId === engagementId);
+  return clients
+    .filter((item) => item.engagementId === engagementId)
+    .map((client) => resolveClient(client, state));
 }
 
 function sortByDate<T extends { date: string }>(items: T[], direction: "asc" | "desc" = "asc"): T[] {
@@ -218,6 +262,10 @@ export type ClientDossier = {
   commitments: Commitment[];
   openCommitments: Commitment[];
   documents: PortalDocument[];
+  /** Coachingmaterial — filer, anteckningar, coach-delat. */
+  materials: CoachingMaterial[];
+  /** Antal material kopplade till nästa session. */
+  nextSessionMaterialCount: number;
   /** Klientens egen förberedelse inför nästa samtal, om den finns. */
   prep: DemoSessionPrep | null;
   /** Reflektioner klienten själv har skrivit i portalen. */
@@ -229,9 +277,11 @@ export function buildClientDossier(
   coachId: string,
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
 ): ClientDossier | null {
-  const client = getClient(coachId, clientId);
-  if (!client) return null;
+  const seed = getClient(coachId, clientId);
+  if (!seed) return null;
+  const client = resolveClient(seed, state);
 
   const engagement = getEngagement(coachId, client.engagementId);
   const organisation = getOrganisation(coachId, client.organisationId);
@@ -255,6 +305,8 @@ export function buildClientDossier(
     commitments: clientCommitments,
     openCommitments: clientCommitments.filter((item) => item.status !== "genomfort"),
     documents: listClientDocuments(coachId, clientId),
+    materials: listClientMaterials(clientId, "coach", materialsState),
+    nextSessionMaterialCount: countMaterialsLinkedToNextSession(clientId, materialsState),
     prep: getSessionPrep(coachId, clientId, state),
     clientWrittenReflectionIds: state.reflections
       .filter((item) => item.clientId === clientId)
@@ -266,7 +318,12 @@ export async function getClientDossier(
   coachId: string,
   clientId: string,
 ): Promise<ClientDossier | null> {
-  return buildClientDossier(coachId, clientId, await readDemoState());
+  return buildClientDossier(
+    coachId,
+    clientId,
+    await readDemoState(),
+    await readDemoMaterialsState(),
+  );
 }
 
 export type EngagementOverview = {
@@ -297,7 +354,7 @@ export function buildEngagementOverview(
   const organisation = getOrganisation(coachId, engagement.organisationId);
   if (!organisation) return null;
 
-  const participants = listClientsForEngagement(coachId, engagementId).map((client) => {
+  const participants = listClientsForEngagement(coachId, engagementId, state).map((client) => {
     const clientSessions = listSessions(coachId, client.id, state);
     return {
       client,
@@ -339,6 +396,8 @@ export type ClientPerspective = {
   commitments: Commitment[];
   openCommitments: Commitment[];
   documents: PortalDocument[];
+  materials: CoachingMaterial[];
+  nextSessionMaterialCount: number;
   prep: DemoSessionPrep | null;
 };
 
@@ -346,9 +405,11 @@ export function buildClientPerspective(
   coachId: string,
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
 ): ClientPerspective | null {
-  const client = getClient(coachId, clientId);
-  if (!client) return null;
+  const seed = getClient(coachId, clientId);
+  if (!seed) return null;
+  const client = resolveClient(seed, state);
   const engagement = getEngagement(coachId, client.engagementId);
   const organisation = getOrganisation(coachId, client.organisationId);
   if (!engagement || !organisation) return null;
@@ -385,6 +446,8 @@ export function buildClientPerspective(
     commitments: clientCommitments,
     openCommitments: clientCommitments.filter((item) => item.status !== "genomfort"),
     documents: listClientDocuments(coachId, clientId, "klient"),
+    materials: listClientMaterials(clientId, "klient", materialsState),
+    nextSessionMaterialCount: countMaterialsLinkedToNextSession(clientId, materialsState),
     prep: getSessionPrep(coachId, clientId, state),
   };
 }
@@ -393,7 +456,12 @@ export async function getClientPerspective(
   coachId: string,
   clientId: string,
 ): Promise<ClientPerspective | null> {
-  return buildClientPerspective(coachId, clientId, await readDemoState());
+  return buildClientPerspective(
+    coachId,
+    clientId,
+    await readDemoState(),
+    await readDemoMaterialsState(),
+  );
 }
 
 /* ---------------------------------------------------------------- översikt */
@@ -411,7 +479,7 @@ export type ClientActivity = {
 
 /** Vad klienten har lämnat sedan seed-läget. Driver coachens aviseringar. */
 export function buildClientActivity(coachId: string, state: DemoState): ClientActivity[] {
-  const byId = new Map(listClients(coachId).map((item) => [item.id, item]));
+  const byId = new Map(listClients(coachId, state).map((item) => [item.id, item]));
   const items: ClientActivity[] = [];
 
   for (const reflection of state.reflections) {
@@ -492,7 +560,7 @@ export function buildDashboardData(
     };
   }
 
-  const allClients = listClients(coachId);
+  const allClients = listClients(coachId, state);
   const clientById = new Map(allClients.map((item) => [item.id, item]));
   const engagementById = new Map(listEngagements(coachId).map((item) => [item.id, item]));
 
@@ -624,7 +692,7 @@ export function buildOperationsOverview(
   };
   if (!coachHasAccess(coachId)) return empty;
 
-  const allClients = listClients(coachId);
+  const allClients = listClients(coachId, state);
   const allEngagements = listEngagements(coachId);
   const engagementById = new Map(allEngagements.map((item) => [item.id, item]));
 

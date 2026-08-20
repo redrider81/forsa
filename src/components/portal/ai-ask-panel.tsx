@@ -2,7 +2,16 @@
 
 import { useRef, useState } from "react";
 import { AiDisclaimer, AiResult, AiSkeleton } from "@/components/portal/ai-result";
-import { Panel, SectionLabel } from "@/components/portal/ui";
+import {
+  Panel,
+  portalButtonClass,
+  portalChipClass,
+  portalGhostButtonClass,
+  portalInsetClass,
+  portalOutlineButtonClass,
+  portalTextareaClass,
+  SectionLabel,
+} from "@/components/portal/ui";
 
 type ContextType = "klient" | "organisation";
 
@@ -76,7 +85,7 @@ export default function AiAskPanel({
 
   return (
     <Panel className="scroll-mt-24">
-      <SectionLabel>AI-underlag</SectionLabel>
+      <SectionLabel>Sammanställt underlag</SectionLabel>
       <h2 className="mt-2.5 text-[1.3rem] font-medium leading-[1.25] tracking-tight text-zinc-900">
         {title}
       </h2>
@@ -92,7 +101,7 @@ export default function AiAskPanel({
               setQuestion(suggestion.question);
               void ask(suggestion.question);
             }}
-            className="min-h-11 rounded-full border border-zinc-200 bg-[#faf9f7] px-3.5 py-2.5 text-[0.8125rem] leading-tight text-zinc-700 transition-colors duration-200 hover:border-zinc-300 hover:bg-white disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className={`min-h-11 ${portalChipClass} disabled:opacity-50`}
           >
             {suggestion.label}
           </button>
@@ -116,14 +125,14 @@ export default function AiAskPanel({
           rows={3}
           placeholder={placeholder}
           enterKeyHint="send"
-          className="w-full resize-none rounded-2xl border border-zinc-200 bg-[#faf9f7] px-4 py-3.5 text-[0.9375rem] leading-[1.6] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+          className={`${portalTextareaClass} resize-none rounded-2xl px-4 py-3.5 leading-[1.6] placeholder:text-zinc-400`}
         />
         <div className="mt-3 flex items-center justify-between gap-3">
           <p className="text-[0.75rem] text-zinc-400">Endast aktuell kontext.</p>
           <button
             type="submit"
             disabled={loading || question.trim().length === 0}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-50 transition-colors duration-200 hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className={`${portalButtonClass} disabled:cursor-not-allowed`}
           >
             {loading ? "Sammanställer…" : "Fråga"}
           </button>
@@ -138,13 +147,13 @@ export default function AiAskPanel({
         ) : null}
 
         {!loading && error ? (
-          <div className="rounded-2xl border border-zinc-200 bg-[#faf9f7] p-4">
+          <div className={portalInsetClass}>
             <p className="text-[0.9375rem] leading-relaxed text-zinc-700">{error}</p>
             {askedQuestion ? (
               <button
                 type="button"
                 onClick={() => void ask(askedQuestion)}
-                className="mt-3 inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors hover:border-zinc-500 hover:bg-white"
+                className={`mt-3 ${portalOutlineButtonClass}`}
               >
                 Försök igen
               </button>
@@ -153,7 +162,7 @@ export default function AiAskPanel({
         ) : null}
 
         {!loading && answer ? (
-          <article className="rounded-2xl border border-zinc-200/90 bg-[#faf9f7] p-4 md:p-5">
+          <article className={portalInsetClass}>
             {askedQuestion ? (
               <p className="mb-4 border-l-2 border-zinc-300 pl-3 text-[0.8125rem] leading-relaxed text-zinc-500">
                 {askedQuestion}
@@ -165,7 +174,7 @@ export default function AiAskPanel({
             {!answer.refused ? (
               <>
                 {answer.sources.length > 0 ? (
-                  <div className="mt-5 border-t border-zinc-200 pt-4">
+                  <div className="mt-5 border-t border-[var(--klient-border-muted)] pt-4">
                     <SectionLabel>Underlag</SectionLabel>
                     <ul className="mt-2.5 space-y-1.5">
                       {answer.sources.map((source) => (
@@ -178,7 +187,7 @@ export default function AiAskPanel({
                 ) : null}
                 <div className="mt-4">
                   <AiDisclaimer>
-                    AI-genererat underlag för granskning. Kan bygga på dina arbetsanteckningar och är
+                    Genererat underlag för granskning. Kan bygga på dina arbetsanteckningar och är
                     inte avsett att delas vidare.
                   </AiDisclaimer>
                 </div>
@@ -186,7 +195,7 @@ export default function AiAskPanel({
                   <button
                     type="button"
                     onClick={() => askedQuestion && void ask(askedQuestion)}
-                    className="inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors hover:border-zinc-500 hover:bg-white"
+                    className={portalOutlineButtonClass}
                   >
                     Generera om
                   </button>
@@ -197,7 +206,7 @@ export default function AiAskPanel({
                       setAskedQuestion(null);
                       setQuestion("");
                     }}
-                    className="inline-flex min-h-10 items-center rounded-full px-4 py-2 text-[0.8125rem] font-medium text-zinc-500 transition-colors hover:text-zinc-800"
+                    className={portalGhostButtonClass}
                   >
                     Rensa
                   </button>
