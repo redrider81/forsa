@@ -15,18 +15,39 @@ describe("operations status presentation", () => {
     expect(presentation.toneClass).not.toContain("orange");
   });
 
-  it("keeps semantic action/active/completed/neutral mapping", () => {
-    const expected: Partial<Record<OperationsStatus, string>> = {
+  it("locks full OperationsStatus → visual state mapping", () => {
+    const expected: Record<OperationsStatus, string> = {
       "Uppföljning krävs": "action",
       "Förberedelse saknas": "action",
-      "Förberedelse mottagen": "completed",
-      "Session idag": "active",
+      "Sammanfattning för granskning": "action",
+      "Underlag saknas": "neutral",
       Programgenomgång: "active",
+      "Session idag": "active",
+      "Förberedelse mottagen": "completed",
+      "Session genomförd": "completed",
+      "Underlag mottaget": "completed",
       "Session planerad": "neutral",
+      "Ny reflektion": "neutral",
+      "Åtagande uppdaterat": "neutral",
     };
 
     for (const [status, visualState] of Object.entries(expected)) {
       expect(operationsStatusVisualState[status as OperationsStatus]).toBe(visualState);
+    }
+  });
+
+  it("maps visual states to canonical tone classes", () => {
+    const samples: Array<[OperationsStatus, string, string]> = [
+      ["Uppföljning krävs", "action", "border-orange-400 bg-orange-400 text-white"],
+      ["Programgenomgång", "active", "border-emerald-500 bg-emerald-500 text-white"],
+      ["Förberedelse mottagen", "completed", "border-emerald-700/20 bg-emerald-700/6 text-emerald-900"],
+      ["Session planerad", "neutral", "border-zinc-300/80 bg-zinc-50 text-zinc-700"],
+    ];
+
+    for (const [status, visualState, toneClass] of samples) {
+      const presentation = getOperationsStatusPresentation(status);
+      expect(presentation.visualState).toBe(visualState);
+      expect(presentation.toneClass).toBe(toneClass);
     }
   });
 });
