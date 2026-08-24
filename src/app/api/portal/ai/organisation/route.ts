@@ -1,5 +1,6 @@
 import { readCoachSession } from "@/lib/portal/session";
-import { readDemoState } from "@/lib/portal/store/demo-store";
+import { fetchPortalRepositoryData } from "@/lib/portal/repository";
+import { EMPTY_DEMO_STATE } from "@/lib/portal/store/demo-state";
 import { buildEngagementContext } from "@/lib/ai/context";
 import { AiError, generate, hasApiKey } from "@/lib/ai/openai";
 import { organisationSystemPrompt } from "@/lib/ai/prompts";
@@ -33,7 +34,12 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: validated.error }, { status: 400 });
   }
 
-  const context = buildEngagementContext(session.coachId, engagementId, await readDemoState());
+  const context = buildEngagementContext(
+    session.coachId,
+    engagementId,
+    EMPTY_DEMO_STATE,
+    await fetchPortalRepositoryData(),
+  );
   if (!context) {
     return Response.json({ ok: false, error: "Uppdraget kunde inte hittas." }, { status: 404 });
   }

@@ -1,5 +1,6 @@
 import { readCoachSession } from "@/lib/portal/session";
-import { readDemoState } from "@/lib/portal/store/demo-store";
+import { fetchPortalRepositoryData } from "@/lib/portal/repository";
+import { EMPTY_DEMO_STATE } from "@/lib/portal/store/demo-state";
 import { buildClientContext } from "@/lib/ai/context";
 import { AiError, generate, hasApiKey } from "@/lib/ai/openai";
 import { clientQuestionSystemPrompt, prepareSessionSystemPrompt } from "@/lib/ai/prompts";
@@ -37,10 +38,16 @@ export async function POST(request: Request) {
 
   const requestMode = mode === "forbered" ? "forbered" : "fraga";
 
-  const context = buildClientContext(session.coachId, clientId, await readDemoState(), {
-    // Coachens eget arbetsläge med sin egen klient.
-    includeCoachNotes: true,
-  });
+  const context = buildClientContext(
+    session.coachId,
+    clientId,
+    EMPTY_DEMO_STATE,
+    {
+      // Coachens eget arbetsläge med sin egen klient.
+      includeCoachNotes: true,
+    },
+    await fetchPortalRepositoryData(),
+  );
   if (!context) {
     return Response.json({ ok: false, error: "Klienten kunde inte hittas." }, { status: 404 });
   }

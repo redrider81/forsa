@@ -1,6 +1,11 @@
 import "server-only";
 
-import { buildClientDossier, buildEngagementOverview } from "@/lib/portal/repository";
+import {
+  buildClientDossier,
+  buildEngagementOverview,
+  SEED_REPOSITORY_DATA,
+  type PortalRepositoryData,
+} from "@/lib/portal/repository";
 import { EMPTY_DEMO_STATE, type DemoState } from "@/lib/portal/store/demo-state";
 import { commitmentStatusLabel, formatDate, milestoneStatusLabel } from "@/lib/portal/format";
 
@@ -38,8 +43,9 @@ export function buildClientContext(
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
   options: { includeCoachNotes?: boolean } = {},
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): BuiltContext | null {
-  const dossier = buildClientDossier(coachId, clientId, state);
+  const dossier = buildClientDossier(coachId, clientId, state, undefined, data);
   if (!dossier) return null;
 
   const { client, engagement, organisation } = dossier;
@@ -229,8 +235,9 @@ export function buildEngagementContext(
   coachId: string,
   engagementId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): BuiltContext | null {
-  const overview = buildEngagementOverview(coachId, engagementId, state);
+  const overview = buildEngagementOverview(coachId, engagementId, state, data);
   if (!overview) return null;
 
   const { engagement, organisation, participants } = overview;

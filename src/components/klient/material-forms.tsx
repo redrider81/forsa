@@ -6,10 +6,7 @@ import {
   materialLinkTypeOptions,
 } from "@/lib/portal/material-labels";
 import { validateMaterialFile, inferTitleFromFileName } from "@/lib/portal/material-validation";
-import {
-  fileToStoredPayload,
-  storeMaterialFile,
-} from "@/lib/portal/client-material-files";
+import { uploadMaterialFile } from "@/lib/portal/client-material-files";
 import type { CoachingMaterial, MaterialLinkType, MaterialSharingLevel } from "@/lib/portal/types";
 import type { MaterialLinkContext } from "@/components/klient/material-workspace";
 import { klientButtonClass, klientButtonSmClass } from "@/components/klient/klient-ui";
@@ -155,8 +152,7 @@ export default function MaterialForms({
       }
 
       if (data.storeFileLocally) {
-        const payload = await fileToStoredPayload(file);
-        storeMaterialFile(data.material.id, clientId, payload);
+        await uploadMaterialFile(data.material.id, clientId, file);
       }
 
       onDone();

@@ -1,22 +1,27 @@
 import "server-only";
 
 import {
-  clients,
-  coach,
-  commitments,
-  documents,
-  engagements,
-  insights,
-  organisations,
-  reflections,
-  sessions,
+  clients as seedClients,
+  coach as seedCoach,
+  commitments as seedCommitments,
+  documents as seedDocuments,
+  engagements as seedEngagements,
+  insights as seedInsights,
+  organisations as seedOrganisations,
+  reflections as seedReflections,
+  sessions as seedSessions,
 } from "@/lib/portal/data";
+import { seedMaterials } from "@/lib/portal/data/materials";
 import type {
   Client,
+  CoachingAgreement,
   CoachingSession,
+  CoachProfile,
   Commitment,
+  DevelopmentGoal,
   Engagement,
   Insight,
+  Milestone,
   Organisation,
   PortalDocument,
   Reflection,
@@ -26,60 +31,100 @@ import {
   type DemoSessionPrep,
   type DemoState,
 } from "@/lib/portal/store/demo-state";
-import { readDemoState } from "@/lib/portal/store/demo-store";
-import {
-  EMPTY_DEMO_MATERIALS_STATE,
-  type DemoMaterialsState,
-} from "@/lib/portal/store/demo-materials-state";
-import { readDemoMaterialsState } from "@/lib/portal/store/demo-materials-store";
+import { EMPTY_DEMO_MATERIALS_STATE, type DemoMaterialsState } from "@/lib/portal/store/demo-materials-state";
 import {
   countMaterialsLinkedToNextSession,
   listClientMaterials,
 } from "@/lib/portal/materials-repository";
 import type { CoachingMaterial } from "@/lib/portal/types";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
  * Accesslager. All läsning av klient- och uppdragsdata går via detta lager och
  * kräver ett coachId. Ingen vy och inget AI-anrop får läsa datafilerna direkt —
  * det är här kontextisoleringen upprätthålls.
  *
- * Lagret slår ihop två källor:
- *   1. deterministisk seed-data (statisk, återställningsbar)
- *   2. demo-state som klienten själv har skapat (se store/demo-state.ts)
- *
- * Funktionerna finns i två former: rena `build*`/`list*` som tar ett DemoState
- * och kan enhetstestas, och tunna `get*`-omslag som läser tillståndet själva.
- * När demolagret byts mot en riktig databas är det bara omslagen som ändras.
+ * Alla rena `build*`/`list*`-funktioner tar emot en enda `PortalRepositoryData`
+ * -ögonblicksbild med samtliga entiteter. Samma ögonblicksbild används genom
+ * en hel operation — Supabase-data och seed-data kan därför aldrig blandas
+ * inom ett och samma anrop. De tunna `get*`-omslagen hämtar ögonblicksbilden
+ * från Supabase; testerna och seed-datan använder SEED_REPOSITORY_DATA, exakt
+ * samma statiska fixtures appen alltid har haft.
  */
 
-export function getCoach() {
-  return coach;
+export type PortalRepositoryData = {
+  coach: CoachProfile;
+  organisations: Organisation[];
+  engagements: Engagement[];
+  clients: Client[];
+  sessions: CoachingSession[];
+  reflections: Reflection[];
+  insights: Insight[];
+  commitments: Commitment[];
+  documents: PortalDocument[];
+  materials: CoachingMaterial[];
+  /** Klientens förberedelse inför nästa session, per klient. Motsvarigheten
+   * till DemoState.prep men källad från session_preparations i produktion. */
+  sessionPreparations: Record<string, DemoSessionPrep>;
+};
+
+export const SEED_REPOSITORY_DATA: PortalRepositoryData = {
+  coach: seedCoach,
+  organisations: seedOrganisations,
+  engagements: seedEngagements,
+  clients: seedClients,
+  sessions: seedSessions,
+  reflections: seedReflections,
+  insights: seedInsights,
+  commitments: seedCommitments,
+  documents: seedDocuments,
+  materials: seedMaterials,
+  sessionPreparations: {},
+};
+
+export function getCoach(data: PortalRepositoryData = SEED_REPOSITORY_DATA): CoachProfile {
+  return data.coach;
 }
 
-function coachHasAccess(coachId: string): boolean {
+function coachHasAccess(coachId: string, data: PortalRepositoryData): boolean {
   // Demon har en coach. Strukturen är förberedd för fler coacher och fler
   // organisationer utan att anropsställena behöver ändras.
-  return coachId === coach.id;
+  return coachId === data.coach.id;
 }
 
-export function listEngagements(coachId: string): Engagement[] {
-  if (!coachHasAccess(coachId)) return [];
-  return [...engagements];
+export function listEngagements(
+  coachId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): Engagement[] {
+  if (!coachHasAccess(coachId, data)) return [];
+  return [...data.engagements];
 }
 
-export function getEngagement(coachId: string, engagementId: string): Engagement | null {
-  if (!coachHasAccess(coachId)) return null;
-  return engagements.find((item) => item.id === engagementId) ?? null;
+export function getEngagement(
+  coachId: string,
+  engagementId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): Engagement | null {
+  if (!coachHasAccess(coachId, data)) return null;
+  return data.engagements.find((item) => item.id === engagementId) ?? null;
 }
 
-export function getOrganisation(coachId: string, organisationId: string): Organisation | null {
-  if (!coachHasAccess(coachId)) return null;
-  return organisations.find((item) => item.id === organisationId) ?? null;
+export function getOrganisation(
+  coachId: string,
+  organisationId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): Organisation | null {
+  if (!coachHasAccess(coachId, data)) return null;
+  return data.organisations.find((item) => item.id === organisationId) ?? null;
 }
 
-export function getClient(coachId: string, clientId: string): Client | null {
-  if (!coachHasAccess(coachId)) return null;
-  return clients.find((item) => item.id === clientId) ?? null;
+export function getClient(
+  coachId: string,
+  clientId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): Client | null {
+  if (!coachHasAccess(coachId, data)) return null;
+  return data.clients.find((item) => item.id === clientId) ?? null;
 }
 
 /** Klientens egna profiluppdateringar läggs ovanpå seed-datan. */
@@ -110,18 +155,23 @@ export function resolveClient(client: Client, state: DemoState = EMPTY_DEMO_STAT
   };
 }
 
-export function listClients(coachId: string, state: DemoState = EMPTY_DEMO_STATE): Client[] {
-  if (!coachHasAccess(coachId)) return [];
-  return clients.map((client) => resolveClient(client, state));
+export function listClients(
+  coachId: string,
+  state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): Client[] {
+  if (!coachHasAccess(coachId, data)) return [];
+  return data.clients.map((client) => resolveClient(client, state));
 }
 
 export function listClientsForEngagement(
   coachId: string,
   engagementId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): Client[] {
-  if (!getEngagement(coachId, engagementId)) return [];
-  return clients
+  if (!getEngagement(coachId, engagementId, data)) return [];
+  return data.clients
     .filter((item) => item.engagementId === engagementId)
     .map((client) => resolveClient(client, state));
 }
@@ -139,11 +189,12 @@ export function listSessions(
   coachId: string,
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): CoachingSession[] {
-  if (!getClient(coachId, clientId)) return [];
-  const prep = state.prep[clientId];
+  if (!getClient(coachId, clientId, data)) return [];
+  const prep = state.prep[clientId] ?? data.sessionPreparations[clientId];
   return sortByDate(
-    sessions
+    data.sessions
       .filter((item) => item.clientId === clientId)
       .map((session) => {
         if (session.status !== "kommande" || !prep) return session;
@@ -163,8 +214,9 @@ export function getSession(
   clientId: string,
   sessionId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): CoachingSession | null {
-  return listSessions(coachId, clientId, state).find((item) => item.id === sessionId) ?? null;
+  return listSessions(coachId, clientId, state, data).find((item) => item.id === sessionId) ?? null;
 }
 
 /** Reflektioner. Seed + de reflektioner klienten själv har skrivit. */
@@ -172,8 +224,9 @@ export function listReflections(
   coachId: string,
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): Reflection[] {
-  if (!getClient(coachId, clientId)) return [];
+  if (!getClient(coachId, clientId, data)) return [];
   const own = state.reflections
     .filter((item) => item.clientId === clientId)
     .map<Reflection>((item) => ({
@@ -184,12 +237,19 @@ export function listReflections(
       text: item.text,
       visibility: "coach_klient",
     }));
-  return sortByDate([...reflections.filter((item) => item.clientId === clientId), ...own], "desc");
+  return sortByDate(
+    [...data.reflections.filter((item) => item.clientId === clientId), ...own],
+    "desc",
+  );
 }
 
-export function listInsights(coachId: string, clientId: string): Insight[] {
-  if (!getClient(coachId, clientId)) return [];
-  return sortByDate(insights.filter((item) => item.clientId === clientId), "desc");
+export function listInsights(
+  coachId: string,
+  clientId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): Insight[] {
+  if (!getClient(coachId, clientId, data)) return [];
+  return sortByDate(data.insights.filter((item) => item.clientId === clientId), "desc");
 }
 
 /** Åtaganden. Klientens statusändringar läggs ovanpå seed-datan. */
@@ -197,10 +257,11 @@ export function listCommitments(
   coachId: string,
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): Commitment[] {
-  if (!getClient(coachId, clientId)) return [];
+  if (!getClient(coachId, clientId, data)) return [];
   return sortByDate(
-    commitments
+    data.commitments
       .filter((item) => item.clientId === clientId)
       .map((commitment) => {
         const update = state.commitments[commitment.id];
@@ -224,27 +285,33 @@ export function getSessionPrep(
   coachId: string,
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): DemoSessionPrep | null {
-  if (!getClient(coachId, clientId)) return null;
-  return state.prep[clientId] ?? null;
+  if (!getClient(coachId, clientId, data)) return null;
+  return state.prep[clientId] ?? data.sessionPreparations[clientId] ?? null;
 }
 
 export function listClientDocuments(
   coachId: string,
   clientId: string,
   audience: "coach" | "klient" = "coach",
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): PortalDocument[] {
-  if (!getClient(coachId, clientId)) return [];
-  return documents.filter((item) => {
+  if (!getClient(coachId, clientId, data)) return [];
+  return data.documents.filter((item) => {
     if (item.ownerType !== "klient" || item.ownerId !== clientId) return false;
     if (audience === "klient") return item.visibility !== "coach";
     return true;
   });
 }
 
-export function listEngagementDocuments(coachId: string, engagementId: string): PortalDocument[] {
-  if (!getEngagement(coachId, engagementId)) return [];
-  return documents.filter((item) => item.ownerType === "uppdrag" && item.ownerId === engagementId);
+export function listEngagementDocuments(
+  coachId: string,
+  engagementId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): PortalDocument[] {
+  if (!getEngagement(coachId, engagementId, data)) return [];
+  return data.documents.filter((item) => item.ownerType === "uppdrag" && item.ownerId === engagementId);
 }
 
 /* ------------------------------------------------------------------ vyer */
@@ -278,19 +345,20 @@ export function buildClientDossier(
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
   materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): ClientDossier | null {
-  const seed = getClient(coachId, clientId);
+  const seed = getClient(coachId, clientId, data);
   if (!seed) return null;
   const client = resolveClient(seed, state);
 
-  const engagement = getEngagement(coachId, client.engagementId);
-  const organisation = getOrganisation(coachId, client.organisationId);
+  const engagement = getEngagement(coachId, client.engagementId, data);
+  const organisation = getOrganisation(coachId, client.organisationId, data);
   if (!engagement || !organisation) return null;
 
-  const clientSessions = listSessions(coachId, clientId, state);
+  const clientSessions = listSessions(coachId, clientId, state, data);
   const completed = clientSessions.filter((item) => item.status === "genomford");
   const upcoming = clientSessions.filter((item) => item.status === "kommande");
-  const clientCommitments = listCommitments(coachId, clientId, state);
+  const clientCommitments = listCommitments(coachId, clientId, state, data);
 
   return {
     client,
@@ -300,14 +368,14 @@ export function buildClientDossier(
     completedSessions: completed,
     upcomingSession: upcoming[0] ?? null,
     lastSession: completed[completed.length - 1] ?? null,
-    reflections: listReflections(coachId, clientId, state),
-    insights: listInsights(coachId, clientId),
+    reflections: listReflections(coachId, clientId, state, data),
+    insights: listInsights(coachId, clientId, data),
     commitments: clientCommitments,
     openCommitments: clientCommitments.filter((item) => item.status !== "genomfort"),
-    documents: listClientDocuments(coachId, clientId),
-    materials: listClientMaterials(clientId, "coach", materialsState),
-    nextSessionMaterialCount: countMaterialsLinkedToNextSession(clientId, materialsState),
-    prep: getSessionPrep(coachId, clientId, state),
+    documents: listClientDocuments(coachId, clientId, "coach", data),
+    materials: listClientMaterials(clientId, "coach", materialsState, data.materials),
+    nextSessionMaterialCount: countMaterialsLinkedToNextSession(clientId, materialsState, data.materials),
+    prep: getSessionPrep(coachId, clientId, state, data),
     clientWrittenReflectionIds: state.reflections
       .filter((item) => item.clientId === clientId)
       .map((item) => item.id),
@@ -321,8 +389,9 @@ export async function getClientDossier(
   return buildClientDossier(
     coachId,
     clientId,
-    await readDemoState(),
-    await readDemoMaterialsState(),
+    EMPTY_DEMO_STATE,
+    EMPTY_DEMO_MATERIALS_STATE,
+    await fetchPortalRepositoryData(),
   );
 }
 
@@ -348,19 +417,20 @@ export function buildEngagementOverview(
   coachId: string,
   engagementId: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): EngagementOverview | null {
-  const engagement = getEngagement(coachId, engagementId);
+  const engagement = getEngagement(coachId, engagementId, data);
   if (!engagement) return null;
-  const organisation = getOrganisation(coachId, engagement.organisationId);
+  const organisation = getOrganisation(coachId, engagement.organisationId, data);
   if (!organisation) return null;
 
-  const participants = listClientsForEngagement(coachId, engagementId, state).map((client) => {
-    const clientSessions = listSessions(coachId, client.id, state);
+  const participants = listClientsForEngagement(coachId, engagementId, state, data).map((client) => {
+    const clientSessions = listSessions(coachId, client.id, state, data);
     return {
       client,
       completedSessions: clientSessions.filter((item) => item.status === "genomford").length,
       upcomingSession: clientSessions.find((item) => item.status === "kommande") ?? null,
-      openCommitments: listCommitments(coachId, client.id, state).filter(
+      openCommitments: listCommitments(coachId, client.id, state, data).filter(
         (item) => item.status !== "genomfort",
       ).length,
     };
@@ -372,7 +442,7 @@ export function buildEngagementOverview(
     participants,
     totalCompletedSessions: participants.reduce((sum, p) => sum + p.completedSessions, 0),
     totalUpcomingSessions: participants.filter((p) => p.upcomingSession).length,
-    documents: listEngagementDocuments(coachId, engagementId),
+    documents: listEngagementDocuments(coachId, engagementId, data),
   };
 }
 
@@ -380,7 +450,7 @@ export async function getEngagementOverview(
   coachId: string,
   engagementId: string,
 ): Promise<EngagementOverview | null> {
-  return buildEngagementOverview(coachId, engagementId, await readDemoState());
+  return buildEngagementOverview(coachId, engagementId, EMPTY_DEMO_STATE, await fetchPortalRepositoryData());
 }
 
 /** Klientens eget perspektiv. Privata coachanteckningar filtreras bort. */
@@ -406,15 +476,16 @@ export function buildClientPerspective(
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
   materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): ClientPerspective | null {
-  const seed = getClient(coachId, clientId);
+  const seed = getClient(coachId, clientId, data);
   if (!seed) return null;
   const client = resolveClient(seed, state);
-  const engagement = getEngagement(coachId, client.engagementId);
-  const organisation = getOrganisation(coachId, client.organisationId);
+  const engagement = getEngagement(coachId, client.engagementId, data);
+  const organisation = getOrganisation(coachId, client.organisationId, data);
   if (!engagement || !organisation) return null;
 
-  const stripped = listSessions(coachId, clientId, state).map((session) => {
+  const stripped = listSessions(coachId, clientId, state, data).map((session) => {
     const shared: Omit<CoachingSession, "coachNotes"> = {
       id: session.id,
       clientId: session.clientId,
@@ -432,7 +503,7 @@ export function buildClientPerspective(
     return shared;
   });
 
-  const clientCommitments = listCommitments(coachId, clientId, state);
+  const clientCommitments = listCommitments(coachId, clientId, state, data);
 
   return {
     client,
@@ -442,13 +513,13 @@ export function buildClientPerspective(
     sessions: stripped,
     completedSessions: stripped.filter((item) => item.status === "genomford"),
     upcomingSession: stripped.find((item) => item.status === "kommande") ?? null,
-    reflections: listReflections(coachId, clientId, state),
+    reflections: listReflections(coachId, clientId, state, data),
     commitments: clientCommitments,
     openCommitments: clientCommitments.filter((item) => item.status !== "genomfort"),
-    documents: listClientDocuments(coachId, clientId, "klient"),
-    materials: listClientMaterials(clientId, "klient", materialsState),
-    nextSessionMaterialCount: countMaterialsLinkedToNextSession(clientId, materialsState),
-    prep: getSessionPrep(coachId, clientId, state),
+    documents: listClientDocuments(coachId, clientId, "klient", data),
+    materials: listClientMaterials(clientId, "klient", materialsState, data.materials),
+    nextSessionMaterialCount: countMaterialsLinkedToNextSession(clientId, materialsState, data.materials),
+    prep: getSessionPrep(coachId, clientId, state, data),
   };
 }
 
@@ -459,8 +530,9 @@ export async function getClientPerspective(
   return buildClientPerspective(
     coachId,
     clientId,
-    await readDemoState(),
-    await readDemoMaterialsState(),
+    EMPTY_DEMO_STATE,
+    EMPTY_DEMO_MATERIALS_STATE,
+    await fetchPortalRepositoryData(),
   );
 }
 
@@ -478,8 +550,12 @@ export type ClientActivity = {
 };
 
 /** Vad klienten har lämnat sedan seed-läget. Driver coachens aviseringar. */
-export function buildClientActivity(coachId: string, state: DemoState): ClientActivity[] {
-  const byId = new Map(listClients(coachId, state).map((item) => [item.id, item]));
+export function buildClientActivity(
+  coachId: string,
+  state: DemoState,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): ClientActivity[] {
+  const byId = new Map(listClients(coachId, state, data).map((item) => [item.id, item]));
   const items: ClientActivity[] = [];
 
   for (const reflection of state.reflections) {
@@ -513,7 +589,7 @@ export function buildClientActivity(coachId: string, state: DemoState): ClientAc
   }
 
   for (const [commitmentId, update] of Object.entries(state.commitments)) {
-    const seed = commitments.find((item) => item.id === commitmentId);
+    const seed = data.commitments.find((item) => item.id === commitmentId);
     const client = seed ? byId.get(seed.clientId) : undefined;
     if (!seed || !client) continue;
     items.push({
@@ -546,8 +622,9 @@ export function buildDashboardData(
   coachId: string,
   todayIso: string,
   state: DemoState = EMPTY_DEMO_STATE,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): DashboardData {
-  if (!coachHasAccess(coachId)) {
+  if (!coachHasAccess(coachId, data)) {
     return {
       upcomingSessions: [],
       sessionsWithinWeek: 0,
@@ -560,13 +637,13 @@ export function buildDashboardData(
     };
   }
 
-  const allClients = listClients(coachId, state);
+  const allClients = listClients(coachId, state, data);
   const clientById = new Map(allClients.map((item) => [item.id, item]));
-  const engagementById = new Map(listEngagements(coachId).map((item) => [item.id, item]));
+  const engagementById = new Map(listEngagements(coachId, data).map((item) => [item.id, item]));
 
   const upcoming = allClients
     .flatMap((client) =>
-      listSessions(coachId, client.id, state).filter((session) => session.status === "kommande"),
+      listSessions(coachId, client.id, state, data).filter((session) => session.status === "kommande"),
     )
     .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))
     .map((session) => {
@@ -583,14 +660,14 @@ export function buildDashboardData(
 
   const recentReflections = allClients
     .flatMap((client) =>
-      listReflections(coachId, client.id, state).map((reflection) => ({ reflection, client })),
+      listReflections(coachId, client.id, state, data).map((reflection) => ({ reflection, client })),
     )
     .sort((a, b) => b.reflection.date.localeCompare(a.reflection.date))
     .slice(0, 4);
 
   const openCommitments = allClients
     .flatMap((client) =>
-      listCommitments(coachId, client.id, state)
+      listCommitments(coachId, client.id, state, data)
         .filter((item) => item.status === "oppet")
         .map((commitment) => ({ commitment, client })),
     )
@@ -608,9 +685,9 @@ export function buildDashboardData(
     nextSession: relevant[0] ?? null,
     recentReflections,
     openCommitments,
-    engagements: listEngagements(coachId),
+    engagements: listEngagements(coachId, data),
     clientCount: allClients.length,
-    clientActivity: buildClientActivity(coachId, state),
+    clientActivity: buildClientActivity(coachId, state, data),
   };
 }
 
@@ -618,7 +695,7 @@ export async function getDashboardData(
   coachId: string,
   todayIso: string,
 ): Promise<DashboardData> {
-  return buildDashboardData(coachId, todayIso, await readDemoState());
+  return buildDashboardData(coachId, todayIso, EMPTY_DEMO_STATE, await fetchPortalRepositoryData());
 }
 
 /* --------------------------------------------------- operativ översikt */
@@ -675,6 +752,7 @@ export function buildOperationsOverview(
   todayIso: string,
   state: DemoState = EMPTY_DEMO_STATE,
   horizonDays = 21,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): OperationsOverview {
   const empty: OperationsOverview = {
     today: [],
@@ -690,10 +768,10 @@ export function buildOperationsOverview(
       activeClients: 0,
     },
   };
-  if (!coachHasAccess(coachId)) return empty;
+  if (!coachHasAccess(coachId, data)) return empty;
 
-  const allClients = listClients(coachId, state);
-  const allEngagements = listEngagements(coachId);
+  const allClients = listClients(coachId, state, data);
+  const allEngagements = listEngagements(coachId, data);
   const engagementById = new Map(allEngagements.map((item) => [item.id, item]));
 
   const horizon = new Date(`${todayIso}T00:00:00Z`);
@@ -713,12 +791,12 @@ export function buildOperationsOverview(
   for (const client of allClients) {
     const engagement = engagementById.get(client.engagementId);
     if (!engagement) continue;
-    const organisation = getOrganisation(coachId, client.organisationId);
+    const organisation = getOrganisation(coachId, client.organisationId, data);
 
-    const clientSessions = listSessions(coachId, client.id, state);
+    const clientSessions = listSessions(coachId, client.id, state, data);
     completed += clientSessions.filter((item) => item.status === "genomford").length;
 
-    const prep = state.prep[client.id];
+    const prep = state.prep[client.id] ?? data.sessionPreparations[client.id];
     if (prep) preparationsReceived += 1;
 
     for (const session of clientSessions) {
@@ -754,7 +832,7 @@ export function buildOperationsOverview(
       }
     }
 
-    const openCommitments = listCommitments(coachId, client.id, state).filter(
+    const openCommitments = listCommitments(coachId, client.id, state, data).filter(
       (commitment) => commitment.status === "oppet",
     );
     followUpsRequired += openCommitments.length;
@@ -828,5 +906,314 @@ export async function getOperationsOverview(
   todayIso: string,
   horizonDays = 21,
 ): Promise<OperationsOverview> {
-  return buildOperationsOverview(coachId, todayIso, await readDemoState(), horizonDays);
+  return buildOperationsOverview(
+    coachId,
+    todayIso,
+    EMPTY_DEMO_STATE,
+    horizonDays,
+    await fetchPortalRepositoryData(),
+  );
 }
+
+/* ------------------------------------------------------- Supabase-hämtning */
+
+const EMPTY_AGREEMENT: CoachingAgreement = {
+  agreedAt: "",
+  purpose: "",
+  scope: "",
+  cadence: "",
+  confidentiality: "",
+  sponsorSharing: "",
+  ethics: "",
+  clientResponsibility: "",
+};
+
+const EMPTY_GOAL: DevelopmentGoal = {
+  headline: "",
+  clientWording: "",
+  baseline: "",
+  successCriteria: [],
+  horizon: "",
+};
+
+function groupBy<T, K>(items: T[], keyOf: (item: T) => K): Map<K, T[]> {
+  const map = new Map<K, T[]>();
+  for (const item of items) {
+    const key = keyOf(item);
+    const list = map.get(key);
+    if (list) list.push(item);
+    else map.set(key, [item]);
+  }
+  return map;
+}
+
+/**
+ * Hämtar hela den ögonblicksbild av data som den inloggade sessionen (coach
+ * eller klient) har rätt att se, via RLS. Anropas oavsett roll — för en
+ * klient returnerar t.ex. session_coach_notes helt enkelt en tom lista, eftersom
+ * ingen policy alls finns för klienter på den tabellen. Kontextisoleringen
+ * upprätthålls därmed på databasnivå, inte bara i applikationskoden.
+ */
+async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
+  const supabase = await createSupabaseServerClient();
+
+  const [
+    { data: coachRows },
+    { data: organisationRows },
+    { data: engagementRows },
+    { data: milestoneRows },
+    { data: clientRows },
+    { data: agreementRows },
+    { data: goalRows },
+    { data: sessionRows },
+    { data: summaryRows },
+    { data: coachNoteRows },
+    { data: prepRows },
+    { data: reflectionRows },
+    { data: insightRows },
+    { data: commitmentRows },
+    { data: documentRows },
+    { data: materialRows },
+  ] = await Promise.all([
+    supabase.from("coaches").select("*"),
+    supabase.from("organisations").select("*"),
+    supabase.from("engagements").select("*"),
+    supabase.from("milestones").select("*"),
+    supabase.from("clients").select("*"),
+    supabase.from("coaching_agreements").select("*"),
+    supabase.from("development_goals").select("*"),
+    supabase.from("sessions").select("*"),
+    supabase.from("session_summaries").select("*"),
+    supabase.from("session_coach_notes").select("*"),
+    supabase.from("session_preparations").select("*"),
+    supabase.from("reflections").select("*"),
+    supabase.from("insights").select("*"),
+    supabase.from("commitments").select("*"),
+    supabase.from("documents").select("*"),
+    supabase.from("materials").select("*"),
+  ]);
+
+  const coachRow = coachRows?.[0];
+  const coach: CoachProfile = coachRow
+    ? {
+        id: coachRow.id,
+        name: coachRow.name,
+        title: coachRow.title,
+        initials: coachRow.initials,
+        email: coachRow.email,
+        credential: coachRow.credential,
+        focus: coachRow.focus,
+      }
+    : { id: "", name: "", title: "", initials: "", email: "", credential: "", focus: "" };
+
+  const milestonesByEngagement = groupBy(milestoneRows ?? [], (row) => row.engagement_id);
+  const clientsByEngagement = groupBy(clientRows ?? [], (row) => row.engagement_id);
+
+  const organisations: Organisation[] = (organisationRows ?? []).map((row) => ({
+    id: row.id,
+    name: row.name,
+    sizeLabel: row.size_label,
+    industry: row.industry,
+    location: row.location,
+    sponsor: row.sponsor_name ? { name: row.sponsor_name, role: row.sponsor_role ?? "" } : undefined,
+  }));
+
+  const engagements: Engagement[] = (engagementRows ?? []).map((row) => {
+    const milestones: Milestone[] = (milestonesByEngagement.get(row.id) ?? []).map((m) => ({
+      id: m.id,
+      label: m.label,
+      date: m.date,
+      status: m.status,
+    }));
+    return {
+      id: row.id,
+      organisationId: row.organisation_id,
+      title: row.title,
+      kind: row.kind,
+      kindLabel: row.kind_label,
+      purpose: row.purpose,
+      scopeNote: row.scope_note,
+      periodLabel: row.period_label,
+      startDate: row.start_date,
+      endDate: row.end_date,
+      status: row.status,
+      participantIds: (clientsByEngagement.get(row.id) ?? []).map((c) => c.id),
+      milestones,
+      nextReview:
+        row.next_review_label && row.next_review_date
+          ? { label: row.next_review_label, date: row.next_review_date }
+          : undefined,
+      sponsorReporting: row.sponsor_reporting,
+    };
+  });
+
+  const agreementByClient = new Map((agreementRows ?? []).map((row) => [row.client_id, row]));
+  const goalByClient = new Map((goalRows ?? []).map((row) => [row.client_id, row]));
+
+  const clients: Client[] = (clientRows ?? []).map((row) => {
+    const agreement = agreementByClient.get(row.id);
+    const goal = goalByClient.get(row.id);
+    return {
+      id: row.id,
+      engagementId: row.engagement_id,
+      organisationId: row.organisation_id,
+      name: row.name,
+      initials: row.initials,
+      role: row.role,
+      email: row.email,
+      phone: row.phone,
+      headline: row.headline,
+      startedAt: row.started_at,
+      depth: row.depth,
+      agreement: agreement
+        ? {
+            agreedAt: agreement.agreed_at,
+            purpose: agreement.purpose,
+            scope: agreement.scope,
+            cadence: agreement.cadence,
+            confidentiality: agreement.confidentiality,
+            sponsorSharing: agreement.sponsor_sharing,
+            ethics: agreement.ethics,
+            clientResponsibility: agreement.client_responsibility,
+          }
+        : EMPTY_AGREEMENT,
+      goal: goal
+        ? {
+            headline: goal.headline,
+            clientWording: goal.client_wording,
+            baseline: goal.baseline,
+            successCriteria: goal.success_criteria,
+            horizon: goal.horizon,
+          }
+        : EMPTY_GOAL,
+      recurringThemes: row.recurring_themes,
+    };
+  });
+
+  const summaryBySession = new Map((summaryRows ?? []).map((row) => [row.session_id, row]));
+  const coachNotesBySession = new Map((coachNoteRows ?? []).map((row) => [row.session_id, row]));
+
+  const sessions: CoachingSession[] = (sessionRows ?? []).map((row) => {
+    const summary = summaryBySession.get(row.id);
+    const coachNote = coachNotesBySession.get(row.id);
+    return {
+      id: row.id,
+      clientId: row.client_id,
+      number: row.number,
+      date: row.date,
+      time: row.time,
+      durationMinutes: row.duration_minutes,
+      status: row.status,
+      clientFocus: row.client_focus,
+      desiredOutcome: row.desired_outcome,
+      coachNotes: coachNote?.notes,
+      summary: summary
+        ? {
+            focus: summary.focus,
+            insights: summary.insights,
+            awareness: summary.awareness,
+            newPerspectives: summary.new_perspectives,
+            commitments: summary.commitments,
+            followUp: summary.follow_up,
+            possibleNextFocus: summary.possible_next_focus,
+            approved: summary.approved,
+            approvedAt: summary.approved_at ?? undefined,
+          }
+        : undefined,
+      location: row.location,
+    };
+  });
+
+  const sessionPreparations: Record<string, DemoSessionPrep> = {};
+  for (const row of prepRows ?? []) {
+    sessionPreparations[row.client_id] = {
+      clientId: row.client_id,
+      focus: row.focus,
+      desiredOutcome: row.desired_outcome,
+      changed: row.changed,
+      followUp: row.follow_up,
+      updatedAt: row.updated_at,
+    };
+  }
+
+  const reflections: Reflection[] = (reflectionRows ?? []).map((row) => ({
+    id: row.id,
+    clientId: row.client_id,
+    sessionId: row.session_id ?? undefined,
+    date: row.date,
+    prompt: row.prompt,
+    text: row.text,
+    visibility: "coach_klient",
+  }));
+
+  const insights: Insight[] = (insightRows ?? []).map((row) => ({
+    id: row.id,
+    clientId: row.client_id,
+    sessionId: row.session_id,
+    date: row.date,
+    text: row.text,
+    visibility: "coach_klient",
+  }));
+
+  const commitments: Commitment[] = (commitmentRows ?? []).map((row) => ({
+    id: row.id,
+    clientId: row.client_id,
+    sessionId: row.session_id,
+    date: row.date,
+    text: row.text,
+    dueLabel: row.due_label,
+    status: row.status,
+    clientNote: row.client_note ?? undefined,
+    completedAt: row.completed_at ?? undefined,
+    visibility: "coach_klient",
+  }));
+
+  const documents: PortalDocument[] = (documentRows ?? []).map((row) => ({
+    id: row.id,
+    ownerType: row.owner_type,
+    ownerId: row.owner_id,
+    title: row.title,
+    kind: row.kind,
+    date: row.date,
+    description: row.description,
+    visibility: row.visibility,
+  }));
+
+  const materials: CoachingMaterial[] = (materialRows ?? []).map((row) => ({
+    id: row.id,
+    ownerClientId: row.owner_client_id,
+    createdByRole: row.created_by_role,
+    createdById: row.created_by_id,
+    title: row.title,
+    fileName: row.file_name ?? undefined,
+    mimeType: row.mime_type ?? undefined,
+    sizeBytes: row.size_bytes ?? undefined,
+    category: row.category,
+    noteText: row.note_text ?? undefined,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    sharingLevel: row.sharing_level,
+    source: row.source,
+    linkType: row.link_type,
+    linkedSessionId: row.linked_session_id ?? undefined,
+    linkedCommitmentId: row.linked_commitment_id ?? undefined,
+    comment: row.comment ?? undefined,
+    hasFilePayload: Boolean(row.storage_path),
+  }));
+
+  return {
+    coach,
+    organisations,
+    engagements,
+    clients,
+    sessions,
+    reflections,
+    insights,
+    commitments,
+    documents,
+    materials,
+    sessionPreparations,
+  };
+}
+
+export { fetchPortalRepositoryData };

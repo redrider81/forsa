@@ -26,11 +26,12 @@ function sortMaterials(items: CoachingMaterial[]): CoachingMaterial[] {
 function mergeMaterialsForClient(
   clientId: string,
   materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
+  materials: CoachingMaterial[] = seedMaterials,
 ): CoachingMaterial[] {
   const deleted = new Set(materialsState.deletedIds);
   const byId = new Map<string, CoachingMaterial>();
 
-  for (const seed of seedMaterials) {
+  for (const seed of materials) {
     if (seed.ownerClientId !== clientId || deleted.has(seed.id)) continue;
     byId.set(seed.id, { ...seed });
   }
@@ -65,8 +66,9 @@ export function listClientMaterials(
   clientId: string,
   audience: MaterialAudience,
   materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
+  materials: CoachingMaterial[] = seedMaterials,
 ): CoachingMaterial[] {
-  const merged = mergeMaterialsForClient(clientId, materialsState);
+  const merged = mergeMaterialsForClient(clientId, materialsState, materials);
   if (audience === "coach") {
     return merged.filter(visibleToCoach);
   }
@@ -78,18 +80,21 @@ export function getClientMaterial(
   materialId: string,
   audience: MaterialAudience,
   materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
+  materials: CoachingMaterial[] = seedMaterials,
 ): CoachingMaterial | null {
   return (
-    listClientMaterials(clientId, audience, materialsState).find((item) => item.id === materialId) ??
-    null
+    listClientMaterials(clientId, audience, materialsState, materials).find(
+      (item) => item.id === materialId,
+    ) ?? null
   );
 }
 
 export function countMaterialsLinkedToNextSession(
   clientId: string,
   materialsState: DemoMaterialsState = EMPTY_DEMO_MATERIALS_STATE,
+  materials: CoachingMaterial[] = seedMaterials,
 ): number {
-  return listClientMaterials(clientId, "klient", materialsState).filter(
+  return listClientMaterials(clientId, "klient", materialsState, materials).filter(
     (item) => item.linkType === "next_session",
   ).length;
 }

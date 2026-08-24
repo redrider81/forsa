@@ -3,14 +3,15 @@ import { notFound } from "next/navigation";
 import PrepForm from "@/components/klient/prep-form";
 import { Card, CardTitle, Label, Muted, klientLinkButtonClass } from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
-import { getClientPerspective, getCoach } from "@/lib/portal/repository";
+import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
 import { formatWeekdayDate } from "@/lib/portal/format";
 
 export default async function PrepPage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const view = await getClientPerspective(getCoach().id, session.clientId);
+  const data = await fetchPortalRepositoryData();
+  const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 
   return (

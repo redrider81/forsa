@@ -1,80 +1,62 @@
 import "server-only";
 
-import { cookies } from "next/headers";
-import {
-  SESSION_MAX_AGE_SECONDS,
-  createSessionToken as signToken,
-  verifySessionToken as verifyToken,
-  type PortalSession,
-} from "@/lib/portal/token";
-
-export type { PortalSession };
-
-export const SESSION_COOKIE = "cvb_portal_session";
+import type { PortalRole } from "@/lib/portal/token";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
- * Hemligheten läses enbart server-side och ingår aldrig i klientbundlen.
- * PORTAL_SESSION_SECRET ska sättas i Vercel. Saknas den används en tydligt
- * märkt reservhemlighet så att live-demon aldrig blockeras — den måste vara
- * stabil, eftersom sessionen annars inte kan verifieras mellan instanser.
+ * Sessionen är Supabase Auths egen — cookien sätts och läses av
+ * @supabase/ssr (se lib/supabase/server.ts), inte av denna modul. Detta
+ * lager slår bara upp vilken profil (coach eller klient) den inloggade
+ * Auth-användaren är kopplad till.
  */
-const FALLBACK_SECRET = "cvb-portal-demo-fallback-secret-set-PORTAL_SESSION_SECRET";
 
-let warned = false;
+type PortalProfile = {
+  id: string;
+  role: PortalRole;
+  coach_id: string | null;
+  client_id: string | null;
+  name: string;
+};
 
-function sessionSecret(): string {
-  const configured = process.env.PORTAL_SESSION_SECRET;
-  if (configured && configured.length >= 16) return configured;
+async function readProfile(): Promise<PortalProfile | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data: userData, error } = await supabase.auth.getUser();
+  if (error || !userData.user) return null;
 
-  if (!warned) {
-    warned = true;
-    console.warn(
-      "[CVB Coaching] PORTAL_SESSION_SECRET saknas - anvander reservhemlighet. Satt variabeln i Vercel infor live-demo.",
-    );
-  }
-  return FALLBACK_SECRET;
-}
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id, role, coach_id, client_id, name")
+    .eq("id", userData.user.id)
+    .single();
 
-export function createSessionToken(session: Omit<PortalSession, "issuedAt">): string {
-  return signToken(session, sessionSecret());
-}
-
-export function verifySessionToken(token: string | undefined): PortalSession | null {
-  return verifyToken(token, sessionSecret());
-}
-
-export function sessionCookieOptions() {
-  return {
-    httpOnly: true,
-    sameSite: "lax" as const,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: SESSION_MAX_AGE_SECONDS,
-  };
-}
-
-/** Läser och verifierar sessionen från cookien. Returnerar null om ogiltig. */
-export async function readSession(): Promise<PortalSession | null> {
-  const store = await cookies();
-  return verifySessionToken(store.get(SESSION_COOKIE)?.value);
+  return profile ?? null;
 }
 
 export type CoachSession = { userId: string; name: string; coachId: string };
 export type ClientSession = { userId: string; name: string; clientId: string };
+export type PortalSession = { userId: string; name: string; role: PortalRole };
+
+/** Rollagnostisk sessionsläsning — används av inloggningsvyerna för att avgöra vart en redan inloggad användare ska skickas. */
+export async function readSession(): Promise<PortalSession | null> {
+  const profile = await readProfile();
+  if (!profile) return null;
+  return { userId: profile.id, name: profile.name, role: profile.role };
+}
 
 /**
  * Coachsession. En klientsession ger aldrig coachåtkomst — rollen kommer från
- * den signerade token och kan inte sättas från klienten.
+ * profiles-raden kopplad till den signerade Supabase Auth-sessionen och kan
+ * inte sättas från klienten.
  */
 export async function readCoachSession(): Promise<CoachSession | null> {
-  const session = await readSession();
-  if (!session || session.role !== "coach") return null;
-  return { userId: session.userId, name: session.name, coachId: session.subjectId };
+  const profile = await readProfile();
+  if (!profile || profile.role !== "coach" || !profile.coach_id) return null;
+  return { userId: profile.id, name: profile.name, coachId: profile.coach_id };
 }
 
 /** Klientsession. Ger endast åtkomst till den egna coachingrelationen. */
 export async function readClientSession(): Promise<ClientSession | null> {
-  const session = await readSession();
-  if (!session || session.role !== "klient") return null;
-  return { userId: session.userId, name: session.name, clientId: session.subjectId };
+  const profile = await readProfile();
+  if (!profile || profile.role !== "klient" || !profile.client_id) return null;
+  return { userId: profile.id, name: profile.name, clientId: profile.client_id };
 }

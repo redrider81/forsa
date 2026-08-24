@@ -8,7 +8,6 @@ import {
 } from "@/lib/portal/material-labels";
 import {
   deleteMaterialFile,
-  getMaterialFile,
   openStoredMaterialFile,
   previewStoredMaterialFile,
 } from "@/lib/portal/client-material-files";
@@ -59,7 +58,7 @@ export default function MaterialRow({
   const [busy, setBusy] = useState(false);
 
   const linked = useMemo(() => linkLabel(material, linkContext), [material, linkContext]);
-  const hasLocalFile = Boolean(material.hasFilePayload && getMaterialFile(material.id, clientId));
+  const hasStoredFile = Boolean(material.hasFilePayload);
 
   async function remove() {
     if (!window.confirm(`Ta bort "${material.title}"? Detta går inte att ångra.`)) return;
@@ -81,7 +80,9 @@ export default function MaterialRow({
         setBusy(false);
         return;
       }
-      if (data.removeLocalFile) deleteMaterialFile(material.id, clientId);
+      if (data.removeLocalFile && material.fileName) {
+        await deleteMaterialFile(material.id, clientId, material.fileName);
+      }
       onChanged();
     } catch {
       setError("Det gick inte att nå tjänsten just nu.");
@@ -90,18 +91,23 @@ export default function MaterialRow({
     }
   }
 
-  function openFile() {
+  async function openFile() {
     if (material.source === "client_note") {
       setPreviewUrl(null);
       return;
     }
-    if (hasLocalFile) {
-      const inline = previewStoredMaterialFile(material.id, clientId);
-      if (inline && (material.mimeType?.startsWith("image/") || material.mimeType === "application/pdf")) {
+    if (hasStoredFile && material.fileName) {
+      const inline = await previewStoredMaterialFile(
+        material.id,
+        clientId,
+        material.fileName,
+        material.mimeType,
+      );
+      if (inline) {
         window.open(inline, "_blank", "noopener,noreferrer");
         return;
       }
-      const opened = openStoredMaterialFile(material.id, clientId, material.fileName ?? material.title);
+      const opened = await openStoredMaterialFile(material.id, clientId, material.fileName ?? material.title);
       if (opened) return;
     }
     window.alert(

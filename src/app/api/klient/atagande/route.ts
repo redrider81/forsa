@@ -1,13 +1,13 @@
 import { readClientSession } from "@/lib/portal/session";
-import { updateDemoState } from "@/lib/portal/store/demo-store";
-import { listCommitments } from "@/lib/portal/repository";
-import { getCoach } from "@/lib/portal/repository";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const STATUSES = new Set(["oppet", "pagar", "genomfort"]);
 
 /**
  * Klienten uppdaterar status på ett eget åtagande.
- * Åtagandet måste tillhöra den inloggade klienten — annars 403.
+ * update_own_commitment_status (SECURITY DEFINER) begränsar detta till
+ * status/client_note/completed_at på åtaganden som tillhör den inloggade
+ * klienten — samma ägarkontroll som tidigare, nu upprätthållen av databasen.
  */
 export async function POST(request: Request) {
   const session = await readClientSession();
@@ -28,27 +28,23 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Ogiltig uppdatering." }, { status: 400 });
   }
 
-  // Ägarkontroll server-side: åtagandet måste finnas hos den inloggade klienten.
-  const owned = listCommitments(getCoach().id, session.clientId).some(
-    (item) => item.id === commitmentId,
-  );
-  if (!owned) {
+  const note = typeof clientNote === "string" ? clientNote.trim().slice(0, 400) : "";
+  const completedAt = status === "genomfort" ? new Date().toISOString().slice(0, 10) : null;
+
+  const supabase = await createSupabaseServerClient();
+  // Den genererade RPC-signaturen markerar p_client_note/p_completed_at som
+  // icke-nullbara trots att SQL-funktionen accepterar NULL för båda —
+  // typegeneratorn känner inte av nullbarhet på funktionsparametrar.
+  const { error } = await supabase.rpc("update_own_commitment_status", {
+    p_commitment_id: commitmentId,
+    p_status: status as "oppet" | "pagar" | "genomfort",
+    p_client_note: (note || null) as unknown as string,
+    p_completed_at: completedAt as unknown as string,
+  });
+
+  if (error) {
     return Response.json({ ok: false, error: "Åtagandet kunde inte hittas." }, { status: 403 });
   }
-
-  const note = typeof clientNote === "string" ? clientNote.trim().slice(0, 400) : "";
-
-  await updateDemoState((state) => ({
-    ...state,
-    commitments: {
-      ...state.commitments,
-      [commitmentId]: {
-        status: status as "oppet" | "pagar" | "genomfort",
-        clientNote: note || undefined,
-        updatedAt: new Date().toISOString(),
-      },
-    },
-  }));
 
   return Response.json({ ok: true });
 }

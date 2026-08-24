@@ -1,15 +1,14 @@
 import { readClientSession } from "@/lib/portal/session";
-import { getCoach, listCommitments, listSessions } from "@/lib/portal/repository";
-import { updateDemoMaterialsState } from "@/lib/portal/store/demo-materials-store";
 import {
-  canClientDelete,
-  canClientEdit,
-  getClientMaterial,
-  isSharingLevel,
-  resolveLinkInput,
-} from "@/lib/portal/materials-repository";
+  fetchPortalRepositoryData,
+  listCommitments,
+  listSessions,
+  type PortalRepositoryData,
+} from "@/lib/portal/repository";
+import { canClientDelete, canClientEdit, isSharingLevel } from "@/lib/portal/materials-repository";
 import { inferTitleFromFileName, validateMaterialFile } from "@/lib/portal/material-validation";
-import { todayIso } from "@/lib/portal/format";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
 import type {
   CoachingMaterial,
   MaterialCategory,
@@ -33,37 +32,78 @@ const LINK_TYPES = new Set<MaterialLinkType>([
   "none",
 ]);
 
-function parseLink(body: Record<string, unknown>) {
-  const linkType =
-    typeof body.linkType === "string" && LINK_TYPES.has(body.linkType as MaterialLinkType)
-      ? (body.linkType as MaterialLinkType)
-      : "none";
-  return resolveLinkInput({
-    linkType,
-    linkedSessionId:
-      typeof body.linkedSessionId === "string" ? body.linkedSessionId : undefined,
-    linkedCommitmentId:
-      typeof body.linkedCommitmentId === "string" ? body.linkedCommitmentId : undefined,
-  });
+function parseLinkType(raw: Record<string, unknown>): MaterialLinkType {
+  return typeof raw.linkType === "string" && LINK_TYPES.has(raw.linkType as MaterialLinkType)
+    ? (raw.linkType as MaterialLinkType)
+    : "none";
 }
 
 function validateOwnershipLinks(
   coachId: string,
   clientId: string,
-  link: ReturnType<typeof parseLink>,
+  linkType: MaterialLinkType,
+  data: PortalRepositoryData,
+  linkedSessionId?: string,
+  linkedCommitmentId?: string,
 ): boolean {
-  if (link.linkType === "session" && link.linkedSessionId) {
-    return Boolean(listSessions(coachId, clientId).find((s) => s.id === link.linkedSessionId));
-  }
-  if (link.linkType === "commitment" && link.linkedCommitmentId) {
+  if (linkType === "session" && linkedSessionId) {
     return Boolean(
-      listCommitments(coachId, clientId).find((c) => c.id === link.linkedCommitmentId),
+      listSessions(coachId, clientId, undefined, data).find((s) => s.id === linkedSessionId),
+    );
+  }
+  if (linkType === "commitment" && linkedCommitmentId) {
+    return Boolean(
+      listCommitments(coachId, clientId, undefined, data).find((c) => c.id === linkedCommitmentId),
     );
   }
   return true;
 }
 
-/** Klienten skapar fil-metadata eller anteckning. Filbytes lagras lokalt i webbläsaren. */
+function mapMaterialRow(row: {
+  id: string;
+  owner_client_id: string;
+  created_by_role: "klient" | "coach";
+  created_by_id: string;
+  title: string;
+  file_name: string | null;
+  mime_type: string | null;
+  size_bytes: number | null;
+  category: MaterialCategory;
+  note_text: string | null;
+  created_at: string;
+  updated_at: string;
+  sharing_level: MaterialSharingLevel;
+  source: "client_upload" | "client_note" | "coach_shared";
+  link_type: MaterialLinkType;
+  linked_session_id: string | null;
+  linked_commitment_id: string | null;
+  comment: string | null;
+  storage_path: string | null;
+}): CoachingMaterial {
+  return {
+    id: row.id,
+    ownerClientId: row.owner_client_id,
+    createdByRole: row.created_by_role,
+    createdById: row.created_by_id,
+    title: row.title,
+    fileName: row.file_name ?? undefined,
+    mimeType: row.mime_type ?? undefined,
+    sizeBytes: row.size_bytes ?? undefined,
+    category: row.category,
+    noteText: row.note_text ?? undefined,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    sharingLevel: row.sharing_level,
+    source: row.source,
+    linkType: row.link_type,
+    linkedSessionId: row.linked_session_id ?? undefined,
+    linkedCommitmentId: row.linked_commitment_id ?? undefined,
+    comment: row.comment ?? undefined,
+    hasFilePayload: Boolean(row.storage_path),
+  };
+}
+
+/** Klienten skapar fil-metadata eller anteckning. Filbytes laddas upp separat till Supabase Storage. */
 export async function POST(request: Request) {
   const session = await readClientSession();
   if (!session) {
@@ -79,12 +119,16 @@ export async function POST(request: Request) {
 
   const raw = (body ?? {}) as Record<string, unknown>;
   const kind = raw.kind === "note" ? "note" : "file";
-  const coachId = getCoach().id;
-  const now = new Date().toISOString();
-  const today = todayIso();
-  const link = parseLink(raw);
+  const data = await fetchPortalRepositoryData();
+  const coachId = data.coach.id;
+  const linkType = parseLinkType(raw);
+  const linkedSessionId = typeof raw.linkedSessionId === "string" ? raw.linkedSessionId : undefined;
+  const linkedCommitmentId =
+    typeof raw.linkedCommitmentId === "string" ? raw.linkedCommitmentId : undefined;
 
-  if (!validateOwnershipLinks(coachId, session.clientId, link)) {
+  if (
+    !validateOwnershipLinks(coachId, session.clientId, linkType, data, linkedSessionId, linkedCommitmentId)
+  ) {
     return Response.json({ ok: false, error: "Kopplingen kunde inte hittas." }, { status: 400 });
   }
 
@@ -100,8 +144,8 @@ export async function POST(request: Request) {
         ? "anteckning"
         : "ovrigt";
 
-  const comment =
-    typeof raw.comment === "string" ? raw.comment.trim().slice(0, 400) : undefined;
+  const comment = typeof raw.comment === "string" ? raw.comment.trim().slice(0, 400) || null : null;
+  const supabase = await createSupabaseServerClient();
 
   if (kind === "note") {
     const title =
@@ -116,28 +160,30 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, error: "Anteckningen är för lång." }, { status: 400 });
     }
 
-    const material: CoachingMaterial = {
-      id: `mat-${Date.now().toString(36)}`,
-      ownerClientId: session.clientId,
-      createdByRole: "klient",
-      createdById: session.clientId,
-      title,
-      category: "anteckning",
-      noteText,
-      createdAt: today,
-      updatedAt: now,
-      sharingLevel,
-      source: "client_note",
-      ...link,
-      comment,
-    };
+    const { data: row, error } = await supabase
+      .from("materials")
+      .insert({
+        owner_client_id: session.clientId,
+        created_by_role: "klient",
+        created_by_id: session.clientId,
+        title,
+        category: "anteckning",
+        note_text: noteText,
+        sharing_level: sharingLevel,
+        source: "client_note",
+        link_type: linkType,
+        linked_session_id: linkType === "session" ? linkedSessionId ?? null : null,
+        linked_commitment_id: linkType === "commitment" ? linkedCommitmentId ?? null : null,
+        comment,
+      })
+      .select("*")
+      .single();
 
-    await updateDemoMaterialsState((state) => ({
-      ...state,
-      added: [...state.added, material],
-    }));
+    if (error || !row) {
+      return Response.json({ ok: false, error: "Det gick inte att spara." }, { status: 502 });
+    }
 
-    return Response.json({ ok: true, material, storeFileLocally: false });
+    return Response.json({ ok: true, material: mapMaterialRow(row), storeFileLocally: false });
   }
 
   const fileName = typeof raw.fileName === "string" ? raw.fileName : "";
@@ -153,31 +199,35 @@ export async function POST(request: Request) {
       ? raw.title.trim().slice(0, 120)
       : inferTitleFromFileName(fileName);
 
-  const material: CoachingMaterial = {
-    id: `mat-${Date.now().toString(36)}`,
-    ownerClientId: session.clientId,
-    createdByRole: "klient",
-    createdById: session.clientId,
-    title,
-    fileName,
-    mimeType: validation.mimeType,
-    sizeBytes,
-    category,
-    createdAt: today,
-    updatedAt: now,
-    sharingLevel,
-    source: "client_upload",
-    ...link,
-    comment,
-    hasFilePayload: true,
-  };
+  const { data: row, error } = await supabase
+    .from("materials")
+    .insert({
+      owner_client_id: session.clientId,
+      created_by_role: "klient",
+      created_by_id: session.clientId,
+      title,
+      file_name: fileName,
+      mime_type: validation.mimeType,
+      size_bytes: sizeBytes,
+      category,
+      sharing_level: sharingLevel,
+      source: "client_upload",
+      link_type: linkType,
+      linked_session_id: linkType === "session" ? linkedSessionId ?? null : null,
+      linked_commitment_id: linkType === "commitment" ? linkedCommitmentId ?? null : null,
+      comment,
+    })
+    .select("*")
+    .single();
 
-  await updateDemoMaterialsState((state) => ({
-    ...state,
-    added: [...state.added, material],
-  }));
+  if (error || !row) {
+    return Response.json({ ok: false, error: "Det gick inte att spara." }, { status: 502 });
+  }
 
-  return Response.json({ ok: true, material, storeFileLocally: true });
+  // storage_path sätts av klienten efter en lyckad uppladdning till Storage
+  // (se uploadMaterialFile i client-material-files.ts) — hasFilePayload blir
+  // sant först då. storeFileLocally styr att klienten laddar upp nu.
+  return Response.json({ ok: true, material: mapMaterialRow(row), storeFileLocally: true });
 }
 
 /** Klienten uppdaterar eget material. */
@@ -200,19 +250,33 @@ export async function PATCH(request: Request) {
     return Response.json({ ok: false, error: "Materialet kunde inte hittas." }, { status: 400 });
   }
 
-  const existing = getClientMaterial(session.clientId, materialId, "klient");
-  if (!existing || !canClientEdit(existing)) {
+  const supabase = await createSupabaseServerClient();
+  const { data: existingRow } = await supabase
+    .from("materials")
+    .select("*")
+    .eq("id", materialId)
+    .eq("owner_client_id", session.clientId)
+    .maybeSingle();
+
+  if (!existingRow || !canClientEdit(mapMaterialRow(existingRow))) {
     return Response.json({ ok: false, error: "Materialet kunde inte hittas." }, { status: 403 });
   }
 
-  const coachId = getCoach().id;
-  const link = raw.linkType ? parseLink(raw) : undefined;
-  if (link && !validateOwnershipLinks(coachId, session.clientId, link)) {
+  const data = await fetchPortalRepositoryData();
+  const coachId = data.coach.id;
+  const linkType = raw.linkType ? parseLinkType(raw) : undefined;
+  const linkedSessionId = typeof raw.linkedSessionId === "string" ? raw.linkedSessionId : undefined;
+  const linkedCommitmentId =
+    typeof raw.linkedCommitmentId === "string" ? raw.linkedCommitmentId : undefined;
+  if (
+    linkType &&
+    !validateOwnershipLinks(coachId, session.clientId, linkType, data, linkedSessionId, linkedCommitmentId)
+  ) {
     return Response.json({ ok: false, error: "Kopplingen kunde inte hittas." }, { status: 400 });
   }
 
-  const patch: Partial<CoachingMaterial> = {
-    updatedAt: new Date().toISOString(),
+  const patch: Database["public"]["Tables"]["materials"]["Update"] = {
+    updated_at: new Date().toISOString(),
   };
 
   if (typeof raw.title === "string" && raw.title.trim()) {
@@ -222,38 +286,28 @@ export async function PATCH(request: Request) {
     patch.category = raw.category as MaterialCategory;
   }
   if (typeof raw.comment === "string") {
-    patch.comment = raw.comment.trim().slice(0, 400) || undefined;
+    patch.comment = raw.comment.trim().slice(0, 400) || null;
   }
   if (typeof raw.sharingLevel === "string" && isSharingLevel(raw.sharingLevel)) {
-    patch.sharingLevel = raw.sharingLevel;
+    patch.sharing_level = raw.sharingLevel;
   }
-  if (typeof raw.noteText === "string" && existing.source === "client_note") {
+  if (typeof raw.noteText === "string" && existingRow.source === "client_note") {
     const noteText = raw.noteText.trim();
     if (noteText.length < 3) {
       return Response.json({ ok: false, error: "Skriv minst några ord i anteckningen." }, { status: 400 });
     }
-    patch.noteText = noteText.slice(0, 4000);
+    patch.note_text = noteText.slice(0, 4000);
   }
-  if (link) {
-    Object.assign(patch, link);
+  if (linkType) {
+    patch.link_type = linkType;
+    patch.linked_session_id = linkType === "session" ? linkedSessionId ?? null : null;
+    patch.linked_commitment_id = linkType === "commitment" ? linkedCommitmentId ?? null : null;
   }
 
-  const isAdded = existing.id.startsWith("mat-") && !existing.id.startsWith("mat-seed-");
-
-  await updateDemoMaterialsState((state) => {
-    if (isAdded && state.added.some((item) => item.id === materialId)) {
-      return {
-        ...state,
-        added: state.added.map((item) =>
-          item.id === materialId ? { ...item, ...patch, id: item.id } : item,
-        ),
-      };
-    }
-    return {
-      ...state,
-      updated: { ...state.updated, [materialId]: { ...state.updated[materialId], ...patch } },
-    };
-  });
+  const { error } = await supabase.from("materials").update(patch).eq("id", materialId);
+  if (error) {
+    return Response.json({ ok: false, error: "Det gick inte att spara." }, { status: 502 });
+  }
 
   return Response.json({ ok: true });
 }
@@ -277,18 +331,23 @@ export async function DELETE(request: Request) {
     return Response.json({ ok: false, error: "Materialet kunde inte hittas." }, { status: 400 });
   }
 
-  const existing = getClientMaterial(session.clientId, materialId, "klient");
+  const supabase = await createSupabaseServerClient();
+  const { data: existingRow } = await supabase
+    .from("materials")
+    .select("*")
+    .eq("id", materialId)
+    .eq("owner_client_id", session.clientId)
+    .maybeSingle();
+
+  const existing = existingRow ? mapMaterialRow(existingRow) : null;
   if (!existing || !canClientDelete(existing)) {
     return Response.json({ ok: false, error: "Materialet kunde inte tas bort." }, { status: 403 });
   }
 
-  await updateDemoMaterialsState((state) => ({
-    ...state,
-    added: state.added.filter((item) => item.id !== materialId),
-    deletedIds: state.deletedIds.includes(materialId)
-      ? state.deletedIds
-      : [...state.deletedIds, materialId],
-  }));
+  const { error } = await supabase.from("materials").delete().eq("id", materialId);
+  if (error) {
+    return Response.json({ ok: false, error: "Materialet kunde inte tas bort." }, { status: 502 });
+  }
 
   return Response.json({ ok: true, removeLocalFile: Boolean(existing.hasFilePayload) });
 }

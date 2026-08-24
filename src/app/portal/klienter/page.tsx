@@ -1,6 +1,7 @@
 import { readCoachSession } from "@/lib/portal/session";
 import { readDemoState } from "@/lib/portal/store/demo-store";
 import {
+  fetchPortalRepositoryData,
   getOrganisation,
   listClients,
   listEngagements,
@@ -22,8 +23,9 @@ export default async function ClientsPage() {
   if (!session) return null;
 
   const state = await readDemoState();
-  const engagements = listEngagements(session.coachId);
-  const clients = listClients(session.coachId, state);
+  const data = await fetchPortalRepositoryData();
+  const engagements = listEngagements(session.coachId, data);
+  const clients = listClients(session.coachId, state, data);
 
   return (
     <div className={portalPageStackClass}>
@@ -37,7 +39,7 @@ export default async function ClientsPage() {
           const group = clients.filter((client) => client.engagementId === engagement.id);
           if (group.length === 0) return null;
 
-          const organisation = getOrganisation(session.coachId, engagement.organisationId);
+          const organisation = getOrganisation(session.coachId, engagement.organisationId, data);
 
           return (
             <Panel key={engagement.id} as="section">
@@ -52,7 +54,7 @@ export default async function ClientsPage() {
 
               <div className="mt-5 border-t border-[var(--klient-border-muted)] pt-4">
                 {group.map((client, index) => {
-                  const clientSessions = listSessions(session.coachId, client.id);
+                  const clientSessions = listSessions(session.coachId, client.id, state, data);
                   const upcoming = clientSessions.find((item) => item.status === "kommande");
                   const completed = clientSessions.filter(
                     (item) => item.status === "genomford",

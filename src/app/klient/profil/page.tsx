@@ -3,15 +3,16 @@ import { KlientLogoutButton } from "@/components/klient/klient-nav";
 import ProfileEditor from "@/components/klient/profile-editor";
 import { Body, Card, CardTitle, Label, Muted } from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
-import { getClientPerspective, getCoach } from "@/lib/portal/repository";
+import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
 import { formatDate } from "@/lib/portal/format";
 
 export default async function ClientProfilePage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const coach = getCoach();
-  const view = await getClientPerspective(coach.id, session.clientId);
+  const data = await fetchPortalRepositoryData();
+  const coach = data.coach;
+  const view = buildClientPerspective(coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 
   const { client } = view;

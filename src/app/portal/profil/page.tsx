@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { readCoachSession } from "@/lib/portal/session";
-import { getCoach, listClients, listEngagements } from "@/lib/portal/repository";
+import { fetchPortalRepositoryData, getCoach, listClients, listEngagements } from "@/lib/portal/repository";
 import { LogoutButton } from "@/components/portal/portal-nav";
 import DemoResetButton from "@/components/portal/demo-reset-button";
 import { Avatar, DefinitionList, PageHeading, Panel, PanelHeading, portalPageStackClass } from "@/components/portal/ui";
@@ -9,9 +9,10 @@ export default async function ProfilePage() {
   const session = await readCoachSession();
   if (!session) return null;
 
-  const coach = getCoach();
-  const engagements = listEngagements(session.coachId);
-  const clients = listClients(session.coachId);
+  const data = await fetchPortalRepositoryData();
+  const coach = getCoach(data);
+  const engagements = listEngagements(session.coachId, data);
+  const clients = listClients(session.coachId, undefined, data);
 
   return (
     <div className={portalPageStackClass}>

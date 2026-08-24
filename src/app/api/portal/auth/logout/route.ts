@@ -1,8 +1,7 @@
-import { cookies } from "next/headers";
-import { SESSION_COOKIE } from "@/lib/portal/session";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function POST() {
-  const store = await cookies();
-  store.delete(SESSION_COOKIE);
+  const supabase = await createSupabaseServerClient();
+  await supabase.auth.signOut();
   return Response.json({ ok: true });
 }

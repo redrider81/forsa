@@ -1,12 +1,7 @@
 import { readCoachSession } from "@/lib/portal/session";
-import { getClient, getCoach } from "@/lib/portal/repository";
-import { updateDemoMaterialsState } from "@/lib/portal/store/demo-materials-store";
-import {
-  canCoachDelete,
-  getClientMaterial,
-  resolveLinkInput,
-} from "@/lib/portal/materials-repository";
-import { todayIso } from "@/lib/portal/format";
+import { fetchPortalRepositoryData, getClient } from "@/lib/portal/repository";
+import { canCoachDelete } from "@/lib/portal/materials-repository";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { CoachingMaterial, MaterialCategory, MaterialLinkType } from "@/lib/portal/types";
 
 const CATEGORIES = new Set<MaterialCategory>([
@@ -25,7 +20,7 @@ const LINK_TYPES = new Set<MaterialLinkType>([
   "none",
 ]);
 
-/** Carolina delar material med en specifik klient (metadata — demo utan filbytes). */
+/** Carolina delar material med en specifik klient (metadata — inga filbytes). */
 export async function POST(request: Request) {
   const session = await readCoachSession();
   if (!session) {
@@ -43,7 +38,8 @@ export async function POST(request: Request) {
   const clientId = typeof raw.clientId === "string" ? raw.clientId : "";
   const title = typeof raw.title === "string" ? raw.title.trim().slice(0, 120) : "";
 
-  if (!clientId || !getClient(session.coachId, clientId)) {
+  const data = await fetchPortalRepositoryData();
+  if (!clientId || !getClient(session.coachId, clientId, data)) {
     return Response.json({ ok: false, error: "Klienten kunde inte hittas." }, { status: 403 });
   }
   if (!title) {
@@ -55,40 +51,55 @@ export async function POST(request: Request) {
       ? (raw.category as MaterialCategory)
       : "arbetsmaterial";
 
-  const linkType =
+  const linkType: MaterialLinkType =
     typeof raw.linkType === "string" && LINK_TYPES.has(raw.linkType as MaterialLinkType)
       ? (raw.linkType as MaterialLinkType)
       : "none";
 
-  const link = resolveLinkInput({ linkType });
-  const comment =
-    typeof raw.comment === "string" ? raw.comment.trim().slice(0, 400) : undefined;
-  const fileName =
-    typeof raw.fileName === "string" ? raw.fileName.trim().slice(0, 120) : undefined;
+  const comment = typeof raw.comment === "string" ? raw.comment.trim().slice(0, 400) : null;
+  const fileName = typeof raw.fileName === "string" ? raw.fileName.trim().slice(0, 120) : null;
 
-  const now = new Date().toISOString();
+  const supabase = await createSupabaseServerClient();
+  const { data: row, error } = await supabase
+    .from("materials")
+    .insert({
+      owner_client_id: clientId,
+      created_by_role: "coach",
+      created_by_id: data.coach.id,
+      title,
+      file_name: fileName,
+      mime_type: fileName?.endsWith(".pdf") ? "application/pdf" : null,
+      category,
+      sharing_level: "shared_coach",
+      source: "coach_shared",
+      link_type: linkType,
+      comment,
+    })
+    .select("*")
+    .single();
+
+  if (error || !row) {
+    return Response.json({ ok: false, error: "Materialet kunde inte sparas." }, { status: 502 });
+  }
+
   const material: CoachingMaterial = {
-    id: `mat-coach-${Date.now().toString(36)}`,
-    ownerClientId: clientId,
-    createdByRole: "coach",
-    createdById: getCoach().id,
-    title,
-    fileName,
-    mimeType: fileName?.endsWith(".pdf") ? "application/pdf" : undefined,
-    category,
-    createdAt: todayIso(),
-    updatedAt: now,
-    sharingLevel: "shared_coach",
-    source: "coach_shared",
-    ...link,
-    comment,
-    hasFilePayload: false,
+    id: row.id,
+    ownerClientId: row.owner_client_id,
+    createdByRole: row.created_by_role,
+    createdById: row.created_by_id,
+    title: row.title,
+    fileName: row.file_name ?? undefined,
+    mimeType: row.mime_type ?? undefined,
+    sizeBytes: row.size_bytes ?? undefined,
+    category: row.category,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    sharingLevel: row.sharing_level,
+    source: row.source,
+    linkType: row.link_type,
+    comment: row.comment ?? undefined,
+    hasFilePayload: Boolean(row.storage_path),
   };
-
-  await updateDemoMaterialsState((state) => ({
-    ...state,
-    added: [...state.added, material],
-  }));
 
   return Response.json({ ok: true, material });
 }
@@ -112,22 +123,42 @@ export async function DELETE(request: Request) {
     return Response.json({ ok: false, error: "Materialet kunde inte hittas." }, { status: 400 });
   }
 
-  if (!getClient(session.coachId, clientId)) {
+  if (!getClient(session.coachId, clientId, await fetchPortalRepositoryData())) {
     return Response.json({ ok: false, error: "Klienten kunde inte hittas." }, { status: 403 });
   }
 
-  const existing = getClientMaterial(clientId, materialId, "coach");
+  const supabase = await createSupabaseServerClient();
+  const { data: materialRows } = await supabase
+    .from("materials")
+    .select("*")
+    .eq("id", materialId)
+    .eq("owner_client_id", clientId);
+  const row = materialRows?.[0];
+  const existing: CoachingMaterial | null = row
+    ? {
+        id: row.id,
+        ownerClientId: row.owner_client_id,
+        createdByRole: row.created_by_role,
+        createdById: row.created_by_id,
+        title: row.title,
+        category: row.category,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+        sharingLevel: row.sharing_level,
+        source: row.source,
+        linkType: row.link_type,
+        hasFilePayload: Boolean(row.storage_path),
+      }
+    : null;
+
   if (!existing || !canCoachDelete(existing)) {
     return Response.json({ ok: false, error: "Materialet kunde inte tas bort." }, { status: 403 });
   }
 
-  await updateDemoMaterialsState((state) => ({
-    ...state,
-    added: state.added.filter((item) => item.id !== materialId),
-    deletedIds: state.deletedIds.includes(materialId)
-      ? state.deletedIds
-      : [...state.deletedIds, materialId],
-  }));
+  const { error } = await supabase.from("materials").delete().eq("id", materialId);
+  if (error) {
+    return Response.json({ ok: false, error: "Materialet kunde inte tas bort." }, { status: 502 });
+  }
 
   return Response.json({ ok: true });
 }

@@ -1,79 +1,67 @@
 "use client";
 
-/** Enhet-lokal fillagring för demoläge. Överlever refresh och omstart i samma webbläsare. */
+/** Fillagring för klientmaterial i Supabase Storage (bucket coaching-materials). */
 
-const PREFIX = "cvb_material_file:";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-function storageKey(materialId: string, clientId: string): string {
-  return `${PREFIX}${clientId}:${materialId}`;
+const BUCKET = "coaching-materials";
+
+function objectPath(materialId: string, clientId: string, fileName: string): string {
+  return `${clientId}/${materialId}/${fileName}`;
 }
 
-export type StoredMaterialFile = {
-  mimeType: string;
-  fileName: string;
-  base64: string;
-};
-
-export async function fileToStoredPayload(file: File): Promise<StoredMaterialFile> {
-  const buffer = await file.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  let binary = "";
-  for (let i = 0; i < bytes.length; i += 1) {
-    binary += String.fromCharCode(bytes[i]!);
-  }
-  return {
-    mimeType: file.type,
-    fileName: file.name,
-    base64: btoa(binary),
-  };
-}
-
-export function storeMaterialFile(
+/**
+ * Laddar upp filbytes till Storage och sparar sedan sökvägen på
+ * materialposten (RLS tillåter klienten att uppdatera storage_path på sitt
+ * eget material). hasFilePayload blir sant för klienten först när båda
+ * stegen är klara.
+ */
+export async function uploadMaterialFile(
   materialId: string,
   clientId: string,
-  payload: StoredMaterialFile,
-): void {
-  localStorage.setItem(storageKey(materialId, clientId), JSON.stringify(payload));
+  file: File,
+): Promise<void> {
+  const supabase = createSupabaseBrowserClient();
+  const path = objectPath(materialId, clientId, file.name);
+
+  const { error: uploadError } = await supabase.storage.from(BUCKET).upload(path, file, {
+    contentType: file.type,
+    upsert: true,
+  });
+  if (uploadError) throw uploadError;
+
+  const { error: updateError } = await supabase
+    .from("materials")
+    .update({ storage_path: path })
+    .eq("id", materialId);
+  if (updateError) throw updateError;
 }
 
-export function getMaterialFile(
-  materialId: string,
-  clientId: string,
-): StoredMaterialFile | null {
-  try {
-    const raw = localStorage.getItem(storageKey(materialId, clientId));
-    if (!raw) return null;
-    return JSON.parse(raw) as StoredMaterialFile;
-  } catch {
-    return null;
-  }
-}
-
-export function deleteMaterialFile(materialId: string, clientId: string): void {
-  localStorage.removeItem(storageKey(materialId, clientId));
-}
-
-export function openStoredMaterialFile(
+export async function deleteMaterialFile(
   materialId: string,
   clientId: string,
   fileName: string,
-): boolean {
-  const stored = getMaterialFile(materialId, clientId);
-  if (!stored) return false;
+): Promise<void> {
+  const supabase = createSupabaseBrowserClient();
+  await supabase.storage.from(BUCKET).remove([objectPath(materialId, clientId, fileName)]);
+}
 
-  const binary = atob(stored.base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i += 1) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  const blob = new Blob([bytes], { type: stored.mimeType });
-  const url = URL.createObjectURL(blob);
+export async function openStoredMaterialFile(
+  materialId: string,
+  clientId: string,
+  fileName: string,
+): Promise<boolean> {
+  const supabase = createSupabaseBrowserClient();
+  const { data, error } = await supabase.storage
+    .from(BUCKET)
+    .createSignedUrl(objectPath(materialId, clientId, fileName), 60);
+  if (error || !data?.signedUrl) return false;
+
   const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = fileName || stored.fileName;
+  anchor.href = data.signedUrl;
+  anchor.download = fileName;
   anchor.rel = "noopener";
   anchor.click();
-  URL.revokeObjectURL(url);
   return true;
 }
 
@@ -86,8 +74,17 @@ export function canPreviewInline(mimeType?: string): boolean {
   );
 }
 
-export function previewStoredMaterialFile(materialId: string, clientId: string): string | null {
-  const stored = getMaterialFile(materialId, clientId);
-  if (!stored || !canPreviewInline(stored.mimeType)) return null;
-  return `data:${stored.mimeType};base64,${stored.base64}`;
+export async function previewStoredMaterialFile(
+  materialId: string,
+  clientId: string,
+  fileName: string,
+  mimeType?: string,
+): Promise<string | null> {
+  if (!canPreviewInline(mimeType)) return null;
+  const supabase = createSupabaseBrowserClient();
+  const { data, error } = await supabase.storage
+    .from(BUCKET)
+    .createSignedUrl(objectPath(materialId, clientId, fileName), 60);
+  if (error || !data?.signedUrl) return null;
+  return data.signedUrl;
 }

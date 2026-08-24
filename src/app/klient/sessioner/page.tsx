@@ -1,14 +1,15 @@
 import { notFound } from "next/navigation";
 import { Body, Card, CardTitle, Empty, Label, Muted } from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
-import { getClientPerspective, getCoach } from "@/lib/portal/repository";
+import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
 import { formatDate, formatWeekdayDate } from "@/lib/portal/format";
 
 export default async function ClientSessionsPage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const view = await getClientPerspective(getCoach().id, session.clientId);
+  const data = await fetchPortalRepositoryData();
+  const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 
   const past = [...view.completedSessions].reverse();

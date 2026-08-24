@@ -3,14 +3,15 @@ import ReflectionComposer from "@/components/klient/reflection-composer";
 import OwnReflectionControls from "@/components/klient/own-reflection";
 import { Card, CardTitle, Empty, Label, OwnWords } from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
-import { getClientPerspective, getCoach } from "@/lib/portal/repository";
+import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
 import { formatDate } from "@/lib/portal/format";
 
 export default async function ReflectionsPage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const view = await getClientPerspective(getCoach().id, session.clientId);
+  const data = await fetchPortalRepositoryData();
+  const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 
   return (

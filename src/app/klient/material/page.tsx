@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import MaterialWorkspace from "@/components/klient/material-workspace";
 import { readClientSession } from "@/lib/portal/session";
-import { getClientPerspective, getCoach } from "@/lib/portal/repository";
+import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
 
 export default async function ClientMaterialPage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const view = await getClientPerspective(getCoach().id, session.clientId);
+  const data = await fetchPortalRepositoryData();
+  const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 
   const linkContext = {

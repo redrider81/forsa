@@ -1,5 +1,5 @@
 import { readClientSession } from "@/lib/portal/session";
-import { updateDemoState } from "@/lib/portal/store/demo-store";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /** Klientens förberedelse inför nästa samtal. Klientägd information. */
 export async function POST(request: Request) {
@@ -21,22 +21,34 @@ export async function POST(request: Request) {
     typeof value === "string" ? value.trim().slice(0, max) : "";
 
   const prep = {
-    clientId: session.clientId,
     focus: field(focus),
     desiredOutcome: field(desiredOutcome),
     changed: field(changed),
     followUp: field(followUp),
-    updatedAt: new Date().toISOString(),
   };
 
   if (!prep.focus && !prep.desiredOutcome && !prep.changed && !prep.followUp) {
     return Response.json({ ok: false, error: "Fyll i minst ett fält." }, { status: 400 });
   }
 
-  await updateDemoState((state) => ({
-    ...state,
-    prep: { ...state.prep, [session.clientId]: prep },
-  }));
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase
+    .from("session_preparations")
+    .upsert(
+      {
+        client_id: session.clientId,
+        focus: prep.focus,
+        desired_outcome: prep.desiredOutcome,
+        changed: prep.changed,
+        follow_up: prep.followUp,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "client_id" },
+    );
+
+  if (error) {
+    return Response.json({ ok: false, error: "Det gick inte att spara." }, { status: 502 });
+  }
 
   return Response.json({ ok: true });
 }

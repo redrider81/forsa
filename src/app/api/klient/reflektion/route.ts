@@ -1,10 +1,11 @@
 import { readClientSession } from "@/lib/portal/session";
-import { readDemoState, updateDemoState } from "@/lib/portal/store/demo-store";
-import { todayIso } from "@/lib/portal/format";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
  * Klienten skriver en egen reflektion. Reflektionen knyts alltid till den
- * inloggade klientens id — aldrig till ett id som skickas från klienten.
+ * inloggade klientens id — reflections_insert_klient (RLS) kräver
+ * client_id = current_client_id(), så ett id som skickas från klienten kan
+ * aldrig sättas för någon annan.
  */
 export async function POST(request: Request) {
   const session = await readClientSession();
@@ -31,26 +32,38 @@ export async function POST(request: Request) {
     );
   }
 
-  const reflection = {
-    id: `refl-egen-${Date.now().toString(36)}`,
-    clientId: session.clientId,
-    date: todayIso(),
-    prompt: typeof prompt === "string" && prompt.trim() ? prompt.trim().slice(0, 120) : "Egen reflektion",
-    text: text.trim(),
-  };
+  const supabase = await createSupabaseServerClient();
+  const { data: row, error } = await supabase
+    .from("reflections")
+    .insert({
+      client_id: session.clientId,
+      date: new Date().toISOString().slice(0, 10),
+      prompt: typeof prompt === "string" && prompt.trim() ? prompt.trim().slice(0, 120) : "Egen reflektion",
+      text: text.trim(),
+    })
+    .select("*")
+    .single();
 
-  await updateDemoState((state) => ({
-    ...state,
-    reflections: [...state.reflections, reflection],
-  }));
+  if (error || !row) {
+    return Response.json({ ok: false, error: "Det gick inte att spara." }, { status: 502 });
+  }
 
-  return Response.json({ ok: true, reflection });
+  return Response.json({
+    ok: true,
+    reflection: {
+      id: row.id,
+      clientId: row.client_id,
+      date: row.date,
+      prompt: row.prompt,
+      text: row.text,
+    },
+  });
 }
 
 /**
  * Klienten tar bort en reflektion hon själv har skrivit.
- * Klientens autonomi över sitt eget material — seed-reflektioner rörs inte,
- * och ingen kan ta bort någon annans.
+ * Klientens autonomi över sitt eget material — RLS (reflections_delete_klient)
+ * garanterar att ingen kan ta bort någon annans.
  */
 export async function DELETE(request: Request) {
   const session = await readClientSession();
@@ -70,18 +83,20 @@ export async function DELETE(request: Request) {
     return Response.json({ ok: false, error: "Reflektionen kunde inte hittas." }, { status: 400 });
   }
 
-  const state = await readDemoState();
-  const owned = state.reflections.some(
-    (item) => item.id === id && item.clientId === session.clientId,
-  );
-  if (!owned) {
+  const supabase = await createSupabaseServerClient();
+  const { data: rows, error } = await supabase
+    .from("reflections")
+    .delete()
+    .eq("id", id)
+    .eq("client_id", session.clientId)
+    .select("id");
+
+  if (error) {
     return Response.json({ ok: false, error: "Reflektionen kunde inte hittas." }, { status: 403 });
   }
-
-  await updateDemoState((current) => ({
-    ...current,
-    reflections: current.reflections.filter((item) => item.id !== id),
-  }));
+  if (!rows || rows.length === 0) {
+    return Response.json({ ok: false, error: "Reflektionen kunde inte hittas." }, { status: 403 });
+  }
 
   return Response.json({ ok: true });
 }

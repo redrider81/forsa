@@ -1,7 +1,7 @@
 import { readCoachSession } from "@/lib/portal/session";
-import { readDemoState } from "@/lib/portal/store/demo-store";
+import { fetchPortalRepositoryData, getSession } from "@/lib/portal/repository";
+import { EMPTY_DEMO_STATE } from "@/lib/portal/store/demo-state";
 import { buildClientContext } from "@/lib/ai/context";
-import { getSession } from "@/lib/portal/repository";
 import { AiError, generate, hasApiKey } from "@/lib/ai/openai";
 import { sessionSummarySystemPrompt } from "@/lib/ai/prompts";
 
@@ -42,9 +42,15 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Anteckningarna är för långa." }, { status: 400 });
   }
 
-  const demoState = await readDemoState();
-  const coachingSession = getSession(session.coachId, clientId, sessionId, demoState);
-  const context = buildClientContext(session.coachId, clientId, demoState, { includeCoachNotes: true });
+  const data = await fetchPortalRepositoryData();
+  const coachingSession = getSession(session.coachId, clientId, sessionId, EMPTY_DEMO_STATE, data);
+  const context = buildClientContext(
+    session.coachId,
+    clientId,
+    EMPTY_DEMO_STATE,
+    { includeCoachNotes: true },
+    data,
+  );
   if (!coachingSession || !context) {
     return Response.json({ ok: false, error: "Sessionen kunde inte hittas." }, { status: 404 });
   }

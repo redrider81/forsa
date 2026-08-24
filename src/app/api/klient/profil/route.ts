@@ -1,6 +1,5 @@
-import { getClient, getCoach } from "@/lib/portal/repository";
 import { readClientSession } from "@/lib/portal/session";
-import { updateDemoState } from "@/lib/portal/store/demo-store";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -9,6 +8,8 @@ function isValidEmail(value: string): boolean {
 /**
  * Klienten uppdaterar namn, roll och kontaktuppgifter i sin profil.
  * Organisation och coachningsöverenskommelse ändras inte här.
+ * update_own_client_profile (SECURITY DEFINER) begränsar skrivningen till
+ * exakt dessa fyra kolumner på den inloggade klientens egen rad.
  */
 export async function POST(request: Request) {
   const session = await readClientSession();
@@ -51,24 +52,17 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Ange en giltig e-postadress." }, { status: 400 });
   }
 
-  const coach = getCoach();
-  if (!getClient(coach.id, session.clientId)) {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc("update_own_client_profile", {
+    p_name: trimmedName,
+    p_role: trimmedRole,
+    p_email: trimmedEmail,
+    p_phone: trimmedPhone,
+  });
+
+  if (error) {
     return Response.json({ ok: false, error: "Profilen kunde inte hittas." }, { status: 403 });
   }
-
-  await updateDemoState((state) => ({
-    ...state,
-    profile: {
-      ...state.profile,
-      [session.clientId]: {
-        name: trimmedName,
-        role: trimmedRole,
-        email: trimmedEmail,
-        phone: trimmedPhone,
-        updatedAt: new Date().toISOString(),
-      },
-    },
-  }));
 
   return Response.json({ ok: true });
 }

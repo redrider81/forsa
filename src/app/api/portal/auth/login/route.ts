@@ -1,6 +1,4 @@
-import { cookies } from "next/headers";
 import { authenticate } from "@/lib/portal/users";
-import { SESSION_COOKIE, createSessionToken, sessionCookieOptions } from "@/lib/portal/session";
 import type { PortalRole } from "@/lib/portal/token";
 
 /** Enkel skydd mot upprepade försök. Räcker för demon. */
@@ -37,8 +35,9 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Fyll i både e-post och lösenord." }, { status: 400 });
   }
 
-  // Rollen avgör vilken kontolista som används. En klient kan aldrig logga in
-  // som coach även om hon skickar role: "coach" — kontot finns inte i den listan.
+  // Rollen avgör vilken profiltyp som accepteras. En klient kan aldrig logga
+  // in som coach även om hon skickar role: "coach" — authenticate() matchar
+  // mot profiles.role, inte mot vad anroparen påstår.
   const requestedRole: PortalRole = role === "klient" ? "klient" : "coach";
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "lokal";
@@ -49,20 +48,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const user = authenticate(email, password, requestedRole);
+  const user = await authenticate(email, password, requestedRole);
   if (!user) {
     return Response.json({ ok: false, error: "Fel e-postadress eller lösenord." }, { status: 401 });
   }
 
-  const token = createSessionToken({
-    userId: user.id,
-    name: user.name,
-    role: user.role,
-    subjectId: user.subjectId,
-  });
-
-  const store = await cookies();
-  store.set(SESSION_COOKIE, token, sessionCookieOptions());
-
+  // Supabase Auth-sessionen sätts redan av authenticate() via
+  // createSupabaseServerClient() — ingen egen cookie behöver skrivas här.
   return Response.json({ ok: true, role: user.role });
 }

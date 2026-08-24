@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SessionWorkspace from "@/components/portal/session-workspace";
 import { readCoachSession } from "@/lib/portal/session";
-import { getClientDossier, getSession } from "@/lib/portal/repository";
+import { fetchPortalRepositoryData, getClientDossier, getSession } from "@/lib/portal/repository";
 import { formatWeekdayDate, formatDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
 import { Panel, PanelHeading, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
 
@@ -16,7 +16,13 @@ export default async function SessionPage({
   if (!session) return null;
 
   const dossier = await getClientDossier(session.coachId, clientId);
-  const coachingSession = await getSession(session.coachId, clientId, sessionId);
+  const coachingSession = getSession(
+    session.coachId,
+    clientId,
+    sessionId,
+    undefined,
+    await fetchPortalRepositoryData(),
+  );
   if (!dossier || !coachingSession) notFound();
 
   const { client } = dossier;
