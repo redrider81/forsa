@@ -111,11 +111,11 @@ export default function MeetingWorkspace({
 
   return (
     <>
-      <div className="mb-6 flex justify-end">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
         <button
           type="button"
           onClick={() => setShowClosePanel(!showClosePanel)}
-          className="text-[0.9375rem] font-medium text-red-600 hover:text-red-700"
+          className="rounded-lg border border-red-200 bg-white px-4 py-2 text-[0.9375rem] font-medium text-red-600 transition-colors hover:bg-red-50 hover:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
         >
           Avsluta möte
         </button>
