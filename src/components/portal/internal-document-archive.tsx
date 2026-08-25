@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { PortalDocument } from "@/lib/portal/types";
 import { formatDate } from "@/lib/portal/format";
 import {
@@ -13,18 +13,17 @@ import {
   Divider,
   EmptyState,
   Panel,
-  PanelHeading,
   SectionLabel,
   Tag,
   portalButtonSmClass,
   portalFieldClass,
   portalGhostButtonClass,
   portalOutlineButtonClass,
-  portalQuietLinkClass,
   portalTextareaClass,
 } from "@/components/portal/ui";
 
 const KINDS = ["Avtal", "Mall", "Certifikat", "Metod & underlag", "Administration", "Övrigt"];
+const CATEGORY_OPTIONS = ["Alla kategorier", ...KINDS];
 
 export default function InternalDocumentArchive({
   coachId,
@@ -44,6 +43,25 @@ export default function InternalDocumentArchive({
 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("Alla kategorier");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return documents
+      .filter((document) => category === "Alla kategorier" || document.kind === category)
+      .filter((document) => {
+        if (!q) return true;
+        return (
+          document.title.toLowerCase().includes(q) ||
+          (document.fileName ?? "").toLowerCase().includes(q) ||
+          document.description.toLowerCase().includes(q) ||
+          document.kind.toLowerCase().includes(q)
+        );
+      })
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  }, [documents, query, category]);
 
   async function add(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -104,21 +122,42 @@ export default function InternalDocumentArchive({
 
   return (
     <Panel>
-      <PanelHeading
-        label="Internt arkiv"
-        title="Dokument"
-        action={
-          <button type="button" onClick={() => setOpen((value) => !value)} className={portalQuietLinkClass}>
-            {open ? "Avbryt" : "+ Lägg till dokument"}
-          </button>
-        }
-      />
+      <SectionLabel>Internt arkiv</SectionLabel>
 
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col gap-2.5 sm:flex-row sm:items-center">
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Sök dokument…"
+          className={`${portalFieldClass} sm:flex-1`}
+        />
+        <select
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
+          className={`${portalFieldClass} sm:w-56`}
+        >
+          {CATEGORY_OPTIONS.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          className={`${portalButtonSmClass} sm:shrink-0`}
+        >
+          {open ? "Avbryt" : "+ Nytt dokument"}
+        </button>
+      </div>
+
+      <div className="mt-5">
         {documents.length === 0 ? (
           <EmptyState>Inga dokument tillagda.</EmptyState>
+        ) : filtered.length === 0 ? (
+          <EmptyState>Inga dokument matchar din sökning.</EmptyState>
         ) : (
-          documents.map((document, index) => (
+          filtered.map((document, index) => (
             <div key={document.id}>
               {index > 0 ? <Divider /> : null}
               <div className="-mx-3 px-3 py-3.5">
@@ -131,6 +170,7 @@ export default function InternalDocumentArchive({
                 ) : null}
                 <p className="mt-1.5 text-[0.75rem] text-zinc-400">
                   {document.kind} · {formatDate(document.date)}
+                  {document.fileName ? ` · ${document.fileName}` : ""}
                 </p>
                 <div className="mt-2.5 flex gap-2.5">
                   {document.fileName ? (
