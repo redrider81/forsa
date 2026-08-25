@@ -8,6 +8,7 @@ import {
   listSessions,
 } from "@/lib/portal/repository";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
+import { listPendingCoachBookings } from "@/lib/portal/booking";
 import {
   ExecutiveSummaryBand,
   RecentActivitySection,
@@ -16,6 +17,7 @@ import {
   WeekStatusModule,
 } from "@/components/portal/dashboard-sections";
 import { RequiresActionSection } from "@/components/portal/requires-action-section";
+import DashboardBookingRequests from "@/components/portal/dashboard-booking-requests";
 import StartMeetingPanel from "@/components/portal/start-meeting-panel";
 import { PageHeading, portalPageStackClass } from "@/components/portal/ui";
 
@@ -24,11 +26,12 @@ export default async function PortalOverviewPage() {
   if (!session) return null;
 
   const today = todayIso();
-  const [operations, data, state, repositoryData] = await Promise.all([
+  const [operations, data, state, repositoryData, bookingRequests] = await Promise.all([
     getOperationsOverview(session.coachId, today),
     getDashboardData(session.coachId, today),
     readDemoState(),
     fetchPortalRepositoryData(),
+    listPendingCoachBookings(),
   ]);
 
   const { week } = operations;
@@ -44,11 +47,13 @@ export default async function PortalOverviewPage() {
     }))
     .filter((client) => client.sessions.length > 0);
 
+  const pendingBookingsCount = bookingRequests.filter((br) => br.status === "pending").length;
+
   return (
     <div className={`${portalPageStackClass} portal-dashboard min-w-0 max-w-full overflow-x-clip`}>
       <PageHeading
         title="Översikt"
-        lead={`${formatWeekdayDate(today)} · ${week.activeClients} klienter · ${week.activeEngagements} uppdrag`}
+        lead={`${formatWeekdayDate(today)} · ${week.activeClients} klienter · ${pendingBookingsCount} väntande`}
       />
 
       <ExecutiveSummaryBand
@@ -56,12 +61,14 @@ export default async function PortalOverviewPage() {
         actionCount={operations.requiresAction.length}
         weekSessions={week.sessions}
         activeClients={week.activeClients}
-        activeEngagements={week.activeEngagements}
+        pendingBookings={pendingBookingsCount}
       />
 
       <TodayAgendaSection items={operations.today} today={today} />
 
       <StartMeetingPanel clients={meetableClients} />
+
+      {bookingRequests.length > 0 && <DashboardBookingRequests bookingRequests={bookingRequests} />}
 
       <RequiresActionSection items={operations.requiresAction} today={today} />
 

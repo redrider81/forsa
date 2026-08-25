@@ -20,7 +20,7 @@ type SummaryProps = {
   actionCount: number;
   weekSessions: number;
   activeClients: number;
-  activeEngagements: number;
+  pendingBookings: number;
 };
 
 export function ExecutiveSummaryBand({
@@ -28,14 +28,14 @@ export function ExecutiveSummaryBand({
   actionCount,
   weekSessions,
   activeClients,
-  activeEngagements,
+  pendingBookings,
 }: SummaryProps) {
   const items = [
     { label: "Idag", value: String(todayCount), note: "insatser" },
     { label: "Kräver åtgärd", value: String(actionCount), note: "öppna punkter" },
     { label: "Nästa 7 dagar", value: String(weekSessions), note: "coachingsamtal" },
     { label: "Aktiva klienter", value: String(activeClients), note: "" },
-    { label: "Aktiva uppdrag", value: String(activeEngagements), note: "" },
+    { label: "Väntar på svar", value: String(pendingBookings), note: "" },
   ];
 
   return (
