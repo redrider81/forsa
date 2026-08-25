@@ -10,6 +10,7 @@ const items = [
   { href: "/portal/kalender", label: "Kalender", exact: false },
   { href: "/portal/klienter", label: "Klienter", exact: false },
   { href: "/portal/uppdrag", label: "Uppdrag", exact: false },
+  { href: "/portal/dokument", label: "Dokument", exact: false },
   { href: "/portal/profil", label: "Profil", exact: false },
 ] as const;
 

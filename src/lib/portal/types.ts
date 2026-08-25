@@ -145,7 +145,7 @@ export type DocumentStatus = "aktiv" | "arkiverad";
 
 export type PortalDocument = {
   id: string;
-  ownerType: "klient" | "uppdrag";
+  ownerType: "klient" | "uppdrag" | "coach";
   ownerId: string;
   title: string;
   kind: string;

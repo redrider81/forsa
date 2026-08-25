@@ -322,6 +322,15 @@ export function listEngagementDocuments(
   return data.documents.filter((item) => item.ownerType === "uppdrag" && item.ownerId === engagementId);
 }
 
+/** Carolinas interna dokumentarkiv — kräver varken klient eller uppdrag. */
+export function listInternalDocuments(
+  coachId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): PortalDocument[] {
+  if (!coachHasAccess(coachId, data)) return [];
+  return data.documents.filter((item) => item.ownerType === "coach" && item.ownerId === coachId);
+}
+
 /* ------------------------------------------------------------------ vyer */
 
 export type ClientDossier = {

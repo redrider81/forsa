@@ -958,7 +958,7 @@ export type Database = {
       client_depth: "full" | "oversikt"
       commitment_status: "oppet" | "pagar" | "genomfort"
       confidentiality_level: "coach" | "coach_klient" | "organisation"
-      document_owner_type: "klient" | "uppdrag"
+      document_owner_type: "klient" | "uppdrag" | "coach"
       document_status: "aktiv" | "arkiverad"
       engagement_kind: "individuell" | "ledarutveckling" | "program"
       engagement_status: "planering" | "pagaende" | "avslutat"
@@ -1110,7 +1110,7 @@ export const Constants = {
       client_depth: ["full", "oversikt"],
       commitment_status: ["oppet", "pagar", "genomfort"],
       confidentiality_level: ["coach", "coach_klient", "organisation"],
-      document_owner_type: ["klient", "uppdrag"],
+      document_owner_type: ["klient", "uppdrag", "coach"],
       document_status: ["aktiv", "arkiverad"],
       engagement_kind: ["individuell", "ledarutveckling", "program"],
       engagement_status: ["planering", "pagaende", "avslutat"],
