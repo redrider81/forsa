@@ -1,5 +1,12 @@
 import { readCoachSession } from "@/lib/portal/session";
-import { getDashboardData, getOperationsOverview } from "@/lib/portal/repository";
+import { readDemoState } from "@/lib/portal/store/demo-store";
+import {
+  fetchPortalRepositoryData,
+  getDashboardData,
+  getOperationsOverview,
+  listClients,
+  listSessions,
+} from "@/lib/portal/repository";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import {
   ExecutiveSummaryBand,
@@ -9,6 +16,7 @@ import {
   WeekStatusModule,
 } from "@/components/portal/dashboard-sections";
 import { RequiresActionSection } from "@/components/portal/requires-action-section";
+import StartMeetingPanel from "@/components/portal/start-meeting-panel";
 import { PageHeading, portalPageStackClass } from "@/components/portal/ui";
 
 export default async function PortalOverviewPage() {
@@ -16,12 +24,25 @@ export default async function PortalOverviewPage() {
   if (!session) return null;
 
   const today = todayIso();
-  const [operations, data] = await Promise.all([
+  const [operations, data, state, repositoryData] = await Promise.all([
     getOperationsOverview(session.coachId, today),
     getDashboardData(session.coachId, today),
+    readDemoState(),
+    fetchPortalRepositoryData(),
   ]);
 
   const { week } = operations;
+
+  const meetableClients = listClients(session.coachId, state, repositoryData)
+    .map((client) => ({
+      id: client.id,
+      name: client.name,
+      sessions: listSessions(session.coachId, client.id, state, repositoryData)
+        .filter((item) => item.status === "kommande")
+        .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))
+        .map((item) => ({ id: item.id, number: item.number, date: item.date, time: item.time })),
+    }))
+    .filter((client) => client.sessions.length > 0);
 
   return (
     <div className={`${portalPageStackClass} portal-dashboard min-w-0 max-w-full overflow-x-clip`}>
@@ -39,6 +60,8 @@ export default async function PortalOverviewPage() {
       />
 
       <TodayAgendaSection items={operations.today} today={today} />
+
+      <StartMeetingPanel clients={meetableClients} />
 
       <RequiresActionSection items={operations.requiresAction} today={today} />
 
