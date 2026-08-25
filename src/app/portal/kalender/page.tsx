@@ -1,6 +1,9 @@
 import Link from "next/link";
+import BookingPanel from "@/components/portal/booking-panel";
 import { readCoachSession } from "@/lib/portal/session";
-import { getOperationsOverview } from "@/lib/portal/repository";
+import { readDemoState } from "@/lib/portal/store/demo-store";
+import { fetchPortalRepositoryData, getOperationsOverview, listClients } from "@/lib/portal/repository";
+import { listPendingCoachBookings } from "@/lib/portal/booking";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { CompactCalendar, MetricGrid } from "@/components/portal/operations";
 import { EmptyState, PageHeading, Panel, PanelHeading, portalPageStackClass, portalSegmentActiveClass, portalSegmentClass, portalSegmentInactiveClass } from "@/components/portal/ui";
@@ -26,6 +29,14 @@ export default async function CalendarPage({
 
   const today = todayIso();
   const operations = await getOperationsOverview(session.coachId, today, ranges[active].days);
+
+  const state = await readDemoState();
+  const data = await fetchPortalRepositoryData();
+  const clients = listClients(session.coachId, state, data).map((client) => ({
+    id: client.id,
+    name: client.name,
+  }));
+  const bookings = await listPendingCoachBookings();
 
   return (
     <div className={portalPageStackClass}>
@@ -75,6 +86,8 @@ export default async function CalendarPage({
           )}
         </div>
       </Panel>
+
+      <BookingPanel clients={clients} bookings={bookings} />
     </div>
   );
 }

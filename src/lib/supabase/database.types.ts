@@ -722,6 +722,66 @@ export type Database = {
           },
         ]
       }
+      session_booking_requests: {
+        Row: {
+          client_id: string
+          created_at: string
+          date: string
+          duration_minutes: number
+          id: string
+          location: string
+          message: string | null
+          requested_by_role: Database["public"]["Enums"]["booking_role"]
+          responded_at: string | null
+          session_id: string | null
+          status: Database["public"]["Enums"]["booking_status"]
+          time: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          date: string
+          duration_minutes?: number
+          id?: string
+          location?: string
+          message?: string | null
+          requested_by_role: Database["public"]["Enums"]["booking_role"]
+          responded_at?: string | null
+          session_id?: string | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          time?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          date?: string
+          duration_minutes?: number
+          id?: string
+          location?: string
+          message?: string | null
+          requested_by_role?: Database["public"]["Enums"]["booking_role"]
+          responded_at?: string | null
+          session_id?: string | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_booking_requests_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_booking_requests_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       session_coach_notes: {
         Row: {
           coach_id: string
@@ -914,6 +974,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_session_booking: {
+        Args: { p_booking_id: string }
+        Returns: string
+      }
+      cancel_session_booking: {
+        Args: { p_booking_id: string }
+        Returns: undefined
+      }
       client_owned_by_current_coach: {
         Args: { p_client_id: string }
         Returns: boolean
@@ -931,6 +999,10 @@ export type Database = {
       }
       current_client_id: { Args: never; Returns: string }
       current_coach_id: { Args: never; Returns: string }
+      decline_session_booking: {
+        Args: { p_booking_id: string }
+        Returns: undefined
+      }
       session_owned_by_current_coach: {
         Args: { p_session_id: string }
         Returns: boolean
@@ -955,6 +1027,8 @@ export type Database = {
       }
     }
     Enums: {
+      booking_role: "coach" | "klient"
+      booking_status: "pending" | "accepted" | "declined" | "cancelled"
       client_depth: "full" | "oversikt"
       commitment_status: "oppet" | "pagar" | "genomfort"
       confidentiality_level: "coach" | "coach_klient" | "organisation"
@@ -1107,6 +1181,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      booking_role: ["coach", "klient"],
+      booking_status: ["pending", "accepted", "declined", "cancelled"],
       client_depth: ["full", "oversikt"],
       commitment_status: ["oppet", "pagar", "genomfort"],
       confidentiality_level: ["coach", "coach_klient", "organisation"],

@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { Body, Card, CardTitle, Empty, Label, Muted } from "@/components/klient/klient-ui";
+import ClientBookingPanel from "@/components/klient/booking-panel";
 import { readClientSession } from "@/lib/portal/session";
 import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
+import { listPendingClientBookings } from "@/lib/portal/booking";
 import { formatDate, formatWeekdayDate } from "@/lib/portal/format";
 
 export default async function ClientSessionsPage() {
@@ -11,6 +13,8 @@ export default async function ClientSessionsPage() {
   const data = await fetchPortalRepositoryData();
   const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
+
+  const bookings = await listPendingClientBookings(session.clientId);
 
   const past = [...view.completedSessions].reverse();
 
@@ -24,6 +28,8 @@ export default async function ClientSessionsPage() {
           {past.length} genomförda sedan {formatDate(view.client.startedAt)}
         </p>
       </header>
+
+      <ClientBookingPanel bookings={bookings} />
 
       {view.upcomingSession ? (
         <Card>
