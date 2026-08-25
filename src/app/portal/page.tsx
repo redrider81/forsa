@@ -7,18 +7,16 @@ import {
   listClients,
   listSessions,
 } from "@/lib/portal/repository";
-import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
+import { todayIso } from "@/lib/portal/format";
 import { listPendingCoachBookings } from "@/lib/portal/booking";
 import {
-  ExecutiveSummaryBand,
   RecentActivitySection,
   TodayAgendaSection,
   UpcomingSection,
-  WeekStatusModule,
 } from "@/components/portal/dashboard-sections";
 import { RequiresActionSection } from "@/components/portal/requires-action-section";
 import DashboardBookingRequests from "@/components/portal/dashboard-booking-requests";
-import DashboardAnalytics from "@/components/portal/dashboard-analytics";
+import { ExecutiveKPIStrip, PrimaryAnalyticsZone, ManagementAnalyticsZone, ClientOverview } from "@/components/portal/dashboard-analytics";
 import StartMeetingPanel from "@/components/portal/start-meeting-panel";
 import { PageHeading, portalPageStackClass } from "@/components/portal/ui";
 
@@ -50,22 +48,50 @@ export default async function PortalOverviewPage() {
 
   const pendingBookingsCount = bookingRequests.filter((br) => br.status === "pending").length;
 
+  // Calculate analytics
+  const last30DaysStart = new Date();
+  last30DaysStart.setDate(last30DaysStart.getDate() - 30);
+
+  const completedLast30 = repositoryData.sessions.filter(
+    (s) => s.status === "genomford" && new Date(s.date) >= last30DaysStart && new Date(s.date) <= new Date(today)
+  ).length;
+
+  const totalCommitments = repositoryData.commitments.length;
+  const completedCommitments = repositoryData.commitments.filter((c) => c.status === "genomfort").length;
+  const commitmentCompletedPct = totalCommitments > 0 ? Math.round((completedCommitments / totalCommitments) * 100) : 0;
+
+  const activeClientsLast30 = new Set(
+    repositoryData.sessions
+      .filter((s) => new Date(s.date) >= last30DaysStart && new Date(s.date) <= new Date(today))
+      .map((s) => s.clientId)
+  ).size;
+
+  const clientsWithFutureSessions = new Set(
+    repositoryData.sessions.filter((s) => s.status === "kommande" && new Date(s.date) > new Date(today)).map((s) => s.clientId)
+  ).size;
+
   return (
     <div className={`${portalPageStackClass} portal-dashboard min-w-0 max-w-full overflow-x-clip`}>
       <PageHeading
         title="Översikt"
-        lead={`${formatWeekdayDate(today)} · ${week.activeClients} klienter · ${pendingBookingsCount} väntande`}
+        lead={`${week.activeClients} aktiva klienter · ${pendingBookingsCount} behöver planeras · ${week.sessions} sessioner nästa 7 dagar`}
       />
 
-      <ExecutiveSummaryBand
-        todayCount={operations.today.length}
-        actionCount={operations.requiresAction.length}
-        weekSessions={week.sessions}
-        activeClients={week.activeClients}
-        pendingBookings={pendingBookingsCount}
+      <ExecutiveKPIStrip
+        completedCount={completedLast30}
+        commitmentCompletedPct={commitmentCompletedPct}
+        clientsWithNextSession={clientsWithFutureSessions}
+        totalActiveClients={activeClientsLast30}
+        pendingBookingsCount={pendingBookingsCount}
       />
 
-      <DashboardAnalytics allSessions={repositoryData.sessions} allCommitments={repositoryData.commitments} today={today} />
+      <PrimaryAnalyticsZone
+        allSessions={repositoryData.sessions}
+        allCommitments={repositoryData.commitments}
+        activeClientsLast30={activeClientsLast30}
+        clientsWithFutureSessions={clientsWithFutureSessions}
+        today={today}
+      />
 
       <TodayAgendaSection items={operations.today} today={today} />
 
@@ -73,11 +99,18 @@ export default async function PortalOverviewPage() {
 
       {bookingRequests.length > 0 && <DashboardBookingRequests bookingRequests={bookingRequests} />}
 
+      <ManagementAnalyticsZone allCommitments={repositoryData.commitments} />
+
+      <ClientOverview
+        allClients={listClients(session.coachId, state, repositoryData)}
+        allSessions={repositoryData.sessions}
+        allCommitments={repositoryData.commitments}
+        today={today}
+      />
+
       <RequiresActionSection items={operations.requiresAction} today={today} />
 
       <UpcomingSection items={operations.calendar} />
-
-      <WeekStatusModule week={week} />
 
       <RecentActivitySection items={data.clientActivity} />
     </div>
