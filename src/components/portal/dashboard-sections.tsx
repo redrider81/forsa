@@ -9,6 +9,7 @@ import {
   PortalSectionHeader,
   RowLink,
   Avatar,
+  portalButtonClass,
 } from "@/components/portal/ui";
 
 const UPCOMING_PREVIEW = 4;
@@ -88,12 +89,25 @@ export function TodayAgendaSection({ items, today }: { items: OperationsItem[]; 
         }
       />
       <div className="mt-4">
-        {items.map((item, index) => (
-          <div key={item.id}>
-            {index > 0 ? <Divider /> : null}
-            <ActionRow item={item} today={today} />
-          </div>
-        ))}
+        {items.map((item, index) => {
+          const isCoachingSession = item.kind === "Coachingsamtal";
+          const sessionId = isCoachingSession ? item.id.replace("op-", "") : null;
+
+          return (
+            <div key={item.id}>
+              {index > 0 ? <Divider /> : null}
+              <ActionRow item={item} today={today} />
+              {isCoachingSession && sessionId ? (
+                <Link
+                  href={`/portal/mote/${sessionId}`}
+                  className={`-mx-3 px-3 py-2 ${portalButtonClass} inline-block`}
+                >
+                  Starta möte
+                </Link>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
     </Panel>
   );
