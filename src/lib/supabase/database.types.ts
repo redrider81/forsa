@@ -7,6 +7,8 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.15"
   }
@@ -22,7 +24,7 @@ export type Database = {
           id: string
           initials: string
           name: string
-          organisation_id: string
+          organisation_id: string | null
           phone: string
           recurring_themes: string[]
           role: string
@@ -38,7 +40,7 @@ export type Database = {
           id?: string
           initials: string
           name: string
-          organisation_id: string
+          organisation_id?: string | null
           phone?: string
           recurring_themes?: string[]
           role: string
@@ -54,7 +56,7 @@ export type Database = {
           id?: string
           initials?: string
           name?: string
-          organisation_id?: string
+          organisation_id?: string | null
           phone?: string
           recurring_themes?: string[]
           role?: string
@@ -249,36 +251,74 @@ export type Database = {
       }
       documents: {
         Row: {
+          created_at: string
           date: string
           description: string
+          expires_at: string | null
+          file_name: string | null
           id: string
           kind: string
+          mime_type: string | null
           owner_id: string
           owner_type: Database["public"]["Enums"]["document_owner_type"]
+          signed_at: string | null
+          size_bytes: number | null
+          status: Database["public"]["Enums"]["document_status"]
+          storage_path: string | null
           title: string
+          updated_at: string
+          uploaded_by_coach_id: string | null
           visibility: Database["public"]["Enums"]["confidentiality_level"]
         }
         Insert: {
+          created_at?: string
           date: string
           description?: string
+          expires_at?: string | null
+          file_name?: string | null
           id?: string
           kind: string
+          mime_type?: string | null
           owner_id: string
           owner_type: Database["public"]["Enums"]["document_owner_type"]
+          signed_at?: string | null
+          size_bytes?: number | null
+          status?: Database["public"]["Enums"]["document_status"]
+          storage_path?: string | null
           title: string
+          updated_at?: string
+          uploaded_by_coach_id?: string | null
           visibility: Database["public"]["Enums"]["confidentiality_level"]
         }
         Update: {
+          created_at?: string
           date?: string
           description?: string
+          expires_at?: string | null
+          file_name?: string | null
           id?: string
           kind?: string
+          mime_type?: string | null
           owner_id?: string
           owner_type?: Database["public"]["Enums"]["document_owner_type"]
+          signed_at?: string | null
+          size_bytes?: number | null
+          status?: Database["public"]["Enums"]["document_status"]
+          storage_path?: string | null
           title?: string
+          updated_at?: string
+          uploaded_by_coach_id?: string | null
           visibility?: Database["public"]["Enums"]["confidentiality_level"]
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "documents_uploaded_by_coach_id_fkey"
+            columns: ["uploaded_by_coach_id"]
+            isOneToOne: false
+            referencedRelation: "coaches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       engagements: {
         Row: {
@@ -290,7 +330,7 @@ export type Database = {
           kind_label: string
           next_review_date: string | null
           next_review_label: string | null
-          organisation_id: string
+          organisation_id: string | null
           period_label: string
           purpose: string
           scope_note: string
@@ -309,7 +349,7 @@ export type Database = {
           kind_label: string
           next_review_date?: string | null
           next_review_label?: string | null
-          organisation_id: string
+          organisation_id?: string | null
           period_label: string
           purpose: string
           scope_note: string
@@ -328,7 +368,7 @@ export type Database = {
           kind_label?: string
           next_review_date?: string | null
           next_review_label?: string | null
-          organisation_id?: string
+          organisation_id?: string | null
           period_label?: string
           purpose?: string
           scope_note?: string
@@ -878,6 +918,17 @@ export type Database = {
         Args: { p_client_id: string }
         Returns: boolean
       }
+      create_client_bundle: {
+        Args: {
+          p_agreement: Json
+          p_client: Json
+          p_engagement: Json
+          p_goal: Json
+          p_new_organisation?: Json
+          p_organisation_id?: string
+        }
+        Returns: string
+      }
       current_client_id: { Args: never; Returns: string }
       current_coach_id: { Args: never; Returns: string }
       session_owned_by_current_coach: {
@@ -908,6 +959,7 @@ export type Database = {
       commitment_status: "oppet" | "pagar" | "genomfort"
       confidentiality_level: "coach" | "coach_klient" | "organisation"
       document_owner_type: "klient" | "uppdrag"
+      document_status: "aktiv" | "arkiverad"
       engagement_kind: "individuell" | "ledarutveckling" | "program"
       engagement_status: "planering" | "pagaende" | "avslutat"
       material_category:
@@ -934,3 +986,154 @@ export type Database = {
     }
   }
 }
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      client_depth: ["full", "oversikt"],
+      commitment_status: ["oppet", "pagar", "genomfort"],
+      confidentiality_level: ["coach", "coach_klient", "organisation"],
+      document_owner_type: ["klient", "uppdrag"],
+      document_status: ["aktiv", "arkiverad"],
+      engagement_kind: ["individuell", "ledarutveckling", "program"],
+      engagement_status: ["planering", "pagaende", "avslutat"],
+      material_category: [
+        "arbetsmaterial",
+        "underlag",
+        "utvardering",
+        "anteckning",
+        "ovrigt",
+      ],
+      material_created_by_role: ["klient", "coach"],
+      material_link_type: [
+        "goal",
+        "next_session",
+        "session",
+        "commitment",
+        "none",
+      ],
+      material_sharing_level: ["private", "shared_coach"],
+      material_source: ["client_upload", "client_note", "coach_shared"],
+      milestone_status: ["genomford", "pagaende", "kommande"],
+      portal_role: ["coach", "klient"],
+      session_status: ["genomford", "kommande"],
+    },
+  },
+} as const

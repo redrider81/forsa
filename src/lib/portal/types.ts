@@ -42,7 +42,8 @@ export type Milestone = {
 
 export type Engagement = {
   id: string;
-  organisationId: string;
+  /** Saknas för uppdrag knutna till en privat klient utan organisation. */
+  organisationId?: string;
   title: string;
   kind: EngagementKind;
   kindLabel: string;
@@ -140,6 +141,8 @@ export type Commitment = {
   visibility: Extract<ConfidentialityLevel, "coach_klient">;
 };
 
+export type DocumentStatus = "aktiv" | "arkiverad";
+
 export type PortalDocument = {
   id: string;
   ownerType: "klient" | "uppdrag";
@@ -149,6 +152,18 @@ export type PortalDocument = {
   date: string;
   description: string;
   visibility: ConfidentialityLevel;
+  storagePath?: string;
+  fileName?: string;
+  mimeType?: string;
+  sizeBytes?: number;
+  uploadedByCoachId?: string;
+  /** Saknas för fixturer skapade innan filhantering fanns; behandlas som "aktiv". */
+  status?: DocumentStatus;
+  signedAt?: string;
+  expiresAt?: string;
+  /** Saknas för fixturer skapade innan filhantering fanns. */
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 /** Kategori för coachingmaterial — inte filsystemstyp. */
@@ -203,7 +218,8 @@ export type CoachingMaterial = {
 export type Client = {
   id: string;
   engagementId: string;
-  organisationId: string;
+  /** Saknas för privata klienter utan organisation. */
+  organisationId?: string;
   name: string;
   initials: string;
   role: string;

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { readCoachSession } from "@/lib/portal/session";
 import { readDemoState } from "@/lib/portal/store/demo-store";
 import {
@@ -13,6 +14,7 @@ import {
   Divider,
   PageHeading,
   Panel,
+  portalButtonClass,
   portalPageStackClass,
   RowLink,
   SectionLabel,
@@ -29,17 +31,24 @@ export default async function ClientsPage() {
 
   return (
     <div className={portalPageStackClass}>
-      <PageHeading
-        title="Klienter"
-        lead={`${clients.length} aktiva coachingrelationer · ${engagements.length} uppdrag`}
-      />
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <PageHeading
+          title="Klienter"
+          lead={`${clients.length} aktiva coachingrelationer · ${engagements.length} uppdrag`}
+        />
+        <Link href="/portal/klienter/ny" className={portalButtonClass}>
+          + Ny klient
+        </Link>
+      </div>
 
       <div className="space-y-6">
         {engagements.map((engagement) => {
           const group = clients.filter((client) => client.engagementId === engagement.id);
           if (group.length === 0) return null;
 
-          const organisation = getOrganisation(session.coachId, engagement.organisationId, data);
+          const organisation = engagement.organisationId
+            ? getOrganisation(session.coachId, engagement.organisationId, data)
+            : null;
 
           return (
             <Panel key={engagement.id} as="section">

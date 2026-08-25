@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AiAskPanel from "@/components/portal/ai-ask-panel";
+import ClientDetailNav from "@/components/portal/client-detail-nav";
 import ShareMaterialPanel from "@/components/portal/share-material-panel";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
@@ -49,6 +50,10 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           Klienter
         </Link>
 
+        <div className="mt-4">
+          <ClientDetailNav clientId={client.id} />
+        </div>
+
         <div className="mt-5 flex items-start gap-4">
           <Avatar initials={client.initials} size="lg" />
           <div className="min-w-0">
@@ -56,9 +61,11 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
               {client.name}
             </h1>
             <p className="mt-1.5 text-[0.9375rem] leading-snug text-zinc-600">{client.role}</p>
-            <p className="mt-1 text-[0.8125rem] leading-snug text-zinc-500">
-              {organisation.name} · {organisation.sizeLabel}
-            </p>
+            {organisation.name ? (
+              <p className="mt-1 text-[0.8125rem] leading-snug text-zinc-500">
+                {organisation.name} · {organisation.sizeLabel}
+              </p>
+            ) : null}
           </div>
         </div>
 

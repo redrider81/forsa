@@ -109,6 +109,14 @@ export function getEngagement(
   return data.engagements.find((item) => item.id === engagementId) ?? null;
 }
 
+export function listOrganisations(
+  coachId: string,
+  data: PortalRepositoryData = SEED_REPOSITORY_DATA,
+): Organisation[] {
+  if (!coachHasAccess(coachId, data)) return [];
+  return [...data.organisations];
+}
+
 export function getOrganisation(
   coachId: string,
   organisationId: string,
@@ -352,8 +360,10 @@ export function buildClientDossier(
   const client = resolveClient(seed, state);
 
   const engagement = getEngagement(coachId, client.engagementId, data);
-  const organisation = getOrganisation(coachId, client.organisationId, data);
-  if (!engagement || !organisation) return null;
+  if (!engagement) return null;
+  const organisation = client.organisationId
+    ? getOrganisation(coachId, client.organisationId, data)
+    : null;
 
   const clientSessions = listSessions(coachId, clientId, state, data);
   const completed = clientSessions.filter((item) => item.status === "genomford");
@@ -363,7 +373,7 @@ export function buildClientDossier(
   return {
     client,
     engagement,
-    organisation,
+    organisation: organisation ?? EMPTY_ORGANISATION,
     sessions: clientSessions,
     completedSessions: completed,
     upcomingSession: upcoming[0] ?? null,
@@ -421,7 +431,9 @@ export function buildEngagementOverview(
 ): EngagementOverview | null {
   const engagement = getEngagement(coachId, engagementId, data);
   if (!engagement) return null;
-  const organisation = getOrganisation(coachId, engagement.organisationId, data);
+  const organisation = engagement.organisationId
+    ? getOrganisation(coachId, engagement.organisationId, data)
+    : null;
   if (!organisation) return null;
 
   const participants = listClientsForEngagement(coachId, engagementId, state, data).map((client) => {
@@ -482,7 +494,9 @@ export function buildClientPerspective(
   if (!seed) return null;
   const client = resolveClient(seed, state);
   const engagement = getEngagement(coachId, client.engagementId, data);
-  const organisation = getOrganisation(coachId, client.organisationId, data);
+  const organisation = client.organisationId
+    ? getOrganisation(coachId, client.organisationId, data)
+    : null;
   if (!engagement || !organisation) return null;
 
   const stripped = listSessions(coachId, clientId, state, data).map((session) => {
@@ -791,7 +805,9 @@ export function buildOperationsOverview(
   for (const client of allClients) {
     const engagement = engagementById.get(client.engagementId);
     if (!engagement) continue;
-    const organisation = getOrganisation(coachId, client.organisationId, data);
+    const organisation = client.organisationId
+      ? getOrganisation(coachId, client.organisationId, data)
+      : null;
 
     const clientSessions = listSessions(coachId, client.id, state, data);
     completed += clientSessions.filter((item) => item.status === "genomford").length;
@@ -917,6 +933,15 @@ export async function getOperationsOverview(
 
 /* ------------------------------------------------------- Supabase-hämtning */
 
+/** Fallback för privata klienter/uppdrag utan organisation. */
+const EMPTY_ORGANISATION: Organisation = {
+  id: "",
+  name: "",
+  sizeLabel: "",
+  industry: "",
+  location: "",
+};
+
 const EMPTY_AGREEMENT: CoachingAgreement = {
   agreedAt: "",
   purpose: "",
@@ -1027,7 +1052,7 @@ async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
     }));
     return {
       id: row.id,
-      organisationId: row.organisation_id,
+      organisationId: row.organisation_id ?? undefined,
       title: row.title,
       kind: row.kind,
       kindLabel: row.kind_label,
@@ -1056,7 +1081,7 @@ async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
     return {
       id: row.id,
       engagementId: row.engagement_id,
-      organisationId: row.organisation_id,
+      organisationId: row.organisation_id ?? undefined,
       name: row.name,
       initials: row.initials,
       role: row.role,
@@ -1177,6 +1202,16 @@ async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
     date: row.date,
     description: row.description,
     visibility: row.visibility,
+    storagePath: row.storage_path ?? undefined,
+    fileName: row.file_name ?? undefined,
+    mimeType: row.mime_type ?? undefined,
+    sizeBytes: row.size_bytes ?? undefined,
+    uploadedByCoachId: row.uploaded_by_coach_id ?? undefined,
+    status: row.status,
+    signedAt: row.signed_at ?? undefined,
+    expiresAt: row.expires_at ?? undefined,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
   }));
 
   const materials: CoachingMaterial[] = (materialRows ?? []).map((row) => ({
