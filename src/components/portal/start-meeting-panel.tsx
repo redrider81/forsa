@@ -38,7 +38,9 @@ export default function StartMeetingPanel({ clients }: { clients: ClientOption[]
             onChange={(event) => selectClient(event.target.value)}
             className={`mt-2 ${portalFieldClass}`}
           >
-            <option value="">Välj klient</option>
+            <option value="" disabled>
+              Välj klient
+            </option>
             {clients.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -54,7 +56,9 @@ export default function StartMeetingPanel({ clients }: { clients: ClientOption[]
             disabled={!selectedClient}
             className={`mt-2 ${portalFieldClass}`}
           >
-            <option value="">Välj session</option>
+            <option value="" disabled>
+              Välj session
+            </option>
             {sortedSessions.map((item) => (
               <option key={item.id} value={item.id}>
                 Session {item.number} · {item.date} kl. {item.time}
