@@ -9,13 +9,13 @@ export default function LoginForm({
   role,
   redirectTo,
 }: {
-  demo: { email: string; password: string } | null;
+  demo: { email: string } | null;
   role: "coach" | "klient";
   redirectTo: string;
 }) {
   const router = useRouter();
   const [email, setEmail] = useState(demo?.email ?? "");
-  const [password, setPassword] = useState(demo?.password ?? "");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 

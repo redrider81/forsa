@@ -16,7 +16,6 @@ const DEMO_HINT_EMAIL: Record<PortalRole, string> = {
   coach: "carolina@cvbcoaching.se",
   klient: "emma@northlinestudio.se",
 };
-const DEMO_FALLBACK_PASSWORD = "cvb-demo-2026";
 
 export type PortalUser = {
   id: string;
@@ -70,12 +69,10 @@ export async function authenticate(
  * använda utan instruktion. Stäng av med PORTAL_SHOW_DEMO_HINT=false.
  * Värdet ingår aldrig i klientbundlen — det skickas som renderad text.
  * Visar endast e-postadressen ett riktigt Supabase Auth-konto ska bjudas in
- * med; lösenordet är det som sattes vid inbjudan, med samma fallback-text som
- * tidigare om PORTAL_DEMO_PASSWORD inte är satt.
+ * med. Lösenordet visas eller förifylls aldrig — det sätts vid inbjudan och
+ * är känt av kontots ägare.
  */
-export function demoHint(role: PortalRole): { email: string; password: string } | null {
+export function demoHint(role: PortalRole): { email: string } | null {
   if (process.env.PORTAL_SHOW_DEMO_HINT === "false") return null;
-  const configured = process.env.PORTAL_DEMO_PASSWORD;
-  const password = configured && configured.length > 0 ? configured : DEMO_FALLBACK_PASSWORD;
-  return { email: DEMO_HINT_EMAIL[role], password };
+  return { email: DEMO_HINT_EMAIL[role] };
 }
