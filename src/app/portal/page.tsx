@@ -18,6 +18,7 @@ import {
 } from "@/components/portal/dashboard-sections";
 import { RequiresActionSection } from "@/components/portal/requires-action-section";
 import DashboardBookingRequests from "@/components/portal/dashboard-booking-requests";
+import DashboardAnalytics from "@/components/portal/dashboard-analytics";
 import StartMeetingPanel from "@/components/portal/start-meeting-panel";
 import { PageHeading, portalPageStackClass } from "@/components/portal/ui";
 
@@ -63,6 +64,8 @@ export default async function PortalOverviewPage() {
         activeClients={week.activeClients}
         pendingBookings={pendingBookingsCount}
       />
+
+      <DashboardAnalytics allSessions={repositoryData.sessions} allCommitments={repositoryData.commitments} today={today} />
 
       <TodayAgendaSection items={operations.today} today={today} />
 
