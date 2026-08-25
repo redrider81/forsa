@@ -83,11 +83,11 @@ export default async function PortalOverviewPage() {
         clientsWithNextSession={clientsWithFutureSessions}
         totalActiveClients={activeClientsLast30}
         pendingBookingsCount={pendingBookingsCount}
+        allSessions={repositoryData.sessions}
       />
 
       <PrimaryAnalyticsZone
         allSessions={repositoryData.sessions}
-        allCommitments={repositoryData.commitments}
         activeClientsLast30={activeClientsLast30}
         clientsWithFutureSessions={clientsWithFutureSessions}
         today={today}
