@@ -30,6 +30,7 @@ export default function MeetingWorkspace({
 }) {
   const [clientFocus, setClientFocus] = useState(initialClientFocus);
   const [desiredOutcome, setDesiredOutcome] = useState(initialDesiredOutcome);
+  const [explore, setExplore] = useState(exploreContext);
   const [agreementBusy, setAgreementBusy] = useState(false);
   const [agreementSaved, setAgreementSaved] = useState(false);
 
@@ -43,7 +44,7 @@ export default function MeetingWorkspace({
     await fetch("/api/portal/mote/agreement", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, clientFocus, desiredOutcome }),
+      body: JSON.stringify({ sessionId, clientFocus, desiredOutcome, exploration: explore }),
     });
     setAgreementBusy(false);
     setAgreementSaved(true);
@@ -90,13 +91,18 @@ export default function MeetingWorkspace({
               className={`mt-2 ${portalTextareaClass}`}
             />
           </div>
-          {exploreContext ? (
-            <div className="border-t border-zinc-200/80 pt-5">
-              <SectionLabel>Vad behöver utforskas?</SectionLabel>
-              <p className="mt-2.5 text-[0.9375rem] leading-[1.7] text-zinc-600">{exploreContext}</p>
-              <p className="mt-1.5 text-[0.75rem] text-zinc-400">Från klientens förberedelse.</p>
-            </div>
-          ) : null}
+          <div className="border-t border-zinc-200/80 pt-5">
+            <SectionLabel>Vad behöver utforskas?</SectionLabel>
+            <textarea
+              value={explore}
+              onChange={(event) => {
+                setExplore(event.target.value);
+                setAgreementSaved(false);
+              }}
+              rows={3}
+              className={`mt-2 ${portalTextareaClass}`}
+            />
+          </div>
           <div className="flex items-center gap-3">
             <button type="button" onClick={saveAgreement} disabled={agreementBusy} className={portalButtonClass}>
               {agreementBusy ? "Sparar…" : "Spara"}

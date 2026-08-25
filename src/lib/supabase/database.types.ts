@@ -1025,6 +1025,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      upsert_coach_meeting_exploration: {
+        Args: { p_follow_up: string; p_session_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       booking_role: "coach" | "klient"

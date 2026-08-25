@@ -20,6 +20,7 @@ export async function PATCH(request: Request) {
   const sessionId = typeof raw.sessionId === "string" ? raw.sessionId : "";
   const clientFocus = typeof raw.clientFocus === "string" ? raw.clientFocus.trim().slice(0, 700) : "";
   const desiredOutcome = typeof raw.desiredOutcome === "string" ? raw.desiredOutcome.trim().slice(0, 700) : "";
+  const exploration = typeof raw.exploration === "string" ? raw.exploration.trim().slice(0, 700) : "";
 
   const data = await fetchPortalRepositoryData();
   const coachingSession = data.sessions.find((item) => item.id === sessionId);
@@ -34,6 +35,15 @@ export async function PATCH(request: Request) {
     .eq("id", sessionId);
 
   if (error) {
+    return Response.json({ ok: false, error: "Kunde inte sparas." }, { status: 502 });
+  }
+
+  const { error: explorationError } = await supabase.rpc("upsert_coach_meeting_exploration", {
+    p_session_id: sessionId,
+    p_follow_up: exploration,
+  });
+
+  if (explorationError) {
     return Response.json({ ok: false, error: "Kunde inte sparas." }, { status: 502 });
   }
 
