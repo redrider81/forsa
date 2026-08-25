@@ -74,7 +74,7 @@ export default async function PortalOverviewPage() {
     <div className={`${portalPageStackClass} portal-dashboard min-w-0 max-w-full overflow-x-clip`}>
       <PageHeading
         title="Översikt"
-        lead={`${week.activeClients} aktiva klienter · ${pendingBookingsCount} behöver planeras · ${week.sessions} sessioner nästa 7 dagar`}
+        lead={`${week.activeClients} aktiva klienter · ${week.sessions} sessioner nästa 7 dagar`}
       />
 
       <ExecutiveKPIStrip
@@ -86,33 +86,88 @@ export default async function PortalOverviewPage() {
         allSessions={repositoryData.sessions}
       />
 
-      <PrimaryAnalyticsZone
-        allSessions={repositoryData.sessions}
-        activeClientsLast30={activeClientsLast30}
-        clientsWithFutureSessions={clientsWithFutureSessions}
-        today={today}
-      />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        <div className="lg:col-span-2">
+          <PrimaryAnalyticsZone
+            allSessions={repositoryData.sessions}
+            activeClientsLast30={activeClientsLast30}
+            clientsWithFutureSessions={clientsWithFutureSessions}
+            today={today}
+          />
+        </div>
 
-      <TodayAgendaSection items={operations.today} today={today} />
+        <div className="flex flex-col gap-6">
+          <div className="border border-zinc-200/80 rounded-lg p-6 bg-white">
+            <h3 className="text-sm font-semibold uppercase tracking-widest text-zinc-500 mb-6">Sessioner planerade</h3>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-3xl font-bold text-zinc-900">{clientsWithFutureSessions}</div>
+                <div className="text-[0.8125rem] text-zinc-600 mt-1">av {activeClientsLast30} aktiva</div>
+              </div>
+              <div className="flex-1 ml-6">
+                <svg viewBox="0 0 100 100" className="w-20 h-20">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" strokeWidth="8" />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
+                    stroke="#047857"
+                    strokeWidth="8"
+                    strokeDasharray={`${(clientsWithFutureSessions / activeClientsLast30) * 283} 283`}
+                    strokeLinecap="round"
+                    transform="rotate(-90 50 50)"
+                  />
+                  <text x="50" y="50" textAnchor="middle" dy="0.3em" className="text-sm font-bold" fill="#111827">
+                    {Math.round((clientsWithFutureSessions / activeClientsLast30) * 100)}%
+                  </text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <ManagementAnalyticsZone allCommitments={repositoryData.commitments} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <div>
+          <TodayAgendaSection items={operations.today} today={today} />
+        </div>
+
+        <div>
+          <RequiresActionSection items={operations.requiresAction} today={today} />
+        </div>
+      </div>
+
+      {bookingRequests.length > 0 && (
+        <div className="mt-6">
+          <DashboardBookingRequests bookingRequests={bookingRequests} />
+        </div>
+      )}
 
       <StartMeetingPanel clients={meetableClients} />
 
-      {bookingRequests.length > 0 && <DashboardBookingRequests bookingRequests={bookingRequests} />}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <div>
+          <UpcomingSection items={operations.calendar} />
+        </div>
 
-      <ManagementAnalyticsZone allCommitments={repositoryData.commitments} />
+        <div>
+          <ClientOverview
+            allClients={listClients(session.coachId, state, repositoryData)}
+            allSessions={repositoryData.sessions}
+            allCommitments={repositoryData.commitments}
+            today={today}
+          />
+        </div>
+      </div>
 
-      <ClientOverview
-        allClients={listClients(session.coachId, state, repositoryData)}
-        allSessions={repositoryData.sessions}
-        allCommitments={repositoryData.commitments}
-        today={today}
-      />
-
-      <RequiresActionSection items={operations.requiresAction} today={today} />
-
-      <UpcomingSection items={operations.calendar} />
-
-      <RecentActivitySection items={data.clientActivity} />
+      {data.clientActivity.length > 0 && (
+        <div className="mt-6">
+          <RecentActivitySection items={data.clientActivity} />
+        </div>
+      )}
     </div>
   );
 }
