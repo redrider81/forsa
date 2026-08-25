@@ -986,6 +986,17 @@ export type Database = {
         Args: { p_client_id: string }
         Returns: boolean
       }
+      complete_coaching_session: {
+        Args: {
+          p_session_id: string
+          p_awareness: string
+          p_insights: string[]
+          p_commitments: string[]
+          p_follow_up: string[]
+          p_possible_next_focus: string
+        }
+        Returns: string
+      }
       create_client_bundle: {
         Args: {
           p_agreement: Json
