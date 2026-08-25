@@ -18,7 +18,7 @@ import { RequiresActionSection } from "@/components/portal/requires-action-secti
 import DashboardBookingRequests from "@/components/portal/dashboard-booking-requests";
 import { AnalyticsBento, ClientOverview } from "@/components/portal/dashboard-analytics";
 import StartMeetingPanel from "@/components/portal/start-meeting-panel";
-import { PageHeading, portalPageStackClass } from "@/components/portal/ui";
+import { PageHeading } from "@/components/portal/ui";
 
 export default async function PortalOverviewPage() {
   const session = await readCoachSession();
@@ -68,13 +68,13 @@ export default async function PortalOverviewPage() {
   ).length;
 
   return (
-    <div className={`${portalPageStackClass} portal-dashboard min-w-0 max-w-full overflow-x-clip`}>
+    <div className="portal-dashboard min-w-0 max-w-full overflow-x-clip">
       <PageHeading
         title="Översikt"
         lead={`${totalActiveClients} aktiva klienter · ${week.sessions} sessioner nästa 7 dagar`}
       />
 
-      <div className="mt-8">
+      <div className="mt-5">
         <AnalyticsBento
           allSessions={repositoryData.sessions}
           allCommitments={repositoryData.commitments}
@@ -88,14 +88,16 @@ export default async function PortalOverviewPage() {
       </div>
 
       {bookingRequests.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-5">
           <DashboardBookingRequests bookingRequests={bookingRequests} />
         </div>
       )}
 
-      <StartMeetingPanel clients={meetableClients} />
+      <div className="mt-3 mb-1">
+        <StartMeetingPanel clients={meetableClients} />
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-5">
         <div className="lg:col-span-5">
           <TodayAgendaSection items={operations.today} today={today} />
         </div>
@@ -105,7 +107,7 @@ export default async function PortalOverviewPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-5">
         <div className="lg:col-span-5">
           <UpcomingSection items={operations.calendar} />
         </div>
@@ -121,7 +123,7 @@ export default async function PortalOverviewPage() {
       </div>
 
       {data.clientActivity.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-5">
           <RecentActivitySection items={data.clientActivity} />
         </div>
       )}

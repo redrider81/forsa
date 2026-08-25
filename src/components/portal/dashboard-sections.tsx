@@ -88,7 +88,7 @@ export function TodayAgendaSection({ items, today }: { items: OperationsItem[]; 
           items.length === 1 ? "1 insats planerad" : `${items.length} insatser planerade`
         }
       />
-      <div className="mt-4">
+      <div className="mt-3">
         {items.map((item, index) => {
           const isCoachingSession = item.kind === "Coachingsamtal";
           const sessionId = isCoachingSession ? item.id.replace("op-", "") : null;
@@ -173,7 +173,7 @@ export function UpcomingSection({ items }: { items: OperationsItem[] }) {
   return (
     <Panel>
       <PortalSectionHeader label="Kommande" title="Nästa insatser" />
-      <div className="mt-4">
+      <div className="mt-3">
         {upcoming.length === 0 ? (
           <p className="text-[0.9375rem] text-zinc-600">Inget planerat inom perioden.</p>
         ) : (
@@ -203,7 +203,7 @@ export function UpcomingSection({ items }: { items: OperationsItem[] }) {
           ))
         )}
       </div>
-      <div className="mt-4 border-t border-[var(--klient-border-muted)] pt-4">
+      <div className="mt-3 border-t border-[var(--klient-border-muted)] pt-3">
         <Link href="/portal/kalender" className={portalQuietLinkClass}>
           Visa hela kalendern →
         </Link>
@@ -227,7 +227,7 @@ export function RecentActivitySection({ items }: { items: ActivityItem[] }) {
   return (
     <Panel>
       <PortalSectionHeader label="Inkommet" title="Sedan senaste inloggning" />
-      <div className="mt-4">
+      <div className="mt-3">
         {items.slice(0, ACTIVITY_PREVIEW).map((item, index) => (
           <div key={item.id}>
             {index > 0 ? <Divider /> : null}

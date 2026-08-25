@@ -6,29 +6,33 @@ import type { CoachingSession, Commitment } from "@/lib/portal/types";
 type ClientRef = { id: string; name: string };
 
 const PALETTE = {
-  canvas: "#F1F0EC",
-  boardCanvas: "#DEDCD6",
-  lightSurface: "#FCFBF8",
-  secondarySurface: "#E7E4DD",
-  darkSurface: "#222521",
-  darkSurface2: "#2D312C",
-  text: "#272621",
-  mutedText: "#77736B",
-  border: "#DDD8CF",
-  gold: "#B89A5A",
-  goldBright: "#D0B574",
-  goldSoft: "#E8DEC7",
-  emerald: "#356B59",
-  emeraldSoft: "#AFC6BC",
-  amber: "#A96F38",
-  amberSoft: "#DEC4A5",
-  red: "#94554F",
+  canvas: "#F3F1ED",
+  boardCanvas: "#DDD8CF",
+  lightSurface: "#FFFEFC",
+  lightSurfaceSecondary: "#F8F5EF",
+  secondarySurface: "#E8E3DB",
+  darkSurface: "#232323",
+  darkSurface2: "#2B2A28",
+  text: "#262421",
+  mutedText: "#77716A",
+  subtleText: "#9A948C",
+  border: "#DED8CE",
+  gridLine: "#E7E1D8",
+  gold: "#B99857",
+  goldBright: "#D2B56C",
+  goldSoft: "#E9DDC3",
+  emerald: "#2F6B59",
+  emeraldSoft: "#A9C2B7",
+  amber: "#A96D32",
+  amberSoft: "#DEC3A1",
+  red: "#8F514B",
   stone: "#AAA39A",
-  graphite: "#4C4A45",
+  graphite: "#58534D",
+  supportLine: "#B7AEA3",
 };
 
-const LIGHT_CARD_SHADOW = "0 1px 2px rgba(39,38,33,0.06), 0 8px 20px rgba(39,38,33,0.08)";
-const DARK_CARD_SHADOW = "0 2px 4px rgba(20,20,18,0.12), 0 10px 24px rgba(20,20,18,0.16)";
+const LIGHT_CARD_SHADOW = "0 1px 2px rgba(38,36,33,0.05), 0 6px 16px rgba(38,36,33,0.07)";
+const DARK_CARD_SHADOW = "0 2px 4px rgba(20,20,20,0.12), 0 8px 18px rgba(20,20,20,0.14)";
 
 function lightCardStyle(): CSSProperties {
   return {
@@ -202,12 +206,12 @@ export function AnalyticsBento({
   return (
     <div
       className="min-w-0"
-      style={{ background: PALETTE.boardCanvas, padding: "20px", borderRadius: "20px" }}
+      style={{ background: PALETTE.boardCanvas, padding: "13px", borderRadius: "18px" }}
     >
-      <div className="grid grid-cols-12" style={{ gap: "14px" }}>
+      <div className="grid grid-cols-12" style={{ gap: "11px" }}>
         {/* A. COACHING MOMENTUM — dark hero */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[230px] rounded-2xl p-5 flex flex-col justify-between"
+          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[200px] rounded-xl p-4 flex flex-col justify-between"
           style={darkCardStyle(PALETTE.darkSurface)}
         >
           <div>
@@ -222,7 +226,10 @@ export function AnalyticsBento({
             </div>
           </div>
 
-          <div className="mt-4 flex items-end gap-1 h-9">
+          <div
+            className="mt-4 flex items-end gap-1 h-9 pb-1"
+            style={{ borderBottom: "1px solid rgba(255,255,255,0.12)" }}
+          >
             {pastWeeks.map((week, idx) => {
               const isRecent = idx >= pastWeeks.length - 4;
               return (
@@ -231,15 +238,14 @@ export function AnalyticsBento({
                   className="flex-1 rounded-sm"
                   style={{
                     height: `${Math.max((week.count / maxPastWeek) * 100, 6)}%`,
-                    background: isRecent ? PALETTE.goldBright : PALETTE.stone,
-                    opacity: isRecent ? 1 : 0.55,
+                    background: isRecent ? PALETTE.goldBright : PALETTE.mutedText,
                   }}
                 />
               );
             })}
           </div>
 
-          <div className="mt-4 pt-4 flex items-center justify-between" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="mt-3 pt-3 flex items-center justify-between" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
             <div>
               <div className="text-[1.125rem] font-semibold" style={{ color: PALETTE.goldBright }}>
                 {completedLast30}
@@ -257,7 +263,7 @@ export function AnalyticsBento({
 
         {/* B. COACHINGAKTIVITET — main bar chart */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-6 min-h-[230px] rounded-2xl p-5"
+          className="col-span-12 md:col-span-6 lg:col-span-6 min-h-[200px] rounded-xl p-4"
           style={lightCardStyle()}
         >
           <div className="flex items-baseline justify-between mb-4">
@@ -279,9 +285,9 @@ export function AnalyticsBento({
           </div>
 
           <div className="relative h-28">
-            <div className="absolute inset-x-0 top-0 h-px" style={{ background: PALETTE.border }} />
-            <div className="absolute inset-x-0 top-1/2 h-px" style={{ background: PALETTE.border }} />
-            <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: PALETTE.border }} />
+            <div className="absolute inset-x-0 top-0 h-px" style={{ background: PALETTE.gridLine }} />
+            <div className="absolute inset-x-0 top-1/2 h-px" style={{ background: PALETTE.gridLine }} />
+            <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: PALETTE.gridLine }} />
             <div className="relative flex items-end gap-1 h-full">
               {pastWeeks.map((week, idx) => {
                 const isRecent = idx >= pastWeeks.length - 4;
@@ -311,7 +317,7 @@ export function AnalyticsBento({
 
         {/* C. KLIENTKONTINUITET — radial */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[230px] rounded-2xl p-5 flex flex-col"
+          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[200px] rounded-xl p-4 flex flex-col"
           style={lightCardStyle()}
         >
           <CardLabel>
@@ -319,7 +325,7 @@ export function AnalyticsBento({
           </CardLabel>
           <div className="flex-1 flex items-center justify-center my-2">
             <svg viewBox="0 0 100 100" className="w-28 h-28">
-              <circle cx="50" cy="50" r="42" fill="none" stroke={PALETTE.secondarySurface} strokeWidth="10" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke={PALETTE.amberSoft} strokeWidth="10" />
               <circle
                 cx="50"
                 cy="50"
@@ -351,13 +357,13 @@ export function AnalyticsBento({
 
         {/* D. KLIENTMOMENTUM */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[190px] rounded-2xl p-5"
+          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[170px] rounded-xl p-4"
           style={lightCardStyle()}
         >
           <CardLabel>
             <span style={{ color: PALETTE.mutedText }}>Klientmomentum</span>
           </CardLabel>
-          <div className="mt-4 space-y-2.5">
+          <div className="mt-3 space-y-2">
             {(
               [
                 ["STABIL", PALETTE.emerald],
@@ -385,7 +391,7 @@ export function AnalyticsBento({
 
         {/* E. ÅTAGANDEPROGRESSION — donut + details */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-6 min-h-[190px] rounded-2xl p-5"
+          className="col-span-12 md:col-span-6 lg:col-span-6 min-h-[170px] rounded-xl p-4"
           style={lightCardStyle()}
         >
           <CardLabel>
@@ -394,7 +400,7 @@ export function AnalyticsBento({
           {totalCommitments > 0 ? (
             <div className="mt-4 flex items-center gap-6">
               <svg viewBox="0 0 100 100" className="w-24 h-24 shrink-0">
-                <circle cx="50" cy="50" r="42" fill="none" stroke={PALETTE.secondarySurface} strokeWidth="12" />
+                <circle cx="50" cy="50" r="42" fill="none" stroke={PALETTE.stone} strokeWidth="12" />
                 <circle
                   cx="50"
                   cy="50"
@@ -447,7 +453,7 @@ export function AnalyticsBento({
 
         {/* F. COACHINGFÖRDELNING */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[190px] rounded-2xl p-5 flex flex-col"
+          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[170px] rounded-xl p-4 flex flex-col"
           style={lightCardStyle()}
         >
           <CardLabel>
@@ -492,7 +498,7 @@ export function AnalyticsBento({
 
         {/* G. UTVECKLING ÖVER TID — dark line chart */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-6 min-h-[180px] rounded-2xl p-5"
+          className="col-span-12 md:col-span-6 lg:col-span-6 min-h-[160px] rounded-xl p-4"
           style={darkCardStyle(PALETTE.darkSurface)}
         >
           <CardLabel>
@@ -501,14 +507,14 @@ export function AnalyticsBento({
           <p className="mt-0.5 text-[0.75rem]" style={{ color: PALETTE.stone }}>Genomförda och planerade sessioner</p>
           <div className="mt-3 relative h-24">
             <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="w-full h-full">
-              <line x1="0" y1="10" x2="100" y2="10" stroke="#444841" strokeWidth="0.3" />
-              <line x1="0" y1="20" x2="100" y2="20" stroke="#444841" strokeWidth="0.3" />
-              <line x1="0" y1="30" x2="100" y2="30" stroke="#444841" strokeWidth="0.3" />
+              <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.10)" strokeWidth="0.3" />
+              <line x1="0" y1="20" x2="100" y2="20" stroke="rgba(255,255,255,0.10)" strokeWidth="0.3" />
+              <line x1="0" y1="30" x2="100" y2="30" stroke="rgba(255,255,255,0.10)" strokeWidth="0.3" />
               <polyline points={pastPoints.join(" ")} fill="none" stroke={PALETTE.goldBright} strokeWidth="1" />
               <polyline
                 points={`${bridgePoint} ${futurePoints.join(" ")}`}
                 fill="none"
-                stroke={PALETTE.stone}
+                stroke={PALETTE.supportLine}
                 strokeWidth="1"
                 strokeDasharray="2,1.5"
               />
@@ -520,7 +526,7 @@ export function AnalyticsBento({
               {futureWeeks.map((w, idx) => {
                 const x = (pastWeeks.length - 1 + (idx + 1)) * stepX;
                 const y = chartH - (w.count / lineMax) * chartH;
-                return <circle key={w.key} cx={x} cy={y} r="0.9" fill="none" stroke={PALETTE.stone} strokeWidth="0.5" />;
+                return <circle key={w.key} cx={x} cy={y} r="0.9" fill="none" stroke={PALETTE.supportLine} strokeWidth="0.5" />;
               })}
             </svg>
           </div>
@@ -536,7 +542,7 @@ export function AnalyticsBento({
 
         {/* H. NÄSTA 7 DAGAR — dark */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[180px] rounded-2xl p-5 flex flex-col"
+          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[160px] rounded-xl p-4 flex flex-col"
           style={darkCardStyle(PALETTE.darkSurface2)}
         >
           <CardLabel>
@@ -570,13 +576,13 @@ export function AnalyticsBento({
 
         {/* I. VERKSAMHETSLÄGE */}
         <div
-          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[180px] rounded-2xl p-5"
+          className="col-span-12 md:col-span-6 lg:col-span-3 min-h-[160px] rounded-xl p-4"
           style={lightCardStyle()}
         >
           <CardLabel>
             <span style={{ color: PALETTE.mutedText }}>Verksamhetsläge</span>
           </CardLabel>
-          <div className="mt-4 space-y-2.5">
+          <div className="mt-3 space-y-2">
             {[
               { label: "Aktiva klienter", value: totalActiveClients, max: Math.max(totalActiveClients, 1), color: PALETTE.gold },
               { label: "Bokade", value: clientsWithNextSession, max: Math.max(totalActiveClients, 1), color: PALETTE.emerald },
@@ -657,10 +663,10 @@ export function ClientOverview({
   if (sortedClients.length === 0) return null;
 
   return (
-    <div className="rounded-2xl border border-[var(--klient-border-soft)] bg-white p-5 md:p-7 min-w-0 overflow-hidden">
-      <h3 className="font-serif text-[1.0625rem] font-medium text-zinc-900 mb-6">Klientöversikt</h3>
+    <div className="rounded-xl p-4 min-w-0 overflow-hidden" style={lightCardStyle()}>
+      <h3 className="font-serif text-[1.0625rem] font-medium mb-4" style={{ color: PALETTE.text }}>Klientöversikt</h3>
 
-      <div className="hidden md:grid md:grid-cols-5 gap-4 mb-4 text-[0.75rem] font-semibold uppercase tracking-widest text-zinc-400">
+      <div className="hidden md:grid md:grid-cols-5 gap-4 mb-4 text-[0.75rem] font-semibold uppercase tracking-widest text-[#9A948C]">
         <div>Klient</div>
         <div>Senaste</div>
         <div>Nästa</div>
@@ -672,19 +678,19 @@ export function ClientOverview({
         {sortedClients.map((client, idx) => (
           <div
             key={client.id}
-            className={`flex gap-3 py-3 pl-3 border-l-2 ${idx < sortedClients.length - 1 ? "border-b border-zinc-200/60" : ""}`}
+            className={`flex gap-3 py-2.5 pl-3 border-l-2 ${idx < sortedClients.length - 1 ? "border-b border-[#DED8CE]/70" : ""}`}
             style={{ borderLeftColor: client.statusColor }}
           >
             <div className="flex-1 min-w-0">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="font-medium text-zinc-900">{client.name}</div>
-                <div className="text-[0.8125rem] text-zinc-500">
+                <div className="font-medium text-[#262421]">{client.name}</div>
+                <div className="text-[0.8125rem] text-[#77716A]">
                   {client.latestDate
                     ? `${Math.floor((new Date(today).getTime() - new Date(client.latestDate).getTime()) / (1000 * 60 * 60 * 24))} dagar`
                     : "—"}
                 </div>
-                <div className="text-[0.8125rem] text-zinc-500">{client.nextDate || "—"}</div>
-                <div className="text-[0.8125rem] text-zinc-600">{client.commitmentText}</div>
+                <div className="text-[0.8125rem] text-[#77716A]">{client.nextDate || "—"}</div>
+                <div className="text-[0.8125rem] text-[#77716A]">{client.commitmentText}</div>
               </div>
             </div>
             <div className="text-[0.8125rem] font-medium whitespace-nowrap" style={{ color: client.statusColor }}>
