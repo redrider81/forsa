@@ -117,6 +117,7 @@ type ContactSchedulingPickerProps = {
   dateError?: string;
   windowError?: string;
   isSubmitting?: boolean;
+  canSubmit?: boolean;
   dateLabelClass: string;
   errorTextClass: string;
 };
@@ -147,6 +148,7 @@ export default function ContactSchedulingPicker({
   dateError,
   windowError,
   isSubmitting = false,
+  canSubmit = false,
   dateLabelClass,
   errorTextClass,
 }: ContactSchedulingPickerProps) {
@@ -157,6 +159,15 @@ export default function ContactSchedulingPicker({
   const [bookingEnabled, setBookingEnabled] = React.useState(true);
   const [loadFailed, setLoadFailed] = React.useState(false);
   const [visibleMonth, setVisibleMonth] = React.useState<Date>(selected ?? new Date());
+  const [calendarMonths, setCalendarMonths] = React.useState(1);
+
+  React.useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const update = () => setCalendarMonths(media.matches ? 3 : 1);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   React.useEffect(() => {
     const today = new Date();
@@ -210,12 +221,12 @@ export default function ContactSchedulingPicker({
 
   const visibleMonthKeys = React.useMemo(() => {
     const keys: string[] = [];
-    for (let offset = 0; offset < 3; offset += 1) {
+    for (let offset = 0; offset < calendarMonths; offset += 1) {
       const monthDate = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + offset, 1);
       keys.push(`${monthDate.getFullYear()}-${String(monthDate.getMonth() + 1).padStart(2, "0")}`);
     }
     return keys;
-  }, [visibleMonth]);
+  }, [visibleMonth, calendarMonths]);
 
   const monthHasSlots = React.useMemo(
     () => [...datesWithSlots].some((date) => visibleMonthKeys.includes(monthKey(date))),
@@ -255,7 +266,7 @@ export default function ContactSchedulingPicker({
                 mode="single"
                 locale={dayPickerLocale}
                 weekStartsOn={1}
-                numberOfMonths={3}
+                numberOfMonths={calendarMonths}
                 pagedNavigation={false}
                 reverseMonths={false}
                 selected={selected}
@@ -352,26 +363,6 @@ export default function ContactSchedulingPicker({
 
                 <div className="mt-6 space-y-3.5">
                   <div className="space-y-1.5">
-                    <label htmlFor="picker-organisation" className={compactLabelClass}>
-                      {locale === "sv" ? "Företag" : "Company"}
-                    </label>
-                    <input
-                      id="picker-organisation"
-                      name="organisation"
-                      type="text"
-                      autoComplete="organization"
-                      value={organisation}
-                      onChange={(event) => onOrganisationChange(event.target.value)}
-                      className={cn(compactFieldClass, organisationError && "border-zinc-600")}
-                    />
-                    {organisationError ? (
-                      <p className={errorTextClass} role="alert">
-                        {organisationError}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <div className="space-y-1.5">
                     <label htmlFor="picker-namn" className={compactLabelClass}>
                       {t.form.fields.name}
                     </label>
@@ -380,6 +371,8 @@ export default function ContactSchedulingPicker({
                       name="namn"
                       type="text"
                       autoComplete="name"
+                      required
+                      aria-required="true"
                       value={namn}
                       onChange={(event) => onNamnChange(event.target.value)}
                       className={cn(compactFieldClass, namnError && "border-zinc-600")}
@@ -387,26 +380,6 @@ export default function ContactSchedulingPicker({
                     {namnError ? (
                       <p className={errorTextClass} role="alert">
                         {namnError}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="picker-telefon" className={compactLabelClass}>
-                      {t.form.fields.phone}
-                    </label>
-                    <input
-                      id="picker-telefon"
-                      name="telefon"
-                      type="tel"
-                      autoComplete="tel"
-                      value={telefon}
-                      onChange={(event) => onTelefonChange(event.target.value)}
-                      className={cn(compactFieldClass, telefonError && "border-zinc-600")}
-                    />
-                    {telefonError ? (
-                      <p className={errorTextClass} role="alert">
-                        {telefonError}
                       </p>
                     ) : null}
                   </div>
@@ -420,6 +393,8 @@ export default function ContactSchedulingPicker({
                       name="epost"
                       type="email"
                       autoComplete="email"
+                      required
+                      aria-required="true"
                       value={epost}
                       onChange={(event) => onEpostChange(event.target.value)}
                       className={cn(compactFieldClass, epostError && "border-zinc-600")}
@@ -427,6 +402,48 @@ export default function ContactSchedulingPicker({
                     {epostError ? (
                       <p className={errorTextClass} role="alert">
                         {epostError}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-telefon" className={compactLabelClass}>
+                      {t.form.fields.phone}
+                    </label>
+                    <input
+                      id="picker-telefon"
+                      name="telefon"
+                      type="tel"
+                      autoComplete="tel"
+                      required
+                      aria-required="true"
+                      value={telefon}
+                      onChange={(event) => onTelefonChange(event.target.value)}
+                      className={cn(compactFieldClass, telefonError && "border-zinc-600")}
+                    />
+                    {telefonError ? (
+                      <p className={errorTextClass} role="alert">
+                        {telefonError}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-organisation" className={compactLabelClass}>
+                      {locale === "sv" ? "Företag (valfritt)" : "Company (optional)"}
+                    </label>
+                    <input
+                      id="picker-organisation"
+                      name="organisation"
+                      type="text"
+                      autoComplete="organization"
+                      value={organisation}
+                      onChange={(event) => onOrganisationChange(event.target.value)}
+                      className={cn(compactFieldClass, organisationError && "border-zinc-600")}
+                    />
+                    {organisationError ? (
+                      <p className={errorTextClass} role="alert">
+                        {organisationError}
                       </p>
                     ) : null}
                   </div>
@@ -452,14 +469,14 @@ export default function ContactSchedulingPicker({
 
                 <button
                   type="submit"
-                  disabled={!selectedSlotStart || !selectedSlotEnd || isSubmitting}
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#3F7569] px-7 py-3.5 text-sm font-medium leading-snug tracking-wide text-white transition duration-150 hover:bg-[#35685D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7569] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={!canSubmit || isSubmitting}
+                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#3F7569] px-7 py-3.5 text-sm font-medium leading-snug tracking-wide text-white transition duration-150 hover:bg-[#35685D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7569] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-600 disabled:hover:bg-zinc-200"
                 >
                   {isSubmitting
                     ? t.form.submit.submitting
                     : locale === "sv"
-                      ? "Boka tid"
-                      : "Book time"}
+                      ? "Skicka bokningsförfrågan"
+                      : "Send booking request"}
                 </button>
                 <p className="mt-4 text-center text-[0.8125rem] leading-relaxed text-zinc-500">
                   {t.form.confidentialityNote}

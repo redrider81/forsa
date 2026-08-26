@@ -4,6 +4,7 @@ import "@/components/klient/klient-tokens.css";
 import { LogoMark } from "@/components/brand/logo";
 import { redirect } from "next/navigation";
 import LoginForm from "@/components/portal/login-form";
+import { portalOutlineButtonClass } from "@/components/portal/ui";
 import { readSession } from "@/lib/portal/session";
 import { demoHint } from "@/lib/portal/users";
 
@@ -18,7 +19,7 @@ export default async function CoachLoginPage() {
   if (session?.role === "coach") redirect("/portal");
 
   return (
-    <main id="main-content" data-portal className="flex min-h-[100svh] flex-col bg-[var(--klient-page-bg)] text-zinc-900">
+    <main id="main-content" data-portal className="portal-login-bg flex min-h-[100svh] flex-col text-zinc-900">
       <div className="flex flex-1 items-center justify-center px-5 py-12 md:py-20">
         <div className="w-full max-w-[26rem]">
           <Link
@@ -35,7 +36,7 @@ export default async function CoachLoginPage() {
             Tillgång till klienter, uppdrag, sessioner och förberedelser.
           </p>
 
-          <div className="mt-8 rounded-2xl border border-[var(--klient-border-soft)] bg-white p-6 shadow-[var(--klient-shadow-soft)] md:p-7">
+          <div className="portal-login-glass mt-8 rounded-2xl border p-6 md:p-7">
             <LoginForm demo={demoHint("coach")} role="coach" redirectTo="/portal" />
           </div>
 
@@ -45,11 +46,9 @@ export default async function CoachLoginPage() {
             </Link>
           </p>
 
-          <p className="mt-8 text-[0.8125rem] text-zinc-400">
-            <Link href="/" className="transition-colors hover:text-zinc-700">
-              cvbcoaching.se
-            </Link>
-          </p>
+          <Link href="/" className={`mt-8 w-full ${portalOutlineButtonClass}`}>
+            Tillbaka
+          </Link>
         </div>
       </div>
     </main>

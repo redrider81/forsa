@@ -12,7 +12,7 @@ const selectChevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2
 
 export type { ContactIntakePayload } from "@/lib/contact/intake-types";
 
-const STEP1_FIELDS = ["organisation", "namn", "epost", "telefon", "situation", "onskatDatum", "onskadTid"] as const;
+const BOOKING_FIELDS = ["namn", "epost", "telefon", "onskatDatum", "onskadTid"] as const;
 const FULL_FIELDS = [
   "namn",
   "organisation",
@@ -361,7 +361,7 @@ export default function ContactIntakeForm() {
       data.set("onskadTid", step1Data.onskadTid);
       data.set("onskadTidSlut", step1Data.onskadTidSlut);
     }
-    const errors = validateForm(data, messages, bookingOnly ? STEP1_FIELDS : FULL_FIELDS);
+    const errors = validateForm(data, messages, bookingOnly ? BOOKING_FIELDS : FULL_FIELDS);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       setSummaryError(validationSummary(errors, messages));
@@ -399,6 +399,14 @@ export default function ContactIntakeForm() {
   }
 
   const err = (name: FieldName) => fieldErrors[name];
+
+  const canSubmitBooking =
+    Boolean(step1Data.namn.trim()) &&
+    Boolean(step1Data.telefon.trim()) &&
+    Boolean(step1Data.epost.trim()) &&
+    isValidEmail(step1Data.epost.trim()) &&
+    Boolean(step1Data.onskadTid) &&
+    Boolean(step1Data.onskadTidSlut);
 
   return (
     <form
@@ -450,6 +458,7 @@ export default function ContactIntakeForm() {
               dateError={err("onskatDatum")}
               windowError={err("onskadTid")}
               isSubmitting={submitState === "submitting"}
+              canSubmit={canSubmitBooking}
               dateLabelClass={labelClass}
               errorTextClass={errorTextClass}
             />

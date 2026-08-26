@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { portalButtonClass } from "@/components/portal/ui";
@@ -16,6 +17,7 @@ export default function LoginForm({
   const router = useRouter();
   const [email, setEmail] = useState(demo?.email ?? "");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +46,7 @@ export default function LoginForm({
   }
 
   const fieldClass =
-    "mt-2 w-full rounded-xl border border-[#e6e0d3] bg-[var(--klient-text-block-bg)] px-4 py-3.5 text-[1rem] leading-tight text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15";
+    "w-full rounded-xl border border-white/70 bg-white/45 px-4 py-3.5 text-[1rem] leading-tight text-zinc-900 placeholder:text-zinc-400 backdrop-blur-sm focus:border-zinc-400 focus:bg-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15";
 
   return (
     <form onSubmit={submit} noValidate>
@@ -62,7 +64,7 @@ export default function LoginForm({
           spellCheck={false}
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className={fieldClass}
+          className={`mt-2 ${fieldClass}`}
         />
       </div>
 
@@ -70,19 +72,30 @@ export default function LoginForm({
         <label htmlFor="login-password" className="text-[0.8125rem] font-medium text-zinc-700">
           Lösenord
         </label>
-        <input
-          id="login-password"
-          type="password"
-          name="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          className={fieldClass}
-        />
+        <div className="relative mt-2">
+          <input
+            id="login-password"
+            type={showPassword ? "text" : "password"}
+            name="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className={`${fieldClass} pr-12`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-zinc-500 transition-colors hover:text-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+            aria-label={showPassword ? "Dölj lösenord" : "Visa lösenord"}
+            aria-pressed={showPassword}
+          >
+            {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+          </button>
+        </div>
       </div>
 
       {error ? (
-        <p role="alert" className="mt-4 rounded-xl bg-[var(--klient-text-block-bg)] px-4 py-3 text-[0.875rem] leading-relaxed text-zinc-700">
+        <p role="alert" className="mt-4 rounded-xl border border-white/60 bg-white/40 px-4 py-3 text-[0.875rem] leading-relaxed text-zinc-700 backdrop-blur-sm">
           {error}
         </p>
       ) : null}

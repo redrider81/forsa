@@ -4,7 +4,7 @@ const MESSAGES: Record<string, string> = {
   SLOT_UNAVAILABLE: "Tiden hann precis bli bokad. Välj gärna en annan tid.",
   BOOKING_DISABLED: "Bokning är tillfälligt pausad. Kontakta oss gärna så återkommer vi.",
   INVALID_SLOT: "Den valda tiden är inte längre giltig. Välj gärna en annan tid.",
-  INVALID_REQUEST: "Fyll i namn och e-post innan du skickar förfrågan.",
+  INVALID_REQUEST: "Fyll i namn, e-post och telefon innan du skickar förfrågan.",
 };
 
 /**
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   const startAt = typeof raw.startAt === "string" ? raw.startAt : "";
   const endAt = typeof raw.endAt === "string" ? raw.endAt : "";
 
-  if (!slug || !name || !email || !startAt || !endAt) {
+  if (!slug || !name || !email || !phone || !startAt || !endAt) {
     return Response.json({ ok: false, error: MESSAGES.INVALID_REQUEST }, { status: 400 });
   }
 

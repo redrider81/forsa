@@ -82,7 +82,7 @@ export default async function ProfilePage() {
       <div className="flex flex-col gap-3 pb-2 sm:flex-row">
         <LogoutButton className="flex-1" />
         <Link href="/" className={`flex-1 ${portalOutlineButtonClass}`}>
-          cvbcoaching.se
+          Tillbaka
         </Link>
       </div>
     </div>
