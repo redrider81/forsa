@@ -82,6 +82,25 @@ export function showTargets(targets: gsap.TweenTarget): void {
   gsap.set(targets, { autoAlpha: 1, y: 0, x: 0, scale: 1, clearProps: "transform,opacity,visibility" });
 }
 
+/** Reset window scroll without smooth-scroll side effects. */
+export function resetRouteScroll(): void {
+  if (typeof window === "undefined") return;
+
+  const html = document.documentElement;
+  const body = document.body;
+  const previousHtml = html.style.scrollBehavior;
+  const previousBody = body.style.scrollBehavior;
+
+  html.style.scrollBehavior = "auto";
+  body.style.scrollBehavior = "auto";
+  html.scrollTop = 0;
+  body.scrollTop = 0;
+  window.scrollTo(0, 0);
+
+  html.style.scrollBehavior = previousHtml;
+  body.style.scrollBehavior = previousBody;
+}
+
 /** Refresh ScrollTriggers and complete reveals already in the viewport. */
 export function refreshScrollTriggers(): void {
   if (typeof window === "undefined") return;

@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
+import { resetRouteScroll } from "@/lib/motion";
 
 type CtaLinkProps = {
   href: string;
@@ -18,9 +21,9 @@ const heroBaseClass =
 
 const variants = {
   primary:
-    "bg-zinc-900 !text-zinc-50 hover:bg-zinc-700 active:bg-zinc-800",
+    "bg-zinc-700 !text-zinc-50 hover:bg-zinc-600 active:bg-zinc-800",
   primaryTranslucent:
-    "border border-[#e8e0d4]/18 bg-[#1a1917]/94 !text-white shadow-[0_6px_28px_-10px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,248,242,0.14)] hover:border-[#efe8dc]/28 hover:bg-[#22211e]/96 active:bg-[#141312] focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30",
+    "border border-white/22 bg-zinc-700/92 !text-white shadow-[0_6px_28px_-10px_rgba(0,0,0,0.45),inset_0_1px_0_0_rgba(255,255,255,0.14)] hover:border-white/32 hover:bg-zinc-600/95 active:bg-zinc-800/95 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30",
   secondary:
     "border border-zinc-400 !text-zinc-700 hover:border-zinc-600 hover:bg-zinc-100 active:border-zinc-700",
   secondaryTranslucent:
@@ -45,6 +48,21 @@ function variantClass(variant: NonNullable<CtaLinkProps["variant"]>, translucent
   return variants[variant];
 }
 
+function isContactHref(href: string): boolean {
+  return href === "/kontakt" || href === "/en/kontakt" || href.endsWith("/kontakt");
+}
+
+function handleNavigate(
+  event: MouseEvent<HTMLAnchorElement>,
+  href: string,
+  onClick?: () => void,
+) {
+  onClick?.();
+  if (isContactHref(href)) {
+    resetRouteScroll();
+  }
+}
+
 export default function CtaLink({
   href,
   children,
@@ -64,7 +82,12 @@ export default function CtaLink({
   }
 
   return (
-    <Link href={href} className={className} onClick={onClick}>
+    <Link
+      href={href}
+      className={className}
+      scroll
+      onClick={(event) => handleNavigate(event, href, onClick)}
+    >
       {children}
     </Link>
   );

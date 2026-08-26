@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ContactIntakeForm from "@/components/contact-intake-form";
+import ContactPageScrollReset from "@/components/contact-page-scroll-reset";
 import HeroReveal from "@/components/animations/HeroReveal";
-import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Book an initial conversation | CVB Coaching",
@@ -19,10 +19,11 @@ const relevantWhen = [
 export default function ContactPageEn() {
   return (
     <main id="main-content" className="min-h-screen bg-[#f6f6f4] text-zinc-900">
+      <ContactPageScrollReset />
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
         <section className="relative overflow-hidden border-b border-zinc-300/80 pb-16 md:pb-20">
           <HeroReveal>
-            <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
+            <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
               Contact
             </p>
@@ -38,28 +39,26 @@ export default function ContactPageEn() {
         </section>
 
         <section className="py-16 md:py-20">
-          <ScrollReveal variant="fadeUp">
-            <div className="space-y-16 md:space-y-20">
-              <div className="max-w-5xl">
-                <ContactIntakeForm />
-              </div>
-
-              <aside className="max-w-2xl border-t border-zinc-300/35 pt-12 md:pt-16">
-                <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
-                  How to tell whether this is right
-                </h2>
-
-                <h3 className="mt-10 text-lg font-medium text-zinc-900">Right fit when</h3>
-                <ul className="mt-4 divide-y divide-zinc-300/40 border-y border-zinc-300/35">
-                  {relevantWhen.map((item) => (
-                    <li key={item} className="py-5 text-[1.0625rem] leading-[1.65] text-zinc-800">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </aside>
+          <div className="space-y-16 md:space-y-20">
+            <div className="max-w-5xl">
+              <ContactIntakeForm />
             </div>
-          </ScrollReveal>
+
+            <aside className="max-w-2xl border-t border-line-accent/30 pt-12 md:pt-16">
+              <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
+                How to tell whether this is right
+              </h2>
+
+              <h3 className="mt-10 text-lg font-medium text-zinc-900">Right fit when</h3>
+              <ul className="mt-4 divide-y divide-line-accent/25 border-y border-line-accent/30">
+                {relevantWhen.map((item) => (
+                  <li key={item} className="py-5 text-[1.0625rem] leading-[1.65] text-zinc-800">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </div>
         </section>
       </div>
     </main>

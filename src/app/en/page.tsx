@@ -60,11 +60,11 @@ export default function HomePageEn() {
                 className="w-full shrink-0 min-h-[min(38svh,22rem)] md:hidden"
                 aria-hidden="true"
               />
-              <HeroReveal className="relative flex w-full max-w-[20rem] shrink-0 flex-col items-center text-center sm:max-w-[21rem] md:max-w-md md:items-start md:text-left lg:max-w-lg">
-                <div className="relative w-full md:max-w-md lg:max-w-lg">
+              <HeroReveal className="relative flex w-full max-w-[22rem] shrink-0 flex-col items-center text-center sm:max-w-[24rem] md:max-w-lg md:items-start md:text-left lg:max-w-xl">
+                <div className="relative w-full md:max-w-lg lg:max-w-xl">
                   <h1
                     data-hero-headline
-                    className="relative mx-auto inline-block max-w-[18ch] rounded-2xl bg-black/18 px-4 py-3 text-[2rem] font-medium leading-[1.12] tracking-tight text-balance text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)] backdrop-blur-[8px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-4xl md:mx-0 md:max-w-none md:px-5 md:py-4 md:text-5xl md:leading-tight"
+                    className="relative mx-auto max-w-[18ch] text-4xl font-medium leading-[1.1] tracking-tight text-balance text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-5xl md:mx-0 md:max-w-none md:text-6xl md:leading-[1.08] lg:text-7xl"
                   >
                     Some questions are difficult to think through alone.
                   </h1>
@@ -207,10 +207,10 @@ export default function HomePageEn() {
                 >
                   What the work involves
                 </h2>
-                <div className="mt-16 border-y border-zinc-200/80">
+                <div className="mt-16 border-y border-line-accent/30">
                   <article
                     data-editorial-row
-                    className="border-b border-zinc-200/80 py-12 md:py-14"
+                    className="border-b border-line-accent/30 py-12 md:py-14"
                   >
                     <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
                       <p
@@ -236,7 +236,7 @@ export default function HomePageEn() {
                   </article>
                   <article
                     data-editorial-row
-                    className="border-b border-zinc-200/80 py-12 md:py-14"
+                    className="border-b border-line-accent/30 py-12 md:py-14"
                   >
                     <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
                       <p

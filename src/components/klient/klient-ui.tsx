@@ -361,7 +361,7 @@ export function Empty({ children }: { children: ReactNode }) {
 
 /** Pill-länk — svart ram, vit bakgrund. */
 export const klientLinkButtonClass =
-  "inline-flex min-h-9 items-center justify-center rounded-full border border-zinc-900 bg-white px-4 py-2 text-[0.8125rem] font-medium text-zinc-900 transition-colors duration-150 hover:bg-zinc-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-reduce:transition-none";
+  "inline-flex min-h-9 items-center justify-center rounded-full border border-zinc-700 bg-white px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors duration-150 hover:bg-zinc-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 motion-reduce:transition-none";
 
 export function QuietLink({
   href,

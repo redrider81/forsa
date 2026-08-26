@@ -85,7 +85,7 @@ export function HomePricingTable({ locale }: HomePricingTableProps) {
   if (visibleRows.length === 0 && PRIS_ENSKILT_SAMTAL === null) return null;
 
   return (
-    <div className="divide-y divide-zinc-200/80 border-y border-zinc-200/80">
+    <div className="divide-y divide-line-accent/25 border-y border-line-accent/30">
       {visibleRows.map((row) => {
         const formatted = formatPrice(row.price, locale);
         if (!formatted) return null;

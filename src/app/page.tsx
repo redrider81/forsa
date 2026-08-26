@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import SiteNavigation from "@/components/site-navigation";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -10,6 +9,7 @@ import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import EditorialImageTransition from "@/components/animations/EditorialImageTransition";
 import CoachingServicesGrid from "@/components/coaching-services-grid";
 import EngagementSection from "@/components/engagement-section";
+import KineticTeamHybrid from "@/components/ui/kinetic-team-hybrid";
 import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 
 export const metadata: Metadata = {
@@ -60,11 +60,11 @@ export default function HomePage() {
               className="w-full shrink-0 min-h-[min(38svh,22rem)] md:hidden"
               aria-hidden="true"
             />
-            <HeroReveal className="relative flex w-full max-w-[20rem] shrink-0 flex-col items-center text-center sm:max-w-[21rem] md:max-w-md md:items-start md:text-left lg:max-w-lg">
-              <div className="relative w-full md:max-w-md lg:max-w-lg">
+            <HeroReveal className="relative flex w-full max-w-[22rem] shrink-0 flex-col items-center text-center sm:max-w-[24rem] md:max-w-lg md:items-start md:text-left lg:max-w-xl">
+              <div className="relative w-full md:max-w-lg lg:max-w-xl">
                 <h1
                   data-hero-headline
-                  className="relative mx-auto inline-block max-w-[18ch] rounded-2xl bg-black/18 px-4 py-3 text-[2rem] font-medium leading-[1.12] tracking-tight text-balance text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)] backdrop-blur-[8px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-4xl md:mx-0 md:max-w-none md:px-5 md:py-4 md:text-5xl md:leading-tight"
+                  className="relative mx-auto max-w-[18ch] text-4xl font-medium leading-[1.1] tracking-tight text-balance text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-5xl md:mx-0 md:max-w-none md:text-6xl md:leading-[1.08] lg:text-7xl"
                 >
                   Det finns frågor man inte tänker färdigt ensam.
                 </h1>
@@ -89,40 +89,7 @@ export default function HomePage() {
       <div className="relative z-10 isolate bg-zinc-100">
       <div className="mx-auto max-w-6xl px-6 pb-24 md:px-10">
 
-        <section
-          data-hero-reveal-first
-          className="relative bg-gradient-to-b from-[#f8f7f4] via-zinc-100 to-[#f3f2ee] py-20 md:py-24"
-        >
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16 md:gap-y-10">
-            <h2
-              data-col-left
-              className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:pr-4 md:text-[2.1rem]"
-            >
-              Det är mig du träffar.
-            </h2>
-            <div
-              data-col-right
-              className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end"
-            >
-              <p data-col-paragraph>
-                Jag heter Carolina von Braun och driver CVB Coaching i Göteborg. Innan jag blev coach
-                arbetade jag på kapitalmarknaden och i styrelser. Det gör att jag känner igen lägen
-                där besluten får verkliga konsekvenser.
-              </p>
-              <p data-col-paragraph>
-                Som coach är uppgiften en annan: att göra tänkandet klarare, inte att ta över dina
-                slutsatser.{" "}
-                <Link
-                  href="/om-oss"
-                  className="underline underline-offset-4 decoration-zinc-400 transition-colors hover:text-zinc-950 hover:decoration-zinc-700"
-                >
-                  Mer om mig
-                </Link>
-                .
-              </p>
-            </div>
-          </ScrollReveal>
-        </section>
+        <KineticTeamHybrid />
 
         <section
           id="coaching"
@@ -208,8 +175,8 @@ export default function HomePage() {
           >
             Vad arbetet består av
           </h2>
-          <div className="mt-16 border-y border-zinc-200/80">
-            <article data-editorial-row className="border-b border-zinc-200/80 py-12 md:py-14">
+          <div className="mt-16 border-y border-line-accent/30">
+            <article data-editorial-row className="border-b border-line-accent/30 py-12 md:py-14">
               <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">01</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Klarhet</h3>
@@ -218,7 +185,7 @@ export default function HomePage() {
                 </p>
               </div>
             </article>
-            <article data-editorial-row className="border-b border-zinc-200/80 py-12 md:py-14">
+            <article data-editorial-row className="border-b border-line-accent/30 py-12 md:py-14">
               <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">02</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Beslut</h3>

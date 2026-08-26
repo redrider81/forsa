@@ -275,8 +275,8 @@ export default function EngagementBentoGrid({ locale }: Props) {
                 {step.index}
               </span>
               {index < steps.length - 1 ? (
-                <span className="mx-3 h-2 flex-1 overflow-hidden rounded-full bg-zinc-200/90">
-                  <span data-progress-line className="block h-full w-full rounded-full bg-[#92753a]" />
+                <span data-progress-track className="mx-3 h-2 flex-1 overflow-hidden rounded-full bg-line-track">
+                  <span data-progress-line className="block h-full w-full rounded-full" />
                 </span>
               ) : null}
             </li>
@@ -295,7 +295,7 @@ export default function EngagementBentoGrid({ locale }: Props) {
                     {step.index}
                   </span>
                   <span data-bento-accent aria-hidden="true" className="block h-0.5 w-10 origin-left overflow-hidden rounded-full md:w-14">
-                    <span className="block h-full w-full rounded-full bg-[#92753a]" />
+                    <span className="block h-full w-full rounded-full" />
                   </span>
                 </div>
                 <h3 className="mt-5 text-lg font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.2rem]">

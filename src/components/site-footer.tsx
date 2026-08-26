@@ -45,7 +45,7 @@ export default function SiteFooter() {
   const about =
     locale === "sv"
       ? [
-          { href: "/om-oss", label: "Om Carolina" },
+          { href: "/om-oss", label: "Om CVB Coaching" },
           { href: "/kontakt", label: "Kontakt" },
         ]
       : [

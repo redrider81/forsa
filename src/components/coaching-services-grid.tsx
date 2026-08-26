@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import CtaLink from "@/components/cta-link";
 import type { Locale } from "@/lib/i18n/config";
 import { isMobile, motion, prefersReducedMotion, refreshScrollTriggers, revealScrollTrigger, showTargets } from "@/lib/motion";
 
@@ -12,6 +13,9 @@ type Service = {
   href: string;
   title: string;
   description: string;
+  ctaLabel: string;
+  image?: string;
+  imageAlt?: string;
   spanClass?: string;
 };
 
@@ -22,6 +26,9 @@ const servicesSv: Service[] = [
     title: "Individuell coaching",
     description:
       "För dig som står inför ett vägval, en förändring eller ett beslut som inte låter sig skjutas upp.",
+    ctaLabel: "Läs mer",
+    image: "/individuell-coaching.jpg",
+    imageAlt: "Individuellt coachingsamtal i lugn miljö",
   },
   {
     index: "02",
@@ -29,6 +36,9 @@ const servicesSv: Service[] = [
     title: "Business coaching",
     description:
       "För ledare, medarbetare, team och ledningsgrupper — där besluten också ska bära i organisationen.",
+    ctaLabel: "Läs mer",
+    image: "/business-coaching-workshop.jpg",
+    imageAlt: "Business coaching i workshopmiljö med whiteboard",
   },
 ];
 
@@ -39,6 +49,9 @@ const servicesEn: Service[] = [
     title: "Individual coaching",
     description:
       "For anyone facing a choice, a change or a decision that will not wait any longer.",
+    ctaLabel: "Learn more",
+    image: "/individuell-coaching.jpg",
+    imageAlt: "Individual coaching session in a calm setting",
   },
   {
     index: "02",
@@ -46,11 +59,14 @@ const servicesEn: Service[] = [
     title: "Business coaching",
     description:
       "For leaders, employees, teams and executive teams — where decisions also have to hold in the organisation.",
+    ctaLabel: "Learn more",
+    image: "/business-coaching-workshop.jpg",
+    imageAlt: "Business coaching in a workshop setting with a whiteboard",
   },
 ];
 
 const cardClass =
-  "group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_20px_50px_-28px_rgba(24,24,27,0.30)] motion-reduce:transition-none cursor-pointer md:p-9";
+  "group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] md:p-9";
 
 type Props = {
   locale: Locale;
@@ -94,13 +110,13 @@ function buildMobileReveal(
   );
   tl.to(
     lines,
-    { scaleX: 1, duration: motion.duration.medium, ease: motion.ease.reveal, stagger: 0.05, force3D: true },
+    { scaleX: 1, duration: motion.duration.long, ease: motion.ease.reveal, stagger: 0.08, force3D: true },
     0.05,
   );
   tl.to(steps, { opacity: 1, duration: 0.12, stagger: 0.04, ease: "none" }, 0.08);
   tl.to(
     accents,
-    { scaleX: 1, duration: motion.duration.short, ease: motion.ease.reveal, stagger: 0.05, force3D: true },
+    { scaleX: 1, duration: motion.duration.medium, ease: motion.ease.reveal, stagger: 0.08, force3D: true },
     0.1,
   );
   tl.to(
@@ -142,7 +158,7 @@ function buildProgressTimeline(
       trigger: panel,
       start: "top 72%",
       end: "bottom 18%",
-      scrub: 0.55,
+      scrub: 1,
       invalidateOnRefresh: true,
     },
   });
@@ -150,13 +166,13 @@ function buildProgressTimeline(
   cards.forEach((card, index) => {
     if (index === 0) return;
 
-    const segmentStart = (index - 1) * 0.2 + 0.05;
+    const segmentStart = (index - 1) * 0.3 + 0.05;
 
     const line = lines[index - 1];
     if (line) {
       tl.to(
         line,
-        { scaleX: 1, duration: 0.22, ease: motion.ease.reveal },
+        { scaleX: 1, duration: 0.38, ease: motion.ease.reveal },
         segmentStart,
       );
     }
@@ -186,7 +202,7 @@ function buildProgressTimeline(
     if (accent) {
       tl.to(
         accent,
-        { scaleX: 1, duration: 0.18, ease: motion.ease.reveal },
+        { scaleX: 1, duration: 0.32, ease: motion.ease.reveal },
         segmentStart + 0.1,
       );
     }
@@ -261,19 +277,24 @@ export default function CoachingServicesGrid({ locale }: Props) {
         <ol
           data-progress-rail
           aria-hidden="true"
-          className="mb-12 hidden max-w-4xl items-center md:flex"
+          className="mb-12 hidden w-full items-center md:flex"
         >
           {services.map((service, index) => (
-            <li key={service.index} className="flex flex-1 items-center last:flex-none">
+            <li
+              key={service.index}
+              className={`flex items-center ${
+                index < services.length - 1 ? "min-w-0 flex-1" : "shrink-0"
+              }`}
+            >
               <span
                 data-progress-step
-                className="text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 transition-opacity duration-200 md:text-[0.9375rem]"
+                className="shrink-0 text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 transition-opacity duration-200 md:text-[0.9375rem]"
               >
                 {service.index}
               </span>
               {index < services.length - 1 ? (
-                <span className="mx-4 h-2 flex-1 overflow-hidden rounded-full bg-zinc-200/90">
-                  <span data-progress-line className="block h-full w-full rounded-full bg-[#92753a]" />
+                <span data-progress-track className="mx-4 h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-line-track">
+                  <span data-progress-line className="block h-full w-full rounded-full" />
                 </span>
               ) : null}
             </li>
@@ -286,10 +307,9 @@ export default function CoachingServicesGrid({ locale }: Props) {
           }`}
         >
           {services.map((service) => (
-            <Link
+            <article
               key={service.href}
               data-card
-              href={service.href}
               className={`${cardClass} ${service.spanClass ?? ""}`}
             >
                 <div className="flex items-center gap-3 md:gap-4">
@@ -304,23 +324,40 @@ export default function CoachingServicesGrid({ locale }: Props) {
                     aria-hidden="true"
                     className="block h-px min-w-0 max-w-[5rem] flex-1 origin-left md:max-w-[6rem]"
                   >
-                    <span className="block h-px w-full bg-zinc-900" />
+                    <span className="block h-px w-full" />
                   </span>
                   <span
                     data-card-arrow
                     aria-hidden="true"
-                    className="shrink-0 text-sm text-zinc-400 transition-[transform,opacity,color] duration-300 group-hover:translate-x-0.5 group-hover:text-zinc-900 motion-reduce:transition-none"
+                    className="shrink-0 text-sm text-zinc-400"
                   >
                     →
                   </span>
                 </div>
-                <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">
+                {service.image ? (
+                  <div className="relative mt-6 aspect-[5/4] w-full overflow-hidden rounded-xl border border-zinc-200/80 bg-zinc-100">
+                    <Image
+                      src={service.image}
+                      alt={service.imageAlt ?? service.title}
+                      fill
+                      sizes="(min-width: 768px) 28vw, 100vw"
+                      className="object-cover object-center"
+                      quality={85}
+                    />
+                  </div>
+                ) : null}
+                <h3 className={`text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900 ${service.image ? "mt-6" : "mt-7"}`}>
                   {service.title}
                 </h3>
                 <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                   {service.description}
                 </p>
-              </Link>
+                <div className="mt-8">
+                  <CtaLink href={service.href} variant="primary">
+                    {service.ctaLabel}
+                  </CtaLink>
+                </div>
+              </article>
             ))}
         </div>
       </div>

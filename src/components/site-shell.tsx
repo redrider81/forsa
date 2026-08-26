@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { usePathname } from "next/navigation";
 import SiteNavigation from "@/components/site-navigation";
 import { localeFromPathname, stripLocaleFromPath } from "@/lib/i18n/config";
-import { refreshScrollTriggers } from "@/lib/motion";
+import { refreshScrollTriggers, resetRouteScroll } from "@/lib/motion";
 
 export default function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,12 +19,47 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     pathname.startsWith("/klient-login");
 
   useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
 
+  useLayoutEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const target = document.querySelector(hash);
+      if (target instanceof HTMLElement) {
+        const html = document.documentElement;
+        const previous = html.style.scrollBehavior;
+        html.style.scrollBehavior = "auto";
+        target.scrollIntoView({ block: "start" });
+        html.style.scrollBehavior = previous;
+        return;
+      }
+    }
+
+    resetRouteScroll();
+  }, [pathname]);
+
   useEffect(() => {
-    const id = requestAnimationFrame(() => refreshScrollTriggers());
-    return () => cancelAnimationFrame(id);
+    resetRouteScroll();
+
+    const frame = requestAnimationFrame(() => {
+      refreshScrollTriggers();
+      resetRouteScroll();
+      requestAnimationFrame(resetRouteScroll);
+    });
+
+    const timeout = window.setTimeout(resetRouteScroll, 50);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
+    };
   }, [pathname]);
 
   if (isPortal) {

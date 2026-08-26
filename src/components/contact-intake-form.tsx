@@ -535,7 +535,7 @@ export default function ContactIntakeForm() {
           {summaryError ? <p className={errorTextClass} role="alert" aria-live="polite">{summaryError}</p> : null}
           {step === 2 ? (
             <div className="flex flex-wrap gap-3">
-              <button type="submit" disabled={submitState === "submitting"} className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60">
+              <button type="submit" disabled={submitState === "submitting"} className="inline-flex items-center justify-center rounded-full bg-zinc-700 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-600 disabled:cursor-not-allowed disabled:opacity-60">
                 {submitState === "submitting" ? t.form.submit.submitting : t.form.submit.idle}
               </button>
               <button

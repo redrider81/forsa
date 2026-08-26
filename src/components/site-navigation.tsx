@@ -90,7 +90,7 @@ function DesktopNavTabs({
   return (
     <ul
       ref={listRef}
-      className="relative flex w-fit items-center gap-0.5 rounded-full p-1"
+      className="relative flex w-fit items-center gap-2 rounded-full p-1"
       onMouseLeave={restToActive}
     >
       {children({ listRef, setPosition })}
@@ -390,7 +390,7 @@ function LanguageMenu({
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex items-center gap-1.5 rounded-full border border-zinc-900/80 bg-zinc-900/80 px-3 py-1.5 text-xs font-medium tracking-wide text-white transition-colors hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100"
+        className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700/90 bg-zinc-700/90 px-3 py-1.5 text-xs font-medium tracking-wide text-white transition-colors hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100"
       >
         {locale === "en" ? "EN" : "SV"}
         <NavChevron open={open} />
@@ -735,7 +735,7 @@ export default function SiteNavigation() {
           href={localizedHref("/")}
           className={`shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          <LogoMark className="block h-14 w-auto translate-y-2 lg:h-16" priority />
+          <LogoMark className="block h-[4.25rem] w-auto translate-y-1 lg:h-20" priority />
         </Link>
 
         <nav aria-label={t.nav.mainAria} className="ml-auto">
@@ -889,10 +889,10 @@ export default function SiteNavigation() {
                 >
                   {t.nav.contact}
                 </NavHoverTarget>
-                <li className="ml-1.5 list-none">
+                <li className="list-none">
                   <Link
                     href="/klient-login"
-                    className={`inline-flex items-center gap-1.5 rounded-full border border-zinc-900 bg-zinc-900 px-3.5 py-1.5 text-xs font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-800 hover:border-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-700 px-3.5 py-1.5 text-xs font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 ${
                       isHome
                         ? "focus-visible:ring-offset-white/40"
                         : "focus-visible:ring-offset-zinc-100"
@@ -902,7 +902,7 @@ export default function SiteNavigation() {
                     {t.nav.login}
                   </Link>
                 </li>
-                <li className="ml-2 list-none">
+                <li className="list-none">
                   <LanguageMenu
                     locale={locale}
                     onSelect={handleLanguageChange}
@@ -923,7 +923,7 @@ export default function SiteNavigation() {
           href={localizedHref("/")}
           className={`min-w-0 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          <LogoMark className="mt-1.5 block h-12 w-auto" priority />
+          <LogoMark className="mt-1 block h-14 w-auto" priority />
         </Link>
         <div className={mobileHeaderControlCluster + " ml-auto"}>
           <MobileHeaderLanguageDropdown locale={locale} pathname={pathname} />

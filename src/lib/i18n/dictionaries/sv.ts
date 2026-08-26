@@ -14,7 +14,7 @@ export const svDictionary = {
     menuClose: "Stäng meny",
     home: "Start",
     coaching: "Coaching",
-    about: "Om Carolina",
+    about: "Om CVB Coaching",
     contact: "Kontakt",
     login: "Logga in",
     leadershipLabel: "Två vägar in",
@@ -40,7 +40,7 @@ export const svDictionary = {
   },
   cta: {
     primary: "Boka ett första samtal",
-    secondary: "Två vägar in",
+    secondary: "Individ & företag",
     tertiary: "Omfattning och investering",
     engagementLink: "Så går det till →",
   },

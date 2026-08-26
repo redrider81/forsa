@@ -73,7 +73,7 @@ export default async function ClientsPage({
             href={item.key === "aktiva" ? "/cvb-base/klienter" : `/cvb-base/klienter?status=${item.key}`}
             className={`inline-flex min-h-9 items-center rounded-full border px-4 py-1.5 text-[0.8125rem] font-medium transition-colors ${
               filter === item.key
-                ? "border-zinc-900 bg-zinc-900 text-white"
+                ? "border-zinc-700 bg-zinc-700 text-white"
                 : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-zinc-900"
             }`}
           >

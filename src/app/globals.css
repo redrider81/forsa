@@ -19,6 +19,9 @@
   --border: rgb(212 212 216 / 0.7);
   --input: rgb(212 212 216 / 0.8);
   --ring: #18181b;
+  --line-accent: #967844;
+  --line-track: #f6f5f3;
+  --line-progress: #d4d4d8;
 }
 
 @theme inline {
@@ -39,6 +42,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-line-accent: var(--line-accent);
+  --color-line-track: var(--line-track);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
@@ -126,7 +131,17 @@ button:focus-visible {
   color: #18181b;
 }
 
-/* Smoother GSAP transforms on editorial imagery */
+/* Animated / editorial line accents — one shared color */
+[data-progress-line],
+[data-card-accent] > span,
+[data-bento-accent] > span,
+[data-hero-line] {
+  background-color: var(--line-progress);
+}
+
+[data-progress-track] {
+  background-color: var(--line-track);
+}
 [data-editorial-image] {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;

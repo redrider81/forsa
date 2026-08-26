@@ -37,7 +37,7 @@ export default function TeamCoachingPageEn() {
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
         <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
           <HeroReveal>
-            <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
+            <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
               Team coaching
             </p>
