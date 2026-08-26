@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { AvailabilityException, AvailabilityRule, BookingSettings, PublicSlot } from "@/lib/portal/availability";
+import { FIXED_PUBLIC_BLOCKS } from "@/lib/portal/types";
 import { Panel, PanelHeading, SectionLabel, portalButtonSmClass, portalFieldClass, portalGhostButtonClass } from "@/components/portal/ui";
 
 const WEEKDAY_LABELS: Record<number, string> = {
@@ -14,6 +15,9 @@ const WEEKDAY_LABELS: Record<number, string> = {
   6: "Lördag",
   7: "Söndag",
 };
+
+const WEEKDAYS = [1, 2, 3, 4, 5] as const;
+const WEEKEND_DAYS = [6, 7] as const;
 
 const DURATIONS = [30, 45, 60, 90];
 const BUFFERS = [0, 15, 30, 45, 60];
@@ -58,30 +62,13 @@ export default function AvailabilityManager({
 
   // ---------------------------------------------------------- veckoschema
 
-  const [openDays, setOpenDays] = useState<Set<number>>(new Set(rules.map((r) => r.weekday)));
-  const [newIntervalByDay, setNewIntervalByDay] = useState<Record<number, { start: string; end: string }>>({});
+  const [busyBlock, setBusyBlock] = useState<string | null>(null);
 
-  function toggleDay(weekday: number) {
-    const isOpen = openDays.has(weekday);
-    if (isOpen) {
-      const toRemove = rules.filter((r) => r.weekday === weekday);
-      setOpenDays((prev) => {
-        const next = new Set(prev);
-        next.delete(weekday);
-        return next;
-      });
-      toRemove.forEach((rule) => void removeRule(rule.id));
-    } else {
-      setOpenDays((prev) => new Set(prev).add(weekday));
-    }
-  }
-
-  async function addInterval(weekday: number) {
-    const draft = newIntervalByDay[weekday] ?? { start: "09:00", end: "12:00" };
+  async function addBlock(weekday: number, startTime: string, endTime: string) {
     const response = await fetch("/api/portal/tillganglighet/regler", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ weekday, startTime: draft.start, endTime: draft.end }),
+      body: JSON.stringify({ weekday, startTime, endTime }),
     });
     if (response.ok) {
       const { rule } = (await response.json()) as { rule: AvailabilityRule };
@@ -94,6 +81,21 @@ export default function AvailabilityManager({
     await fetch(`/api/portal/tillganglighet/regler/${ruleId}`, { method: "DELETE" });
     setRules((prev) => prev.filter((r) => r.id !== ruleId));
     router.refresh();
+  }
+
+  async function toggleBlock(weekday: number, startTime: string, endTime: string) {
+    const key = `${weekday}-${startTime}`;
+    setBusyBlock(key);
+    try {
+      const existingRule = rules.find((r) => r.weekday === weekday && r.startTime === startTime && r.endTime === endTime);
+      if (existingRule) {
+        await removeRule(existingRule.id);
+      } else {
+        await addBlock(weekday, startTime, endTime);
+      }
+    } finally {
+      setBusyBlock(null);
+    }
   }
 
   // ---------------------------------------------------------- bokningsregler
@@ -127,15 +129,26 @@ export default function AvailabilityManager({
   const [addingException, setAddingException] = useState(false);
   const [exceptionDate, setExceptionDate] = useState("");
   const [exceptionType, setExceptionType] = useState<"unavailable" | "custom">("unavailable");
-  const [exceptionIntervals, setExceptionIntervals] = useState<Array<{ start: string; end: string }>>([
-    { start: "09:00", end: "12:00" },
-  ]);
+  const [selectedExceptionBlocks, setSelectedExceptionBlocks] = useState<Set<string>>(new Set());
   const [exceptionError, setExceptionError] = useState<string | null>(null);
+
+  const exceptionDateIsWeekend = exceptionDate
+    ? [0, 6].includes(new Date(`${exceptionDate}T12:00:00Z`).getUTCDay())
+    : false;
 
   const exceptionsByDate = exceptions.reduce<Record<string, AvailabilityException[]>>((acc, exception) => {
     (acc[exception.date] ??= []).push(exception);
     return acc;
   }, {});
+
+  function toggleExceptionBlock(startTime: string) {
+    setSelectedExceptionBlocks((prev) => {
+      const next = new Set(prev);
+      if (next.has(startTime)) next.delete(startTime);
+      else next.add(startTime);
+      return next;
+    });
+  }
 
   async function saveException() {
     setExceptionError(null);
@@ -143,13 +156,22 @@ export default function AvailabilityManager({
       setExceptionError("Välj ett datum.");
       return;
     }
+    if (exceptionDateIsWeekend && exceptionType === "custom") {
+      setExceptionError("Helger kan inte göras bokningsbara.");
+      return;
+    }
+    if (exceptionType === "custom" && selectedExceptionBlocks.size === 0) {
+      setExceptionError("Välj minst ett bokningsblock.");
+      return;
+    }
+
     const body: Record<string, unknown> =
       exceptionType === "unavailable"
         ? { date: exceptionDate, type: "unavailable" }
         : {
             date: exceptionDate,
             type: "custom",
-            intervals: exceptionIntervals.map((i) => ({ startTime: i.start, endTime: i.end })),
+            intervals: FIXED_PUBLIC_BLOCKS.filter((block) => selectedExceptionBlocks.has(block.startTime)),
           };
 
     const response = await fetch("/api/portal/tillganglighet/undantag", {
@@ -167,7 +189,7 @@ export default function AvailabilityManager({
     setAddingException(false);
     setExceptionDate("");
     setExceptionType("unavailable");
-    setExceptionIntervals([{ start: "09:00", end: "12:00" }]);
+    setSelectedExceptionBlocks(new Set());
     router.refresh();
   }
 
@@ -188,72 +210,40 @@ export default function AvailabilityManager({
       {/* 1. VECKOSCHEMA */}
       <Panel>
         <PanelHeading label="Tillgänglighet" title="Veckoschema" />
+        <p className="mt-2 text-[0.8125rem] text-zinc-500">
+          Bokning från hemsidan sker endast måndag–fredag, i fyra fasta block. 12:00–13:00 är alltid lunch.
+        </p>
         <div className="mt-5 flex flex-col gap-5">
-          {[1, 2, 3, 4, 5, 6, 7].map((weekday) => {
-            const dayRules = rules.filter((r) => r.weekday === weekday);
-            const isOpen = openDays.has(weekday);
-            const draft = newIntervalByDay[weekday] ?? { start: "09:00", end: "12:00" };
-            return (
-              <div key={weekday} className="border-b border-zinc-200/70 pb-5 last:border-0 last:pb-0">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-[0.9375rem] font-medium text-zinc-900">{WEEKDAY_LABELS[weekday]}</p>
-                  <div className="flex gap-2">
+          {WEEKDAYS.map((weekday) => (
+            <div key={weekday} className="border-b border-zinc-200/70 pb-5 last:border-0 last:pb-0">
+              <p className="text-[0.9375rem] font-medium text-zinc-900">{WEEKDAY_LABELS[weekday]}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {FIXED_PUBLIC_BLOCKS.map((block) => {
+                  const isOn = rules.some(
+                    (r) => r.weekday === weekday && r.startTime === block.startTime && r.endTime === block.endTime,
+                  );
+                  const key = `${weekday}-${block.startTime}`;
+                  return (
                     <button
+                      key={key}
                       type="button"
-                      onClick={() => (!isOpen ? toggleDay(weekday) : undefined)}
-                      className={`${portalGhostButtonClass} ${isOpen ? "border-zinc-900 text-zinc-900" : ""}`}
+                      disabled={busyBlock === key}
+                      onClick={() => toggleBlock(weekday, block.startTime, block.endTime)}
+                      className={`${portalGhostButtonClass} ${isOn ? "border-zinc-900 text-zinc-900" : ""}`}
                     >
-                      Tillgänglig
+                      {block.startTime}–{block.endTime}
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => (isOpen ? toggleDay(weekday) : undefined)}
-                      className={`${portalGhostButtonClass} ${!isOpen ? "border-zinc-900 text-zinc-900" : ""}`}
-                    >
-                      Ej tillgänglig
-                    </button>
-                  </div>
-                </div>
-
-                {isOpen && (
-                  <div className="mt-3 flex flex-col gap-2">
-                    {dayRules.map((rule) => (
-                      <div key={rule.id} className="flex items-center justify-between text-[0.875rem] text-zinc-700">
-                        <span>
-                          {rule.startTime}–{rule.endTime}
-                        </span>
-                        <button type="button" onClick={() => removeRule(rule.id)} className="text-[0.8125rem] text-zinc-500 hover:text-zinc-900">
-                          Ta bort
-                        </button>
-                      </div>
-                    ))}
-                    <div className="flex flex-wrap items-center gap-2 pt-1">
-                      <input
-                        type="time"
-                        value={draft.start}
-                        onChange={(e) =>
-                          setNewIntervalByDay((prev) => ({ ...prev, [weekday]: { ...draft, start: e.target.value } }))
-                        }
-                        className={`${portalFieldClass} w-auto`}
-                      />
-                      <span className="text-zinc-400">–</span>
-                      <input
-                        type="time"
-                        value={draft.end}
-                        onChange={(e) =>
-                          setNewIntervalByDay((prev) => ({ ...prev, [weekday]: { ...draft, end: e.target.value } }))
-                        }
-                        className={`${portalFieldClass} w-auto`}
-                      />
-                      <button type="button" onClick={() => addInterval(weekday)} className={portalGhostButtonClass}>
-                        + Lägg till intervall
-                      </button>
-                    </div>
-                  </div>
-                )}
+                  );
+                })}
               </div>
-            );
-          })}
+            </div>
+          ))}
+          {WEEKEND_DAYS.map((weekday) => (
+            <div key={weekday} className="flex items-center justify-between border-b border-zinc-200/70 pb-5 last:border-0 last:pb-0">
+              <p className="text-[0.9375rem] font-medium text-zinc-900">{WEEKDAY_LABELS[weekday]}</p>
+              <p className="text-[0.8125rem] text-zinc-500">Ej bokningsbar</p>
+            </div>
+          ))}
         </div>
       </Panel>
 
@@ -392,58 +382,35 @@ export default function AvailabilityManager({
                 >
                   Ej tillgänglig
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setExceptionType("custom")}
-                  className={`${portalGhostButtonClass} ${exceptionType === "custom" ? "border-zinc-900 text-zinc-900" : ""}`}
-                >
-                  Anpassad tillgänglighet
-                </button>
-              </div>
-
-              {exceptionType === "custom" && (
-                <div className="mt-4 flex flex-col gap-2">
-                  {exceptionIntervals.map((interval, index) => (
-                    <div key={index} className="flex flex-wrap items-center gap-2">
-                      <input
-                        type="time"
-                        value={interval.start}
-                        onChange={(e) =>
-                          setExceptionIntervals((prev) =>
-                            prev.map((item, i) => (i === index ? { ...item, start: e.target.value } : item)),
-                          )
-                        }
-                        className={`${portalFieldClass} w-auto`}
-                      />
-                      <span className="text-zinc-400">–</span>
-                      <input
-                        type="time"
-                        value={interval.end}
-                        onChange={(e) =>
-                          setExceptionIntervals((prev) =>
-                            prev.map((item, i) => (i === index ? { ...item, end: e.target.value } : item)),
-                          )
-                        }
-                        className={`${portalFieldClass} w-auto`}
-                      />
-                      {exceptionIntervals.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => setExceptionIntervals((prev) => prev.filter((_, i) => i !== index))}
-                          className="text-[0.8125rem] text-zinc-500 hover:text-zinc-900"
-                        >
-                          Ta bort
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                {!exceptionDateIsWeekend && (
                   <button
                     type="button"
-                    onClick={() => setExceptionIntervals((prev) => [...prev, { start: "09:00", end: "12:00" }])}
-                    className={`w-fit ${portalGhostButtonClass}`}
+                    onClick={() => setExceptionType("custom")}
+                    className={`${portalGhostButtonClass} ${exceptionType === "custom" ? "border-zinc-900 text-zinc-900" : ""}`}
                   >
-                    + Lägg till intervall
+                    Anpassad tillgänglighet
                   </button>
+                )}
+              </div>
+              {exceptionDateIsWeekend && (
+                <p className="mt-2 text-[0.75rem] text-zinc-500">Helger kan endast markeras som ej tillgängliga.</p>
+              )}
+
+              {exceptionType === "custom" && !exceptionDateIsWeekend && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {FIXED_PUBLIC_BLOCKS.map((block) => {
+                    const isSelected = selectedExceptionBlocks.has(block.startTime);
+                    return (
+                      <button
+                        key={block.startTime}
+                        type="button"
+                        onClick={() => toggleExceptionBlock(block.startTime)}
+                        className={`${portalGhostButtonClass} ${isSelected ? "border-zinc-900 text-zinc-900" : ""}`}
+                      >
+                        {block.startTime}–{block.endTime}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
 

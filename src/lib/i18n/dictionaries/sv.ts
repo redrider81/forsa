@@ -51,6 +51,7 @@ export const svDictionary = {
     selectRequired: "Välj ett alternativ.",
     successMessage:
       "Tack. Din förfrågan har tagits emot. CVB Coaching återkommer när läget har bedömts.",
+    bookingSuccessMessage: "Tack för din förfrågan, vi återkommer inom kort.",
     submitError: "Förfrågan kunde inte skickas just nu. Försök igen om en stund.",
     ariaLabel: "Kontaktformulär",
     optional: "valfritt",

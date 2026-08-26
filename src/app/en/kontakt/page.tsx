@@ -39,12 +39,12 @@ export default function ContactPageEn() {
 
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
-            <div className="grid gap-16 lg:grid-cols-12 lg:gap-14">
-              <div className="lg:col-span-7">
+            <div className="space-y-16 md:space-y-20">
+              <div className="max-w-5xl">
                 <ContactIntakeForm />
               </div>
 
-              <aside className="border-t border-zinc-300/35 pt-12 lg:col-span-5 lg:border-t-0 lg:border-l lg:border-zinc-300/25 lg:pl-14 lg:pt-2">
+              <aside className="max-w-2xl border-t border-zinc-300/35 pt-12 md:pt-16">
                 <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
                   How we decide if it is the right engagement
                 </h2>

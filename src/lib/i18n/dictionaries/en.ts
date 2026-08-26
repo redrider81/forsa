@@ -51,6 +51,7 @@ export const enDictionary = {
     selectRequired: "Please choose an option.",
     successMessage:
       "Thank you. Your request has been received. CVB Coaching will follow up after reviewing your situation.",
+    bookingSuccessMessage: "Thank you for your request, we will get back to you shortly.",
     submitError: "Your request could not be sent right now. Please try again shortly.",
     ariaLabel: "Contact form",
     optional: "optional",

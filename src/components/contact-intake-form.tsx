@@ -12,7 +12,7 @@ const selectChevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2
 
 export type { ContactIntakePayload } from "@/lib/contact/intake-types";
 
-const STEP1_FIELDS = ["namn", "epost", "telefon", "situation", "onskatDatum", "onskadTid"] as const;
+const STEP1_FIELDS = ["organisation", "namn", "epost", "telefon", "situation", "onskatDatum", "onskadTid"] as const;
 const FULL_FIELDS = [
   "namn",
   "organisation",
@@ -243,6 +243,7 @@ function FieldGroup({
 const selectStyle = { backgroundImage: selectChevron };
 
 type Step1Data = {
+  organisation: string;
   namn: string;
   epost: string;
   telefon: string;
@@ -308,6 +309,7 @@ export default function ContactIntakeForm() {
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success">("idle");
   const [step, setStep] = useState<1 | 2>(1);
   const [step1Data, setStep1Data] = useState<Step1Data>({
+    organisation: "",
     namn: "",
     epost: "",
     telefon: "",
@@ -345,53 +347,53 @@ export default function ContactIntakeForm() {
     }
   }
 
-  function handleContinue(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const errors = validateForm(data, messages, STEP1_FIELDS);
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      setSummaryError(validationSummary(errors, messages));
-      return;
-    }
-    setStep1Data({
-      namn: String(data.get("namn") ?? "").trim(),
-      epost: String(data.get("epost") ?? "").trim(),
-      telefon: String(data.get("telefon") ?? "").trim(),
-      situation: String(data.get("situation") ?? "").trim(),
-      onskatDatum: String(data.get("onskatDatum") ?? "").trim(),
-      onskadTid: String(data.get("onskadTid") ?? "").trim(),
-      onskadTidSlut: String(data.get("onskadTidSlut") ?? "").trim(),
-    });
-    setFieldErrors({});
-    setSummaryError("");
-    setStep(2);
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>, partial = false) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>, bookingOnly = false) {
     event.preventDefault();
     if (submitState === "submitting") return;
     const data = new FormData(event.currentTarget);
-    data.set("namn", step1Data.namn);
-    data.set("epost", step1Data.epost);
-    data.set("telefon", step1Data.telefon);
-    data.set("situation", step1Data.situation);
-    data.set("onskatDatum", step1Data.onskatDatum);
-    data.set("onskadTid", step1Data.onskadTid);
-    data.set("onskadTidSlut", step1Data.onskadTidSlut);
-    const errors = validateForm(data, messages, partial ? STEP1_FIELDS : FULL_FIELDS);
+    if (!bookingOnly) {
+      data.set("organisation", step1Data.organisation);
+      data.set("namn", step1Data.namn);
+      data.set("epost", step1Data.epost);
+      data.set("telefon", step1Data.telefon);
+      data.set("situation", step1Data.situation);
+      data.set("onskatDatum", step1Data.onskatDatum);
+      data.set("onskadTid", step1Data.onskadTid);
+      data.set("onskadTidSlut", step1Data.onskadTidSlut);
+    }
+    const errors = validateForm(data, messages, bookingOnly ? STEP1_FIELDS : FULL_FIELDS);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       setSummaryError(validationSummary(errors, messages));
       return;
     }
+    if (bookingOnly) {
+      setStep1Data({
+        organisation: String(data.get("organisation") ?? "").trim(),
+        namn: String(data.get("namn") ?? "").trim(),
+        epost: String(data.get("epost") ?? "").trim(),
+        telefon: String(data.get("telefon") ?? "").trim(),
+        situation: String(data.get("situation") ?? "").trim(),
+        onskatDatum: String(data.get("onskatDatum") ?? "").trim(),
+        onskadTid: String(data.get("onskadTid") ?? "").trim(),
+        onskadTidSlut: String(data.get("onskadTidSlut") ?? "").trim(),
+      });
+    }
+    setFieldErrors({});
+    setSummaryError("");
     await submitPayload(data);
   }
 
   if (submitState === "success") {
     return (
-      <div className="max-w-md border border-zinc-300/55 bg-zinc-900/[0.02] px-6 py-8" role="status" aria-live="polite">
-        <p className="text-[1.0625rem] leading-[1.7] text-zinc-800">{t.form.successMessage}</p>
+      <div
+        className="max-w-2xl rounded-2xl border border-zinc-200/90 bg-white px-6 py-10 text-center shadow-sm shadow-zinc-900/[0.04] md:px-10 md:py-12"
+        role="status"
+        aria-live="polite"
+      >
+        <p className="text-lg font-medium leading-relaxed text-zinc-900 md:text-xl">
+          {t.form.bookingSuccessMessage}
+        </p>
       </div>
     );
   }
@@ -400,32 +402,16 @@ export default function ContactIntakeForm() {
 
   return (
     <form
-      onSubmit={step === 1 ? handleContinue : (e) => handleSubmit(e, false)}
+      onSubmit={(event) => handleSubmit(event, step === 1)}
       className="space-y-14"
       noValidate
       aria-label={t.form.ariaLabel}
     >
       {step === 1 ? (
         <>
-          <FormSection title={t.form.sections.contact}>
-            <FieldGroup label={t.form.fields.name} htmlFor="namn" error={err("namn")}>
-              <input id="namn" name="namn" type="text" autoComplete="name" defaultValue={step1Data.namn} className={withFieldState(fieldClassBase, Boolean(err("namn")))} />
-            </FieldGroup>
-            <FieldGroup label={t.form.fields.email} htmlFor="epost" error={err("epost")}>
-              <input id="epost" name="epost" type="email" autoComplete="email" defaultValue={step1Data.epost} className={withFieldState(fieldClassBase, Boolean(err("epost")))} />
-            </FieldGroup>
-            <FieldGroup label={t.form.fields.phone} htmlFor="telefon" error={err("telefon")}>
-              <input id="telefon" name="telefon" type="tel" autoComplete="tel" defaultValue={step1Data.telefon} className={withFieldState(fieldClassBase, Boolean(err("telefon")))} />
-            </FieldGroup>
-            <FieldGroup label={t.form.fields.situation} htmlFor="situation" error={err("situation")}>
-              <textarea id="situation" name="situation" defaultValue={step1Data.situation} className={withFieldState(textareaClassBase, Boolean(err("situation")), true)} />
-            </FieldGroup>
-          </FormSection>
-
           <FormSection
             title={t.form.sections.scheduling}
             headingClassName={schedulingSectionLabelClass}
-            className="mt-16 border-t border-zinc-300/35 pt-16"
           >
             <ContactSchedulingPicker
               locale={locale}
@@ -433,12 +419,28 @@ export default function ContactIntakeForm() {
               selectedDate={step1Data.onskatDatum}
               selectedSlotStart={step1Data.onskadTid}
               selectedSlotEnd={step1Data.onskadTidSlut}
+              organisation={step1Data.organisation}
+              namn={step1Data.namn}
+              telefon={step1Data.telefon}
+              epost={step1Data.epost}
+              situation={step1Data.situation}
+              onOrganisationChange={(value) => setStep1Data((prev) => ({ ...prev, organisation: value }))}
+              onNamnChange={(value) => setStep1Data((prev) => ({ ...prev, namn: value }))}
+              onTelefonChange={(value) => setStep1Data((prev) => ({ ...prev, telefon: value }))}
+              onEpostChange={(value) => setStep1Data((prev) => ({ ...prev, epost: value }))}
+              onSituationChange={(value) => setStep1Data((prev) => ({ ...prev, situation: value }))}
               onSelectDate={(value) => setStep1Data((prev) => ({ ...prev, onskatDatum: value }))}
               onSelectSlot={(startAt, endAt) =>
                 setStep1Data((prev) => ({ ...prev, onskadTid: startAt, onskadTidSlut: endAt }))
               }
+              organisationError={err("organisation")}
+              namnError={err("namn")}
+              telefonError={err("telefon")}
+              epostError={err("epost")}
+              situationError={err("situation")}
               dateError={err("onskatDatum")}
               windowError={err("onskadTid")}
+              isSubmitting={submitState === "submitting"}
               dateLabelClass={labelClass}
               errorTextClass={errorTextClass}
             />
@@ -457,7 +459,7 @@ export default function ContactIntakeForm() {
           <FormSection title={t.form.sections.contact}>
             <div className="grid gap-7 md:grid-cols-2 md:gap-x-10">
               <FieldGroup label={t.form.fields.organization} htmlFor="organisation" error={err("organisation")}>
-                <input id="organisation" name="organisation" type="text" autoComplete="organization" className={withFieldState(fieldClassBase, Boolean(err("organisation")))} />
+                <input id="organisation" name="organisation" type="text" autoComplete="organization" defaultValue={step1Data.organisation} className={withFieldState(fieldClassBase, Boolean(err("organisation")))} />
               </FieldGroup>
               <FieldGroup label={t.form.fields.role} htmlFor="roll" error={err("roll")}>
                 <input id="roll" name="roll" type="text" autoComplete="organization-title" className={withFieldState(fieldClassBase, Boolean(err("roll")))} />
@@ -509,16 +511,25 @@ export default function ContactIntakeForm() {
 
       <div className="border-t border-zinc-300/45 pt-10">
         <div className="max-w-md space-y-5">
-          <p className="text-sm leading-[1.7] text-zinc-600">{t.form.confidentialityNote}</p>
+          {(step === 2 || (step === 1 && !step1Data.onskadTid)) && (
+            <p className="text-sm leading-[1.7] text-zinc-600">{t.form.confidentialityNote}</p>
+          )}
           {summaryError ? <p className={errorTextClass} role="alert" aria-live="polite">{summaryError}</p> : null}
           {step === 1 ? (
-            <button
-              type="submit"
-              disabled={!step1Data.onskadTid}
-              className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-zinc-900"
-            >
-              {t.form.continue}
-            </button>
+            // Once a real slot is selected, ContactSchedulingPicker renders its
+            // own "Fortsätt med vald tid" submit button right below the time
+            // list — the same handleContinue flow, triggered from closer to
+            // the selection. Hide this one then so there is only one primary
+            // continuation action at a time.
+            !step1Data.onskadTid && (
+              <button
+                type="submit"
+                disabled
+                className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-zinc-900"
+              >
+                {t.form.continue}
+              </button>
+            )
           ) : (
             <div className="flex flex-wrap gap-3">
               <button type="submit" disabled={submitState === "submitting"} className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60">

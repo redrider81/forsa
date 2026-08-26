@@ -240,6 +240,23 @@ export type Client = {
 
 export type ClientLifecycleStatus = "aktiv" | "avslutad";
 
+/**
+ * Public booking uses exactly these four fixed weekday blocks — no dynamic
+ * duration/buffer slots. 12:00–13:00 is a permanent lunch gap: it is not
+ * one of the four values below, so it can never be represented as a public
+ * block regardless of what availability data exists.
+ */
+export const FIXED_PUBLIC_BLOCKS = [
+  { startTime: "08:00", endTime: "10:00" },
+  { startTime: "10:00", endTime: "12:00" },
+  { startTime: "13:00", endTime: "15:00" },
+  { startTime: "15:00", endTime: "17:00" },
+] as const;
+
+export function isFixedPublicBlock(startTime: string, endTime: string): boolean {
+  return FIXED_PUBLIC_BLOCKS.some((block) => block.startTime === startTime && block.endTime === endTime);
+}
+
 export type CoachProfile = {
   id: string;
   name: string;

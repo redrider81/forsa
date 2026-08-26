@@ -52,6 +52,7 @@ export type Dictionary = {
     fieldRequired: string;
     selectRequired: string;
     successMessage: string;
+    bookingSuccessMessage: string;
     submitError: string;
     ariaLabel: string;
     optional: string;

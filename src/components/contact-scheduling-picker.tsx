@@ -42,6 +42,16 @@ function formatSlotInterval(startAt: string, endAt: string): string {
   return `${formatSlotTime(startAt)}–${formatSlotTime(endAt)}`;
 }
 
+function formatSelectedDateLabel(iso: string, locale: Locale): string {
+  const formatted = new Intl.DateTimeFormat(locale === "sv" ? "sv-SE" : "en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    timeZone: "Europe/Stockholm",
+  }).format(new Date(iso));
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}
+
 const weekdayLabels: Record<Locale, string[]> = {
   sv: ["M", "T", "O", "T", "F", "L", "S"],
   en: ["M", "T", "W", "T", "F", "S", "S"],
@@ -52,7 +62,14 @@ const weekdayLabels: Record<Locale, string[]> = {
 // touching the shared component. Kept in the same neutral zinc family as
 // the rest of this monochrome public site.
 const calendarClassNameOverrides = {
+  months: "relative flex flex-col gap-6 sm:flex-col md:flex-col",
+  month: "w-full max-w-full",
   day_button: "group-data-[disabled]:text-zinc-500",
+  month_caption: "mb-4",
+  caption_label: "text-[0.9375rem] font-medium tracking-tight text-zinc-900",
+  weekday: "text-[0.6875rem] font-medium tracking-[0.12em] text-zinc-400",
+  button_previous: "size-10 rounded-full hover:bg-zinc-100",
+  button_next: "size-10 rounded-full hover:bg-zinc-100",
 };
 
 // Light CVB green for dates with real availability — dot when idle,
@@ -66,16 +83,40 @@ const AVAILABLE_DAY_CLASS = cn(
 const SELECTED_SLOT_CLASS =
   "border-[#6BB5A8] bg-[#DFF0EC] text-[#3F7569] shadow-[inset_0_0_0_1px_rgba(107,181,168,0.35)] ring-2 ring-[#6BB5A8]/25 hover:bg-[#D0EDE6]";
 
+const compactLabelClass = "block text-[0.75rem] font-medium tracking-[0.02em] text-zinc-700";
+
+const compactFieldClass =
+  "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-[0.875rem] leading-snug text-zinc-900 placeholder:text-zinc-400 transition-colors duration-150 focus:border-[#6BB5A8] focus:outline-none focus:ring-2 focus:ring-[#6BB5A8]/20";
+
+const compactTextareaClass =
+  "min-h-[5.5rem] w-full resize-y rounded-xl border border-zinc-200 bg-zinc-900/[0.02] px-3 py-2.5 text-[0.875rem] leading-relaxed text-zinc-900 placeholder:text-zinc-400 transition-colors duration-150 focus:border-[#6BB5A8] focus:outline-none focus:ring-2 focus:ring-[#6BB5A8]/20";
+
 type ContactSchedulingPickerProps = {
   locale: Locale;
   t: Dictionary;
   selectedDate: string;
   selectedSlotStart: string;
   selectedSlotEnd?: string;
+  organisation: string;
+  namn: string;
+  telefon: string;
+  epost: string;
+  situation: string;
+  onOrganisationChange: (value: string) => void;
+  onNamnChange: (value: string) => void;
+  onTelefonChange: (value: string) => void;
+  onEpostChange: (value: string) => void;
+  onSituationChange: (value: string) => void;
   onSelectDate: (value: string) => void;
   onSelectSlot: (startAt: string, endAt: string) => void;
+  organisationError?: string;
+  namnError?: string;
+  telefonError?: string;
+  epostError?: string;
+  situationError?: string;
   dateError?: string;
   windowError?: string;
+  isSubmitting?: boolean;
   dateLabelClass: string;
   errorTextClass: string;
 };
@@ -86,10 +127,26 @@ export default function ContactSchedulingPicker({
   selectedDate,
   selectedSlotStart,
   selectedSlotEnd = "",
+  organisation,
+  namn,
+  telefon,
+  epost,
+  situation,
+  onOrganisationChange,
+  onNamnChange,
+  onTelefonChange,
+  onEpostChange,
+  onSituationChange,
   onSelectDate,
   onSelectSlot,
+  organisationError,
+  namnError,
+  telefonError,
+  epostError,
+  situationError,
   dateError,
   windowError,
+  isSubmitting = false,
   dateLabelClass,
   errorTextClass,
 }: ContactSchedulingPickerProps) {
@@ -151,10 +208,18 @@ export default function ContactSchedulingPicker({
     [slots, selectedDate],
   );
 
-  const visibleMonthKey = `${visibleMonth.getFullYear()}-${String(visibleMonth.getMonth() + 1).padStart(2, "0")}`;
+  const visibleMonthKeys = React.useMemo(() => {
+    const keys: string[] = [];
+    for (let offset = 0; offset < 3; offset += 1) {
+      const monthDate = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + offset, 1);
+      keys.push(`${monthDate.getFullYear()}-${String(monthDate.getMonth() + 1).padStart(2, "0")}`);
+    }
+    return keys;
+  }, [visibleMonth]);
+
   const monthHasSlots = React.useMemo(
-    () => [...datesWithSlots].some((date) => monthKey(date) === visibleMonthKey),
-    [datesWithSlots, visibleMonthKey],
+    () => [...datesWithSlots].some((date) => visibleMonthKeys.includes(monthKey(date))),
+    [datesWithSlots, visibleMonthKeys],
   );
 
   function isDateDisabled(date: Date): boolean {
@@ -170,26 +235,29 @@ export default function ContactSchedulingPicker({
   const isPaused = slots !== null && !bookingEnabled;
 
   return (
-    <div className="space-y-8">
-      <p className="text-sm leading-[1.7] text-zinc-600">{t.form.schedulingHint}</p>
+    <div className="space-y-10">
+      <p className="max-w-prose text-[0.9375rem] leading-[1.75] text-zinc-600">{t.form.schedulingHint}</p>
 
       {(loadFailed || isPaused) && (
-        <p className="text-sm leading-[1.7] text-zinc-600">
+        <p className="text-[0.9375rem] leading-[1.75] text-zinc-600">
           {locale === "sv"
             ? "Bokning är tillfälligt pausad. Kontakta oss gärna så återkommer vi."
             : "Booking is temporarily paused. Feel free to contact us and we will get back to you."}
         </p>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         <p className={dateLabelClass}>{t.form.fields.preferredDate}</p>
-        <Card className="max-w-2xl gap-0 border-zinc-300/70 bg-white/60 p-0 shadow-none">
-          <CardContent className="relative p-0 md:pr-56">
-            <div className="p-4 md:p-6">
+        <Card className="w-full max-w-5xl gap-0 rounded-2xl border-zinc-200/90 bg-white p-0 shadow-sm shadow-zinc-900/[0.04]">
+          <CardContent className="p-0 md:grid md:grid-cols-[auto_minmax(26rem,1fr)] md:items-start">
+            <div className="w-fit max-w-full shrink-0 self-start p-5 sm:p-7 md:p-8">
               <Calendar
                 mode="single"
                 locale={dayPickerLocale}
                 weekStartsOn={1}
+                numberOfMonths={3}
+                pagedNavigation={false}
+                reverseMonths={false}
                 selected={selected}
                 onSelect={(date) => {
                   if (date) onSelectDate(toIsoDate(date));
@@ -200,7 +268,7 @@ export default function ContactSchedulingPicker({
                 modifiers={{ available: (date) => datesWithSlots.has(toIsoDate(date)) }}
                 modifiersClassNames={{ available: AVAILABLE_DAY_CLASS }}
                 showOutsideDays={false}
-                className="bg-transparent p-0 [--cell-size:2.25rem] md:[--cell-size:2.5rem]"
+                className="bg-transparent p-0 [--cell-size:2.5rem] sm:[--cell-size:2.625rem] md:[--cell-size:2.875rem]"
                 classNames={calendarClassNameOverrides}
                 formatters={{
                   formatWeekdayName: (date) => {
@@ -210,15 +278,15 @@ export default function ContactSchedulingPicker({
                 }}
               />
             </div>
-            <div className="border-t border-zinc-300/70 p-4 md:absolute md:inset-y-0 md:right-0 md:flex md:max-h-none md:w-56 md:flex-col md:border-t-0 md:border-l md:p-5">
-              <p className={cn(dateLabelClass, "mb-3")}>{t.form.fields.preferredTime}</p>
+            <div className="flex flex-col border-t border-zinc-200/90 p-5 sm:p-7 md:sticky md:top-8 md:max-h-[calc(100dvh-2rem)] md:self-start md:overflow-y-auto md:border-t-0 md:border-l md:px-8 md:py-8">
+              <p className={cn(dateLabelClass, "mb-5")}>{t.form.fields.preferredTime}</p>
               <div
-                className="no-scrollbar grid max-h-72 grid-cols-2 gap-2 overflow-y-auto md:max-h-none md:grid-cols-1"
+                className="no-scrollbar grid max-h-72 grid-cols-1 gap-3 overflow-y-auto sm:grid-cols-2 md:max-h-none md:grid-cols-1"
                 role="listbox"
                 aria-label={t.form.timeSlotAria}
               >
                 {isPaused ? null : !selectedDate ? (
-                  <p className="col-span-2 text-[0.8125rem] leading-relaxed text-zinc-500 md:col-span-1">
+                  <p className="col-span-1 text-[0.875rem] leading-relaxed text-zinc-500 sm:col-span-2 md:col-span-1">
                     {locale === "sv" ? "Välj ett tillgängligt datum i kalendern." : "Choose an available date in the calendar."}
                   </p>
                 ) : slotsForSelectedDate.length > 0 ? (
@@ -231,17 +299,17 @@ export default function ContactSchedulingPicker({
                       variant="outline"
                       onClick={() => onSelectSlot(slot.startAt, slot.endAt)}
                       className={cn(
-                        "h-auto min-h-10 w-full rounded-full px-3 py-2.5 text-[0.8125rem] font-medium shadow-none tabular-nums",
+                        "h-auto min-h-11 w-full rounded-full px-4 py-3 text-[0.875rem] font-medium shadow-none tabular-nums transition-colors duration-150",
                         selectedSlotStart === slot.startAt
                           ? SELECTED_SLOT_CLASS
-                          : "border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-500 hover:bg-white",
+                          : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50",
                       )}
                     >
                       {formatSlotInterval(slot.startAt, slot.endAt)}
                     </Button>
                   ))
                 ) : !monthHasSlots ? (
-                  <p className="col-span-2 text-[0.8125rem] leading-relaxed text-zinc-500 md:col-span-1">
+                  <p className="col-span-1 text-[0.875rem] leading-relaxed text-zinc-500 sm:col-span-2 md:col-span-1">
                     {locale === "sv" ? (
                       <>
                         Inga lediga tider denna månad.
@@ -257,11 +325,137 @@ export default function ContactSchedulingPicker({
                     )}
                   </p>
                 ) : (
-                  <p className="col-span-2 text-[0.8125rem] text-zinc-500 md:col-span-1">
+                  <p className="col-span-1 text-[0.875rem] leading-relaxed text-zinc-500 sm:col-span-2 md:col-span-1">
                     {locale === "sv" ? "Inga lediga tider för valt datum." : "No available times for the selected date."}
                   </p>
                 )}
               </div>
+
+              {selectedSlotStart && selectedSlotEnd ? (
+                <div className="mt-8 rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5">
+                  <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
+                    {locale === "sv" ? "Vald tid" : "Selected time"}
+                  </p>
+                  <p className="mt-3 text-base font-medium leading-snug text-zinc-900">
+                    {formatSelectedDateLabel(selectedSlotStart, locale)} · {formatSlotInterval(selectedSlotStart, selectedSlotEnd)}
+                  </p>
+
+                  <div className="mt-6 space-y-3.5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="picker-organisation" className={compactLabelClass}>
+                        {locale === "sv" ? "Företag" : "Company"}
+                      </label>
+                      <input
+                        id="picker-organisation"
+                        name="organisation"
+                        type="text"
+                        autoComplete="organization"
+                        value={organisation}
+                        onChange={(event) => onOrganisationChange(event.target.value)}
+                        className={cn(compactFieldClass, organisationError && "border-zinc-600")}
+                      />
+                      {organisationError ? (
+                        <p className={errorTextClass} role="alert">
+                          {organisationError}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="picker-namn" className={compactLabelClass}>
+                        {t.form.fields.name}
+                      </label>
+                      <input
+                        id="picker-namn"
+                        name="namn"
+                        type="text"
+                        autoComplete="name"
+                        value={namn}
+                        onChange={(event) => onNamnChange(event.target.value)}
+                        className={cn(compactFieldClass, namnError && "border-zinc-600")}
+                      />
+                      {namnError ? (
+                        <p className={errorTextClass} role="alert">
+                          {namnError}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="picker-telefon" className={compactLabelClass}>
+                        {t.form.fields.phone}
+                      </label>
+                      <input
+                        id="picker-telefon"
+                        name="telefon"
+                        type="tel"
+                        autoComplete="tel"
+                        value={telefon}
+                        onChange={(event) => onTelefonChange(event.target.value)}
+                        className={cn(compactFieldClass, telefonError && "border-zinc-600")}
+                      />
+                      {telefonError ? (
+                        <p className={errorTextClass} role="alert">
+                          {telefonError}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="picker-epost" className={compactLabelClass}>
+                        {t.form.fields.email}
+                      </label>
+                      <input
+                        id="picker-epost"
+                        name="epost"
+                        type="email"
+                        autoComplete="email"
+                        value={epost}
+                        onChange={(event) => onEpostChange(event.target.value)}
+                        className={cn(compactFieldClass, epostError && "border-zinc-600")}
+                      />
+                      {epostError ? (
+                        <p className={errorTextClass} role="alert">
+                          {epostError}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="picker-situation" className={compactLabelClass}>
+                        {t.form.fields.situation}
+                      </label>
+                      <textarea
+                        id="picker-situation"
+                        name="situation"
+                        value={situation}
+                        onChange={(event) => onSituationChange(event.target.value)}
+                        className={cn(compactTextareaClass, situationError && "border-zinc-600")}
+                      />
+                      {situationError ? (
+                        <p className={errorTextClass} role="alert">
+                          {situationError}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#3F7569] px-7 py-3.5 text-sm font-medium leading-snug tracking-wide text-white transition duration-150 hover:bg-[#35685D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7569] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isSubmitting
+                      ? t.form.submit.submitting
+                      : locale === "sv"
+                        ? "Boka tid"
+                        : "Book time"}
+                  </button>
+                  <p className="mt-4 text-center text-[0.8125rem] leading-relaxed text-zinc-500">
+                    {t.form.confidentialityNote}
+                  </p>
+                </div>
+              ) : null}
             </div>
           </CardContent>
         </Card>

@@ -1,10 +1,10 @@
 import { readCoachSession } from "@/lib/portal/session";
 import { addAvailabilityException } from "@/lib/portal/availability";
+import { isFixedPublicBlock } from "@/lib/portal/types";
 
-const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-/** Carolina overrides one date: unavailable, or a custom set of intervals. */
+/** Carolina overrides one date: unavailable, or a custom set of fixed public blocks. */
 export async function POST(request: Request) {
   const session = await readCoachSession();
   if (!session) {
@@ -26,6 +26,14 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Ogiltigt datum eller typ." }, { status: 400 });
   }
 
+  // Hard weekend rule: a Saturday/Sunday exception can only ever be
+  // "unavailable" — it can never make a weekend publicly bookable.
+  const weekday = new Date(`${date}T12:00:00Z`).getUTCDay(); // 0 = Sunday, 6 = Saturday
+  const isWeekend = weekday === 0 || weekday === 6;
+  if (isWeekend && type === "custom") {
+    return Response.json({ ok: false, error: "Helger kan inte göras bokningsbara." }, { status: 400 });
+  }
+
   if (type === "unavailable") {
     const exception = await addAvailabilityException({ coachId: session.coachId, date, type: "unavailable" });
     if (!exception) return Response.json({ ok: false, error: "Kunde inte spara undantaget." }, { status: 502 });
@@ -34,7 +42,7 @@ export async function POST(request: Request) {
 
   const intervals = Array.isArray(raw.intervals) ? (raw.intervals as unknown[]) : [];
   if (intervals.length === 0) {
-    return Response.json({ ok: false, error: "Ange minst ett tidsintervall." }, { status: 400 });
+    return Response.json({ ok: false, error: "Ange minst ett bokningsblock." }, { status: 400 });
   }
 
   const parsed: Array<{ startTime: string; endTime: string }> = [];
@@ -42,8 +50,8 @@ export async function POST(request: Request) {
     const entry = (item ?? {}) as Record<string, unknown>;
     const startTime = typeof entry.startTime === "string" ? entry.startTime : "";
     const endTime = typeof entry.endTime === "string" ? entry.endTime : "";
-    if (!TIME_RE.test(startTime) || !TIME_RE.test(endTime) || startTime >= endTime) {
-      return Response.json({ ok: false, error: "Starttid måste vara före sluttid." }, { status: 400 });
+    if (!isFixedPublicBlock(startTime, endTime)) {
+      return Response.json({ ok: false, error: "Ogiltigt bokningsblock." }, { status: 400 });
     }
     parsed.push({ startTime, endTime });
   }
