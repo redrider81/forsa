@@ -1414,6 +1414,7 @@ export type Database = {
           start_at: string
         }[]
       }
+      get_public_booking_status: { Args: { p_slug: string }; Returns: boolean }
       reactivate_coach_client: {
         Args: { p_client_id: string }
         Returns: undefined
