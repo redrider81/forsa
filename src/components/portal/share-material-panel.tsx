@@ -15,6 +15,7 @@ import {
   PanelHeading,
   portalButtonClass,
   portalFieldClass,
+  portalGhostButtonClass,
   portalOutlineButtonClass,
   SectionLabel,
   Tag,
@@ -184,7 +185,7 @@ export default function ShareMaterialPanel({ clientId, materials }: Props) {
                     type="button"
                     disabled={busy}
                     onClick={() => void remove(item.id, item.title)}
-                    className="shrink-0 text-[0.8125rem] text-zinc-500 underline underline-offset-4 hover:text-zinc-800"
+                    className={portalGhostButtonClass}
                   >
                     Ta bort
                   </button>

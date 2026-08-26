@@ -14,7 +14,7 @@ import {
   Divider,
   PageHeading,
   Panel,
-  portalButtonClass,
+  portalPrimaryButtonClass,
   portalPageStackClass,
   RowLink,
   SectionLabel,
@@ -36,7 +36,7 @@ export default async function ClientsPage() {
           title="Klienter"
           lead={`${clients.length} aktiva coachingrelationer · ${engagements.length} uppdrag`}
         />
-        <Link href="/portal/klienter/ny" className={portalButtonClass}>
+        <Link href="/portal/klienter/ny" className={portalPrimaryButtonClass}>
           + Ny klient
         </Link>
       </div>

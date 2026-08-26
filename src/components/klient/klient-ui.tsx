@@ -379,6 +379,10 @@ export function QuietLink({
   );
 }
 
+/** Sekundär pill-knapp för tysta åtgärder (t.ex. Ta bort, Avböj). */
+export const klientGhostButtonClass =
+  "inline-flex min-h-9 items-center justify-center gap-1 rounded-full border border-[var(--klient-border-muted)] bg-white px-4 py-2 text-[0.8125rem] font-medium text-zinc-600 transition-colors duration-150 hover:border-zinc-400 hover:bg-[var(--klient-text-block-bg)] hover:text-zinc-900 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
 /** Primär knappstil — ljus blågrå (#F0F4F5), mörk text. */
 export const klientButtonClass =
   "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-6 py-3 text-sm font-medium text-[var(--klient-button-text)] transition-colors duration-150 hover:bg-[var(--klient-button-bg-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";

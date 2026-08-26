@@ -2,6 +2,7 @@ import Link from "next/link";
 import { readCoachSession } from "@/lib/portal/session";
 import { buildEngagementOverview, fetchPortalRepositoryData, listEngagements } from "@/lib/portal/repository";
 import { engagementStatusLabel, formatDate } from "@/lib/portal/format";
+import { engagementStatusTagTone } from "@/lib/portal/status-tones";
 import { PageHeading, Panel, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function EngagementsPage() {
@@ -44,7 +45,9 @@ export default async function EngagementsPage() {
                       ? "1 deltagare"
                       : `${overview.participants.length} deltagare`}
                   </Tag>
-                  <Tag>{engagementStatusLabel[engagement.status]}</Tag>
+                  <Tag tone={engagementStatusTagTone[engagement.status]}>
+                    {engagementStatusLabel[engagement.status]}
+                  </Tag>
                 </div>
 
                 <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-zinc-200/80 pt-4 sm:grid-cols-4">

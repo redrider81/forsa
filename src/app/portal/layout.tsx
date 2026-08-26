@@ -3,7 +3,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import "@/components/klient/klient-tokens.css";
 import { PortalBottomNav, PortalDesktopNav } from "@/components/portal/portal-nav";
-import { Avatar } from "@/components/portal/ui";
 import { LogoMark } from "@/components/brand/logo";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { readCoachSession } from "@/lib/portal/session";
@@ -21,12 +20,6 @@ export default async function PortalLayout({ children }: { children: React.React
   }
 
   const today = todayIso();
-  const initials = session.name
-    .split(" ")
-    .filter(Boolean)
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 3);
 
   return (
     <div data-portal className="flex min-h-[100svh] flex-col bg-[var(--klient-page-bg)] text-zinc-900">
@@ -35,12 +28,12 @@ export default async function PortalLayout({ children }: { children: React.React
         style={{ paddingTop: "env(safe-area-inset-top)" }}
       >
         <div className="mx-auto w-full max-w-4xl px-5 md:px-6 xl:max-w-5xl">
-          <div className="flex items-center justify-between gap-3 py-3.5">
+          <div className="flex items-center justify-between gap-3 pb-3.5 pt-6 md:pt-7">
             <Link
               href="/portal"
               className="shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
             >
-              <LogoMark className="h-10 w-auto" priority />
+              <LogoMark className="h-12 w-auto md:h-14" priority />
             </Link>
 
             <div className="flex items-center gap-3">
@@ -50,13 +43,6 @@ export default async function PortalLayout({ children }: { children: React.React
               >
                 {formatWeekdayDate(today)}
               </time>
-              <Link
-                href="/portal/profil"
-                aria-label="Profil"
-                className="hidden rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)] md:inline-flex"
-              >
-                <Avatar initials={initials} size="sm" />
-              </Link>
             </div>
           </div>
 

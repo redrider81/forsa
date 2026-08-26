@@ -3,7 +3,8 @@ import { readCoachSession } from "@/lib/portal/session";
 import { fetchPortalRepositoryData, getCoach, listClients, listEngagements } from "@/lib/portal/repository";
 import { LogoutButton } from "@/components/portal/portal-nav";
 import DemoResetButton from "@/components/portal/demo-reset-button";
-import { Avatar, DefinitionList, PageHeading, Panel, PanelHeading, portalPageStackClass } from "@/components/portal/ui";
+import ProfileEditor from "@/components/portal/profile-editor";
+import { PageHeading, Panel, PanelHeading, portalOutlineButtonClass, portalPageStackClass } from "@/components/portal/ui";
 
 export default async function ProfilePage() {
   const session = await readCoachSession();
@@ -19,27 +20,17 @@ export default async function ProfilePage() {
       <PageHeading label="Profil" title="Profil" />
 
       <Panel>
-        <div className="flex items-start gap-4">
-          <Avatar initials={coach.initials} size="lg" />
-          <div className="min-w-0">
-            <h2 className="text-[1.25rem] font-medium leading-tight tracking-tight text-zinc-900">
-              {coach.name}
-            </h2>
-            <p className="mt-1.5 text-[0.9375rem] leading-snug text-zinc-600">{coach.title}</p>
-            <p className="mt-1 text-[0.8125rem] leading-snug text-zinc-500">{coach.email}</p>
-          </div>
-        </div>
-
-        <div className="mt-6 border-t border-zinc-200/80 pt-5">
-          <DefinitionList
-            items={[
-              { term: "Certifiering", value: coach.credential },
-              { term: "Arbetsområde", value: coach.focus },
-              { term: "Aktiva uppdrag", value: `${engagements.length} uppdrag` },
-              { term: "Klienter och deltagare", value: `${clients.length} pågående relationer` },
-            ]}
-          />
-        </div>
+        <ProfileEditor
+          coach={{
+            name: coach.name,
+            title: coach.title,
+            email: coach.email,
+            credential: coach.credential,
+            focus: coach.focus,
+          }}
+          engagementsLabel={`${engagements.length} uppdrag`}
+          clientsLabel={`${clients.length} pågående relationer`}
+        />
       </Panel>
 
       <Panel>
@@ -90,10 +81,7 @@ export default async function ProfilePage() {
 
       <div className="flex flex-col gap-3 pb-2 sm:flex-row">
         <LogoutButton className="flex-1" />
-        <Link
-          href="/"
-          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]"
-        >
+        <Link href="/" className={`flex-1 ${portalOutlineButtonClass}`}>
           cvbcoaching.se
         </Link>
       </div>

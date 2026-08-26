@@ -9,8 +9,11 @@ import {
   PortalSectionHeader,
   RowLink,
   Avatar,
-  portalButtonClass,
 } from "@/components/portal/ui";
+import {
+  TodayAgendaMeetingActions,
+  type MeetableClient,
+} from "@/components/portal/today-agenda-meeting-actions";
 
 const UPCOMING_PREVIEW = 4;
 const ACTIVITY_PREVIEW = 3;
@@ -60,7 +63,15 @@ export function ExecutiveSummaryBand({
   );
 }
 
-export function TodayAgendaSection({ items, today }: { items: OperationsItem[]; today: string }) {
+export function TodayAgendaSection({
+  items,
+  today,
+  meetableClients = [],
+}: {
+  items: OperationsItem[];
+  today: string;
+  meetableClients?: MeetableClient[];
+}) {
   if (items.length === 0) {
     return (
       <section className="flex flex-col gap-3 rounded-2xl border border-[var(--klient-border-muted)] bg-[var(--klient-text-block-bg)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
@@ -88,7 +99,7 @@ export function TodayAgendaSection({ items, today }: { items: OperationsItem[]; 
           items.length === 1 ? "1 insats planerad" : `${items.length} insatser planerade`
         }
       />
-      <div className="mt-3">
+      <div className="mt-5">
         {items.map((item, index) => {
           const isCoachingSession = item.kind === "Coachingsamtal";
           const sessionId = isCoachingSession ? item.id.replace("op-", "") : null;
@@ -97,17 +108,17 @@ export function TodayAgendaSection({ items, today }: { items: OperationsItem[]; 
             <div key={item.id}>
               {index > 0 ? <Divider /> : null}
               <ActionRow item={item} today={today} />
-              {isCoachingSession && sessionId ? (
-                <Link
-                  href={`/portal/mote/${sessionId}`}
-                  className={`-mx-3 px-3 py-2 ${portalButtonClass} inline-block`}
-                >
-                  Starta möte
-                </Link>
-              ) : null}
             </div>
           );
         })}
+        {(() => {
+          const firstCoachingSession = items.find((item) => item.kind === "Coachingsamtal");
+          const sessionId = firstCoachingSession?.id.replace("op-", "");
+          if (!sessionId) return null;
+          return (
+            <TodayAgendaMeetingActions sessionId={sessionId} clients={meetableClients} />
+          );
+        })()}
       </div>
     </Panel>
   );

@@ -10,6 +10,7 @@ const items = [
   { href: "/portal/kalender", label: "Kalender", exact: false },
   { href: "/portal/klienter", label: "Klienter", exact: false },
   { href: "/portal/uppdrag", label: "Uppdrag", exact: false },
+  { href: "/portal/avtal", label: "Avtal", exact: false },
   { href: "/portal/dokument", label: "Dokument", exact: false },
   { href: "/portal/profil", label: "Profil", exact: false },
 ] as const;
@@ -66,7 +67,7 @@ export function PortalDesktopNav() {
                 aria-current={active ? "page" : undefined}
                 className={`flex min-h-11 items-center justify-center rounded-xl px-3 py-2.5 text-[0.8125rem] font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)] ${
                   active
-                    ? "bg-white text-[#7d6432] shadow-[0_1px_4px_rgba(24,24,27,0.08)] ring-1 ring-[#e6e2d8]"
+                    ? "bg-white text-zinc-900 shadow-[0_1px_4px_rgba(24,24,27,0.08)] ring-1 ring-[#e6e2d8]"
                     : "text-zinc-600 hover:bg-white/60 hover:text-zinc-900"
                 }`}
               >

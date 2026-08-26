@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Commitment, DevelopmentGoal } from "@/lib/portal/types";
+import { commitmentStatusTagTone } from "@/lib/portal/status-tones";
 import {
   Panel,
   PanelHeading,
@@ -269,7 +270,7 @@ export default function MeetingWorkspace({
                 {openCommitments.map((commitment) => (
                   <li key={commitment.id} className="flex items-start justify-between gap-4">
                     <span className="text-[0.9375rem] leading-[1.6] text-zinc-700">{commitment.text}</span>
-                    <Tag tone={commitment.status === "pagar" ? "progress" : "open"}>
+                    <Tag tone={commitmentStatusTagTone[commitment.status]}>
                       {commitment.status === "pagar" ? "Pågår" : "Öppet"}
                     </Tag>
                   </li>

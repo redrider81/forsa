@@ -10,7 +10,32 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.15"
+    PostgrestVersion: "14.17"
+  }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -210,6 +235,177 @@ export type Database = {
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contract_signatures: {
+        Row: {
+          contract_id: string
+          contract_version_id: string
+          id: string
+          signed_at: string
+          signer_auth_user_id: string
+          signer_email: string
+          signer_name: string
+          signer_role: Database["public"]["Enums"]["contract_signer_role"]
+        }
+        Insert: {
+          contract_id: string
+          contract_version_id: string
+          id?: string
+          signed_at?: string
+          signer_auth_user_id: string
+          signer_email: string
+          signer_name: string
+          signer_role: Database["public"]["Enums"]["contract_signer_role"]
+        }
+        Update: {
+          contract_id?: string
+          contract_version_id?: string
+          id?: string
+          signed_at?: string
+          signer_auth_user_id?: string
+          signer_email?: string
+          signer_name?: string
+          signer_role?: Database["public"]["Enums"]["contract_signer_role"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_signatures_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contract_templates: {
+        Row: {
+          coach_id: string
+          content: Json
+          created_at: string
+          id: string
+          name: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          coach_id: string
+          content?: Json
+          created_at?: string
+          id?: string
+          name: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          coach_id?: string
+          content?: Json
+          created_at?: string
+          id?: string
+          name?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_templates_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "coaches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contracts: {
+        Row: {
+          client_id: string
+          client_signed_at: string | null
+          coach_id: string
+          coach_signed_at: string | null
+          content: Json
+          created_at: string
+          currency: string
+          engagement_id: string | null
+          id: string
+          locked_at: string | null
+          payment_terms: string | null
+          price_amount: number | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["contract_status"]
+          template_id: string | null
+          title: string
+          updated_at: string
+          version_id: string
+        }
+        Insert: {
+          client_id: string
+          client_signed_at?: string | null
+          coach_id: string
+          coach_signed_at?: string | null
+          content?: Json
+          created_at?: string
+          currency?: string
+          engagement_id?: string | null
+          id?: string
+          locked_at?: string | null
+          payment_terms?: string | null
+          price_amount?: number | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["contract_status"]
+          template_id?: string | null
+          title: string
+          updated_at?: string
+          version_id?: string
+        }
+        Update: {
+          client_id?: string
+          client_signed_at?: string | null
+          coach_id?: string
+          coach_signed_at?: string | null
+          content?: Json
+          created_at?: string
+          currency?: string
+          engagement_id?: string | null
+          id?: string
+          locked_at?: string | null
+          payment_terms?: string | null
+          price_amount?: number | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["contract_status"]
+          template_id?: string | null
+          title?: string
+          updated_at?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracts_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contracts_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "coaches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contracts_engagement_id_fkey"
+            columns: ["engagement_id"]
+            isOneToOne: false
+            referencedRelation: "engagements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contracts_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "contract_templates"
             referencedColumns: ["id"]
           },
         ]
@@ -988,12 +1184,12 @@ export type Database = {
       }
       complete_coaching_session: {
         Args: {
-          p_session_id: string
           p_awareness: string
-          p_insights: string[]
           p_commitments: string[]
           p_follow_up: string[]
+          p_insights: string[]
           p_possible_next_focus: string
+          p_session_id: string
         }
         Returns: string
       }
@@ -1014,9 +1210,21 @@ export type Database = {
         Args: { p_booking_id: string }
         Returns: undefined
       }
+      send_contract_for_signature: {
+        Args: { p_contract_id: string }
+        Returns: string
+      }
       session_owned_by_current_coach: {
         Args: { p_session_id: string }
         Returns: boolean
+      }
+      sign_contract_as_client: {
+        Args: { p_contract_id: string; p_version_id: string }
+        Returns: undefined
+      }
+      sign_contract_as_coach: {
+        Args: { p_contract_id: string; p_version_id: string }
+        Returns: undefined
       }
       update_own_client_profile: {
         Args: {
@@ -1047,6 +1255,13 @@ export type Database = {
       client_depth: "full" | "oversikt"
       commitment_status: "oppet" | "pagar" | "genomfort"
       confidentiality_level: "coach" | "coach_klient" | "organisation"
+      contract_signer_role: "coach" | "klient"
+      contract_status:
+        | "utkast"
+        | "skickat"
+        | "kund_signerad"
+        | "signerat"
+        | "arkiverat"
       document_owner_type: "klient" | "uppdrag" | "coach"
       document_status: "aktiv" | "arkiverad"
       engagement_kind: "individuell" | "ledarutveckling" | "program"
@@ -1194,6 +1409,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       booking_role: ["coach", "klient"],
@@ -1201,6 +1419,14 @@ export const Constants = {
       client_depth: ["full", "oversikt"],
       commitment_status: ["oppet", "pagar", "genomfort"],
       confidentiality_level: ["coach", "coach_klient", "organisation"],
+      contract_signer_role: ["coach", "klient"],
+      contract_status: [
+        "utkast",
+        "skickat",
+        "kund_signerad",
+        "signerat",
+        "arkiverat",
+      ],
       document_owner_type: ["klient", "uppdrag", "coach"],
       document_status: ["aktiv", "arkiverad"],
       engagement_kind: ["individuell", "ledarutveckling", "program"],

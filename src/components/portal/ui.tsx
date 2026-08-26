@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react";
-import { cvbStatusTone } from "@/lib/portal/status-tones";
+import { portalTagTone, type PortalTagTone } from "@/lib/portal/status-tones";
 
 /**
  * Delade portalprimitiver. Följer samma formspråk som klientportalen:
@@ -9,6 +9,15 @@ import { cvbStatusTone } from "@/lib/portal/status-tones";
 
 export const portalButtonClass =
   "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-6 py-3 text-sm font-medium text-[var(--klient-button-text)] transition-colors duration-150 hover:bg-[var(--klient-button-bg-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalPrimaryButtonClass =
+  "inline-flex min-h-11 items-center justify-center rounded-full border border-[#6BB5A8] bg-[#6BB5A8] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:border-[#5AA698] hover:bg-[#5AA698] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6BB5A8] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalPrimaryButtonSmClass =
+  "inline-flex min-h-9 items-center justify-center rounded-full border border-[#6BB5A8] bg-[#6BB5A8] px-4 py-2 text-[0.8125rem] font-medium text-white transition-colors duration-150 hover:border-[#5AA698] hover:bg-[#5AA698] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6BB5A8] focus-visible:ring-offset-2 motion-reduce:transition-none";
+
+export const portalSecondaryButtonSmClass =
+  "inline-flex min-h-9 items-center justify-center rounded-full border border-[#EDD9B8] bg-[#FFF4E5] px-4 py-2 text-[0.8125rem] font-medium text-[#8A6535] transition-colors duration-150 hover:border-[#E0CDA8] hover:bg-[#FCEFD9] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A96A] focus-visible:ring-offset-2 motion-reduce:transition-none";
 
 export const portalAiPrepareButtonClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-6 py-3 text-sm font-medium text-emerald-800 transition-colors duration-150 hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 motion-reduce:transition-none";
@@ -96,13 +105,12 @@ export const portalInsetClass =
   "rounded-2xl border border-[var(--klient-border-muted)] bg-[var(--klient-text-block-bg)] p-4 md:p-5";
 
 export const portalOutlineButtonClass =
-  "inline-flex min-h-10 items-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors duration-150 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-reduce:transition-none";
+  "inline-flex min-h-10 items-center justify-center rounded-full border border-zinc-300 px-4 py-2 text-[0.8125rem] font-medium text-zinc-700 transition-colors duration-150 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-reduce:transition-none";
 
 export const portalGhostButtonClass =
-  "inline-flex min-h-10 items-center rounded-full px-4 py-2 text-[0.8125rem] font-medium text-zinc-500 transition-colors hover:text-zinc-800";
+  "inline-flex min-h-9 items-center justify-center gap-1 rounded-full border border-[var(--klient-border-muted)] bg-white px-4 py-2 text-[0.8125rem] font-medium text-zinc-600 transition-colors duration-150 hover:border-zinc-400 hover:bg-[var(--klient-text-block-bg)] hover:text-zinc-900 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-reduce:transition-none";
 
-export const portalQuietLinkClass =
-  "inline-flex items-center gap-1 text-[0.8125rem] font-medium text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2";
+export const portalQuietLinkClass = portalGhostButtonClass;
 
 export const portalSegmentClass =
   "inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-[0.8125rem] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-button-border)] focus-visible:ring-offset-2 motion-reduce:transition-none";
@@ -113,11 +121,53 @@ export const portalSegmentActiveClass =
 export const portalSegmentInactiveClass =
   "border-zinc-300 bg-white text-zinc-700 hover:border-zinc-500";
 
-export function SectionLabel({ children }: { children: ReactNode }) {
+export function SectionLabel({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <span className="mb-1.5 inline-flex w-fit items-center rounded-md border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[var(--klient-button-text)]">
+    <span
+      className={`mb-1.5 inline-flex w-fit items-center rounded-md border border-[var(--klient-button-border)] bg-[var(--klient-button-bg)] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[var(--klient-button-text)] ${className}`.trim()}
+    >
       {children}
     </span>
+  );
+}
+
+const portalHeadingTitleCardClass =
+  "relative z-10 inline-block rounded-lg border border-[var(--klient-border-muted)] bg-white px-3 py-1.5 font-serif font-medium leading-tight tracking-tight text-balance text-zinc-900 shadow-[0_1px_3px_rgba(24,24,27,0.06)]";
+
+const portalHeadingOverlapClass = "ml-4 -mt-3";
+
+function PortalHeadingStack({
+  label,
+  title,
+  titleClassName,
+  as: Tag,
+}: {
+  label?: string;
+  title: string;
+  titleClassName: string;
+  as: "h1" | "h2";
+}) {
+  const showLabel =
+    Boolean(label) &&
+    label!.toLocaleLowerCase("sv-SE") !== title.toLocaleLowerCase("sv-SE");
+
+  return (
+    <div className="relative inline-flex max-w-full flex-col items-start">
+      {showLabel ? (
+        <SectionLabel className="relative z-0 mb-0">{label}</SectionLabel>
+      ) : null}
+      <Tag
+        className={`${portalHeadingTitleCardClass} ${showLabel ? portalHeadingOverlapClass : ""} ${titleClassName}`.trim()}
+      >
+        {title}
+      </Tag>
+    </div>
   );
 }
 
@@ -164,17 +214,21 @@ export function PortalSectionHeader({
   context?: string;
   action?: ReactNode;
 }) {
+  const showLabel =
+    Boolean(label) &&
+    label!.toLocaleLowerCase("sv-SE") !== title.toLocaleLowerCase("sv-SE");
+
   return (
     <div className="flex items-start justify-between gap-6">
       <div className="min-w-0">
-        {label ? <SectionLabel>{label}</SectionLabel> : null}
+        {showLabel ? <SectionLabel>{label}</SectionLabel> : null}
         <h2
-          className={`${label ? "mt-3.5" : ""} text-[1.35rem] font-medium leading-[1.25] tracking-tight text-zinc-900 md:text-[1.45rem]`}
+          className={`${showLabel ? "mt-2" : ""} text-[1.125rem] font-semibold leading-tight tracking-tight text-zinc-900 md:text-[1.2rem]`}
         >
           {title}
         </h2>
         {context ? (
-          <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-zinc-600">{context}</p>
+          <p className="mt-1.5 text-[0.875rem] leading-relaxed text-zinc-500">{context}</p>
         ) : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
@@ -182,24 +236,16 @@ export function PortalSectionHeader({
   );
 }
 
-const toneClass = {
-  neutral: cvbStatusTone.neutral,
-  open: cvbStatusTone.action,
-  progress: cvbStatusTone.active,
-  done: cvbStatusTone.completed,
-  private: cvbStatusTone.private,
-} as const;
-
 export function Tag({
   children,
   tone = "neutral",
 }: {
   children: ReactNode;
-  tone?: keyof typeof toneClass;
+  tone?: PortalTagTone;
 }) {
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium tracking-[0.04em] ${toneClass[tone]}`}
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium tracking-[0.04em] ${portalTagTone[tone]}`}
     >
       {children}
     </span>
@@ -331,20 +377,37 @@ export function PageHeading({
   label,
   title,
   lead,
+  stats,
 }: {
   label?: string;
   title: string;
   lead?: string;
+  stats?: Array<{ value: string | number; label: string }>;
 }) {
   return (
     <header className="pb-2">
-      {label ? <SectionLabel>{label}</SectionLabel> : null}
-      <h1
-        className={`${label ? "mt-3" : ""} font-serif text-[1.75rem] font-medium leading-[1.15] tracking-tight text-balance text-zinc-900 md:text-[2rem]`}
-      >
-        {title}
-      </h1>
-      {lead ? (
+      <PortalHeadingStack
+        label={label}
+        title={title}
+        as="h1"
+        titleClassName="text-[1.375rem] md:text-[1.5rem]"
+      />
+      {stats && stats.length > 0 ? (
+        <dl className="mt-3 flex flex-wrap gap-2">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="min-w-[9rem] rounded-lg border border-[var(--klient-border-muted)] bg-white px-3.5 py-2.5 shadow-[0_1px_3px_rgba(24,24,27,0.06)]"
+            >
+              <dt className="sr-only">{stat.label}</dt>
+              <dd className="text-[1.25rem] font-semibold tabular-nums leading-none text-zinc-900">
+                {stat.value}
+              </dd>
+              <p className="mt-1 text-[0.75rem] font-medium leading-snug text-zinc-500">{stat.label}</p>
+            </div>
+          ))}
+        </dl>
+      ) : lead ? (
         <p className="mt-3.5 max-w-2xl text-balance text-[0.9375rem] leading-[1.65] text-zinc-600 sm:text-[1rem] sm:leading-[1.7]">
           {lead}
         </p>

@@ -5,6 +5,8 @@ import ClientDetailNav from "@/components/portal/client-detail-nav";
 import ShareMaterialPanel from "@/components/portal/share-material-panel";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
+import { listClientContractsForCoach } from "@/lib/portal/contracts";
+import { contractStatusLabel, contractStatusTagTone } from "@/lib/portal/status-tones";
 import {
   commitmentStatusLabel,
   formatDate,
@@ -12,6 +14,7 @@ import {
   relativeDayLabel,
   todayIso,
 } from "@/lib/portal/format";
+import { commitmentStatusTagTone, sessionStatusTagTone } from "@/lib/portal/status-tones";
 import {
   AiActionLink,
   Avatar,
@@ -35,6 +38,8 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
 
   const dossier = await getClientDossier(session.coachId, clientId);
   if (!dossier) notFound();
+
+  const contracts = await listClientContractsForCoach(clientId);
 
   const { client, engagement, organisation, completedSessions, upcomingSession } = dossier;
   const firstName = client.name.split(" ")[0];
@@ -72,7 +77,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
         <div className="mt-5 flex flex-wrap gap-3">
           <Tag>{engagement.kindLabel}</Tag>
           <Tag>{completedSessions.length} genomförda sessioner</Tag>
-          <Tag tone={dossier.openCommitments.length > 0 ? "open" : "done"}>
+          <Tag tone={dossier.openCommitments.length > 0 ? "action" : "completed"}>
             {dossier.openCommitments.length} åtaganden att följa upp
           </Tag>
         </div>
@@ -153,15 +158,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
               <article key={commitment.id} className="border-b border-zinc-200/70 pb-5 last:border-0 last:pb-0">
                 <div className="flex items-start justify-between gap-5">
                   <p className="text-[0.9375rem] leading-[1.6] text-zinc-800">{commitment.text}</p>
-                  <Tag
-                    tone={
-                      commitment.status === "genomfort"
-                        ? "done"
-                        : commitment.status === "pagar"
-                          ? "progress"
-                          : "open"
-                    }
-                  >
+                  <Tag tone={commitmentStatusTagTone[commitment.status]}>
                     {commitmentStatusLabel[commitment.status]}
                   </Tag>
                 </div>
@@ -227,10 +224,31 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
                   title={`Session ${item.number} · ${item.clientFocus}`}
                   subtitle={`${formatDate(item.date)} · ${item.location}`}
                   trailing={
-                    <Tag tone={item.status === "kommande" ? "open" : "neutral"}>
+                    <Tag tone={sessionStatusTagTone[item.status]}>
                       {item.status === "kommande" ? "Kommande" : "Genomförd"}
                     </Tag>
                   }
+                />
+              </div>
+            ))
+          )}
+        </div>
+      </Panel>
+
+      <Panel>
+        <PanelHeading label="Avtal" title="Avtal" />
+        <div className="mt-4">
+          {contracts.length === 0 ? (
+            <EmptyState>Inga avtal ännu.</EmptyState>
+          ) : (
+            contracts.map((contract, index) => (
+              <div key={contract.id}>
+                {index > 0 ? <Divider /> : null}
+                <RowLink
+                  href={`/portal/avtal/${contract.id}`}
+                  title={contract.title}
+                  subtitle={formatDate(contract.createdAt)}
+                  trailing={<Tag tone={contractStatusTagTone[contract.status]}>{contractStatusLabel[contract.status]}</Tag>}
                 />
               </div>
             ))

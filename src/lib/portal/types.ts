@@ -243,3 +243,17 @@ export type CoachProfile = {
   credential: string;
   focus: string;
 };
+
+export type ContractStatus = "utkast" | "skickat" | "kund_signerad" | "signerat" | "arkiverat";
+export type ContractFieldType = "text" | "belopp" | "datum" | "antal" | "procent" | "val";
+export type ContractSignerRole = "coach" | "klient";
+
+export type ContractSection = { id: string; heading: string; body: string };
+export type ContractCustomField = {
+  id: string;
+  label: string;
+  type: ContractFieldType;
+  value: string;
+  options: string[];
+};
+export type ContractContent = { sections: ContractSection[]; fields: ContractCustomField[] };

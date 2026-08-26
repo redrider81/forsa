@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { BookingRequest } from "@/lib/portal/booking";
 import { formatDate } from "@/lib/portal/format";
-import { Card, CardTitle, Empty, Label, Muted, klientButtonClass, klientButtonSmClass } from "@/components/klient/klient-ui";
+import { Card, CardTitle, Empty, Label, Muted, klientButtonClass, klientButtonSmClass, klientGhostButtonClass } from "@/components/klient/klient-ui";
 
 const fieldClass =
   "mt-2 w-full rounded-xl border border-[#e6e0d3] bg-[var(--klient-text-block-bg)] px-4 py-3 text-[0.9375rem] leading-tight text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15";
@@ -115,7 +115,7 @@ export default function ClientBookingPanel({ bookings }: { bookings: BookingRequ
                         type="button"
                         disabled={actingId === booking.id}
                         onClick={() => respond(booking.id, "decline")}
-                        className="text-[0.8125rem] font-medium text-zinc-500 underline-offset-4 hover:underline"
+                        className={klientGhostButtonClass}
                       >
                         Avböj
                       </button>
@@ -127,7 +127,7 @@ export default function ClientBookingPanel({ bookings }: { bookings: BookingRequ
                         type="button"
                         disabled={actingId === booking.id}
                         onClick={() => cancel(booking.id)}
-                        className="text-[0.8125rem] font-medium text-zinc-500 underline-offset-4 hover:underline"
+                        className={klientGhostButtonClass}
                       >
                         Avboka
                       </button>

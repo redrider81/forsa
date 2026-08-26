@@ -4,6 +4,7 @@ import AiAskPanel from "@/components/portal/ai-ask-panel";
 import { readCoachSession } from "@/lib/portal/session";
 import { getEngagementOverview } from "@/lib/portal/repository";
 import { engagementStatusLabel, formatDate, milestoneStatusLabel } from "@/lib/portal/format";
+import { engagementStatusTagTone } from "@/lib/portal/status-tones";
 import {
   Avatar,
   Divider,
@@ -50,7 +51,7 @@ export default async function EngagementPage({
         <p className="mt-3.5 text-[1rem] leading-[1.7] text-zinc-600">{engagement.purpose}</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Tag>{engagement.kindLabel}</Tag>
-          <Tag>{engagementStatusLabel[engagement.status]}</Tag>
+          <Tag tone={engagementStatusTagTone[engagement.status]}>{engagementStatusLabel[engagement.status]}</Tag>
           <Tag>{engagement.periodLabel}</Tag>
         </div>
       </div>
@@ -114,10 +115,10 @@ export default async function EngagementPage({
                 aria-hidden="true"
                 className={`mt-[0.45rem] h-2 w-2 shrink-0 rounded-full ${
                   milestone.status === "genomford"
-                    ? "bg-[#92753a]"
+                    ? "bg-[#6BB5A8]"
                     : milestone.status === "pagaende"
-                      ? "bg-zinc-500"
-                      : "border border-zinc-300 bg-white"
+                      ? "bg-[#D99284]"
+                      : "border border-[#D4A96A] bg-[#FFF4E5]"
                 }`}
               />
               <span className="min-w-0">

@@ -41,7 +41,7 @@ export default async function CalendarPage({
   return (
     <div className={portalPageStackClass}>
       <div>
-        <PageHeading label="Kalender" title="Planerade insatser" />
+        <PageHeading title="Planerade insatser" />
         <p className="mt-3.5 text-[0.875rem] leading-relaxed text-zinc-500">
           {formatWeekdayDate(today)}
         </p>

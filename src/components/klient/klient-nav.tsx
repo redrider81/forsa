@@ -9,6 +9,7 @@ const items = [
   { href: "/klient", label: "Översikt", exact: true },
   { href: "/klient/reflektioner", label: "Reflektioner", exact: false },
   { href: "/klient/sessioner", label: "Sessioner", exact: false },
+  { href: "/klient/avtal", label: "Avtal", exact: false },
   { href: "/klient/material", label: "Material", exact: false },
   { href: "/klient/profil", label: "Profil", exact: false },
 ] as const;

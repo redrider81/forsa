@@ -39,10 +39,6 @@ export default async function ClientLoginPage() {
             <LoginForm demo={demoHint("klient")} role="klient" redirectTo="/klient" />
           </div>
 
-          <p className="mt-6 text-[0.8125rem] leading-relaxed text-zinc-500">
-            Inloggning tillhandahålls av din coach.
-          </p>
-
           <p className="mt-8 text-[0.8125rem] text-zinc-400">
             <Link href="/" className="transition-colors hover:text-zinc-700">
               cvbcoaching.se

@@ -12,8 +12,8 @@ describe("operations status presentation", () => {
 
     expect(presentation.label).toBe("Förberedd");
     expect(presentation.visualState).toBe("completed");
-    expect(presentation.toneClass).toContain("emerald-700/20");
-    expect(presentation.toneClass).not.toContain("orange");
+    expect(presentation.toneClass).toContain("#DFF0EC");
+    expect(presentation.toneClass).not.toContain("#FAECE8");
   });
 
   it("locks full OperationsStatus → visual state mapping", () => {
@@ -58,7 +58,7 @@ describe("operations status presentation", () => {
     const presentation = getOperationsStatusPresentation(johan!.status);
     expect(presentation.label).toBe("Förberedd");
     expect(presentation.visualState).toBe("completed");
-    expect(presentation.toneClass).toBe("border-emerald-700/20 bg-emerald-700/6 text-emerald-900");
+    expect(presentation.toneClass).toBe("border-[#B8DDD6] bg-[#DFF0EC] text-[#3F7569]");
   });
 
   it("derives Förbered yellow prep tone when prep is missing", () => {
@@ -69,16 +69,16 @@ describe("operations status presentation", () => {
     const presentation = getOperationsStatusPresentation(johan!.status);
     expect(presentation.label).toBe("Förbered");
     expect(presentation.visualState).toBe("prep");
-    expect(presentation.toneClass).toBe("border-yellow-400 bg-yellow-400 text-white");
+    expect(presentation.toneClass).toBe("border-[#EDD9B8] bg-[#FFF4E5] text-[#8A6535]");
   });
 
   it("maps visual states to canonical tone classes", () => {
     const samples: Array<[OperationsStatus, string, string]> = [
-      ["Uppföljning krävs", "action", "border-orange-400 bg-orange-400 text-white"],
-      ["Förberedelse saknas", "prep", "border-yellow-400 bg-yellow-400 text-white"],
-      ["Programgenomgång", "active", "border-emerald-500 bg-emerald-500 text-white"],
-      ["Förberedelse mottagen", "completed", "border-emerald-700/20 bg-emerald-700/6 text-emerald-900"],
-      ["Session planerad", "neutral", "border-zinc-300/80 bg-zinc-50 text-zinc-700"],
+      ["Uppföljning krävs", "action", "border-[#EFD0C8] bg-[#FAECE8] text-[#9E5A4E]"],
+      ["Förberedelse saknas", "prep", "border-[#EDD9B8] bg-[#FFF4E5] text-[#8A6535]"],
+      ["Programgenomgång", "active", "border-[#A898C8]66 bg-[#F0ECF6] text-[#65578A]"],
+      ["Förberedelse mottagen", "completed", "border-[#B8DDD6] bg-[#DFF0EC] text-[#3F7569]"],
+      ["Session planerad", "neutral", "border-[#DCE3E8] bg-[#E9ECEF] text-[#5C6F78]"],
     ];
 
     for (const [status, visualState, toneClass] of samples) {

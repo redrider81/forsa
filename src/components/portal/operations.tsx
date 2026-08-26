@@ -3,6 +3,7 @@ import type { OperationsItem, OperationsStatus } from "@/lib/portal/repository";
 import { actionMetaLine } from "@/lib/portal/operations-priority";
 import { formatShortDate, formatWeekdayDate } from "@/lib/portal/format";
 import { cvbStatusBadgeClass, getOperationsStatusPresentation } from "@/lib/portal/status-tones";
+import { portalQuietLinkClass } from "@/components/portal/ui";
 
 export function StatusTag({ status }: { status: OperationsStatus }) {
   const { label, toneClass } = getOperationsStatusPresentation(status);
@@ -118,8 +119,8 @@ export function OperationsRow({
     <>
       <ActionRow item={item} showDate={showDate} />
       {detailed && item.kind === "Coachingsamtal" ? (
-        <p className="-mt-1 px-3 pb-2 text-right text-[0.8125rem] font-medium text-zinc-600 underline underline-offset-4">
-          Förbered session
+        <p className="-mt-1 px-3 pb-2 text-right">
+          <span className={portalQuietLinkClass}>Förbered session</span>
         </p>
       ) : null}
     </>

@@ -4,6 +4,7 @@ import SessionWorkspace from "@/components/portal/session-workspace";
 import { readCoachSession } from "@/lib/portal/session";
 import { fetchPortalRepositoryData, getClientDossier, getSession } from "@/lib/portal/repository";
 import { formatWeekdayDate, formatDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
+import { sessionStatusTagTone } from "@/lib/portal/status-tones";
 import { Panel, PanelHeading, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function SessionPage({
@@ -54,7 +55,7 @@ export default async function SessionPage({
               </span>
             </p>
           </div>
-          <Tag tone={coachingSession.status === "kommande" ? "open" : "neutral"}>
+          <Tag tone={sessionStatusTagTone[coachingSession.status]}>
             {coachingSession.status === "kommande" ? "Kommande" : "Genomförd"}
           </Tag>
         </div>

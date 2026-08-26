@@ -17,7 +17,6 @@ import {
 import { RequiresActionSection } from "@/components/portal/requires-action-section";
 import DashboardBookingRequests from "@/components/portal/dashboard-booking-requests";
 import { AnalyticsBento, ClientOverview } from "@/components/portal/dashboard-analytics";
-import StartMeetingPanel from "@/components/portal/start-meeting-panel";
 import { PageHeading } from "@/components/portal/ui";
 
 export default async function PortalOverviewPage() {
@@ -68,13 +67,20 @@ export default async function PortalOverviewPage() {
   ).length;
 
   return (
-    <div className="portal-dashboard min-w-0 max-w-full overflow-x-clip">
+    <>
+      <div aria-hidden className="portal-dashboard-bg" />
+      <div className="portal-dashboard min-w-0 max-w-full overflow-x-clip">
+      <div className="portal-dash-section portal-dash-section--0">
       <PageHeading
         title="Översikt"
-        lead={`${totalActiveClients} aktiva klienter · ${week.sessions} sessioner nästa 7 dagar`}
+        stats={[
+          { value: totalActiveClients, label: "aktiva klienter" },
+          { value: week.sessions, label: "sessioner nästa 7 dagar" },
+        ]}
       />
+      </div>
 
-      <div className="mt-5">
+      <div className="mt-5 portal-dash-section portal-dash-section--1">
         <AnalyticsBento
           allSessions={repositoryData.sessions}
           allCommitments={repositoryData.commitments}
@@ -88,31 +94,24 @@ export default async function PortalOverviewPage() {
       </div>
 
       {bookingRequests.length > 0 && (
-        <div className="mt-5">
+        <div className="mt-5 portal-dash-section portal-dash-section--2">
           <DashboardBookingRequests bookingRequests={bookingRequests} />
         </div>
       )}
 
-      <div className="mt-3 mb-1">
-        <StartMeetingPanel clients={meetableClients} />
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-5">
-        <div className="lg:col-span-5">
-          <TodayAgendaSection items={operations.today} today={today} />
-        </div>
-
-        <div className="lg:col-span-7">
-          <RequiresActionSection items={operations.requiresAction} today={today} />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-5">
-        <div className="lg:col-span-5">
+      <div className="mt-5 grid grid-cols-1 items-start gap-4 lg:grid-cols-12 portal-dash-section portal-dash-section--3">
+        <div className="flex flex-col gap-4 lg:col-span-5">
+          <TodayAgendaSection
+            items={operations.today}
+            today={today}
+            meetableClients={meetableClients}
+          />
           <UpcomingSection items={operations.calendar} />
         </div>
 
-        <div className="lg:col-span-7">
+        <div className="flex flex-col gap-4 lg:col-span-7">
+          <RequiresActionSection items={operations.requiresAction} today={today} />
           <ClientOverview
             allClients={allClients}
             allSessions={repositoryData.sessions}
@@ -123,10 +122,11 @@ export default async function PortalOverviewPage() {
       </div>
 
       {data.clientActivity.length > 0 && (
-        <div className="mt-5">
+        <div className="mt-5 portal-dash-section portal-dash-section--4">
           <RecentActivitySection items={data.clientActivity} />
         </div>
       )}
     </div>
+    </>
   );
 }

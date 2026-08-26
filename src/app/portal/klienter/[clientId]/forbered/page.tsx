@@ -4,6 +4,7 @@ import AiPreparePanel from "@/components/portal/ai-prepare-panel";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { formatDate, formatWeekdayDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
+import { commitmentStatusTagTone } from "@/lib/portal/status-tones";
 import { Panel, PanelHeading, portalPageStackClass, QuoteBlock, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function PrepareSessionPage({
@@ -107,7 +108,7 @@ export default async function PrepareSessionPage({
                   <p className="text-[0.9375rem] leading-[1.6] text-zinc-800">{commitment.text}</p>
                   <p className="mt-1 text-[0.75rem] text-zinc-400">{commitment.dueLabel}</p>
                 </div>
-                <Tag tone={commitment.status === "pagar" ? "progress" : "open"}>
+                <Tag tone={commitmentStatusTagTone[commitment.status]}>
                   {commitment.status === "pagar" ? "Pågår" : "Öppet"}
                 </Tag>
               </div>

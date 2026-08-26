@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { readCoachSession } from "@/lib/portal/session";
 import { getEngagementOverview } from "@/lib/portal/repository";
 import { engagementStatusLabel, formatDate, milestoneStatusLabel } from "@/lib/portal/format";
+import { milestoneStatusTagTone } from "@/lib/portal/status-tones";
 import { Divider, Panel, PanelHeading, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
 
 export default async function ProgramReportPage({
@@ -102,7 +103,7 @@ export default async function ProgramReportPage({
                 <p className="text-[0.9375rem] leading-snug text-zinc-800">{milestone.label}</p>
                 <p className="mt-1 text-[0.8125rem] text-zinc-500">{formatDate(milestone.date)}</p>
               </div>
-              <Tag tone={milestone.status === "genomford" ? "done" : "neutral"}>
+              <Tag tone={milestoneStatusTagTone[milestone.status]}>
                 {milestoneStatusLabel[milestone.status]}
               </Tag>
             </li>
