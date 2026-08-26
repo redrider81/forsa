@@ -81,25 +81,21 @@ export default function AboutPage() {
             </div>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Jag är diplomerad coach och driver CVB Coaching i Göteborg. Jag arbetar med
-                privatpersoner som står inför något som ska avgöras, och med ledare, team och
-                ledningsgrupper genom deras arbetsgivare.
+                Carolina von Braun heter jag som driver CVB Coaching i Göteborg och är utbildad och
+                diplomerad coach vid Gothia Akademi genom ICF-ackrediterad coachutbildning på Level 1
+                och Level 2.
               </p>
               <p>
-                Innan det var jag verksam på kapitalmarknaden med värdepappershandel på Nordea, och
-                har haft fyra styrelseuppdrag inom fastighetsförvaltning och investeringar. Det har
-                gett mig vana vid rum där konsekvenserna är verkliga och besluten inte går att
-                skjuta upp — en vana som märks i samtalen, oavsett vem som sitter mitt emot.
+                Bakgrunden omfattar värdepappershandel på Nordea, styrelseuppdrag inom
+                fastighetsförvaltning och investeringar samt studier i marknadsföring vid
+                Handelshögskolan vid Göteborgs universitet. Erfarenheten ger en affärsmässig
+                förståelse för situationer där ansvar, vägval och konsekvenser behöver vägas mot
+                varandra.
               </p>
               <p>
-                Jag studerade marknadsföring vid Handelshögskolan vid Göteborgs universitet
-                1996–2002. År 2025 diplomerades jag i coachning vid Gothia Akademi, steg 1 och 2, och
-                medverkar som utbildningsassistent i akademins ledarskapsutbildningar.
-              </p>
-              <p>
-                Förhållningssättet är coachande, och det är en yrkesroll med tydliga gränser: du äger
-                dina mål, dina insikter och dina beslut. Min uppgift är att göra tänkandet klarare,
-                inte att leverera svaret.
+                I coachingen är rollerna tydliga: klienten äger sina mål, insikter och beslut. CVB
+                Coachings uppgift är att skapa skärpa i tänkandet, utmana perspektiv och föra
+                samtalet framåt utan att ta över slutsatserna.
               </p>
             </div>
           </ScrollReveal>

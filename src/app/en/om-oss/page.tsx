@@ -74,25 +74,21 @@ export default function AboutPageEn() {
             </div>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                I am a qualified coach and I run CVB Coaching in Gothenburg. I work with private
-                clients facing something that has to be settled, and with leaders, teams and
-                executive teams through their employers.
+                My name is Carolina von Braun. I run CVB Coaching in Gothenburg and am a trained,
+                qualified coach at Gothia Akademi through ICF-accredited coach training at Level 1 and
+                Level 2.
               </p>
               <p>
-                Before that I worked in capital markets, in securities trading at Nordea, and held
-                four board assignments in property management and investment. That left me used to
-                rooms where the consequences are real and the decision cannot be deferred — and it
-                shows in the sessions, whoever is sitting across from me.
+                My background includes securities trading at Nordea, board assignments in property
+                management and investments, and studies in marketing at the School of Business,
+                Economics and Law, University of Gothenburg. That experience gives a commercially
+                grounded understanding of situations where responsibility, choices and consequences
+                need to be weighed against each other.
               </p>
               <p>
-                I studied marketing at the School of Business, Economics and Law, University of
-                Gothenburg, from 1996 to 2002. In 2025 I completed coaching diplomas at Gothia
-                Akademi, levels 1 and 2, and I teach as an assistant on the academy&apos;s leadership
-                programmes.
-              </p>
-              <p>
-                Coaching is a role with clear edges: you own your objectives, your insights and your
-                decisions. My job is to make the thinking clearer, not to supply the answer.
+                In coaching the roles are clear: the client owns their goals, insights and decisions.
+                CVB Coaching&apos;s task is to sharpen the thinking, challenge perspectives and move
+                the conversation forward without taking over the conclusions.
               </p>
             </div>
           </ScrollReveal>
