@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { TablesUpdate } from "@/lib/supabase/database.types";
 
 export type AvailabilityRule = {
   id: string;
@@ -163,7 +164,7 @@ export async function updateBookingSettings(
   }>,
 ): Promise<BookingSettings | null> {
   const supabase = await createSupabaseServerClient();
-  const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  const patch: TablesUpdate<"coach_booking_settings"> = { updated_at: new Date().toISOString() };
   if (input.meetingDurationMinutes !== undefined) patch.meeting_duration_minutes = input.meetingDurationMinutes;
   if (input.bufferMinutes !== undefined) patch.buffer_minutes = input.bufferMinutes;
   if (input.minimumNoticeHours !== undefined) patch.minimum_notice_hours = input.minimumNoticeHours;
