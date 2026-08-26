@@ -85,13 +85,18 @@ export async function deleteAvailabilityRule(ruleId: string): Promise<boolean> {
   return !error;
 }
 
+function toExceptionType(value: string): AvailabilityExceptionType {
+  if (value === "unavailable" || value === "custom") return value;
+  throw new Error(`Unexpected availability exception type: ${value}`);
+}
+
 export async function listAvailabilityExceptions(): Promise<AvailabilityException[]> {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.from("coach_availability_exceptions").select("*").order("date", { ascending: true });
   return (data ?? []).map((row) => ({
     id: row.id,
     date: row.date,
-    type: row.type,
+    type: toExceptionType(row.type),
     startTime: row.start_time ? toTime(row.start_time) : null,
     endTime: row.end_time ? toTime(row.end_time) : null,
   }));
@@ -120,7 +125,7 @@ export async function addAvailabilityException(input: {
   return {
     id: data.id,
     date: data.date,
-    type: data.type,
+    type: toExceptionType(data.type),
     startTime: data.start_time ? toTime(data.start_time) : null,
     endTime: data.end_time ? toTime(data.end_time) : null,
   };
