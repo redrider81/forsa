@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
@@ -8,14 +7,14 @@ import StaggerCards from "@/components/animations/StaggerCards";
 export const metadata: Metadata = {
   title: "Team coaching for teams and project groups | CVB Coaching",
   description:
-    "For groups with high demands and unspoken ways of working. We work with collaboration, accountability and shared learning in operational work.",
+    "For groups with high demands and unspoken ways of working. The work is about collaboration, accountability and shared learning in day-to-day delivery.",
 };
 
 const relevanceList = [
   "The team has high demands but no shared way of working.",
   "Accountability falls between the cracks in day-to-day collaboration.",
   "Feedback is given unevenly, or not at all.",
-  "The group functions as individuals, not as a team.",
+  "Decisions are made together but followed up individually.",
 ];
 
 const focusList = [
@@ -23,7 +22,7 @@ const focusList = [
   "Collaboration and accountability in tasks and delivery.",
   "Communication and feedback within the team.",
   "Conditions for difficult questions to be raised in time.",
-  "The path from group to functioning team.",
+  "How the team holds together when the pace picks up.",
 ];
 
 const outcomes = [
@@ -71,7 +70,7 @@ export default function TeamCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              What we work with
+              Focus in the work
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -86,12 +85,12 @@ export default function TeamCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              How we work
+              How it works
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                The work takes place in structured team sessions where the team practises listening,
-                asking questions, giving feedback and taking shared accountability.
+                The work takes place in team sessions where the group practises listening, asking
+                questions, giving feedback and taking shared accountability.
               </p>
               <p>
                 Focus lies on how collaboration works in the engagement, not on individual
@@ -129,25 +128,6 @@ export default function TeamCoachingPageEn() {
               </div>
             ))}
           </StaggerCards>
-        </section>
-
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Scope and investment
-            </h2>
-            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>
-                Scope is set after the size of the team and the length of the engagement. Quoted per
-                engagement after a first session on the current situation.
-              </p>
-              <p>
-                <Link href="/en#uppdrag" className="text-sm font-medium text-zinc-900 underline underline-offset-2 hover:text-zinc-700">
-                  How an engagement works →
-                </Link>
-              </p>
-            </div>
-          </ScrollReveal>
         </section>
 
         <section className="py-16 md:py-20">

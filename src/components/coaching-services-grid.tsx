@@ -35,39 +35,17 @@ const servicesSv: Service[] = [
 const servicesEn: Service[] = [
   {
     index: "01",
-    href: "/en/executive-coaching",
-    title: "Executive coaching",
-    description:
-      "For CEOs, founders and senior leaders facing complex decisions, accountability and role clarity.",
-  },
-  {
-    index: "02",
-    href: "/en/ledningsgruppscoaching",
-    title: "Executive team coaching",
-    description:
-      "For executive teams that need clearer decisions, stronger accountability and shared direction.",
-  },
-  {
-    index: "03",
     href: "/en/individuell-coaching",
     title: "Individual coaching",
     description:
-      "For managers and key professionals who need clarity in role, prioritisation and impact.",
+      "For anyone facing a choice, a change or a decision that will not wait any longer.",
   },
   {
-    index: "04",
-    href: "/en/team-coaching",
-    title: "Team coaching",
+    index: "02",
+    href: "/en/business-coaching",
+    title: "Business coaching",
     description:
-      "For teams that need to strengthen collaboration, accountability and shared learning in daily work.",
-  },
-  {
-    index: "05",
-    href: "/en/coachande-ledarskap",
-    title: "Coaching leadership",
-    description:
-      "For organisations developing managers who lead through dialogue, questions and accountability.",
-    spanClass: "lg:col-span-1",
+      "For leaders, employees, teams and executive teams — where decisions also have to hold in the organisation.",
   },
 ];
 

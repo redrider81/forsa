@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import SiteNavigation from "@/components/site-navigation";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -9,37 +10,35 @@ import EditorialImageTransition from "@/components/animations/EditorialImageTran
 import CoachingServicesGrid from "@/components/coaching-services-grid";
 import EngagementSection from "@/components/engagement-section";
 import type { Metadata } from "next";
-import { HomePricingFooter, HomePricingTable } from "@/components/pricing-block";
 
 import { enDictionary } from "@/lib/i18n/dictionaries/en";
 
 export const metadata: Metadata = {
-  title: "Executive coaching Gothenburg | CVB Coaching",
+  title: "CVB Coaching – individual and business coaching in Gothenburg",
   description:
-    "Confidential decision support for CEOs, founders and executive teams in Gothenburg. Defined objectives, fixed cadence and follow-up until decisions show up in execution.",
+    "CVB Coaching in Gothenburg. Individual coaching for anyone facing a choice or a change, and business coaching for leaders, employees, teams and executive teams.",
 };
 
 const relevancePoints = [
-  "A strategic choice must be made with incomplete information.",
+  "A choice has to be made before you know enough.",
+  "You are doing everything you normally do and still are not moving.",
+  "The role has grown faster than the mandate.",
+  "Something has ended — a job, a project, a way of working — and the next thing has not taken shape.",
   "Priorities shift more often than the organisation can adjust.",
-  "Friction in the executive team is slowing decisions that cannot wait.",
-  "The company is entering growth, transition or a new ownership phase.",
-  "Pressure from owners or the board is increasing the pace of demands and reporting.",
   "Decisions are made in the room but lose force in day-to-day work.",
 ];
 
-
 const rightFitWhen = [
-  "The question concerns leadership, accountability or direction.",
-  "The decision affects the organisation's next step.",
-  "You need confidential external support.",
-  "You want to move from discussion to a decision made.",
+  "The question genuinely matters to you, not just on paper.",
+  "You want to finish the thinking yourself, not be handed an answer.",
+  "It needs to happen outside your own circle, in confidence.",
+  "Something is meant to change, not only be discussed.",
 ];
 
 const lessSuitedWhen = [
-  "The need is general inspiration without a clear leadership question.",
-  "The intervention should be short with no follow-up.",
-  "Direction and decisions are already settled.",
+  "You want an expert to assess the situation and tell you what to do.",
+  "The question concerns ill health or needs treatment. Therapy is the right route then, not coaching.",
+  "The direction is already set and what remains is carrying it out.",
 ];
 
 const t = enDictionary;
@@ -67,7 +66,7 @@ export default function HomePageEn() {
                     data-hero-headline
                     className="relative mx-auto inline-block max-w-[18ch] rounded-2xl bg-black/18 px-4 py-3 text-[2rem] font-medium leading-[1.12] tracking-tight text-balance text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)] backdrop-blur-[8px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-4xl md:mx-0 md:max-w-none md:px-5 md:py-4 md:text-5xl md:leading-tight"
                   >
-                    Decisions that outlast the meeting.
+                    Some questions are difficult to think through alone.
                   </h1>
                 </div>
                 <div className="mt-9 flex w-full flex-col items-center gap-4 md:mt-10 md:w-fit md:flex-row md:flex-wrap md:items-start md:justify-start md:gap-3.5">
@@ -77,7 +76,7 @@ export default function HomePageEn() {
                     </CtaLink>
                   </span>
                   <span data-hero-cta className="inline-flex justify-center">
-                    <CtaLink href="/en#uppdrag" variant="secondary" translucent>
+                    <CtaLink href="/en#coaching" variant="secondary" translucent>
                       {t.cta.secondary}
                     </CtaLink>
                   </span>
@@ -98,117 +97,51 @@ export default function HomePageEn() {
                   data-col-left
                   className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:pr-4 md:text-[2.1rem]"
                 >
-                  The capability is there. The decision mechanics do not always follow.
+                  You will be working with me.
                 </h2>
                 <div
                   data-col-right
                   className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end"
                 >
                   <p data-col-paragraph>
-                    When pressure rises, teams often lack a shared picture of what is decided now, by
-                    whom and when. Priorities drift and decisions made in the room do not take hold in
-                    execution.
+                    I am Carolina von Braun, and I run CVB Coaching in Gothenburg. Before becoming a
+                    coach, I worked in capital markets and served on company boards. That experience
+                    means I recognise situations where decisions carry real consequences.
                   </p>
                   <p data-col-paragraph>
-                    CVB Coaching works in that situation as an external and confidential decision forum
-                    for leadership.
+                    As a coach the job is a different one: to make the thinking clearer, not to take
+                    over your conclusions.{" "}
+                    <Link
+                      href="/en/om-oss"
+                      className="underline underline-offset-4 decoration-zinc-400 transition-colors hover:text-zinc-950 hover:decoration-zinc-700"
+                    >
+                      More about me
+                    </Link>
+                    .
                   </p>
                 </div>
               </ScrollReveal>
             </section>
 
             <section
+              id="coaching"
               data-parallax-section
               className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white pt-20 pb-0 md:pt-24"
             >
-              <EditorialRowsReveal className="mx-auto max-w-6xl px-6 md:px-10">
-                <h2
-                  data-section-heading
-                  className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]"
-                >
-                  Three things we do concretely
+              <div className="mx-auto max-w-6xl px-6 md:px-10">
+                <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                  Two ways in
                 </h2>
-                <div className="mt-16 border-y border-zinc-200/80">
-                  <article
-                    data-editorial-row
-                    className="border-b border-zinc-200/80 py-12 md:py-14"
-                  >
-                    <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
-                      <p
-                        data-row-index
-                        className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
-                      >
-                        01
-                      </p>
-                      <h3
-                        data-row-title
-                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
-                      >
-                        Clarity
-                      </h3>
-                      <p
-                        data-row-body
-                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
-                      >
-                        We identify the question that actually determines the next step and set the
-                        rest aside. Normally within the first two sessions.
-                      </p>
-                    </div>
-                  </article>
-                  <article
-                    data-editorial-row
-                    className="border-b border-zinc-200/80 py-12 md:py-14"
-                  >
-                    <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
-                      <p
-                        data-row-index
-                        className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
-                      >
-                        02
-                      </p>
-                      <h3
-                        data-row-title
-                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
-                      >
-                        Decisions
-                      </h3>
-                      <p
-                        data-row-body
-                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
-                      >
-                        We make input, trade-offs and accountability explicit before the decision is
-                        made. Every decision gets an owner, a date and a measure.
-                      </p>
-                    </div>
-                  </article>
-                  <article data-editorial-row className="py-12 md:py-14">
-                    <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
-                      <p
-                        data-row-index
-                        className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
-                      >
-                        03
-                      </p>
-                      <h3
-                        data-row-title
-                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
-                      >
-                        Direction
-                      </h3>
-                      <p
-                        data-row-body
-                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
-                      >
-                        We follow up between sessions until decisions show up in execution. Direction
-                        is measured in action, not in minutes.
-                      </p>
-                    </div>
-                  </article>
+                <p className="mt-6 max-w-2xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
+                  The same approach, in two settings: personal or professional.
+                </p>
+                <div className="mt-14">
+                  <CoachingServicesGrid locale="en" />
                 </div>
-              </EditorialRowsReveal>
+              </div>
               <EditorialImageTransition
                 src="/supertable.png"
-                alt="Preparation for a strategic choice in an executive team"
+                alt="Preparing for a coaching session"
                 className="mt-20 md:mt-24"
               />
             </section>
@@ -216,7 +149,7 @@ export default function HomePageEn() {
             <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  Six situations where an external decision forum pays off
+                  Six situations where coaching belongs
                 </h2>
                 <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
                   <ScrollReveal variant="staggerList" className="mt-0">
@@ -236,7 +169,7 @@ export default function HomePageEn() {
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  How we decide if it is the right engagement
+                  How to tell whether this is right
                 </h2>
                 <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
                   <ScrollReveal variant="staggerList">
@@ -267,35 +200,95 @@ export default function HomePageEn() {
               data-parallax-section
               className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white py-20 md:py-24"
             >
-              <div className="mx-auto max-w-6xl px-6 md:px-10">
-                <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  Coaching for leaders, teams and organisations
+              <EditorialRowsReveal className="mx-auto max-w-6xl px-6 md:px-10">
+                <h2
+                  data-section-heading
+                  className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]"
+                >
+                  What the work involves
                 </h2>
-                <div className="mt-14">
-                  <CoachingServicesGrid locale="en" />
+                <div className="mt-16 border-y border-zinc-200/80">
+                  <article
+                    data-editorial-row
+                    className="border-b border-zinc-200/80 py-12 md:py-14"
+                  >
+                    <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
+                      <p
+                        data-row-index
+                        className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
+                      >
+                        01
+                      </p>
+                      <h3
+                        data-row-title
+                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                      >
+                        Clarity
+                      </h3>
+                      <p
+                        data-row-body
+                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                      >
+                        The question you arrive with is rarely the one that decides anything. The
+                        work begins by telling them apart.
+                      </p>
+                    </div>
+                  </article>
+                  <article
+                    data-editorial-row
+                    className="border-b border-zinc-200/80 py-12 md:py-14"
+                  >
+                    <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
+                      <p
+                        data-row-index
+                        className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
+                      >
+                        02
+                      </p>
+                      <h3
+                        data-row-title
+                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                      >
+                        Decisions
+                      </h3>
+                      <p
+                        data-row-body
+                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                      >
+                        A decision is tested before it is made. What you are weighing against what,
+                        what you actually know, and what you are giving up.
+                      </p>
+                    </div>
+                  </article>
+                  <article data-editorial-row className="py-12 md:py-14">
+                    <div className="grid gap-5 md:grid-cols-[3.25rem_minmax(0,11rem)_1fr] md:items-start md:gap-x-12 lg:gap-x-16">
+                      <p
+                        data-row-index
+                        className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400"
+                      >
+                        03
+                      </p>
+                      <h3
+                        data-row-title
+                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                      >
+                        Direction
+                      </h3>
+                      <p
+                        data-row-body
+                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl"
+                      >
+                        What matters happens between the sessions. We look at what you actually did,
+                        not what you meant to do.
+                      </p>
+                    </div>
+                  </article>
                 </div>
-              </div>
+              </EditorialRowsReveal>
+
             </section>
 
             <EngagementSection locale="en" />
-
-            <section id="investering" data-parallax-section className="pt-12 pb-20 md:pt-14 md:pb-24">
-              <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
-                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  Scope and investment
-                </h2>
-                <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
-                  <p className="text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
-                    Price follows scope, not title. The figures below are starting points. An exact
-                    quote is provided after the first session, when objectives and scope are defined.
-                  </p>
-                  <div className="mt-8">
-                    <HomePricingTable locale="en" />
-                  </div>
-                  <HomePricingFooter locale="en" />
-                </div>
-              </ScrollReveal>
-            </section>
 
             <section
               data-parallax-image-only
@@ -303,7 +296,7 @@ export default function HomePageEn() {
             >
               <EditorialImageTransition
                 src="/superoffice.png"
-                alt="Individual coaching for managers and key professionals"
+                alt="Individual coaching at CVB Coaching"
                 breakout={false}
               />
             </section>
@@ -311,17 +304,13 @@ export default function HomePageEn() {
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
                 <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-                  Gothenburg, with engagements across Sweden
+                  Gothenburg, or online where that suits better
                 </h2>
                 <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
                   <p>
-                    CVB Coaching is based in Gothenburg and works with Swedish executive teams.
-                    Sessions take place on site or digitally.
+                    CVB Coaching is based in Gothenburg. Sessions take place in person or online.
                   </p>
-                  <p>
-                    Engagements are delivered with high discretion. What is said in the room stays in
-                    the room. What is reported to the sponsor is agreed in writing in advance.
-                  </p>
+                  <p>What is said in the session is treated in confidence.</p>
                 </div>
               </ScrollReveal>
             </section>
@@ -329,7 +318,7 @@ export default function HomePageEn() {
             <section data-parallax-image-only>
               <EditorialImageTransition
                 src="/supermeeting.png"
-                alt="Executive team coaching in a confidential session"
+                alt="Business coaching in a confidential session"
                 className="mt-20 md:mt-24"
               />
             </section>
@@ -340,7 +329,7 @@ export default function HomePageEn() {
                   Next step
                 </h2>
                 <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">
-                  Briefly describe the situation your leadership team is in. The conversation is
+                  Write a few lines about what it concerns, and pick a time. The conversation is
                   confidential.
                 </p>
                 <div data-cta-actions className="mt-12 flex flex-wrap gap-4">

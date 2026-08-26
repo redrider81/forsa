@@ -4,16 +4,16 @@ import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
-  title: "Contact | CVB Coaching",
+  title: "Book an initial conversation | CVB Coaching",
   description:
-    "Confidential conversation. Briefly describe the situation your leadership team is in.",
+    "Pick a time and write a few lines about what you would like to bring. The conversation is confidential, whether you come on your own or through your employer.",
 };
 
 const relevantWhen = [
-  "The matter concerns leadership, accountability or direction.",
-  "The decision affects the organisation's next step.",
-  "There is a need for confidential external support.",
-  "You want to move from discussion to a decision made.",
+  "The question genuinely matters to you, not just on paper.",
+  "You want to finish the thinking yourself, not be handed an answer.",
+  "It needs to happen outside your own circle, in confidence.",
+  "Something is meant to change, not only be discussed.",
 ];
 
 export default function ContactPageEn() {
@@ -27,12 +27,12 @@ export default function ContactPageEn() {
               Contact
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Start with the right conversation.
+              Start with a conversation.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              The conversation is confidential. We use it to understand the situation and decide
-              whether CVB Coaching is the right support. Briefly describe the situation you are in
-              and what needs to become clearer.
+              Pick a time that suits you and write a few lines about what you would like to bring.
+              We use the first conversation to work out whether the question belongs here and
+              whether we are a good fit.
             </p>
           </HeroReveal>
         </section>
@@ -46,7 +46,7 @@ export default function ContactPageEn() {
 
               <aside className="max-w-2xl border-t border-zinc-300/35 pt-12 md:pt-16">
                 <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
-                  How we decide if it is the right engagement
+                  How to tell whether this is right
                 </h2>
 
                 <h3 className="mt-10 text-lg font-medium text-zinc-900">Right fit when</h3>

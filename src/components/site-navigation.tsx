@@ -480,14 +480,14 @@ export default function SiteNavigation() {
         ]
       : [
           {
-            href: "/ledningsgruppscoaching",
-            label: "For leadership teams",
-            text: "When accountability, direction, and decisions need sharper focus.",
+            href: "/individuell-coaching",
+            label: "Individual coaching",
+            text: "For anyone facing a choice, a change or a decision that carries weight.",
           },
           {
-            href: "/executive-coaching",
-            label: "For CEOs & founders",
-            text: "Confidential support for complex decisions.",
+            href: "/business-coaching",
+            label: "Business coaching",
+            text: "For leaders, employees, teams and executive teams.",
           },
         ];
   const coachingServices =
@@ -499,11 +499,10 @@ export default function SiteNavigation() {
           { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
         ]
       : [
-          { href: "/ledningsgruppscoaching", label: "Leadership Team Coaching" },
-          { href: "/executive-coaching", label: "Executive Coaching" },
-          { href: "/individuell-coaching", label: "Individual Coaching" },
+          { href: "/executive-coaching", label: "Executive coaching" },
+          { href: "/ledningsgruppscoaching", label: "Executive team coaching" },
           { href: "/team-coaching", label: "Team coaching" },
-          { href: "/coachande-ledarskap", label: "Coaching Leadership" },
+          { href: "/coachande-ledarskap", label: "Coaching leadership" },
         ];
   const headerRef = useRef<HTMLElement>(null);
   const mobileMenuId = useId();

@@ -1,23 +1,18 @@
 # Copy pending customer approval (⚑)
 
-Meningar markerade ⚑ i koden innehåller åtaganden om tid, hantering eller process som måste godkännas innan produktionssättning.
+## Status
 
-## Grundprincip: kommersiell neutralitet
+**Neither the Swedish nor the English public copy contains unapproved claims.**
 
-**Priser och kommersiella paket är inte fastställda av kund och ska inte renderas publikt innan uttryckligt godkännande.**
+All timing, format, outcome, process and commercial statements that lacked customer approval have been removed or neutralised on both language versions.
 
-Det gäller priser, från-priser, prisintervall, fasta paket, offertmodeller, investeringsrubriker och minimiomfattningar. Ingen svensk publik sida renderar i dag pris- eller paketcopy. `src/components/pricing-block.tsx` och `content/pricing.ts` finns kvar som intern infrastruktur men anropas inte längre från någon svensk publik sida — koppla inte in dem igen utan uttryckligt godkännande.
+## Standing principles
 
-## Fortfarande pending
+1. **Prices and commercial packages are not approved by the customer and must not render publicly.** This covers prices, from-prices, price ranges, fixed packages, quote models, investment headings and minimum engagements. No public page in either language renders pricing or package copy today. `src/components/pricing-block.tsx` and `content/pricing.ts` remain as internal infrastructure but are no longer called from any public page — do not wire them back in without explicit approval.
+2. **Confidentiality may be described as a principle**, but not as an exact reporting model, retention period or data process until that has been decided.
+3. **No fixed programme formats** — group sizes, session counts, session durations, programme lengths, midpoint reviews or reporting procedures — may be presented as established offerings.
 
-**Inga ej godkända claims återstår i den svenska publika copyn.**
-
-Samtliga tids-, format-, resultat-, process- och kommersiella påståenden som saknade kundgodkännande är borttagna eller neutraliserade. Registret nedan finns kvar som spårbarhet över vad som togs bort och varför.
-
-Två principer gäller fortsatt vid framtida ändringar:
-
-1. Priser och kommersiella paket är inte fastställda av kund och ska inte renderas publikt innan uttryckligt godkännande.
-2. Konfidentialitet får beskrivas som princip, men inte som exakt återrapporteringsmodell, gallringstid eller dataprocess innan detta är beslutat.
+Any future pricing requires explicit customer approval before public activation.
 
 ## Borttaget i copy-passen augusti 2026
 
@@ -59,6 +54,8 @@ Följande ej godkända påståenden finns inte längre i koden och behöver inte
 **Övrigt**
 - "Det är också utgångspunkten i samtalen: besluten prövas i affärsmässiga termer." (Om Carolina)
 
-## Noterat: engelska sajten
+## Engelska sajten
 
-`/en` ligger utanför det svenska copy-arbetet och har kvar den gamla positioneringen, de gamla programformaten och pris-/investeringssektionerna. Den ska hanteras i ett eget pass efter att svensk copy är slutligt godkänd. Fram till dess bör den betraktas som ej produktionsklar.
+`/en` är nu linjerad med den svenska positioneringen: Individual Coaching och Business Coaching som primära ingångar, specialistformaten underordnade Business Coaching, samma avsändarbalans mellan CVB Coaching och Carolina von Braun.
+
+Borttaget på engelska i samma pass: samtliga "Scope and investment"-sektioner, "Quoted per engagement/programme", "From"-priser, prisstrukturen på startsidan, "Six to eight sessions over six months", hela "Programme format"-listan på Coaching leadership, "normally within two sessions", "Response within one business day", återrapporterings- och gallringslöftena på About Carolina, samt falskt "we" i specialistsidornas rubriker och brödtext.

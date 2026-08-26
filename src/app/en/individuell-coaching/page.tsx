@@ -4,39 +4,39 @@ import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
-import { ServicePricingSection } from "@/components/pricing-block";
 
 export const metadata: Metadata = {
-  title: "Individual coaching for managers | CVB Coaching",
+  title: "Individual coaching in Gothenburg | CVB Coaching",
   description:
-    "Professional coaching for managers, specialists and key professionals who need clarity in role, prioritisation and impact in their communication.",
+    "Individual coaching at CVB Coaching in Gothenburg. For anyone facing a choice, a change or a decision that will not wait any longer.",
 };
 
 const relevanceList = [
-  "You are new in a leadership role and accountability is larger than the mandate is explicit.",
-  "The role has grown and priorities no longer fit together.",
-  "Your communication lands but does not create impact.",
-  "Day-to-day work is complex and demands more deliberate trade-offs.",
+  "You are facing a choice and cannot get to the end of it on your own.",
+  "Something has ended and the next thing has not taken shape.",
+  "You are doing everything you normally do and still are not moving.",
+  "The role, or life, has grown faster than the way you are handling it.",
+  "You know what you should do, and you are not doing it.",
 ];
 
 const focusList = [
-  "The transition to greater accountability.",
-  "The role's boundaries in relation to other roles.",
-  "Prioritisation and self-leadership under pressure.",
-  "Impact in the sessions that matter.",
-  "Overview in a complex working day.",
+  "Choices and decisions that will shape the next stretch.",
+  "Transitions: a new role, a new phase, a new setting.",
+  "Direction when several options all look reasonable.",
+  "Habits and patterns that cost more than they give.",
+  "Work, career and the edges of a role.",
+  "A different angle on something you have already turned over many times.",
 ];
 
 const nonGoals = [
-  "Not therapy or treatment of private matters.",
-  "Not general life coaching without connection to work.",
-  "Not advisory support where the coach takes over your decisions.",
+  "Not therapy or treatment. If the question is about ill health, therapy is the right route, and I will say so.",
+  "Not advice. I will not take over your decisions or hand you my view as the answer.",
 ];
 
 const outcomes = [
-  "An explicit accountability in your own role.",
-  "Better prioritisation between competing demands.",
-  "More precision in the sessions that matter.",
+  "You know what the question is actually about, not only how it feels.",
+  "You make the decision instead of carrying it.",
+  "You have a way of thinking that holds up the next time too.",
 ];
 
 export default function IndividualCoachingPageEn() {
@@ -50,17 +50,18 @@ export default function IndividualCoachingPageEn() {
               Individual coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Clarity in your own role.
+              The question is yours. The structure is mine.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              For managers, specialists and key professionals who need explicit accountability,
-              better prioritisation and more impact in their communication.
+              Individual coaching is a conversation you book for yourself. You bring whatever is
+              actually taking up room — a choice, a change, a question that will not let go — and
+              get further with it than you do alone.
             </p>
             <p className="mt-6 max-w-3xl text-base leading-7 text-zinc-600">
-              This is for managers and key professionals below leadership level. For CEOs,
-              founders and executive team members, see{" "}
-              <Link href="/en/executive-coaching" className="underline underline-offset-2 hover:text-zinc-900">
-                Executive coaching
+              If your employer is paying, or the question belongs to a team or an executive team,
+              see{" "}
+              <Link href="/en/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
+                Business coaching
               </Link>
               .
             </p>
@@ -68,8 +69,27 @@ export default function IndividualCoachingPageEn() {
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              You usually have the answer. Rarely in order.
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                What is missing is seldom information. It is someone who asks the questions in the
+                right order and does not settle for the first answer.
+              </p>
+              <p>
+                Friends want the best for you. Colleagues have a stake in the outcome. A coaching
+                conversation has no view on what you choose, only an interest in you choosing with
+                your eyes open.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
+        <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium tracking-tight">
-            Four situations where coaching makes a difference
+            Where things tend to get stuck
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -86,7 +106,7 @@ export default function IndividualCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              What we work with
+              What the questions can be about
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -101,16 +121,20 @@ export default function IndividualCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              How we work
+              How I work
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Sessions are confidential and start from your current work situation. We work with
-                questions, reflection and accountability, and close every session with a defined
-                next step.
+                Sessions are confidential. You set the question, I keep asking it until it gets
+                sharp. We work with what you can affect and leave the rest.
               </p>
               <p>
-                Focus lies on your professional role and your leadership, with follow-up over time.
+                Every session ends with something concrete you take away. The next one starts there
+                — with what actually happened, not with what was intended.
+              </p>
+              <p>
+                How many sessions it takes depends on the question. Sometimes one is enough.
+                Sometimes it is worth having someone alongside for a longer stretch.
               </p>
             </div>
           </ScrollReveal>
@@ -131,7 +155,7 @@ export default function IndividualCoachingPageEn() {
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Expected outcome</h2>
+          <h2 className="text-3xl font-medium tracking-tight">What you take away</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
             {outcomes.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
@@ -142,31 +166,13 @@ export default function IndividualCoachingPageEn() {
           </StaggerCards>
         </section>
 
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Scope and investment
-            </h2>
-            <div data-col-right className="md:col-span-7">
-              <ServicePricingSection
-                locale="en"
-                lines={[
-                  { text: "Six to eight sessions over six months, or single sessions as needed." },
-                  { text: "An engagement:", priceKey: "individual" },
-                  { text: "A single session:", priceKey: "single" },
-                ]}
-              />
-            </div>
-          </ScrollReveal>
-        </section>
-
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
               Next step
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Briefly describe what needs to become clearer in your role.
+              Write a few lines about what you would like to bring, and pick a time that suits you.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">

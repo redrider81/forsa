@@ -15,7 +15,7 @@ import {
 
 const titles: Record<Locale, string> = {
   sv: "Så går det till",
-  en: "How an engagement works",
+  en: "How it works",
 };
 
 type Props = {

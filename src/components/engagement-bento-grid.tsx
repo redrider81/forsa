@@ -43,39 +43,33 @@ const stepsSv: Step[] = [
 const stepsEn: Step[] = [
   {
     index: "01",
-    title: "First session",
-    body: "Confidential. We decide together whether the question belongs here.",
+    title: "The first conversation",
+    body: "Confidential. We work out together whether the question belongs here, and whether we are a good fit.",
     layout: "md:col-span-6 lg:col-span-7",
   },
   {
     index: "02",
-    title: "Contract and objectives",
-    body: "Objectives, scope, confidentiality and sponsor reporting are agreed in writing before work begins.",
+    title: "What you want from it",
+    body: "We put into words what should be different by the end. Without that, sessions are only sessions.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "03",
-    title: "Delivery",
-    body: "Six to eight sessions over six months, with a fixed cadence and agreed agenda.",
-    layout: "md:col-span-4 lg:col-span-4",
+    title: "The sessions",
+    body: "We set the rhythm together. Every session ends with something you take away with you.",
+    layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "04",
-    title: "Midpoint review",
-    body: "Review against objectives together with the sponsor, within agreed confidentiality.",
-    layout: "md:col-span-4 lg:col-span-4",
-  },
-  {
-    index: "05",
-    title: "Close",
-    body: "Evaluation against the objectives set at the start, and decision on continuation or close.",
-    layout: "md:col-span-4 lg:col-span-4",
+    title: "Closing",
+    body: "We look back at what you set out to do, and decide whether the work is finished or continues.",
+    layout: "md:col-span-6 lg:col-span-7",
   },
 ];
 
 const footnotes: Record<Locale, string> = {
   sv: "Upplägget följer frågan och vad du vill få ut av samtalen.",
-  en: "Method, structure and follow-up stay the same regardless of scope. What differs is the number of leaders and the number of sessions.",
+  en: "The shape of the work follows the question and what you want to get out of the sessions.",
 };
 
 const tileClass =

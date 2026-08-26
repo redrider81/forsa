@@ -63,14 +63,15 @@ export function buildContactConfirmationEmail(
     text: [
       `Hello ${payload.namn},`,
       "",
-      "Thank you for your request. We have received the details below and will confirm by reply.",
+      "Thank you for your request. The details below have been received, and a confirmation will follow.",
       "",
       `Preferred date: ${preferredDate}`,
       `Preferred time: ${preferredTime}`,
       "",
-      "All contact is handled confidentially. Response within one business day.",
+      "All contact is handled confidentially.",
       "",
       "Kind regards,",
+      "Carolina von Braun",
       "CVB Coaching",
     ].join("\n"),
   };

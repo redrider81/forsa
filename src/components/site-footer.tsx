@@ -25,11 +25,8 @@ export default function SiteFooter() {
           { href: "/business-coaching", label: "Business coaching" },
         ]
       : [
-          { href: "/executive-coaching", label: "Executive Coaching" },
-          { href: "/ledningsgruppscoaching", label: "Executive Team Coaching" },
-          { href: "/individuell-coaching", label: "Individual Coaching" },
-          { href: "/team-coaching", label: t.footer.teamCoaching },
-          { href: "/coachande-ledarskap", label: "Coaching Leadership" },
+          { href: "/individuell-coaching", label: "Individual coaching" },
+          { href: "/business-coaching", label: "Business coaching" },
         ];
   const businessFormats =
     locale === "sv"
@@ -39,7 +36,12 @@ export default function SiteFooter() {
           { href: "/team-coaching", label: t.footer.teamCoaching },
           { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
         ]
-      : [];
+      : [
+          { href: "/executive-coaching", label: "Executive coaching" },
+          { href: "/ledningsgruppscoaching", label: "Executive team coaching" },
+          { href: "/team-coaching", label: t.footer.teamCoaching },
+          { href: "/coachande-ledarskap", label: "Coaching leadership" },
+        ];
   const about =
     locale === "sv"
       ? [
@@ -47,7 +49,7 @@ export default function SiteFooter() {
           { href: "/kontakt", label: "Kontakt" },
         ]
       : [
-          { href: "/om-oss", label: "About us" },
+          { href: "/om-oss", label: "About Carolina" },
           { href: "/kontakt", label: "Contact" },
         ];
 
@@ -92,7 +94,7 @@ export default function SiteFooter() {
             {businessFormats.length > 0 ? (
               <>
                 <p className="mt-7 text-xs font-medium tracking-[0.16em] text-zinc-400 uppercase">
-                  Inom business coaching
+                  {locale === "sv" ? "Inom business coaching" : "Within business coaching"}
                 </p>
                 <ul className="mt-4 space-y-2.5">
                   {businessFormats.map((item) => (
