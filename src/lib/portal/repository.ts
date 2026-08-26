@@ -921,7 +921,7 @@ export function buildOperationsOverview(
       ).length,
       completedThisPeriod: completed,
       activeEngagements: allEngagements.length,
-      activeClients: allClients.length,
+      activeClients: allClients.filter((client) => (client.status ?? "aktiv") === "aktiv").length,
     },
   };
 }
@@ -1121,6 +1121,9 @@ async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
           }
         : EMPTY_GOAL,
       recurringThemes: row.recurring_themes,
+      status: row.status,
+      endedAt: row.ended_at ?? null,
+      reactivatedAt: row.reactivated_at ?? null,
     };
   });
 

@@ -44,6 +44,7 @@ export type Database = {
           created_at: string
           depth: Database["public"]["Enums"]["client_depth"]
           email: string
+          ended_at: string | null
           engagement_id: string
           headline: string
           id: string
@@ -51,15 +52,18 @@ export type Database = {
           name: string
           organisation_id: string | null
           phone: string
+          reactivated_at: string | null
           recurring_themes: string[]
           role: string
           started_at: string
+          status: Database["public"]["Enums"]["client_lifecycle_status"]
           updated_at: string
         }
         Insert: {
           created_at?: string
           depth?: Database["public"]["Enums"]["client_depth"]
           email: string
+          ended_at?: string | null
           engagement_id: string
           headline?: string
           id?: string
@@ -67,15 +71,18 @@ export type Database = {
           name: string
           organisation_id?: string | null
           phone?: string
+          reactivated_at?: string | null
           recurring_themes?: string[]
           role: string
           started_at: string
+          status?: Database["public"]["Enums"]["client_lifecycle_status"]
           updated_at?: string
         }
         Update: {
           created_at?: string
           depth?: Database["public"]["Enums"]["client_depth"]
           email?: string
+          ended_at?: string | null
           engagement_id?: string
           headline?: string
           id?: string
@@ -83,9 +90,11 @@ export type Database = {
           name?: string
           organisation_id?: string | null
           phone?: string
+          reactivated_at?: string | null
           recurring_themes?: string[]
           role?: string
           started_at?: string
+          status?: Database["public"]["Enums"]["client_lifecycle_status"]
           updated_at?: string
         }
         Relationships: [
@@ -1210,6 +1219,12 @@ export type Database = {
         Args: { p_booking_id: string }
         Returns: undefined
       }
+      delete_coach_client: { Args: { p_client_id: string }; Returns: undefined }
+      end_coach_client: { Args: { p_client_id: string }; Returns: undefined }
+      reactivate_coach_client: {
+        Args: { p_client_id: string }
+        Returns: undefined
+      }
       send_contract_for_signature: {
         Args: { p_contract_id: string }
         Returns: string
@@ -1253,6 +1268,7 @@ export type Database = {
       booking_role: "coach" | "klient"
       booking_status: "pending" | "accepted" | "declined" | "cancelled"
       client_depth: "full" | "oversikt"
+      client_lifecycle_status: "aktiv" | "avslutad"
       commitment_status: "oppet" | "pagar" | "genomfort"
       confidentiality_level: "coach" | "coach_klient" | "organisation"
       contract_signer_role: "coach" | "klient"
@@ -1417,6 +1433,7 @@ export const Constants = {
       booking_role: ["coach", "klient"],
       booking_status: ["pending", "accepted", "declined", "cancelled"],
       client_depth: ["full", "oversikt"],
+      client_lifecycle_status: ["aktiv", "avslutad"],
       commitment_status: ["oppet", "pagar", "genomfort"],
       confidentiality_level: ["coach", "coach_klient", "organisation"],
       contract_signer_role: ["coach", "klient"],

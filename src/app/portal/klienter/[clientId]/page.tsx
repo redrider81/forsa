@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import AiAskPanel from "@/components/portal/ai-ask-panel";
 import ClientDetailNav from "@/components/portal/client-detail-nav";
 import ShareMaterialPanel from "@/components/portal/share-material-panel";
+import ClientLifecycleActions from "@/components/portal/client-lifecycle-actions";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { listClientContractsForCoach } from "@/lib/portal/contracts";
@@ -75,6 +76,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
+          {(client.status ?? "aktiv") === "avslutad" ? <Tag tone="neutral">AVSLUTAD</Tag> : null}
           <Tag>{engagement.kindLabel}</Tag>
           <Tag>{completedSessions.length} genomförda sessioner</Tag>
           <Tag tone={dossier.openCommitments.length > 0 ? "action" : "completed"}>
@@ -348,6 +350,13 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           </Link>
         </div>
       </Panel>
+
+      <ClientLifecycleActions
+        clientId={client.id}
+        clientName={client.name}
+        status={client.status ?? "aktiv"}
+        endedAt={client.endedAt ?? null}
+      />
     </div>
   );
 }

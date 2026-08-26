@@ -34,7 +34,9 @@ export default async function PortalOverviewPage() {
 
   const { week } = operations;
 
-  const allClients = listClients(session.coachId, state, repositoryData);
+  const allClients = listClients(session.coachId, state, repositoryData).filter(
+    (client) => (client.status ?? "aktiv") === "aktiv"
+  );
 
   const meetableClients = allClients
     .map((client) => ({

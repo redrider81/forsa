@@ -18,27 +18,68 @@ import {
   portalPageStackClass,
   RowLink,
   SectionLabel,
+  Tag,
 } from "@/components/portal/ui";
 
-export default async function ClientsPage() {
+const FILTERS = [
+  { key: "aktiva", label: "Aktiva" },
+  { key: "avslutade", label: "Avslutade" },
+  { key: "alla", label: "Alla" },
+] as const;
+
+type FilterKey = (typeof FILTERS)[number]["key"];
+
+export default async function ClientsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>;
+}) {
   const session = await readCoachSession();
   if (!session) return null;
+
+  const { status: statusParam } = await searchParams;
+  const filter: FilterKey = statusParam === "avslutade" || statusParam === "alla" ? statusParam : "aktiva";
 
   const state = await readDemoState();
   const data = await fetchPortalRepositoryData();
   const engagements = listEngagements(session.coachId, data);
-  const clients = listClients(session.coachId, state, data);
+  const allClients = listClients(session.coachId, state, data);
+
+  const clients = allClients.filter((client) => {
+    const clientStatus = client.status ?? "aktiv";
+    if (filter === "aktiva") return clientStatus === "aktiv";
+    if (filter === "avslutade") return clientStatus === "avslutad";
+    return true;
+  });
+
+  const activeCount = allClients.filter((client) => (client.status ?? "aktiv") === "aktiv").length;
 
   return (
     <div className={portalPageStackClass}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <PageHeading
           title="Klienter"
-          lead={`${clients.length} aktiva coachingrelationer · ${engagements.length} uppdrag`}
+          lead={`${activeCount} aktiva coachingrelationer · ${engagements.length} uppdrag`}
         />
         <Link href="/portal/klienter/ny" className={portalPrimaryButtonClass}>
           + Ny klient
         </Link>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {FILTERS.map((item) => (
+          <Link
+            key={item.key}
+            href={item.key === "aktiva" ? "/portal/klienter" : `/portal/klienter?status=${item.key}`}
+            className={`inline-flex min-h-9 items-center rounded-full border px-4 py-1.5 text-[0.8125rem] font-medium transition-colors ${
+              filter === item.key
+                ? "border-zinc-900 bg-zinc-900 text-white"
+                : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-zinc-900"
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
       </div>
 
       <div className="space-y-6">
@@ -68,6 +109,7 @@ export default async function ClientsPage() {
                   const completed = clientSessions.filter(
                     (item) => item.status === "genomford",
                   ).length;
+                  const isEnded = (client.status ?? "aktiv") === "avslutad";
                   return (
                     <div key={client.id}>
                       {index > 0 ? <Divider /> : null}
@@ -76,9 +118,14 @@ export default async function ClientsPage() {
                         leading={<Avatar initials={client.initials} />}
                         title={client.name}
                         subtitle={client.role}
-                        meta={`${completed} genomförda sessioner${
-                          upcoming ? ` · nästa ${formatDate(upcoming.date, false)}` : ""
-                        }`}
+                        meta={
+                          isEnded && client.endedAt
+                            ? `Avslutad ${formatDate(client.endedAt.slice(0, 10))}`
+                            : `${completed} genomförda sessioner${
+                                upcoming ? ` · nästa ${formatDate(upcoming.date, false)}` : ""
+                              }`
+                        }
+                        trailing={isEnded ? <Tag tone="neutral">AVSLUTAD</Tag> : undefined}
                       />
                     </div>
                   );

@@ -232,7 +232,13 @@ export type Client = {
   agreement: CoachingAgreement;
   goal: DevelopmentGoal;
   recurringThemes: string[];
+  /** Saknas i seed-datan — behandlas som "aktiv". */
+  status?: ClientLifecycleStatus;
+  endedAt?: string | null;
+  reactivatedAt?: string | null;
 };
+
+export type ClientLifecycleStatus = "aktiv" | "avslutad";
 
 export type CoachProfile = {
   id: string;
