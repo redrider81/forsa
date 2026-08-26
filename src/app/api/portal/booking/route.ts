@@ -6,6 +6,12 @@ function text(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
+// Internal meetings stay flexible — any clock time, weekends included. These
+// only reject malformed input, not unusual scheduling.
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+const ALLOWED_DURATIONS = [30, 45, 60, 90];
+
 /** Carolina föreslår en mötestid för en av sina klienter. */
 export async function POST(request: Request) {
   const session = await readCoachSession();
@@ -31,8 +37,11 @@ export async function POST(request: Request) {
   if (!clientId || !getClient(session.coachId, clientId, await fetchPortalRepositoryData())) {
     return Response.json({ ok: false, error: "Klienten kunde inte hittas." }, { status: 403 });
   }
-  if (!date || !time) {
-    return Response.json({ ok: false, error: "Ange datum och tid." }, { status: 400 });
+  if (!DATE_RE.test(date) || !TIME_RE.test(time)) {
+    return Response.json({ ok: false, error: "Ange giltigt datum och tid." }, { status: 400 });
+  }
+  if (!ALLOWED_DURATIONS.includes(durationMinutes)) {
+    return Response.json({ ok: false, error: "Ogiltig möteslängd." }, { status: 400 });
   }
 
   const supabase = await createSupabaseServerClient();

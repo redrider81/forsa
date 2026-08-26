@@ -19,8 +19,6 @@ const WEEKDAY_LABELS: Record<number, string> = {
 const WEEKDAYS = [1, 2, 3, 4, 5] as const;
 const WEEKEND_DAYS = [6, 7] as const;
 
-const DURATIONS = [30, 45, 60, 90];
-const BUFFERS = [0, 15, 30, 45, 60];
 const NOTICE_OPTIONS = [
   { value: 2, label: "2 timmar" },
   { value: 6, label: "6 timmar" },
@@ -40,8 +38,16 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
-function formatSlot(iso: string): string {
-  return iso.slice(11, 16);
+// timestamptz must be converted, never string-sliced — slicing shows UTC and
+// silently drifts by an hour across DST.
+const stockholmTime = new Intl.DateTimeFormat("sv-SE", {
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "Europe/Stockholm",
+});
+
+function formatSlotInterval(startAt: string, endAt: string): string {
+  return `${stockholmTime.format(new Date(startAt))}–${stockholmTime.format(new Date(endAt))}`;
 }
 
 export default function AvailabilityManager({
@@ -105,8 +111,6 @@ export default function AvailabilityManager({
   async function patchSettings(patch: Partial<BookingSettings>) {
     setSettingsSaved(false);
     const body: Record<string, unknown> = {};
-    if (patch.meetingDurationMinutes !== undefined) body.meetingDurationMinutes = patch.meetingDurationMinutes;
-    if (patch.bufferMinutes !== undefined) body.bufferMinutes = patch.bufferMinutes;
     if (patch.minimumNoticeHours !== undefined) body.minimumNoticeHours = patch.minimumNoticeHours;
     if (patch.bookingHorizonDays !== undefined) body.bookingHorizonDays = patch.bookingHorizonDays;
     if (patch.publicBookingEnabled !== undefined) body.publicBookingEnabled = patch.publicBookingEnabled;
@@ -185,7 +189,11 @@ export default function AvailabilityManager({
       return;
     }
     const { exceptions: created } = (await response.json()) as { exceptions: AvailabilityException[] };
-    setExceptions((prev) => [...prev, ...created].sort((a, b) => a.date.localeCompare(b.date)));
+    // The RPC replaces the whole state for that date, so mirror that here
+    // instead of appending to whatever was already shown.
+    setExceptions((prev) =>
+      [...prev.filter((e) => e.date !== exceptionDate), ...created].sort((a, b) => a.date.localeCompare(b.date)),
+    );
     setAddingException(false);
     setExceptionDate("");
     setExceptionType("unavailable");
@@ -250,35 +258,10 @@ export default function AvailabilityManager({
       {/* 2. BOKNINGSREGLER */}
       <Panel>
         <PanelHeading label="Tillgänglighet" title="Bokningsregler" />
+        <p className="mt-2 text-[0.8125rem] text-zinc-500">
+          Publika tider är alltid fasta tvåtimmarsblock — möteslängd och buffert styr dem inte.
+        </p>
         <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <label>
-            <SectionLabel>Möteslängd</SectionLabel>
-            <select
-              value={settings.meetingDurationMinutes}
-              onChange={(e) => patchSettings({ meetingDurationMinutes: Number(e.target.value) })}
-              className={`mt-2 ${portalFieldClass}`}
-            >
-              {DURATIONS.map((d) => (
-                <option key={d} value={d}>
-                  {d} minuter
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <SectionLabel>Buffert mellan möten</SectionLabel>
-            <select
-              value={settings.bufferMinutes}
-              onChange={(e) => patchSettings({ bufferMinutes: Number(e.target.value) })}
-              className={`mt-2 ${portalFieldClass}`}
-            >
-              {BUFFERS.map((b) => (
-                <option key={b} value={b}>
-                  {b} minuter
-                </option>
-              ))}
-            </select>
-          </label>
           <label>
             <SectionLabel>Minsta framförhållning</SectionLabel>
             <select
@@ -451,7 +434,7 @@ export default function AvailabilityManager({
                         key={slot.startAt}
                         className="rounded-full border border-zinc-300 px-3 py-1 text-[0.8125rem] text-zinc-700"
                       >
-                        {formatSlot(slot.startAt)}
+                        {formatSlotInterval(slot.startAt, slot.endAt)}
                       </span>
                     ))}
                   </div>

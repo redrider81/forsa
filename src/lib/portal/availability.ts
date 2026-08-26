@@ -103,6 +103,32 @@ export async function listAvailabilityExceptions(): Promise<AvailabilityExceptio
   }));
 }
 
+/**
+ * Replaces the entire exception state for one coach/date atomically.
+ * A coach/date ends up either "unavailable" or a set of fixed public
+ * blocks — never both, and never a partially written set.
+ */
+export async function replaceAvailabilityException(input: {
+  date: string;
+  type: AvailabilityExceptionType;
+  blocks: Array<{ startTime: string; endTime: string }>;
+}): Promise<AvailabilityException[] | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("replace_coach_availability_exception", {
+    p_date: input.date,
+    p_type: input.type,
+    p_blocks: input.blocks,
+  });
+  if (error || !data) return null;
+  return data.map((row) => ({
+    id: row.id,
+    date: row.date,
+    type: toExceptionType(row.type),
+    startTime: row.start_time ? toTime(row.start_time) : null,
+    endTime: row.end_time ? toTime(row.end_time) : null,
+  }));
+}
+
 export async function addAvailabilityException(input: {
   coachId: string;
   date: string;
@@ -210,9 +236,34 @@ export async function listPendingPublicBookingRequests(): Promise<PublicBookingR
   }));
 }
 
+/**
+ * Accepted reservations stay operationally visible to Carolina — the slot
+ * remains blocked, so she must be able to see and cancel it.
+ */
+export async function listAcceptedPublicBookingRequests(): Promise<PublicBookingRequest[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("public_booking_requests")
+    .select("*")
+    .eq("status", "accepted")
+    .order("requested_start_at", { ascending: true });
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    phone: row.phone,
+    message: row.message,
+    requestedStartAt: row.requested_start_at,
+    requestedEndAt: row.requested_end_at,
+    status: row.status as PublicBookingRequest["status"],
+    createdAt: row.created_at,
+    respondedAt: row.responded_at,
+  }));
+}
+
 export async function respondToPublicBookingRequest(
   requestId: string,
-  action: "accept" | "decline",
+  action: "accept" | "decline" | "cancel",
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.rpc("respond_public_booking_request", { p_request_id: requestId, p_action: action });

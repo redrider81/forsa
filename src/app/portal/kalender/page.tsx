@@ -6,7 +6,7 @@ import { readCoachSession } from "@/lib/portal/session";
 import { readDemoState } from "@/lib/portal/store/demo-store";
 import { fetchPortalRepositoryData, getOperationsOverview, listClients } from "@/lib/portal/repository";
 import { listPendingCoachBookings } from "@/lib/portal/booking";
-import { listPendingPublicBookingRequests } from "@/lib/portal/availability";
+import { listAcceptedPublicBookingRequests, listPendingPublicBookingRequests } from "@/lib/portal/availability";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { CompactCalendar, MetricGrid } from "@/components/portal/operations";
 import { EmptyState, PageHeading, Panel, PanelHeading, portalPageStackClass, portalSegmentActiveClass, portalSegmentClass, portalSegmentInactiveClass } from "@/components/portal/ui";
@@ -41,6 +41,7 @@ export default async function CalendarPage({
   }));
   const bookings = await listPendingCoachBookings();
   const publicRequests = await listPendingPublicBookingRequests();
+  const acceptedPublicRequests = await listAcceptedPublicBookingRequests();
 
   return (
     <div className={portalPageStackClass}>
@@ -94,7 +95,7 @@ export default async function CalendarPage({
         </div>
       </Panel>
 
-      <PublicBookingRequestsPanel requests={publicRequests} />
+      <PublicBookingRequestsPanel pending={publicRequests} accepted={acceptedPublicRequests} />
 
       <BookingPanel clients={clients} bookings={bookings} />
     </div>

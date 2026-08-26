@@ -429,7 +429,16 @@ export default function ContactIntakeForm() {
               onTelefonChange={(value) => setStep1Data((prev) => ({ ...prev, telefon: value }))}
               onEpostChange={(value) => setStep1Data((prev) => ({ ...prev, epost: value }))}
               onSituationChange={(value) => setStep1Data((prev) => ({ ...prev, situation: value }))}
-              onSelectDate={(value) => setStep1Data((prev) => ({ ...prev, onskatDatum: value }))}
+              onSelectDate={(value) =>
+                setStep1Data((prev) =>
+                  // Changing the date invalidates any slot picked for the old
+                  // date — the visitor must choose again. Re-picking the same
+                  // date keeps the selection.
+                  prev.onskatDatum === value
+                    ? prev
+                    : { ...prev, onskatDatum: value, onskadTid: "", onskadTidSlut: "" },
+                )
+              }
               onSelectSlot={(startAt, endAt) =>
                 setStep1Data((prev) => ({ ...prev, onskadTid: startAt, onskadTidSlut: endAt }))
               }

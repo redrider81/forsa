@@ -1419,6 +1419,16 @@ export type Database = {
         Args: { p_client_id: string }
         Returns: undefined
       }
+      replace_coach_availability_exception: {
+        Args: { p_blocks?: Json; p_date: string; p_type: string }
+        Returns: {
+          date: string
+          end_time: string
+          id: string
+          start_time: string
+          type: string
+        }[]
+      }
       resolve_availability_windows: {
         Args: { p_coach_id: string; p_date: string }
         Returns: {
