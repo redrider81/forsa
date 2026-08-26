@@ -19,9 +19,10 @@ import { localeFromPathname, stripLocaleFromPath, toLocalePath, type Locale } fr
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 
 const coachingPaths = [
+  "/individuell-coaching",
+  "/business-coaching",
   "/executive-coaching",
   "/ledningsgruppscoaching",
-  "/individuell-coaching",
   "/team-coaching",
   "/coachande-ledarskap",
 ] as const;
@@ -467,14 +468,14 @@ export default function SiteNavigation() {
     locale === "sv"
       ? [
           {
-            href: "/ledningsgruppscoaching",
-            label: "För ledningsgrupper",
-            text: "När ansvar, riktning och beslut behöver skärpas.",
+            href: "/individuell-coaching",
+            label: "Individuell coaching",
+            text: "För dig som står inför ett vägval, en förändring eller ett beslut som väger.",
           },
           {
-            href: "/executive-coaching",
-            label: "För vd & grundare",
-            text: "Konfidentiellt stöd i komplexa beslut.",
+            href: "/business-coaching",
+            label: "Business coaching",
+            text: "För ledare, medarbetare, team och ledningsgrupper.",
           },
         ]
       : [
@@ -492,9 +493,8 @@ export default function SiteNavigation() {
   const coachingServices =
     locale === "sv"
       ? [
-          { href: "/ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
           { href: "/executive-coaching", label: "Executive coaching" },
-          { href: "/individuell-coaching", label: "Individuell coaching" },
+          { href: "/ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
           { href: "/team-coaching", label: "Teamcoaching" },
           { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
         ]

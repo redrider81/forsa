@@ -44,14 +44,15 @@ export function buildContactConfirmationEmail(
       text: [
         `Hej ${payload.namn},`,
         "",
-        "Tack för din förfrågan. Vi har tagit emot uppgifterna nedan och återkommer med bekräftelse.",
+        "Tack för din förfrågan. Uppgifterna nedan är mottagna, och en bekräftelse följer.",
         "",
         `Önskat datum: ${preferredDate}`,
         `Önskad tid: ${preferredTime}`,
         "",
-        "All kontakt hanteras konfidentiellt. Svar inom en arbetsdag.",
+        "All kontakt hanteras konfidentiellt.",
         "",
         "Med vänlig hälsning,",
+        "Carolina von Braun",
         "CVB Coaching",
       ].join("\n"),
     };

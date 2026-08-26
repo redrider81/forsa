@@ -20,19 +20,24 @@ export const professionalServiceSchema = {
   areaServed: ["Göteborg", "Sverige"],
   availableLanguage: ["sv", "en"],
   serviceType: [
+    "Individuell coaching",
+    "Business coaching",
     "Executive coaching",
     "Ledningsgruppscoaching",
-    "Individuell coaching",
     "Teamcoaching",
     "Coachande ledarskap",
   ],
+  founder: {
+    "@type": "Person",
+    name: "Carolina von Braun",
+  },
 };
 
 export const carolinaPersonSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Carolina von Braun",
-  jobTitle: "Grundare och coach",
+  jobTitle: "Coach",
   worksFor: {
     "@type": "Organization",
     name: "CVB Coaching",

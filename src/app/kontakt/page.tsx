@@ -4,16 +4,16 @@ import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
-  title: "Kontakt | CVB Coaching",
+  title: "Boka ett första samtal | CVB Coaching",
   description:
-    "Konfidentiellt samtal. Beskriv kort vilket läge ledningen står i.",
+    "Välj en tid och skriv några rader om vad du vill ta upp. Samtalet är konfidentiellt, oavsett om du kommer på egen hand eller genom din arbetsgivare.",
 };
 
 const passarNär = [
-  "Frågan rör ledning, ansvar eller riktning.",
-  "Beslutet påverkar organisationens nästa steg.",
-  "Det finns behov av konfidentiellt externt stöd.",
-  "Ni vill gå från diskussion till fattat beslut.",
+  "Frågan angår dig på riktigt, inte bara på pappret.",
+  "Du vill tänka färdigt själv, inte få ett färdigt svar.",
+  "Det behöver ske utanför den egna kretsen, i förtroende.",
+  "Något ska förändras, inte bara diskuteras.",
 ];
 
 export default function KontaktPage() {
@@ -28,11 +28,11 @@ export default function KontaktPage() {
               Kontakt
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Börja med rätt samtal.
+              Börja med ett samtal.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Samtalet är konfidentiellt. Vi använder det för att förstå läget och avgöra om CVB Coaching
-              är rätt stöd. Beskriv kort vilket läge ni står i och vad som behöver klarna.
+              Välj en tid som passar och skriv några rader om vad du vill ta upp. Det första samtalet
+              använder vi till att avgöra om frågan hör hemma här och om vi fungerar ihop.
             </p>
           </HeroReveal>
         </section>
@@ -46,7 +46,7 @@ export default function KontaktPage() {
 
               <aside className="max-w-2xl border-t border-zinc-300/35 pt-12 md:pt-16">
                 <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
-                  Så avgör vi om det är rätt uppdrag
+                  Så vet du om det här är rätt
                 </h2>
                 <h3 className="mt-10 text-lg font-medium text-zinc-900">Passar när</h3>
                 <ul className="mt-4 divide-y divide-zinc-300/40 border-y border-zinc-300/35">

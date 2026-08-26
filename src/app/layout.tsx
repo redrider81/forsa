@@ -23,9 +23,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Executive coaching Göteborg | CVB Coaching",
+  title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
   description:
-    "Konfidentiellt beslutsstöd för vd:ar, grundare och ledningsgrupper i Göteborg. Definierade mål, fast rytm och uppföljning tills besluten syns i genomförandet.",
+    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för ledare, medarbetare, team och ledningsgrupper.",
 };
 
 export default function RootLayout({

@@ -7,24 +7,24 @@ import JsonLd, { carolinaPersonSchema } from "@/components/json-ld";
 import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 
 export const metadata: Metadata = {
-  title: "Om CVB Coaching – Carolina von Braun | CVB Coaching",
+  title: "Carolina von Braun – coach i Göteborg | CVB Coaching",
   description:
-    "CVB Coaching grundades av Carolina von Braun i Göteborg. Kommersiell bakgrund från kapitalmarknad och styrelsearbete, diplomerad coach.",
+    "Carolina von Braun driver CVB Coaching i Göteborg. Kommersiell bakgrund från kapitalmarknad och styrelsearbete, diplomerad coach vid Gothia Akademi.",
 };
 
 const t = svDictionary;
 
 const principles = [
-  "Konfidentialitet i allt arbete.",
-  "Affärsnära perspektiv i varje samtal.",
-  "Precision före generella råd.",
-  "Uppföljning tills beslut syns i handling.",
+  "Konfidentialitet, utan undantag.",
+  "Frågor före råd. Du äger dina slutsatser.",
+  "Precision framför uppmuntran.",
+  "Uppföljning tills något faktiskt har hänt.",
 ];
 
 const audiences = [
-  "Vd:ar och grundare med hög beslutspress.",
-  "Ledningsgrupper i tillväxt, omställning eller ny ägarfas.",
-  "Seniora ledare med ansvar för riktning och genomförande.",
+  "Privatpersoner som står inför ett vägval, en förändring eller ett beslut som väger.",
+  "Ledare och medarbetare som behöver tänka klart med någon utanför organisationen.",
+  "Team och ledningsgrupper där ansvar, prioritering och beslut behöver skärpas.",
   "Organisationer som vill utveckla flera chefer inom ett gemensamt program.",
 ];
 
@@ -38,14 +38,14 @@ export default function AboutPage() {
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-zinc-400" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
-              Om CVB Coaching
+              Om Carolina
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Ett externt beslutsrum för svenska företagsledningar.
+              Personen du ska ha samtalen med.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              CVB Coaching arbetar med vd:ar, grundare och ledningsgrupper när beslut, ansvar och
-              riktning behöver skärpas.
+              Att välja coach är att välja vem man tänker högt inför. Här är vad du behöver veta om
+              mig för att avgöra om det ska vara jag.
             </p>
           </HeroReveal>
         </section>
@@ -57,12 +57,12 @@ export default function AboutPage() {
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                I många ledningsmiljöer finns kompetensen, men inte det uttalade beslutsrummet. CVB
-                Coaching finns för att tillföra det i konkreta affärslägen.
+                De flesta av oss har människor omkring oss som vill väl. Färre har någon vars enda
+                uppgift är att hjälpa oss tänka färdigt, utan att ha en åsikt om utgången.
               </p>
               <p>
-                Målet är inte fler ord om ledarskap, utan bättre beslut och tydligare genomförande i
-                verkliga affärssituationer.
+                CVB Coaching finns för att göra den platsen tillgänglig — för den som kommer på egen
+                hand och för den som kommer genom sitt arbete.
               </p>
             </div>
           </ScrollReveal>
@@ -72,31 +72,34 @@ export default function AboutPage() {
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <div data-col-left className="md:col-span-5">
               <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#92753a]">
-                Grundare
+                Coach
               </p>
               <h2 className="mt-4 text-3xl font-medium leading-tight tracking-tight">
                 Carolina von Braun
               </h2>
-              <p className="mt-3 text-lg leading-8 text-zinc-600">Grundare och coach</p>
+              <p className="mt-3 text-lg leading-8 text-zinc-600">CVB Coaching, Göteborg</p>
             </div>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Carolina von Braun grundade CVB Coaching i Göteborg. Hon arbetar med vd:ar, grundare
-                och ledningsgrupper när beslut, ansvar och riktning behöver bli tydligare.
+                Jag är diplomerad coach och driver CVB Coaching i Göteborg. Jag arbetar med
+                privatpersoner som står inför något som ska avgöras, och med ledare, team och
+                ledningsgrupper genom deras arbetsgivare.
               </p>
               <p>
-                Bakgrunden är kommersiell. Den omfattar värdepappershandel på Nordea och fyra
-                styrelseuppdrag inom fastighetsförvaltning och investeringar. Det är också
-                utgångspunkten i samtalen: besluten prövas i affärsmässiga termer.
+                Innan det var jag verksam på kapitalmarknaden med värdepappershandel på Nordea, och
+                har haft fyra styrelseuppdrag inom fastighetsförvaltning och investeringar. Det har
+                gett mig vana vid rum där konsekvenserna är verkliga och besluten inte går att
+                skjuta upp — en vana som märks i samtalen, oavsett vem som sitter mitt emot.
               </p>
               <p>
-                Hon studerade marknadsföring vid Handelshögskolan vid Göteborgs universitet
-                1996–2002. År 2025 diplomerades hon i coachning vid Gothia Akademi, steg 1 och 2,
-                och medverkar som utbildningsassistent i akademins ledarskapsutbildningar.
+                Jag studerade marknadsföring vid Handelshögskolan vid Göteborgs universitet
+                1996–2002. År 2025 diplomerades jag i coachning vid Gothia Akademi, steg 1 och 2, och
+                medverkar som utbildningsassistent i akademins ledarskapsutbildningar.
               </p>
               <p>
-                Förhållningssättet är coachande: klienten äger sina mål, sina insikter och sina
-                beslut. Coachens uppgift är att göra tänkandet klarare, inte att leverera svar.
+                Förhållningssättet är coachande, och det är en yrkesroll med tydliga gränser: du äger
+                dina mål, dina insikter och dina beslut. Min uppgift är att göra tänkandet klarare,
+                inte att leverera svaret.
               </p>
             </div>
           </ScrollReveal>
@@ -124,22 +127,17 @@ export default function AboutPage() {
               Konfidentialitet
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
-              <p>Vad som sägs i samtalet stannar i samtalet.</p>
+              <p>Vad som sägs i samtalet behandlas konfidentiellt.</p>
               <p>
-                När uppdraget beställs av någon annan än deltagaren avtalas skriftligt i förväg exakt
-                vad som återrapporteras: normalt måluppfyllelse och närvaro, aldrig samtalsinnehåll.
-              </p>
-              <p>
-                Anteckningar förvaras separat från uppdragsgivarens system och raderas senast tolv
-                månader efter avslutat uppdrag. Personuppgifter behandlas enligt
-                dataskyddsförordningen.
+                När samtalen beställs av någon annan än deltagaren kommer vi överens om vad som
+                återkopplas, innan arbetet börjar.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Vem CVB Coaching är rätt för</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Vilka jag arbetar med</h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
               {audiences.map((item) => (
@@ -155,12 +153,12 @@ export default function AboutPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Göteborg, med uppdrag i hela Sverige
+              Göteborg, eller digitalt när det passar bättre
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                CVB Coaching är baserat i Göteborg och arbetar med svenska företagsledningar.
-                Samtalen hålls på plats eller sker digitalt.
+                CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt, och var du
+                befinner dig avgör inte om det fungerar.
               </p>
             </div>
           </ScrollReveal>
@@ -172,7 +170,7 @@ export default function AboutPage() {
               Nästa steg
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Beskriv kort vilket ledningsläge som är aktuellt.
+              Skriv några rader om vad du vill ta upp, och välj en tid som passar.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">{t.cta.primary}</CtaLink>

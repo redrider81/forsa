@@ -3,12 +3,11 @@ import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
-import { ServicePricingSection } from "@/components/pricing-block";
 
 export const metadata: Metadata = {
   title: "Coachande ledarskap – ledarprogram | CVB Coaching",
   description:
-    "Programformat för organisationer som vill stärka chefers förmåga att leda genom frågor, feedback och ansvar. Fem tillfällen över ett halvår.",
+    "För organisationer som vill stärka chefers förmåga att leda genom frågor, lyssnande, feedback och ansvar.",
 };
 
 const relevanceList = [
@@ -16,14 +15,6 @@ const relevanceList = [
   "Organisationen vill utveckla ansvar utan att öka detaljstyrningen.",
   "Feedback och utvecklingssamtal ger inte det de ska ge.",
   "Lärandet stannar hos individer i stället för i verksamheten.",
-];
-
-const programFormatList = [
-  "Grupper om sex till tio chefer.",
-  "Fem tillfällen à tre timmar över ett halvår.",
-  "Träning i coachande samtal mellan tillfällena, tillämpad i den egna gruppen.",
-  "Individuell avstämning per deltagare vid halvtid.",
-  "Avslutande utvärdering mot de mål som sattes vid start, återrapporterad till uppdragsgivaren.",
 ];
 
 const focusList = [
@@ -56,8 +47,8 @@ export default function CoachandeLedarskapPage() {
               Ledarskap som fungerar genom samtal.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Programformat för organisationer som vill stärka chefers förmåga att leda genom frågor,
-              lyssnande, feedback och ansvar.
+              För organisationer som vill stärka chefers förmåga att leda genom frågor, lyssnande,
+              feedback och ansvar.
             </p>
           </HeroReveal>
         </section>
@@ -75,8 +66,8 @@ export default function CoachandeLedarskapPage() {
                 hos enskilda individer.
               </p>
               <p>
-                Effekten syns först i kvaliteten på vardagens ledarsamtal, därefter i hur snabbt problem
-                kommer upp till ytan.
+                Fokus ligger på kvaliteten i vardagens ledarsamtal och på att frågor kommer upp
+                tidigare.
               </p>
             </div>
           </ScrollReveal>
@@ -99,30 +90,11 @@ export default function CoachandeLedarskapPage() {
           </ScrollReveal>
         </section>
 
-        {/* Two-col: program format */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Programformat
-            </h2>
-            <ScrollReveal variant="staggerList" data-col-right className="md:col-span-7">
-              <ul className="space-y-3 text-zinc-700">
-                {programFormatList.map((item) => (
-                  <li key={item} data-list-item className="flex items-start gap-3 leading-relaxed">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </ScrollReveal>
-          </ScrollReveal>
-        </section>
-
         {/* Cards: focus */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Vad vi arbetar med
+              Fokus i arbetet
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -145,29 +117,6 @@ export default function CoachandeLedarskapPage() {
               </div>
             ))}
           </StaggerCards>
-        </section>
-
-        {/* Pricing */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Omfattning och investering
-            </h2>
-            <div data-col-right className="space-y-6 md:col-span-7">
-              <ServicePricingSection
-                locale="sv"
-                lines={[
-                  {
-                    text: "Programmet offereras per uppdrag efter en genomgång av målgrupp, gruppstorlek och önskad omfattning. Från",
-                    priceKey: "program",
-                  },
-                ]}
-              />
-              <CtaLink href="/#uppdrag" variant="secondary">
-                Så ser ett uppdrag ut →
-              </CtaLink>
-            </div>
-          </ScrollReveal>
         </section>
 
         {/* CTA */}

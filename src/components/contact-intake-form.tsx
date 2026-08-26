@@ -260,20 +260,20 @@ export default function ContactIntakeForm() {
   const questionOptions =
     locale === "sv"
       ? [
-          { value: "Executive coaching", label: "Executive coaching" },
-          { value: "Ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
           { value: "Individuell coaching", label: "Individuell coaching" },
-          { value: "Teamcoaching", label: "Teamcoaching" },
-          { value: "Coachande ledarskap", label: "Coachande ledarskap" },
-          { value: "Osäker / vill diskutera rätt stöd", label: "Osäker / vill diskutera rätt stöd" },
+          { value: "Business coaching", label: "Business coaching" },
+          {
+            value: "Jag är osäker – vill börja med ett samtal",
+            label: "Jag är osäker – vill börja med ett samtal",
+          },
         ]
       : [
-          { value: "Executive Coaching", label: "Executive Coaching" },
-          { value: "Leadership Team Coaching", label: "Leadership Team Coaching" },
           { value: "Individual Coaching", label: "Individual Coaching" },
-          { value: "Team Coaching", label: "Team Coaching" },
-          { value: "Coaching Leadership", label: "Coaching Leadership" },
-          { value: "Unsure / want to discuss the right support", label: "Unsure / want to discuss the right support" },
+          { value: "Business Coaching", label: "Business Coaching" },
+          {
+            value: "Not sure — I would like to start with a conversation",
+            label: "Not sure — I would like to start with a conversation",
+          },
         ];
   const phaseOptions =
     locale === "sv"

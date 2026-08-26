@@ -14,7 +14,7 @@ import {
 } from "@/lib/motion";
 
 const titles: Record<Locale, string> = {
-  sv: "Så ser ett uppdrag ut",
+  sv: "Så går det till",
   en: "How an engagement works",
 };
 

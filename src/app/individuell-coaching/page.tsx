@@ -4,39 +4,40 @@ import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
-import { ServicePricingSection } from "@/components/pricing-block";
 
 export const metadata: Metadata = {
-  title: "Individuell coaching för chefer | CVB Coaching",
+  title: "Individuell coaching i Göteborg | CVB Coaching",
   description:
-    "Professionell coaching för chefer, specialister och nyckelpersoner som behöver klarhet i roll, prioritering och genomslag i sin kommunikation.",
+    "Individuell coaching hos CVB Coaching i Göteborg. För dig som står inför ett vägval, en förändring eller ett beslut som inte låter sig skjutas upp.",
 };
 
 const relevanceList = [
-  "Du är ny i ledarroll och ansvaret är större än vad mandatet är uttalat.",
-  "Rollen har vuxit och prioriteringarna går inte längre ihop.",
-  "Din kommunikation når fram men får inte genomslag.",
-  "Arbetsvardagen är komplex och kräver mer medvetna avvägningar.",
+  "Du står inför ett val och kommer inte fram på egen hand.",
+  "Något har tagit slut och nästa sak har inte tagit form.",
+  "Du gör allt du brukar göra och rör dig ändå inte framåt.",
+  "Rollen eller livet har växt fortare än sättet du hanterar det på.",
+  "Du vet vad du borde göra, men gör det inte.",
 ];
 
 const focusList = [
-  "Övergången till större ansvar.",
-  "Rollens gränser i förhållande till andra roller.",
-  "Prioritering och självledning under tryck.",
-  "Genomslag i de samtal som avgör något.",
-  "Överblick i en komplex arbetsvardag.",
+  "Vägval och beslut som får konsekvenser en tid framåt.",
+  "Övergångar: ny roll, ny fas, nytt sammanhang.",
+  "Riktning när flera alternativ ser rimliga ut.",
+  "Vanor och mönster som kostar mer än de ger.",
+  "Arbete, karriär och rollens gränser.",
+  "Nya perspektiv på något du redan vänt på länge.",
 ];
 
 const nonGoals = [
-  "Inte terapi eller behandling av privata frågor.",
-  "Inte allmän livsstilscoaching utan koppling till arbetet.",
-  "Inte rådgivning där coachen tar över dina beslut.",
+  "Inte terapi eller behandling. Handlar frågan om ohälsa är terapi rätt väg, och det säger jag då.",
+  "Inte rådgivning. Jag tar inte över dina beslut och ger dig inte min uppfattning som facit.",
+  "Inte peppning. Du får motstånd när det behövs, inte tillrop.",
 ];
 
 const valueList = [
-  "Ett uttalat ansvar i den egna rollen.",
-  "Bättre prioritering mellan konkurrerande krav.",
-  "Mer precision i de samtal som avgör något.",
+  "Du vet vad frågan faktiskt gäller, inte bara hur den känns.",
+  "Du fattar beslutet i stället för att bära det.",
+  "Du har ett sätt att tänka som håller även nästa gång.",
 ];
 
 export default function IndividuellCoachingPage() {
@@ -52,27 +53,47 @@ export default function IndividuellCoachingPage() {
               Individuell coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Klarhet i den egna rollen.
+              Frågan är din. Strukturen är min.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              För chefer, specialister och nyckelpersoner som behöver ett uttalat ansvar, bättre
-              prioritering och mer genomslag i sin kommunikation.
+              Individuell coaching är ett samtal du bokar för egen räkning. Du tar med dig det som
+              faktiskt upptar dig — ett vägval, en förändring, en fråga som inte släpper — och kommer
+              längre med den än du gör på egen hand.
             </p>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
-              Detta är för chefer och nyckelpersoner under ledningsnivå. För vd, grundare och
-              ledningsgruppsmedlemmar, se{" "}
-              <Link href="/executive-coaching" className="underline underline-offset-2 hover:text-zinc-900">
-                Executive coaching
+              Betalas samtalen av en arbetsgivare, eller gäller frågan ett team eller en
+              ledningsgrupp, se{" "}
+              <Link href="/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
+                Business coaching
               </Link>
               .
             </p>
           </HeroReveal>
         </section>
 
-        {/* List */}
+        {/* Two-col: premise */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Du har oftast redan svaret. Sällan i ordning.
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                Det som saknas är sällan information. Det är någon som ställer frågorna i rätt
+                ordning och inte nöjer sig med det första svaret.
+              </p>
+              <p>
+                Vänner vill ditt bästa. Kollegor är parter i frågan. Ett coachingsamtal har ingen
+                åsikt om vad du väljer, bara intresse av att du väljer med öppna ögon.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium tracking-tight">
-            Fyra lägen där coaching gör skillnad
+            Lägen där det brukar låsa sig
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -90,7 +111,7 @@ export default function IndividuellCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Vad vi arbetar med
+              Vad frågorna kan handla om
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -106,15 +127,20 @@ export default function IndividuellCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Så arbetar vi
+              Så arbetar jag
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Samtalen är konfidentiella och utgår från din aktuella arbetssituation. Vi arbetar med
-                frågor, reflektion och ansvar, och avslutar varje samtal med ett definierat nästa steg.
+                Samtalen är konfidentiella. Du sätter frågan, jag ställer den vidare tills den blir
+                skarp. Vi arbetar med det du kan påverka och lämnar resten.
               </p>
               <p>
-                Fokus ligger på din yrkesroll och ditt ledarskap, med uppföljning över tid.
+                Varje samtal avslutas med något konkret du tar med dig. Nästa gång börjar vi där —
+                med vad som faktiskt hände, inte med vad som var tänkt.
+              </p>
+              <p>
+                Hur många samtal det blir avgörs av frågan. Ibland räcker ett. Ibland behövs en
+                följeslagare över en längre period.
               </p>
             </div>
           </ScrollReveal>
@@ -137,7 +163,7 @@ export default function IndividuellCoachingPage() {
 
         {/* Cards: value */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Förväntat utfall</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Vad du tar med dig</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
             {valueList.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
@@ -148,25 +174,6 @@ export default function IndividuellCoachingPage() {
           </StaggerCards>
         </section>
 
-        {/* Pricing */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Omfattning och investering
-            </h2>
-            <div data-col-right className="md:col-span-7">
-              <ServicePricingSection
-                locale="sv"
-                lines={[
-                  { text: "Sex till åtta samtal över ett halvår, eller enstaka samtal vid behov." },
-                  { text: "Uppdrag:", priceKey: "individual" },
-                  { text: "Enstaka samtal:", priceKey: "single" },
-                ]}
-              />
-            </div>
-          </ScrollReveal>
-        </section>
-
         {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
@@ -174,7 +181,7 @@ export default function IndividuellCoachingPage() {
               Nästa steg
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Beskriv kort vad som behöver klarna i din roll.
+              Skriv några rader om vad du vill ta upp, och välj en tid som passar.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">

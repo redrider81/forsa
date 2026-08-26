@@ -17,32 +17,26 @@ const stepsSv: Step[] = [
   {
     index: "01",
     title: "Första samtalet",
-    body: "Konfidentiellt. Vi avgör tillsammans om frågan hör hemma här.",
+    body: "Konfidentiellt. Vi avgör tillsammans om frågan hör hemma här, och om vi fungerar ihop.",
     layout: "md:col-span-6 lg:col-span-7",
   },
   {
     index: "02",
-    title: "Kontrakt och mål",
-    body: "Mål, omfattning, sekretess och rapportering till uppdragsgivaren fastställs skriftligt innan arbetet börjar.",
+    title: "Vad du vill ha ut",
+    body: "Vi sätter ord på vad som ska vara annorlunda när vi är klara. Utan det blir samtal bara samtal.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "03",
-    title: "Genomförande",
-    body: "Sex till åtta samtal över ett halvår, med fast rytm och avstämd agenda.",
-    layout: "md:col-span-4 lg:col-span-4",
+    title: "Samtalen",
+    body: "Vi bestämmer rytmen tillsammans. Varje samtal slutar med något du tar med dig.",
+    layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "04",
-    title: "Halvtidsavstämning",
-    body: "Avstämning mot målen tillsammans med uppdragsgivaren, inom ramen för överenskommen sekretess.",
-    layout: "md:col-span-4 lg:col-span-4",
-  },
-  {
-    index: "05",
     title: "Avslut",
-    body: "Utvärdering mot de mål som sattes vid start, och beslut om fortsättning eller avslut.",
-    layout: "md:col-span-4 lg:col-span-4",
+    body: "Vi stämmer av mot det du ville uppnå, och avgör om arbetet är klart eller ska fortsätta.",
+    layout: "md:col-span-6 lg:col-span-7",
   },
 ];
 
@@ -80,7 +74,7 @@ const stepsEn: Step[] = [
 ];
 
 const footnotes: Record<Locale, string> = {
-  sv: "Metod, struktur och uppföljning är densamma oavsett omfattning. Det som skiljer är antalet ledare och antalet samtal.",
+  sv: "Upplägget följer frågan och vad du vill få ut av samtalen.",
   en: "Method, structure and follow-up stay the same regardless of scope. What differs is the number of leaders and the number of sessions.",
 };
 

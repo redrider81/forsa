@@ -7,14 +7,14 @@ import StaggerCards from "@/components/animations/StaggerCards";
 export const metadata: Metadata = {
   title: "Teamcoaching för team och projektgrupper | CVB Coaching",
   description:
-    "För grupper med höga krav och outtalat arbetssätt. Vi arbetar med samspel, ansvar och gemensamt lärande i det operativa arbetet.",
+    "För grupper med höga krav och outtalat arbetssätt. Arbetet gäller samspel, ansvar och gemensamt lärande i det operativa arbetet.",
 };
 
 const relevanceList = [
   "Teamet har höga krav men inget gemensamt arbetssätt.",
   "Ansvar faller mellan stolar i det dagliga samarbetet.",
   "Feedback ges ojämnt, eller inte alls.",
-  "Gruppen fungerar som individer, inte som team.",
+  "Beslut fattas gemensamt men följs upp individuellt.",
 ];
 
 const focusList = [
@@ -22,7 +22,7 @@ const focusList = [
   "Samspel och ansvar i uppgifter och leveranser.",
   "Kommunikation och feedback inom teamet.",
   "Förutsättningar för att svåra frågor tas upp i tid.",
-  "Vägen från grupp till fungerande team.",
+  "Hur teamet håller ihop när tempot ökar.",
 ];
 
 const valueList = [
@@ -74,7 +74,7 @@ export default function TeamCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Vad vi arbetar med
+              Fokus i arbetet
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -90,12 +90,12 @@ export default function TeamCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Så arbetar vi
+              Så går arbetet till
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Arbetet sker i strukturerade teamsamtal där teamet tränar på att lyssna, ställa frågor,
-                ge feedback och ta gemensamt ansvar.
+                Arbetet sker i teamsamtal där gruppen tränar på att lyssna, ställa frågor, ge feedback
+                och ta gemensamt ansvar.
               </p>
               <p>
                 Fokus ligger på hur samarbetet fungerar i uppdraget, inte på individuella bedömningar.
@@ -133,24 +133,6 @@ export default function TeamCoachingPage() {
               </div>
             ))}
           </StaggerCards>
-        </section>
-
-        {/* Pricing */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Omfattning och investering
-            </h2>
-            <div data-col-right className="space-y-6 md:col-span-7">
-              <p className="text-lg leading-8 text-zinc-700">
-                Omfattningen sätts efter teamets storlek och uppdragets längd. Offereras per uppdrag
-                efter ett första samtal om nuläget.
-              </p>
-              <CtaLink href="/#uppdrag" variant="secondary">
-                Så ser ett uppdrag ut →
-              </CtaLink>
-            </div>
-          </ScrollReveal>
         </section>
 
         {/* CTA */}

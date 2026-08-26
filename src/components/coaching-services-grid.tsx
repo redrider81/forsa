@@ -18,38 +18,17 @@ type Service = {
 const servicesSv: Service[] = [
   {
     index: "01",
-    href: "/executive-coaching",
-    title: "Executive coaching",
-    description:
-      "För vd:ar, grundare och seniora ledare i komplexa beslut, ansvar och rollklarhet.",
-  },
-  {
-    index: "02",
-    href: "/ledningsgruppscoaching",
-    title: "Ledningsgruppscoaching",
-    description:
-      "För ledningsgrupper som behöver gemensamma prioriteringar och beslut som överlever mötet.",
-  },
-  {
-    index: "03",
     href: "/individuell-coaching",
     title: "Individuell coaching",
     description:
-      "För chefer och nyckelpersoner som behöver klarhet i roll, prioritering och genomslag.",
+      "För dig som står inför ett vägval, en förändring eller ett beslut som inte låter sig skjutas upp.",
   },
   {
-    index: "04",
-    href: "/team-coaching",
-    title: "Teamcoaching",
-    description: "För team och projektgrupper med höga krav och outtalat arbetssätt.",
-  },
-  {
-    index: "05",
-    href: "/coachande-ledarskap",
-    title: "Coachande ledarskap",
+    index: "02",
+    href: "/business-coaching",
+    title: "Business coaching",
     description:
-      "Programformat för organisationer som vill stärka chefers förmåga att leda genom samtal.",
-    spanClass: "lg:col-span-1",
+      "För ledare, medarbetare, team och ledningsgrupper — där besluten också ska bära i organisationen.",
   },
 ];
 
@@ -323,7 +302,11 @@ export default function CoachingServicesGrid({ locale }: Props) {
           ))}
         </ol>
 
-        <div className="grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+        <div
+          className={`grid gap-5 md:grid-cols-2 md:gap-6 ${
+            services.length > 2 ? "lg:grid-cols-3" : ""
+          }`}
+        >
           {services.map((service) => (
             <Link
               key={service.href}

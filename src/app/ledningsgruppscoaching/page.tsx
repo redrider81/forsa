@@ -3,35 +3,34 @@ import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
-import { ServicePricingSection } from "@/components/pricing-block";
 
 export const metadata: Metadata = {
   title: "Ledningsgruppscoaching Göteborg | CVB Coaching",
   description:
-    "För ledningsteam där prioriteringar glider och beslut tappar kraft mellan mötena. Vi arbetar med mandat, ansvar och beslutsmekanik – inte teambuilding.",
+    "För ledningsteam där prioriteringar glider och beslut tappar kraft mellan mötena. Arbetet gäller mandat, ansvar och hur besluten fattas – inte teambuilding.",
 };
 
 const patterns = [
   {
-    title: "Prioriteringsglidning",
+    title: "Prioriteringarna flyttar sig",
     body: "Prioriteringarna ändras oftare än organisationen hinner ställa om. Ingen enskild ändring är fel. Summan blir otydlig riktning.",
   },
   {
-    title: "Mandatglapp",
+    title: "Ansvar utan mandat",
     body: "Ansvaret är fördelat men mandatet är det inte. Frågor fastnar i gränssnitten mellan funktioner.",
   },
   {
-    title: "Genomförandetapp",
+    title: "Beslut utan tydligt ägarskap",
     body: "Beslutet fattas i rummet men saknar ägare, tidpunkt och mått. Det återkommer på nästa agenda.",
   },
   {
-    title: "Friktion utan adressat",
+    title: "Friktion som inte blir uttalad",
     body: "Motsättningar finns men benämns inte. De sänker tempot utan att någon kan peka på var.",
   },
 ];
 
 const focusList = [
-  "Ledningsgruppens beslutsmekanik: vad som avgörs här och vad som avgörs någon annanstans.",
+  "Vad som faktiskt avgörs i ledningsgruppen, och vad som avgörs någon annanstans.",
   "Gemensam prioritering, och vad som aktivt väljs bort.",
   "Ansvar och mandat i gränssnitten mellan roller.",
   "Friktion som benämns och hanteras i stället för att bäras.",
@@ -92,7 +91,7 @@ export default function LedningsgruppscoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Vad vi arbetar med
+              Fokus i arbetet
             </h2>
             <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
               {focusList.map((item) => (
@@ -108,18 +107,18 @@ export default function LedningsgruppscoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Så arbetar vi
+              Så går arbetet till
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Arbetet utgår från ledningsgruppens verkliga beslutsfrågor, inte från övningar. Vi gör
-                samtalet mer precist, prioriteringarna färre och ansvaret explicit.
+                Arbetet utgår från ledningsgruppens verkliga beslutsfrågor, inte från övningar.
+                Samtalet blir mer precist, prioriteringarna färre och ansvaret uttalat.
               </p>
               <p>
                 Mellan träffarna följs besluten upp så att riktningen syns i handling.
               </p>
               <p>
-                Fokus ligger på mandat och ansvarssystem, inte på teambuilding eller workshopformat.
+                Fokus ligger på mandat och ansvar, inte på teambuilding eller workshopformat.
               </p>
             </div>
           </ScrollReveal>
@@ -151,29 +150,6 @@ export default function LedningsgruppscoachingPage() {
               </div>
             ))}
           </StaggerCards>
-        </section>
-
-        {/* Pricing */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Omfattning och investering
-            </h2>
-            <div data-col-right className="space-y-6 md:col-span-7">
-              <ServicePricingSection
-                locale="sv"
-                lines={[
-                  {
-                    text: "Flera ledare i samma organisation, med separata coachingrelationer och ett gemensamt mål för ansvar och beslut. Omfattningen sätts efter gruppens storlek och uppdragets längd.",
-                  },
-                  { text: "Investering:", priceKey: "leadershipGroup" },
-                ]}
-              />
-              <CtaLink href="/#uppdrag" variant="secondary">
-                Så ser ett uppdrag ut →
-              </CtaLink>
-            </div>
-          </ScrollReveal>
         </section>
 
         {/* CTA */}

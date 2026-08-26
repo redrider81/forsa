@@ -88,6 +88,11 @@ const compactLabelClass = "block text-[0.75rem] font-medium tracking-[0.02em] te
 const compactFieldClass =
   "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-[0.875rem] leading-snug text-zinc-900 placeholder:text-zinc-400 transition-colors duration-150 focus:border-[#6BB5A8] focus:outline-none focus:ring-2 focus:ring-[#6BB5A8]/20";
 
+const compactSelectChevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2352525b' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`;
+
+const compactSelectClass =
+  "w-full cursor-pointer appearance-none rounded-xl border border-zinc-200 bg-white bg-[length:0.7rem] bg-[position:right_0.75rem_center] bg-no-repeat px-3 py-2.5 pr-9 text-[0.875rem] leading-snug text-zinc-900 transition-colors duration-150 focus:border-[#6BB5A8] focus:outline-none focus:ring-2 focus:ring-[#6BB5A8]/20";
+
 const compactTextareaClass =
   "min-h-[5.5rem] w-full resize-y rounded-xl border border-zinc-200 bg-zinc-900/[0.02] px-3 py-2.5 text-[0.875rem] leading-relaxed text-zinc-900 placeholder:text-zinc-400 transition-colors duration-150 focus:border-[#6BB5A8] focus:outline-none focus:ring-2 focus:ring-[#6BB5A8]/20";
 
@@ -362,6 +367,39 @@ export default function ContactSchedulingPicker({
                 </p>
 
                 <div className="mt-6 space-y-3.5">
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-fragan" className={compactLabelClass}>
+                      {t.form.fields.question}
+                    </label>
+                    <select
+                      id="picker-fragan"
+                      name="fragan"
+                      defaultValue=""
+                      className={compactSelectClass}
+                      style={{ backgroundImage: compactSelectChevron }}
+                    >
+                      <option value="">
+                        {locale === "sv" ? "Välj alternativ" : "Select an option"}
+                      </option>
+                      {(locale === "sv"
+                        ? [
+                            "Individuell coaching",
+                            "Business coaching",
+                            "Jag är osäker – vill börja med ett samtal",
+                          ]
+                        : [
+                            "Individual coaching",
+                            "Business coaching",
+                            "Not sure — I would like to start with a conversation",
+                          ]
+                      ).map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                   <div className="space-y-1.5">
                     <label htmlFor="picker-namn" className={compactLabelClass}>
                       {t.form.fields.name}

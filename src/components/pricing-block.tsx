@@ -1,3 +1,6 @@
+// Priser och kommersiella paket är inte fastställda av kund. Komponenterna här
+// renderas inte längre från någon svensk publik sida — koppla inte in dem igen
+// utan uttryckligt godkännande. Se CONTENT-REVIEW.md.
 import {
   formatPrice,
   PRIS_ENSKILT_SAMTAL,
