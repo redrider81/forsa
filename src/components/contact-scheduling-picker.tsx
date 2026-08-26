@@ -43,6 +43,20 @@ const weekdayLabels: Record<Locale, string[]> = {
   en: ["M", "T", "W", "T", "F", "S", "S"],
 };
 
+// Calendar.tsx's default disabled-date color (zinc-300) is close to
+// invisible; override to a readable-but-clearly-muted tone here instead of
+// touching the shared component. Kept in the same neutral zinc family as
+// the rest of this monochrome public site.
+const calendarClassNameOverrides = {
+  day_button: "group-data-[disabled]:text-zinc-400",
+};
+
+// Subtle CVB gold dot below dates that have real availability — restrained,
+// not a filled circle, and swaps to white when the date is selected so it
+// stays legible against the dark selected fill.
+const AVAILABLE_DOT_CLASS =
+  "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-[#B89A5A] [&[data-selected]:not(.range-middle)>*]:after:bg-white *:after:transition-colors";
+
 type ContactSchedulingPickerProps = {
   locale: Locale;
   t: Dictionary;
@@ -174,8 +188,11 @@ export default function ContactSchedulingPicker({
                 month={visibleMonth}
                 onMonthChange={setVisibleMonth}
                 disabled={isDateDisabled}
+                modifiers={{ available: (date) => datesWithSlots.has(toIsoDate(date)) }}
+                modifiersClassNames={{ available: AVAILABLE_DOT_CLASS }}
                 showOutsideDays={false}
                 className="bg-transparent p-0 [--cell-size:2.25rem] md:[--cell-size:2.5rem]"
+                classNames={calendarClassNameOverrides}
                 formatters={{
                   formatWeekdayName: (date) => {
                     const index = (date.getDay() + 6) % 7;
@@ -191,7 +208,11 @@ export default function ContactSchedulingPicker({
                 role="listbox"
                 aria-label={t.form.timeSlotAria}
               >
-                {slotsForSelectedDate.length > 0 ? (
+                {isPaused ? null : !selectedDate ? (
+                  <p className="col-span-2 text-[0.8125rem] leading-relaxed text-zinc-500 md:col-span-1">
+                    {locale === "sv" ? "Välj ett tillgängligt datum i kalendern." : "Choose an available date in the calendar."}
+                  </p>
+                ) : slotsForSelectedDate.length > 0 ? (
                   slotsForSelectedDate.map((slot) => (
                     <Button
                       key={slot.startAt}
@@ -210,19 +231,19 @@ export default function ContactSchedulingPicker({
                       {formatSlotTime(slot.startAt)}
                     </Button>
                   ))
-                ) : isPaused ? null : !monthHasSlots ? (
+                ) : !monthHasSlots ? (
                   <p className="col-span-2 text-[0.8125rem] leading-relaxed text-zinc-500 md:col-span-1">
                     {locale === "sv" ? (
                       <>
                         Inga lediga tider denna månad.
                         <br />
-                        Bläddra gärna framåt i kalendern eller kontakta oss.
+                        Bläddra gärna framåt i kalendern.
                       </>
                     ) : (
                       <>
                         No available times this month.
                         <br />
-                        Feel free to browse forward or contact us.
+                        Feel free to browse forward.
                       </>
                     )}
                   </p>
