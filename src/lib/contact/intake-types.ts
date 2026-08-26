@@ -1,5 +1,4 @@
-export const TIME_WINDOWS = ["08_10", "10_12", "12_14", "14_16", "16_17"] as const;
-export type TimeWindow = (typeof TIME_WINDOWS)[number];
+export const PUBLIC_BOOKING_SLUG = "carolina-von-braun";
 
 export type ContactIntakePayload = {
   namn: string;
@@ -14,9 +13,8 @@ export type ContactIntakePayload = {
   tydligare: string;
   tidpunkt: string;
   onskatDatum: string;
-  onskadTidsfonster: TimeWindow | "";
+  /** ISO start timestamp of the selected real slot, e.g. "2026-09-03T07:00:00+00:00". */
+  onskadTid: string;
+  /** ISO end timestamp of the selected real slot. */
+  onskadTidSlut: string;
 };
-
-export function isTimeWindow(value: string): value is TimeWindow {
-  return (TIME_WINDOWS as readonly string[]).includes(value);
-}

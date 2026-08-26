@@ -1,5 +1,4 @@
 import type { Locale } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n";
 import { type ContactIntakePayload } from "@/lib/contact/intake-types";
 
 function formatPreferredDate(isoDate: string, locale: Locale): string {
@@ -15,6 +14,18 @@ function formatPreferredDate(isoDate: string, locale: Locale): string {
   }).format(parsed);
 }
 
+function formatPreferredTime(isoStart: string, isoEnd: string, locale: Locale): string {
+  if (!isoStart || !isoEnd) return locale === "sv" ? "Ej angivet" : "Not specified";
+  const formatter = new Intl.DateTimeFormat(locale === "sv" ? "sv-SE" : "en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Stockholm",
+  });
+  const start = formatter.format(new Date(isoStart));
+  const end = formatter.format(new Date(isoEnd));
+  return `${start}–${end}`;
+}
+
 export type ContactConfirmationEmail = {
   subject: string;
   text: string;
@@ -25,13 +36,7 @@ export function buildContactConfirmationEmail(
   locale: Locale,
 ): ContactConfirmationEmail {
   const preferredDate = formatPreferredDate(payload.onskatDatum, locale);
-  const t = getDictionary(locale);
-  const preferredWindow =
-    payload.onskadTidsfonster === ""
-      ? locale === "sv"
-        ? "Ej angivet"
-        : "Not specified"
-      : t.form.timeWindows[payload.onskadTidsfonster];
+  const preferredTime = formatPreferredTime(payload.onskadTid, payload.onskadTidSlut, locale);
 
   if (locale === "sv") {
     return {
@@ -42,7 +47,7 @@ export function buildContactConfirmationEmail(
         "Tack för din förfrågan. Vi har tagit emot uppgifterna nedan och återkommer med bekräftelse.",
         "",
         `Önskat datum: ${preferredDate}`,
-        `Önskad tid på dagen: ${preferredWindow}`,
+        `Önskad tid: ${preferredTime}`,
         "",
         "All kontakt hanteras konfidentiellt. Svar inom en arbetsdag.",
         "",
@@ -60,7 +65,7 @@ export function buildContactConfirmationEmail(
       "Thank you for your request. We have received the details below and will confirm by reply.",
       "",
       `Preferred date: ${preferredDate}`,
-      `Preferred time of day: ${preferredWindow}`,
+      `Preferred time: ${preferredTime}`,
       "",
       "All contact is handled confidentially. Response within one business day.",
       "",

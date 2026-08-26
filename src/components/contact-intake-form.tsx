@@ -5,19 +5,14 @@ import ContactSchedulingPicker from "@/components/contact-scheduling-picker";
 import { localeFromPathname, type Locale } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 import { buildContactConfirmationEmail } from "@/lib/contact/confirmation-email";
-import {
-  type ContactIntakePayload,
-  isTimeWindow,
-  type TimeWindow,
-} from "@/lib/contact/intake-types";
+import { PUBLIC_BOOKING_SLUG, type ContactIntakePayload } from "@/lib/contact/intake-types";
 import { usePathname } from "next/navigation";
 
 const selectChevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2352525b' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`;
 
-export type { ContactIntakePayload, TimeWindow } from "@/lib/contact/intake-types";
-export { TIME_WINDOWS } from "@/lib/contact/intake-types";
+export type { ContactIntakePayload } from "@/lib/contact/intake-types";
 
-const STEP1_FIELDS = ["namn", "epost", "telefon", "situation", "onskatDatum", "onskadTidsfonster"] as const;
+const STEP1_FIELDS = ["namn", "epost", "telefon", "situation", "onskatDatum", "onskadTid"] as const;
 const FULL_FIELDS = [
   "namn",
   "organisation",
@@ -30,7 +25,7 @@ const FULL_FIELDS = [
   "tydligare",
   "tidpunkt",
   "onskatDatum",
-  "onskadTidsfonster",
+  "onskadTid",
 ] as const;
 
 type FieldName = (typeof FULL_FIELDS)[number];
@@ -81,7 +76,6 @@ function isWeekday(date: Date): boolean {
 }
 
 function buildPayload(data: FormData): ContactIntakePayload {
-  const rawWindow = String(data.get("onskadTidsfonster") ?? "").trim();
   return {
     namn: String(data.get("namn") ?? "").trim(),
     organisation: String(data.get("organisation") ?? "").trim(),
@@ -95,7 +89,8 @@ function buildPayload(data: FormData): ContactIntakePayload {
     tydligare: String(data.get("tydligare") ?? "").trim(),
     tidpunkt: String(data.get("tidpunkt") ?? "").trim(),
     onskatDatum: String(data.get("onskatDatum") ?? "").trim(),
-    onskadTidsfonster: isTimeWindow(rawWindow) ? rawWindow : "",
+    onskadTid: String(data.get("onskadTid") ?? "").trim(),
+    onskadTidSlut: String(data.get("onskadTidSlut") ?? "").trim(),
   };
 }
 
@@ -111,7 +106,7 @@ function validateForm(
     const value = String(data.get(name) ?? "").trim();
     if (!value) {
       errors[name] =
-        name === "fragan" || name === "lage" || name === "tidpunkt" || name === "onskadTidsfonster"
+        name === "fragan" || name === "lage" || name === "tidpunkt" || name === "onskadTid"
           ? messages.selectRequired
           : messages.fieldRequired;
     }
@@ -138,13 +133,6 @@ function validateForm(
     }
   }
 
-  if (fields.includes("onskadTidsfonster")) {
-    const raw = String(data.get("onskadTidsfonster") ?? "").trim();
-    if (raw && !isTimeWindow(raw)) {
-      errors.onskadTidsfonster = messages.selectRequired;
-    }
-  }
-
   return errors;
 }
 
@@ -159,9 +147,45 @@ function validationSummary(
   return messages.generalError;
 }
 
+class SlotConflictError extends Error {}
+
+function buildRequestMessage(payload: ContactIntakePayload): string {
+  const lines = [
+    payload.organisation ? `Organisation: ${payload.organisation}` : "",
+    payload.roll ? `Roll: ${payload.roll}` : "",
+    payload.fragan ? `Typ av stöd: ${payload.fragan}` : "",
+    payload.lage ? `Läge: ${payload.lage}` : "",
+    payload.tidpunkt ? `Tidshorisont: ${payload.tidpunkt}` : "",
+    payload.situation ? `Situation: ${payload.situation}` : "",
+    payload.tydligare ? `Vad behöver bli tydligare: ${payload.tydligare}` : "",
+  ].filter(Boolean);
+  return lines.join("\n");
+}
+
 async function submitContactIntake(payload: ContactIntakePayload, locale: Locale): Promise<void> {
   void buildContactConfirmationEmail(payload, locale);
-  await Promise.resolve();
+
+  const response = await fetch("/api/public/tillganglighet/boka", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      slug: PUBLIC_BOOKING_SLUG,
+      name: payload.namn,
+      email: payload.epost,
+      phone: payload.telefon,
+      message: buildRequestMessage(payload),
+      startAt: payload.onskadTid,
+      endAt: payload.onskadTidSlut,
+    }),
+  });
+
+  const result = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+  if (!response.ok || !result.ok) {
+    if (response.status === 409) {
+      throw new SlotConflictError(result.error || "Tiden hann precis bli bokad. Välj gärna en annan tid.");
+    }
+    throw new Error(result.error || "Förfrågan kunde inte skickas just nu. Försök igen om en stund.");
+  }
 }
 
 function FormSection({
@@ -224,7 +248,8 @@ type Step1Data = {
   telefon: string;
   situation: string;
   onskatDatum: string;
-  onskadTidsfonster: TimeWindow | "";
+  onskadTid: string;
+  onskadTidSlut: string;
 };
 
 export default function ContactIntakeForm() {
@@ -288,7 +313,8 @@ export default function ContactIntakeForm() {
     telefon: "",
     situation: "",
     onskatDatum: "",
-    onskadTidsfonster: "",
+    onskadTid: "",
+    onskadTidSlut: "",
   });
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
   const [summaryError, setSummaryError] = useState("");
@@ -307,8 +333,14 @@ export default function ContactIntakeForm() {
     try {
       await submitContactIntake(buildPayload(data), locale);
       setSubmitState("success");
-    } catch {
-      setSummaryError(t.form.submitError);
+    } catch (err) {
+      if (err instanceof SlotConflictError) {
+        setStep1Data((prev) => ({ ...prev, onskadTid: "", onskadTidSlut: "" }));
+        setStep(1);
+        setSummaryError(err.message);
+      } else {
+        setSummaryError(t.form.submitError);
+      }
       setSubmitState("idle");
     }
   }
@@ -328,9 +360,8 @@ export default function ContactIntakeForm() {
       telefon: String(data.get("telefon") ?? "").trim(),
       situation: String(data.get("situation") ?? "").trim(),
       onskatDatum: String(data.get("onskatDatum") ?? "").trim(),
-      onskadTidsfonster: isTimeWindow(String(data.get("onskadTidsfonster") ?? "").trim())
-        ? (String(data.get("onskadTidsfonster") ?? "").trim() as TimeWindow)
-        : "",
+      onskadTid: String(data.get("onskadTid") ?? "").trim(),
+      onskadTidSlut: String(data.get("onskadTidSlut") ?? "").trim(),
     });
     setFieldErrors({});
     setSummaryError("");
@@ -346,7 +377,8 @@ export default function ContactIntakeForm() {
     data.set("telefon", step1Data.telefon);
     data.set("situation", step1Data.situation);
     data.set("onskatDatum", step1Data.onskatDatum);
-    data.set("onskadTidsfonster", step1Data.onskadTidsfonster);
+    data.set("onskadTid", step1Data.onskadTid);
+    data.set("onskadTidSlut", step1Data.onskadTidSlut);
     const errors = validateForm(data, messages, partial ? STEP1_FIELDS : FULL_FIELDS);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -399,11 +431,14 @@ export default function ContactIntakeForm() {
               locale={locale}
               t={t}
               selectedDate={step1Data.onskatDatum}
-              selectedWindow={step1Data.onskadTidsfonster}
+              selectedSlotStart={step1Data.onskadTid}
+              selectedSlotEnd={step1Data.onskadTidSlut}
               onSelectDate={(value) => setStep1Data((prev) => ({ ...prev, onskatDatum: value }))}
-              onSelectWindow={(value) => setStep1Data((prev) => ({ ...prev, onskadTidsfonster: value }))}
+              onSelectSlot={(startAt, endAt) =>
+                setStep1Data((prev) => ({ ...prev, onskadTid: startAt, onskadTidSlut: endAt }))
+              }
               dateError={err("onskatDatum")}
-              windowError={err("onskadTidsfonster")}
+              windowError={err("onskadTid")}
               dateLabelClass={labelClass}
               errorTextClass={errorTextClass}
             />
@@ -416,7 +451,8 @@ export default function ContactIntakeForm() {
           <input type="hidden" name="telefon" value={step1Data.telefon} />
           <input type="hidden" name="situation" value={step1Data.situation} />
           <input type="hidden" name="onskatDatum" value={step1Data.onskatDatum} />
-          <input type="hidden" name="onskadTidsfonster" value={step1Data.onskadTidsfonster} />
+          <input type="hidden" name="onskadTid" value={step1Data.onskadTid} />
+          <input type="hidden" name="onskadTidSlut" value={step1Data.onskadTidSlut} />
 
           <FormSection title={t.form.sections.contact}>
             <div className="grid gap-7 md:grid-cols-2 md:gap-x-10">

@@ -6,10 +6,12 @@ import { enGB, sv } from "react-day-picker/locale";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
-import { TIME_WINDOWS, type TimeWindow } from "@/lib/contact/intake-types";
+import { PUBLIC_BOOKING_SLUG } from "@/lib/contact/intake-types";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
+
+type PublicSlot = { date: string; startAt: string; endAt: string };
 
 function toIsoDate(date: Date): string {
   const year = date.getFullYear();
@@ -24,13 +26,12 @@ function parseIsoDate(iso: string): Date | undefined {
   return Number.isNaN(parsed.getTime()) ? undefined : parsed;
 }
 
-function isDateDisabled(date: Date): boolean {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const candidate = new Date(date);
-  candidate.setHours(0, 0, 0, 0);
-  const weekday = candidate.getDay();
-  return candidate < today || weekday === 0 || weekday === 6;
+function formatSlotTime(iso: string): string {
+  return new Intl.DateTimeFormat("sv-SE", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Stockholm",
+  }).format(new Date(iso));
 }
 
 const weekdayLabels: Record<Locale, string[]> = {
@@ -42,9 +43,10 @@ type ContactSchedulingPickerProps = {
   locale: Locale;
   t: Dictionary;
   selectedDate: string;
-  selectedWindow: TimeWindow | "";
+  selectedSlotStart: string;
+  selectedSlotEnd?: string;
   onSelectDate: (value: string) => void;
-  onSelectWindow: (value: TimeWindow) => void;
+  onSelectSlot: (startAt: string, endAt: string) => void;
   dateError?: string;
   windowError?: string;
   dateLabelClass: string;
@@ -55,9 +57,10 @@ export default function ContactSchedulingPicker({
   locale,
   t,
   selectedDate,
-  selectedWindow,
+  selectedSlotStart,
+  selectedSlotEnd = "",
   onSelectDate,
-  onSelectWindow,
+  onSelectSlot,
   dateError,
   windowError,
   dateLabelClass,
@@ -66,73 +69,135 @@ export default function ContactSchedulingPicker({
   const selected = parseIsoDate(selectedDate);
   const dayPickerLocale = locale === "sv" ? sv : enGB;
 
+  const [slots, setSlots] = React.useState<PublicSlot[] | null>(null);
+  const [loadFailed, setLoadFailed] = React.useState(false);
+
+  React.useEffect(() => {
+    const today = new Date();
+    const start = toIsoDate(today);
+    const horizon = new Date(today);
+    horizon.setDate(horizon.getDate() + 90);
+    const end = toIsoDate(horizon);
+
+    let cancelled = false;
+    fetch(`/api/public/tillganglighet/slots?slug=${PUBLIC_BOOKING_SLUG}&start=${start}&end=${end}`)
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error("failed"))))
+      .then((payload: { ok: boolean; slots: PublicSlot[] }) => {
+        if (!cancelled) setSlots(payload.slots ?? []);
+      })
+      .catch(() => {
+        if (!cancelled) setLoadFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const datesWithSlots = React.useMemo(() => {
+    const set = new Set<string>();
+    (slots ?? []).forEach((slot) => set.add(slot.date));
+    return set;
+  }, [slots]);
+
+  const slotsForSelectedDate = React.useMemo(
+    () => (slots ?? []).filter((slot) => slot.date === selectedDate),
+    [slots, selectedDate],
+  );
+
+  function isDateDisabled(date: Date): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const candidate = new Date(date);
+    candidate.setHours(0, 0, 0, 0);
+    if (candidate < today) return true;
+    if (!slots) return false;
+    return !datesWithSlots.has(toIsoDate(candidate));
+  }
+
+  const noSlotsAtAll = slots !== null && slots.length === 0;
+
   return (
     <div className="space-y-8">
       <p className="text-sm leading-[1.7] text-zinc-600">{t.form.schedulingHint}</p>
 
-      <div className="space-y-3">
-        <p className={dateLabelClass}>{t.form.fields.preferredDate}</p>
-        <Card className="max-w-2xl gap-0 border-zinc-300/70 bg-white/60 p-0 shadow-none">
-          <CardContent className="relative p-0 md:pr-56">
-            <div className="p-4 md:p-6">
-              <Calendar
-                mode="single"
-                locale={dayPickerLocale}
-                weekStartsOn={1}
-                selected={selected}
-                onSelect={(date) => {
-                  if (date) onSelectDate(toIsoDate(date));
-                }}
-                defaultMonth={selected ?? new Date()}
-                disabled={isDateDisabled}
-                showOutsideDays={false}
-                className="bg-transparent p-0 [--cell-size:2.25rem] md:[--cell-size:2.5rem]"
-                formatters={{
-                  formatWeekdayName: (date) => {
-                    const index = (date.getDay() + 6) % 7;
-                    return weekdayLabels[locale][index] ?? date.toLocaleDateString();
-                  },
-                }}
-              />
-            </div>
-            <div className="border-t border-zinc-300/70 p-4 md:absolute md:inset-y-0 md:right-0 md:flex md:max-h-none md:w-56 md:flex-col md:border-t-0 md:border-l md:p-5">
-              <p className={cn(dateLabelClass, "mb-3")}>{t.form.fields.preferredTime}</p>
-              <div
-                className="no-scrollbar grid max-h-72 grid-cols-2 gap-2 overflow-y-auto md:max-h-none md:grid-cols-1"
-                role="listbox"
-                aria-label={t.form.timeSlotAria}
-              >
-                {TIME_WINDOWS.map((window) => (
-                  <Button
-                    key={window}
-                    type="button"
-                    role="option"
-                    aria-selected={selectedWindow === window}
-                    variant={selectedWindow === window ? "default" : "outline"}
-                    onClick={() => onSelectWindow(window)}
-                    className={cn(
-                      "h-auto min-h-10 w-full rounded-full px-3 py-2.5 text-[0.8125rem] font-medium shadow-none tabular-nums",
-                      selectedWindow === window
-                        ? "border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800"
-                        : "border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-500 hover:bg-white",
-                    )}
-                  >
-                    {t.form.timeWindows[window]}
-                  </Button>
-                ))}
+      {loadFailed || noSlotsAtAll ? (
+        <p className="text-sm leading-[1.7] text-zinc-600">
+          {locale === "sv"
+            ? "Inga lediga tider just nu. Kontakta oss gärna så återkommer vi."
+            : "No available times right now. Feel free to contact us and we will get back to you."}
+        </p>
+      ) : (
+        <div className="space-y-3">
+          <p className={dateLabelClass}>{t.form.fields.preferredDate}</p>
+          <Card className="max-w-2xl gap-0 border-zinc-300/70 bg-white/60 p-0 shadow-none">
+            <CardContent className="relative p-0 md:pr-56">
+              <div className="p-4 md:p-6">
+                <Calendar
+                  mode="single"
+                  locale={dayPickerLocale}
+                  weekStartsOn={1}
+                  selected={selected}
+                  onSelect={(date) => {
+                    if (date) onSelectDate(toIsoDate(date));
+                  }}
+                  defaultMonth={selected ?? new Date()}
+                  disabled={isDateDisabled}
+                  showOutsideDays={false}
+                  className="bg-transparent p-0 [--cell-size:2.25rem] md:[--cell-size:2.5rem]"
+                  formatters={{
+                    formatWeekdayName: (date) => {
+                      const index = (date.getDay() + 6) % 7;
+                      return weekdayLabels[locale][index] ?? date.toLocaleDateString();
+                    },
+                  }}
+                />
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <input type="hidden" name="onskatDatum" value={selectedDate} />
-        {dateError ? (
-          <p className={errorTextClass} role="alert">
-            {dateError}
-          </p>
-        ) : null}
-      </div>
+              <div className="border-t border-zinc-300/70 p-4 md:absolute md:inset-y-0 md:right-0 md:flex md:max-h-none md:w-56 md:flex-col md:border-t-0 md:border-l md:p-5">
+                <p className={cn(dateLabelClass, "mb-3")}>{t.form.fields.preferredTime}</p>
+                <div
+                  className="no-scrollbar grid max-h-72 grid-cols-2 gap-2 overflow-y-auto md:max-h-none md:grid-cols-1"
+                  role="listbox"
+                  aria-label={t.form.timeSlotAria}
+                >
+                  {selectedDate && slotsForSelectedDate.length === 0 ? (
+                    <p className="col-span-2 text-[0.8125rem] text-zinc-500 md:col-span-1">
+                      {locale === "sv" ? "Inga lediga tider den dagen." : "No available times that day."}
+                    </p>
+                  ) : (
+                    slotsForSelectedDate.map((slot) => (
+                      <Button
+                        key={slot.startAt}
+                        type="button"
+                        role="option"
+                        aria-selected={selectedSlotStart === slot.startAt}
+                        variant={selectedSlotStart === slot.startAt ? "default" : "outline"}
+                        onClick={() => onSelectSlot(slot.startAt, slot.endAt)}
+                        className={cn(
+                          "h-auto min-h-10 w-full rounded-full px-3 py-2.5 text-[0.8125rem] font-medium shadow-none tabular-nums",
+                          selectedSlotStart === slot.startAt
+                            ? "border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800"
+                            : "border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-500 hover:bg-white",
+                        )}
+                      >
+                        {formatSlotTime(slot.startAt)}
+                      </Button>
+                    ))
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <input type="hidden" name="onskatDatum" value={selectedDate} />
+          {dateError ? (
+            <p className={errorTextClass} role="alert">
+              {dateError}
+            </p>
+          ) : null}
+        </div>
+      )}
 
-      <input type="hidden" name="onskadTidsfonster" value={selectedWindow} />
+      <input type="hidden" name="onskadTid" value={selectedSlotStart} />
+      <input type="hidden" name="onskadTidSlut" value={selectedSlotEnd} />
       {windowError ? (
         <p className={errorTextClass} role="alert">
           {windowError}
