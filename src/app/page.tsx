@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import CtaLink from "@/components/cta-link";
-import Image from "next/image";
 import SiteNavigation from "@/components/site-navigation";
 import HeroReveal from "@/components/animations/HeroReveal";
-import HeroImageReveal from "@/components/animations/HeroImageReveal";
+import HeroVideoBackground from "@/components/hero-video-background";
 import ParallaxController from "@/components/animations/ParallaxController";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
@@ -50,22 +49,12 @@ export default function HomePage() {
       <ParallaxController>
       <section
         data-hero-sticky
-        className="relative z-0 min-h-[100svh] w-full overflow-x-clip overflow-y-visible md:sticky md:top-0 md:aspect-[16/9] md:max-h-[92svh] md:min-h-0 md:overflow-hidden"
+        className="relative z-0 h-[100svh] min-h-[100svh] w-full overflow-hidden md:sticky md:top-0"
       >
-        <HeroImageReveal className="absolute inset-0 overflow-hidden">
-          <Image
-            src="/superhero1.png"
-            alt="Ledningsgrupp i beslutsmöte – executive coaching i Göteborg"
-            fill
-            sizes="100vw"
-            className="object-cover object-center"
-            data-hero-image
-            quality={90}
-            priority
-          />
-        </HeroImageReveal>
+        <HeroVideoBackground />
+        <div className="pointer-events-none absolute inset-0 z-[1] bg-black/20" aria-hidden="true" />
         <SiteNavigation />
-        <div className="pointer-events-none absolute inset-0 z-0">
+        <div className="pointer-events-none absolute inset-0 z-[2]">
           <div className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[max(clamp(2.5rem,8svh,4.5rem),env(safe-area-inset-bottom,0px))] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
             <div
               className="w-full shrink-0 min-h-[min(38svh,22rem)] md:hidden"

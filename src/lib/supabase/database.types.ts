@@ -114,6 +114,129 @@ export type Database = {
           },
         ]
       }
+      coach_availability_exceptions: {
+        Row: {
+          coach_id: string
+          created_at: string
+          date: string
+          end_time: string | null
+          id: string
+          start_time: string | null
+          type: string
+        }
+        Insert: {
+          coach_id: string
+          created_at?: string
+          date: string
+          end_time?: string | null
+          id?: string
+          start_time?: string | null
+          type: string
+        }
+        Update: {
+          coach_id?: string
+          created_at?: string
+          date?: string
+          end_time?: string | null
+          id?: string
+          start_time?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coach_availability_exceptions_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "coaches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coach_availability_rules: {
+        Row: {
+          coach_id: string
+          created_at: string
+          end_time: string
+          id: string
+          start_time: string
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          coach_id: string
+          created_at?: string
+          end_time: string
+          id?: string
+          start_time: string
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          coach_id?: string
+          created_at?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coach_availability_rules_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "coaches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coach_booking_settings: {
+        Row: {
+          booking_horizon_days: number
+          buffer_minutes: number
+          coach_id: string
+          created_at: string
+          meeting_duration_minutes: number
+          minimum_notice_hours: number
+          public_booking_enabled: boolean
+          public_slug: string
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          booking_horizon_days?: number
+          buffer_minutes?: number
+          coach_id: string
+          created_at?: string
+          meeting_duration_minutes?: number
+          minimum_notice_hours?: number
+          public_booking_enabled?: boolean
+          public_slug: string
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          booking_horizon_days?: number
+          buffer_minutes?: number
+          coach_id?: string
+          created_at?: string
+          meeting_duration_minutes?: number
+          minimum_notice_hours?: number
+          public_booking_enabled?: boolean
+          public_slug?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coach_booking_settings_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: true
+            referencedRelation: "coaches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       coaches: {
         Row: {
           created_at: string
@@ -882,6 +1005,56 @@ export type Database = {
           },
         ]
       }
+      public_booking_requests: {
+        Row: {
+          coach_id: string
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string | null
+          requested_end_at: string
+          requested_start_at: string
+          responded_at: string | null
+          status: string
+        }
+        Insert: {
+          coach_id: string
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          requested_end_at: string
+          requested_start_at: string
+          responded_at?: string | null
+          status?: string
+        }
+        Update: {
+          coach_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          requested_end_at?: string
+          requested_start_at?: string
+          responded_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_booking_requests_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "coaches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reflections: {
         Row: {
           client_id: string
@@ -1213,6 +1386,18 @@ export type Database = {
         }
         Returns: string
       }
+      create_public_booking_request: {
+        Args: {
+          p_email: string
+          p_end_at: string
+          p_message: string
+          p_name: string
+          p_phone: string
+          p_slug: string
+          p_start_at: string
+        }
+        Returns: string
+      }
       current_client_id: { Args: never; Returns: string }
       current_coach_id: { Args: never; Returns: string }
       decline_session_booking: {
@@ -1221,8 +1406,27 @@ export type Database = {
       }
       delete_coach_client: { Args: { p_client_id: string }; Returns: undefined }
       end_coach_client: { Args: { p_client_id: string }; Returns: undefined }
+      get_public_booking_slots: {
+        Args: { p_end_date: string; p_slug: string; p_start_date: string }
+        Returns: {
+          date: string
+          end_at: string
+          start_at: string
+        }[]
+      }
       reactivate_coach_client: {
         Args: { p_client_id: string }
+        Returns: undefined
+      }
+      resolve_availability_windows: {
+        Args: { p_coach_id: string; p_date: string }
+        Returns: {
+          end_time: string
+          start_time: string
+        }[]
+      }
+      respond_public_booking_request: {
+        Args: { p_action: string; p_request_id: string }
         Returns: undefined
       }
       send_contract_for_signature: {

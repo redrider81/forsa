@@ -1,9 +1,12 @@
 import Link from "next/link";
 import BookingPanel from "@/components/portal/booking-panel";
+import CalendarSubnav from "@/components/portal/calendar-subnav";
+import PublicBookingRequestsPanel from "@/components/portal/public-booking-requests-panel";
 import { readCoachSession } from "@/lib/portal/session";
 import { readDemoState } from "@/lib/portal/store/demo-store";
 import { fetchPortalRepositoryData, getOperationsOverview, listClients } from "@/lib/portal/repository";
 import { listPendingCoachBookings } from "@/lib/portal/booking";
+import { listPendingPublicBookingRequests } from "@/lib/portal/availability";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { CompactCalendar, MetricGrid } from "@/components/portal/operations";
 import { EmptyState, PageHeading, Panel, PanelHeading, portalPageStackClass, portalSegmentActiveClass, portalSegmentClass, portalSegmentInactiveClass } from "@/components/portal/ui";
@@ -37,6 +40,7 @@ export default async function CalendarPage({
     name: client.name,
   }));
   const bookings = await listPendingCoachBookings();
+  const publicRequests = await listPendingPublicBookingRequests();
 
   return (
     <div className={portalPageStackClass}>
@@ -45,6 +49,9 @@ export default async function CalendarPage({
         <p className="mt-3.5 text-[0.875rem] leading-relaxed text-zinc-500">
           {formatWeekdayDate(today)}
         </p>
+        <div className="mt-5">
+          <CalendarSubnav active="kalender" />
+        </div>
         <nav aria-label="Period" className="mt-5 flex flex-wrap gap-2">
           {(Object.keys(ranges) as RangeKey[]).map((key) => (
             <Link
@@ -86,6 +93,8 @@ export default async function CalendarPage({
           )}
         </div>
       </Panel>
+
+      <PublicBookingRequestsPanel requests={publicRequests} />
 
       <BookingPanel clients={clients} bookings={bookings} />
     </div>
