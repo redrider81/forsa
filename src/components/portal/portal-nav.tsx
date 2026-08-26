@@ -1,9 +1,12 @@
 "use client";
 
+import { LogoMark } from "@/components/brand/logo";
+import { portalPrimaryButtonClass } from "@/components/portal/ui";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { portalButtonClass } from "@/components/portal/ui";
+import { useEffect, useId, useState, useTransition } from "react";
+import { createPortal } from "react-dom";
 
 const items = [
   { href: "/cvb-base", label: "Översikt", exact: true },
@@ -21,35 +24,145 @@ function isActive(pathname: string, item: (typeof items)[number]): boolean {
     : pathname === item.href || pathname.startsWith(`${item.href}/`);
 }
 
-export function PortalBottomNav() {
-  const pathname = usePathname();
+function MenuIcon({ open }: { open: boolean }) {
   return (
-    <nav
-      aria-label="Portalnavigation"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--klient-border-muted)] bg-[var(--klient-page-bg)]/98 pb-4 backdrop-blur-md md:hidden"
-      style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-[1.125rem] w-[1.125rem] text-current"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.35"
     >
-      <ul className="mx-auto flex max-w-lg items-stretch gap-1.5 px-3 py-2.5">
-        {items.map((item) => {
-          const active = isActive(pathname, item);
-          return (
-            <li key={item.href} className="min-w-0 flex-1">
-              <Link
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`flex min-h-11 items-center justify-center rounded-full border bg-white px-2 py-2.5 text-[0.625rem] font-semibold leading-tight shadow-[0_1px_3px_rgba(24,24,27,0.06)] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)] ${
-                  active
-                    ? "border-zinc-900 text-zinc-900"
-                    : "border-[var(--klient-border-muted)] text-zinc-600 hover:border-zinc-400 hover:text-zinc-900"
-                }`}
-              >
-                <span className="max-w-full truncate px-0.5">{item.label}</span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+      {open ? (
+        <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
+      ) : (
+        <>
+          <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+const mobileMenuTriggerClass =
+  "inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--klient-border-muted)] bg-white text-zinc-800 shadow-[0_1px_3px_rgba(24,24,27,0.06)] transition-[color,background-color] duration-200 hover:border-zinc-400 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]";
+
+const mobileNavLinkClass =
+  "block rounded-md px-1 py-4 text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.01em] text-zinc-900 transition-colors hover:text-[var(--klient-accent-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)]";
+
+export function PortalMobileNav() {
+  const pathname = usePathname();
+  const menuId = useId();
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [open]);
+
+  const overlay = (
+    <div
+      data-portal
+      className={`fixed inset-0 z-50 md:hidden motion-reduce:transition-none transition-[visibility,opacity] duration-200 ease-out ${
+        open ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
+      }`}
+      aria-hidden={!open}
+      inert={open ? undefined : true}
+    >
+      <button
+        type="button"
+        tabIndex={open ? 0 : -1}
+        aria-label="Stäng meny"
+        className="absolute inset-0 bg-zinc-950/35 backdrop-blur-[2px]"
+        onClick={() => setOpen(false)}
+      />
+      <nav
+        id={menuId}
+        aria-label="Portalnavigation"
+        role="dialog"
+        aria-modal="true"
+        className={`absolute inset-y-0 right-0 flex w-full max-w-[min(100%,22.5rem)] flex-col border-l border-zinc-900/8 bg-[var(--klient-page-bg)]/98 shadow-[-16px_0_48px_-28px_rgba(24,24,27,0.28)] motion-reduce:transition-none transition-transform duration-300 ease-out ${
+          open ? "translate-x-0" : "translate-x-full"
+        }`}
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      >
+        <div className="flex items-center justify-between border-b border-[var(--klient-border-muted)] px-5 py-4">
+          <LogoMark className="h-8 w-auto" />
+          <button
+            type="button"
+            aria-label="Stäng meny"
+            onClick={() => setOpen(false)}
+            className={mobileMenuTriggerClass}
+          >
+            <MenuIcon open />
+          </button>
+        </div>
+
+        <div className="flex flex-1 flex-col overflow-y-auto overscroll-contain px-5 py-6">
+          <ul className="divide-y divide-[var(--klient-border-muted)]">
+            {items.map((item) => {
+              const active = isActive(pathname, item);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => setOpen(false)}
+                    className={`${mobileNavLinkClass} ${active ? "text-[var(--klient-accent-gold)]" : ""}`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="mt-auto border-t border-[var(--klient-border-muted)] pt-6">
+            <LogoutButton className="w-full" />
+          </div>
+        </div>
+      </nav>
+    </div>
+  );
+
+  return (
+    <div className="md:hidden">
+      <button
+        type="button"
+        aria-label={open ? "Stäng meny" : "Öppna meny"}
+        aria-expanded={open}
+        aria-controls={menuId}
+        onClick={() => setOpen((prev) => !prev)}
+        className={mobileMenuTriggerClass}
+      >
+        <MenuIcon open={open} />
+      </button>
+      {mounted ? createPortal(overlay, document.body) : null}
+    </div>
   );
 }
 
@@ -100,7 +213,7 @@ export function LogoutButton({ className = "" }: { className?: string }) {
       type="button"
       onClick={logout}
       disabled={busy || pending}
-      className={`${portalButtonClass} disabled:opacity-60 ${className}`.trim()}
+      className={cn(portalPrimaryButtonClass, "disabled:opacity-60", className)}
     >
       {busy || pending ? "Loggar ut…" : "Logga ut"}
     </button>

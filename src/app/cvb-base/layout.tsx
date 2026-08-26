@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import "@/components/klient/klient-tokens.css";
-import { PortalBottomNav, PortalDesktopNav } from "@/components/portal/portal-nav";
+import { PortalDesktopNav, PortalMobileNav } from "@/components/portal/portal-nav";
 import { LogoMark } from "@/components/brand/logo";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { readCoachSession } from "@/lib/portal/session";
@@ -43,6 +43,7 @@ export default async function PortalLayout({ children }: { children: React.React
               >
                 {formatWeekdayDate(today)}
               </time>
+              <PortalMobileNav />
             </div>
           </div>
 
@@ -54,12 +55,10 @@ export default async function PortalLayout({ children }: { children: React.React
 
       <main
         id="main-content"
-        className="mx-auto w-full min-w-0 max-w-4xl flex-1 overflow-x-clip px-5 pb-36 pt-6 md:px-6 md:pb-16 md:pt-10 xl:max-w-5xl"
+        className="mx-auto w-full min-w-0 max-w-4xl flex-1 overflow-x-clip px-5 pb-16 pt-6 md:px-6 md:pt-10 xl:max-w-5xl"
       >
         {children}
       </main>
-
-      <PortalBottomNav />
     </div>
   );
 }
