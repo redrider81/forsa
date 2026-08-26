@@ -26,6 +26,10 @@ function parseIsoDate(iso: string): Date | undefined {
   return Number.isNaN(parsed.getTime()) ? undefined : parsed;
 }
 
+function monthKey(iso: string): string {
+  return iso.slice(0, 7);
+}
+
 function formatSlotTime(iso: string): string {
   return new Intl.DateTimeFormat("sv-SE", {
     hour: "2-digit",
@@ -70,7 +74,9 @@ export default function ContactSchedulingPicker({
   const dayPickerLocale = locale === "sv" ? sv : enGB;
 
   const [slots, setSlots] = React.useState<PublicSlot[] | null>(null);
+  const [bookingEnabled, setBookingEnabled] = React.useState(true);
   const [loadFailed, setLoadFailed] = React.useState(false);
+  const [visibleMonth, setVisibleMonth] = React.useState<Date>(selected ?? new Date());
 
   React.useEffect(() => {
     const today = new Date();
@@ -82,8 +88,10 @@ export default function ContactSchedulingPicker({
     let cancelled = false;
     fetch(`/api/public/tillganglighet/slots?slug=${PUBLIC_BOOKING_SLUG}&start=${start}&end=${end}`)
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error("failed"))))
-      .then((payload: { ok: boolean; slots: PublicSlot[] }) => {
-        if (!cancelled) setSlots(payload.slots ?? []);
+      .then((payload: { ok: boolean; bookingEnabled: boolean; slots: PublicSlot[] }) => {
+        if (cancelled) return;
+        setBookingEnabled(payload.bookingEnabled ?? true);
+        setSlots(payload.slots ?? []);
       })
       .catch(() => {
         if (!cancelled) setLoadFailed(true);
@@ -99,9 +107,31 @@ export default function ContactSchedulingPicker({
     return set;
   }, [slots]);
 
+  // Auto-select the first available date once slots have loaded, so the
+  // picker is useful without an extra click. This synchronizes local state
+  // with data that only exists after an async fetch resolves, which is a
+  // legitimate effect use case (React docs: "fetching data").
+  React.useEffect(() => {
+    if (!slots || slots.length === 0) return;
+    if (selectedDate && datesWithSlots.has(selectedDate)) return;
+    const firstDate = [...datesWithSlots].sort()[0];
+    if (firstDate) {
+      onSelectDate(firstDate);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing calendar view to freshly-fetched async data, not derived render state
+      setVisibleMonth(parseIsoDate(firstDate) ?? visibleMonth);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slots]);
+
   const slotsForSelectedDate = React.useMemo(
     () => (slots ?? []).filter((slot) => slot.date === selectedDate),
     [slots, selectedDate],
+  );
+
+  const visibleMonthKey = `${visibleMonth.getFullYear()}-${String(visibleMonth.getMonth() + 1).padStart(2, "0")}`;
+  const monthHasSlots = React.useMemo(
+    () => [...datesWithSlots].some((date) => monthKey(date) === visibleMonthKey),
+    [datesWithSlots, visibleMonthKey],
   );
 
   function isDateDisabled(date: Date): boolean {
@@ -114,87 +144,104 @@ export default function ContactSchedulingPicker({
     return !datesWithSlots.has(toIsoDate(candidate));
   }
 
-  const noSlotsAtAll = slots !== null && slots.length === 0;
+  const isPaused = slots !== null && !bookingEnabled;
 
   return (
     <div className="space-y-8">
       <p className="text-sm leading-[1.7] text-zinc-600">{t.form.schedulingHint}</p>
 
-      {loadFailed || noSlotsAtAll ? (
+      {(loadFailed || isPaused) && (
         <p className="text-sm leading-[1.7] text-zinc-600">
           {locale === "sv"
-            ? "Inga lediga tider just nu. Kontakta oss gärna så återkommer vi."
-            : "No available times right now. Feel free to contact us and we will get back to you."}
+            ? "Bokning är tillfälligt pausad. Kontakta oss gärna så återkommer vi."
+            : "Booking is temporarily paused. Feel free to contact us and we will get back to you."}
         </p>
-      ) : (
-        <div className="space-y-3">
-          <p className={dateLabelClass}>{t.form.fields.preferredDate}</p>
-          <Card className="max-w-2xl gap-0 border-zinc-300/70 bg-white/60 p-0 shadow-none">
-            <CardContent className="relative p-0 md:pr-56">
-              <div className="p-4 md:p-6">
-                <Calendar
-                  mode="single"
-                  locale={dayPickerLocale}
-                  weekStartsOn={1}
-                  selected={selected}
-                  onSelect={(date) => {
-                    if (date) onSelectDate(toIsoDate(date));
-                  }}
-                  defaultMonth={selected ?? new Date()}
-                  disabled={isDateDisabled}
-                  showOutsideDays={false}
-                  className="bg-transparent p-0 [--cell-size:2.25rem] md:[--cell-size:2.5rem]"
-                  formatters={{
-                    formatWeekdayName: (date) => {
-                      const index = (date.getDay() + 6) % 7;
-                      return weekdayLabels[locale][index] ?? date.toLocaleDateString();
-                    },
-                  }}
-                />
-              </div>
-              <div className="border-t border-zinc-300/70 p-4 md:absolute md:inset-y-0 md:right-0 md:flex md:max-h-none md:w-56 md:flex-col md:border-t-0 md:border-l md:p-5">
-                <p className={cn(dateLabelClass, "mb-3")}>{t.form.fields.preferredTime}</p>
-                <div
-                  className="no-scrollbar grid max-h-72 grid-cols-2 gap-2 overflow-y-auto md:max-h-none md:grid-cols-1"
-                  role="listbox"
-                  aria-label={t.form.timeSlotAria}
-                >
-                  {selectedDate && slotsForSelectedDate.length === 0 ? (
-                    <p className="col-span-2 text-[0.8125rem] text-zinc-500 md:col-span-1">
-                      {locale === "sv" ? "Inga lediga tider den dagen." : "No available times that day."}
-                    </p>
-                  ) : (
-                    slotsForSelectedDate.map((slot) => (
-                      <Button
-                        key={slot.startAt}
-                        type="button"
-                        role="option"
-                        aria-selected={selectedSlotStart === slot.startAt}
-                        variant={selectedSlotStart === slot.startAt ? "default" : "outline"}
-                        onClick={() => onSelectSlot(slot.startAt, slot.endAt)}
-                        className={cn(
-                          "h-auto min-h-10 w-full rounded-full px-3 py-2.5 text-[0.8125rem] font-medium shadow-none tabular-nums",
-                          selectedSlotStart === slot.startAt
-                            ? "border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800"
-                            : "border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-500 hover:bg-white",
-                        )}
-                      >
-                        {formatSlotTime(slot.startAt)}
-                      </Button>
-                    ))
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <input type="hidden" name="onskatDatum" value={selectedDate} />
-          {dateError ? (
-            <p className={errorTextClass} role="alert">
-              {dateError}
-            </p>
-          ) : null}
-        </div>
       )}
+
+      <div className="space-y-3">
+        <p className={dateLabelClass}>{t.form.fields.preferredDate}</p>
+        <Card className="max-w-2xl gap-0 border-zinc-300/70 bg-white/60 p-0 shadow-none">
+          <CardContent className="relative p-0 md:pr-56">
+            <div className="p-4 md:p-6">
+              <Calendar
+                mode="single"
+                locale={dayPickerLocale}
+                weekStartsOn={1}
+                selected={selected}
+                onSelect={(date) => {
+                  if (date) onSelectDate(toIsoDate(date));
+                }}
+                month={visibleMonth}
+                onMonthChange={setVisibleMonth}
+                disabled={isDateDisabled}
+                showOutsideDays={false}
+                className="bg-transparent p-0 [--cell-size:2.25rem] md:[--cell-size:2.5rem]"
+                formatters={{
+                  formatWeekdayName: (date) => {
+                    const index = (date.getDay() + 6) % 7;
+                    return weekdayLabels[locale][index] ?? date.toLocaleDateString();
+                  },
+                }}
+              />
+            </div>
+            <div className="border-t border-zinc-300/70 p-4 md:absolute md:inset-y-0 md:right-0 md:flex md:max-h-none md:w-56 md:flex-col md:border-t-0 md:border-l md:p-5">
+              <p className={cn(dateLabelClass, "mb-3")}>{t.form.fields.preferredTime}</p>
+              <div
+                className="no-scrollbar grid max-h-72 grid-cols-2 gap-2 overflow-y-auto md:max-h-none md:grid-cols-1"
+                role="listbox"
+                aria-label={t.form.timeSlotAria}
+              >
+                {slotsForSelectedDate.length > 0 ? (
+                  slotsForSelectedDate.map((slot) => (
+                    <Button
+                      key={slot.startAt}
+                      type="button"
+                      role="option"
+                      aria-selected={selectedSlotStart === slot.startAt}
+                      variant={selectedSlotStart === slot.startAt ? "default" : "outline"}
+                      onClick={() => onSelectSlot(slot.startAt, slot.endAt)}
+                      className={cn(
+                        "h-auto min-h-10 w-full rounded-full px-3 py-2.5 text-[0.8125rem] font-medium shadow-none tabular-nums",
+                        selectedSlotStart === slot.startAt
+                          ? "border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800"
+                          : "border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-500 hover:bg-white",
+                      )}
+                    >
+                      {formatSlotTime(slot.startAt)}
+                    </Button>
+                  ))
+                ) : isPaused ? null : !monthHasSlots ? (
+                  <p className="col-span-2 text-[0.8125rem] leading-relaxed text-zinc-500 md:col-span-1">
+                    {locale === "sv" ? (
+                      <>
+                        Inga lediga tider denna månad.
+                        <br />
+                        Bläddra gärna framåt i kalendern eller kontakta oss.
+                      </>
+                    ) : (
+                      <>
+                        No available times this month.
+                        <br />
+                        Feel free to browse forward or contact us.
+                      </>
+                    )}
+                  </p>
+                ) : (
+                  <p className="col-span-2 text-[0.8125rem] text-zinc-500 md:col-span-1">
+                    {locale === "sv" ? "Inga lediga tider för valt datum." : "No available times for the selected date."}
+                  </p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <input type="hidden" name="onskatDatum" value={selectedDate} />
+        {dateError ? (
+          <p className={errorTextClass} role="alert">
+            {dateError}
+          </p>
+        ) : null}
+      </div>
 
       <input type="hidden" name="onskadTid" value={selectedSlotStart} />
       <input type="hidden" name="onskadTidSlut" value={selectedSlotEnd} />
