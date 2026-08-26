@@ -38,6 +38,10 @@ function formatSlotTime(iso: string): string {
   }).format(new Date(iso));
 }
 
+function formatSlotInterval(startAt: string, endAt: string): string {
+  return `${formatSlotTime(startAt)}–${formatSlotTime(endAt)}`;
+}
+
 const weekdayLabels: Record<Locale, string[]> = {
   sv: ["M", "T", "O", "T", "F", "L", "S"],
   en: ["M", "T", "W", "T", "F", "S", "S"],
@@ -48,14 +52,19 @@ const weekdayLabels: Record<Locale, string[]> = {
 // touching the shared component. Kept in the same neutral zinc family as
 // the rest of this monochrome public site.
 const calendarClassNameOverrides = {
-  day_button: "group-data-[disabled]:text-zinc-400",
+  day_button: "group-data-[disabled]:text-zinc-500",
 };
 
-// Subtle CVB gold dot below dates that have real availability — restrained,
-// not a filled circle, and swaps to white when the date is selected so it
-// stays legible against the dark selected fill.
-const AVAILABLE_DOT_CLASS =
-  "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-[#B89A5A] [&[data-selected]:not(.range-middle)>*]:after:bg-white *:after:transition-colors";
+// Light CVB green for dates with real availability — dot when idle,
+// soft fill when the date is selected (replaces the default black pill).
+const AVAILABLE_DAY_CLASS = cn(
+  "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-[#6BB5A8] *:after:transition-colors",
+  "[&[data-selected]:not(.range-middle)>button]:!bg-[#DFF0EC] [&[data-selected]:not(.range-middle)>button]:!text-[#3F7569] [&[data-selected]:not(.range-middle)>button]:hover:!bg-[#D0EDE6]",
+  "[&[data-selected]:not(.range-middle)>*]:after:bg-[#3F7569]",
+);
+
+const SELECTED_SLOT_CLASS =
+  "border-[#6BB5A8] bg-[#DFF0EC] text-[#3F7569] shadow-[inset_0_0_0_1px_rgba(107,181,168,0.35)] ring-2 ring-[#6BB5A8]/25 hover:bg-[#D0EDE6]";
 
 type ContactSchedulingPickerProps = {
   locale: Locale;
@@ -189,7 +198,7 @@ export default function ContactSchedulingPicker({
                 onMonthChange={setVisibleMonth}
                 disabled={isDateDisabled}
                 modifiers={{ available: (date) => datesWithSlots.has(toIsoDate(date)) }}
-                modifiersClassNames={{ available: AVAILABLE_DOT_CLASS }}
+                modifiersClassNames={{ available: AVAILABLE_DAY_CLASS }}
                 showOutsideDays={false}
                 className="bg-transparent p-0 [--cell-size:2.25rem] md:[--cell-size:2.5rem]"
                 classNames={calendarClassNameOverrides}
@@ -219,16 +228,16 @@ export default function ContactSchedulingPicker({
                       type="button"
                       role="option"
                       aria-selected={selectedSlotStart === slot.startAt}
-                      variant={selectedSlotStart === slot.startAt ? "default" : "outline"}
+                      variant="outline"
                       onClick={() => onSelectSlot(slot.startAt, slot.endAt)}
                       className={cn(
                         "h-auto min-h-10 w-full rounded-full px-3 py-2.5 text-[0.8125rem] font-medium shadow-none tabular-nums",
                         selectedSlotStart === slot.startAt
-                          ? "border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800"
+                          ? SELECTED_SLOT_CLASS
                           : "border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-500 hover:bg-white",
                       )}
                     >
-                      {formatSlotTime(slot.startAt)}
+                      {formatSlotInterval(slot.startAt, slot.endAt)}
                     </Button>
                   ))
                 ) : !monthHasSlots ? (

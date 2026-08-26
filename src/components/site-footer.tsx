@@ -108,12 +108,6 @@ export default function SiteFooter() {
           <p className="text-xs text-zinc-400">{t.footer.copyright}</p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link
-              href="/klient-login"
-              className="text-xs text-zinc-500 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
-            >
-              {t.footer.clientPortal}
-            </Link>
-            <Link
               href="/coach-login"
               className="text-xs text-zinc-400 transition-colors hover:text-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
             >

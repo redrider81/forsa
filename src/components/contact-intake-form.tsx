@@ -512,7 +512,11 @@ export default function ContactIntakeForm() {
           <p className="text-sm leading-[1.7] text-zinc-600">{t.form.confidentialityNote}</p>
           {summaryError ? <p className={errorTextClass} role="alert" aria-live="polite">{summaryError}</p> : null}
           {step === 1 ? (
-            <button type="submit" className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4]">
+            <button
+              type="submit"
+              disabled={!step1Data.onskadTid}
+              className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-medium tracking-wide text-zinc-50 transition duration-150 hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f6f4] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-zinc-900"
+            >
               {t.form.continue}
             </button>
           ) : (
