@@ -278,7 +278,7 @@ export default function ContactSchedulingPicker({
                 }}
               />
             </div>
-            <div className="flex flex-col border-t border-zinc-200/90 p-5 sm:p-7 md:sticky md:top-8 md:max-h-[calc(100dvh-2rem)] md:self-start md:overflow-y-auto md:border-t-0 md:border-l md:px-8 md:py-8">
+            <div className="flex flex-col border-t border-zinc-200/90 p-5 sm:p-7 md:sticky md:top-8 md:self-start md:border-t-0 md:border-l md:px-8 md:py-8">
               <p className={cn(dateLabelClass, "mb-5")}>{t.form.fields.preferredTime}</p>
               <div
                 className="no-scrollbar grid max-h-72 grid-cols-1 gap-3 overflow-y-auto sm:grid-cols-2 md:max-h-none md:grid-cols-1"
@@ -331,131 +331,140 @@ export default function ContactSchedulingPicker({
                 )}
               </div>
 
-              {selectedSlotStart && selectedSlotEnd ? (
-                <div className="mt-8 rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5">
-                  <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
-                    {locale === "sv" ? "Vald tid" : "Selected time"}
-                  </p>
-                  <p className="mt-3 text-base font-medium leading-snug text-zinc-900">
-                    {formatSelectedDateLabel(selectedSlotStart, locale)} · {formatSlotInterval(selectedSlotStart, selectedSlotEnd)}
-                  </p>
+              <div className="mt-8 rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5">
+                <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
+                  {locale === "sv" ? "Vald tid" : "Selected time"}
+                </p>
+                <p
+                  className={cn(
+                    "mt-3 text-base leading-snug",
+                    selectedSlotStart && selectedSlotEnd
+                      ? "font-medium text-zinc-900"
+                      : "text-zinc-500",
+                  )}
+                >
+                  {selectedSlotStart && selectedSlotEnd
+                    ? `${formatSelectedDateLabel(selectedSlotStart, locale)} · ${formatSlotInterval(selectedSlotStart, selectedSlotEnd)}`
+                    : locale === "sv"
+                      ? "Välj en tid ovan"
+                      : "Choose a time above"}
+                </p>
 
-                  <div className="mt-6 space-y-3.5">
-                    <div className="space-y-1.5">
-                      <label htmlFor="picker-organisation" className={compactLabelClass}>
-                        {locale === "sv" ? "Företag" : "Company"}
-                      </label>
-                      <input
-                        id="picker-organisation"
-                        name="organisation"
-                        type="text"
-                        autoComplete="organization"
-                        value={organisation}
-                        onChange={(event) => onOrganisationChange(event.target.value)}
-                        className={cn(compactFieldClass, organisationError && "border-zinc-600")}
-                      />
-                      {organisationError ? (
-                        <p className={errorTextClass} role="alert">
-                          {organisationError}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="picker-namn" className={compactLabelClass}>
-                        {t.form.fields.name}
-                      </label>
-                      <input
-                        id="picker-namn"
-                        name="namn"
-                        type="text"
-                        autoComplete="name"
-                        value={namn}
-                        onChange={(event) => onNamnChange(event.target.value)}
-                        className={cn(compactFieldClass, namnError && "border-zinc-600")}
-                      />
-                      {namnError ? (
-                        <p className={errorTextClass} role="alert">
-                          {namnError}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="picker-telefon" className={compactLabelClass}>
-                        {t.form.fields.phone}
-                      </label>
-                      <input
-                        id="picker-telefon"
-                        name="telefon"
-                        type="tel"
-                        autoComplete="tel"
-                        value={telefon}
-                        onChange={(event) => onTelefonChange(event.target.value)}
-                        className={cn(compactFieldClass, telefonError && "border-zinc-600")}
-                      />
-                      {telefonError ? (
-                        <p className={errorTextClass} role="alert">
-                          {telefonError}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="picker-epost" className={compactLabelClass}>
-                        {t.form.fields.email}
-                      </label>
-                      <input
-                        id="picker-epost"
-                        name="epost"
-                        type="email"
-                        autoComplete="email"
-                        value={epost}
-                        onChange={(event) => onEpostChange(event.target.value)}
-                        className={cn(compactFieldClass, epostError && "border-zinc-600")}
-                      />
-                      {epostError ? (
-                        <p className={errorTextClass} role="alert">
-                          {epostError}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="picker-situation" className={compactLabelClass}>
-                        {t.form.fields.situation}
-                      </label>
-                      <textarea
-                        id="picker-situation"
-                        name="situation"
-                        value={situation}
-                        onChange={(event) => onSituationChange(event.target.value)}
-                        className={cn(compactTextareaClass, situationError && "border-zinc-600")}
-                      />
-                      {situationError ? (
-                        <p className={errorTextClass} role="alert">
-                          {situationError}
-                        </p>
-                      ) : null}
-                    </div>
+                <div className="mt-6 space-y-3.5">
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-organisation" className={compactLabelClass}>
+                      {locale === "sv" ? "Företag" : "Company"}
+                    </label>
+                    <input
+                      id="picker-organisation"
+                      name="organisation"
+                      type="text"
+                      autoComplete="organization"
+                      value={organisation}
+                      onChange={(event) => onOrganisationChange(event.target.value)}
+                      className={cn(compactFieldClass, organisationError && "border-zinc-600")}
+                    />
+                    {organisationError ? (
+                      <p className={errorTextClass} role="alert">
+                        {organisationError}
+                      </p>
+                    ) : null}
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#3F7569] px-7 py-3.5 text-sm font-medium leading-snug tracking-wide text-white transition duration-150 hover:bg-[#35685D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7569] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {isSubmitting
-                      ? t.form.submit.submitting
-                      : locale === "sv"
-                        ? "Boka tid"
-                        : "Book time"}
-                  </button>
-                  <p className="mt-4 text-center text-[0.8125rem] leading-relaxed text-zinc-500">
-                    {t.form.confidentialityNote}
-                  </p>
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-namn" className={compactLabelClass}>
+                      {t.form.fields.name}
+                    </label>
+                    <input
+                      id="picker-namn"
+                      name="namn"
+                      type="text"
+                      autoComplete="name"
+                      value={namn}
+                      onChange={(event) => onNamnChange(event.target.value)}
+                      className={cn(compactFieldClass, namnError && "border-zinc-600")}
+                    />
+                    {namnError ? (
+                      <p className={errorTextClass} role="alert">
+                        {namnError}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-telefon" className={compactLabelClass}>
+                      {t.form.fields.phone}
+                    </label>
+                    <input
+                      id="picker-telefon"
+                      name="telefon"
+                      type="tel"
+                      autoComplete="tel"
+                      value={telefon}
+                      onChange={(event) => onTelefonChange(event.target.value)}
+                      className={cn(compactFieldClass, telefonError && "border-zinc-600")}
+                    />
+                    {telefonError ? (
+                      <p className={errorTextClass} role="alert">
+                        {telefonError}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-epost" className={compactLabelClass}>
+                      {t.form.fields.email}
+                    </label>
+                    <input
+                      id="picker-epost"
+                      name="epost"
+                      type="email"
+                      autoComplete="email"
+                      value={epost}
+                      onChange={(event) => onEpostChange(event.target.value)}
+                      className={cn(compactFieldClass, epostError && "border-zinc-600")}
+                    />
+                    {epostError ? (
+                      <p className={errorTextClass} role="alert">
+                        {epostError}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="picker-situation" className={compactLabelClass}>
+                      {t.form.fields.situation}
+                    </label>
+                    <textarea
+                      id="picker-situation"
+                      name="situation"
+                      value={situation}
+                      onChange={(event) => onSituationChange(event.target.value)}
+                      className={cn(compactTextareaClass, situationError && "border-zinc-600")}
+                    />
+                    {situationError ? (
+                      <p className={errorTextClass} role="alert">
+                        {situationError}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
-              ) : null}
+
+                <button
+                  type="submit"
+                  disabled={!selectedSlotStart || !selectedSlotEnd || isSubmitting}
+                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#3F7569] px-7 py-3.5 text-sm font-medium leading-snug tracking-wide text-white transition duration-150 hover:bg-[#35685D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7569] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isSubmitting
+                    ? t.form.submit.submitting
+                    : locale === "sv"
+                      ? "Boka tid"
+                      : "Book time"}
+                </button>
+                <p className="mt-4 text-center text-[0.8125rem] leading-relaxed text-zinc-500">
+                  {t.form.confidentialityNote}
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
