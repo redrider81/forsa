@@ -38,8 +38,8 @@ export async function POST(request: Request) {
     p_slug: slug,
     p_name: name,
     p_email: email,
-    p_phone: phone || null,
-    p_message: message || null,
+    p_phone: phone,
+    p_message: message,
     p_start_at: startAt,
     p_end_at: endAt,
   });
