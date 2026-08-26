@@ -153,7 +153,7 @@ export default function NewClientForm({ organisations }: { organisations: Organi
         setBusy(false);
         return;
       }
-      router.push(`/portal/klienter/${data.clientId}`);
+      router.push(`/cvb-base/klienter/${data.clientId}`);
       router.refresh();
     } catch {
       setError("Det gick inte att nå tjänsten just nu. Försök igen.");
@@ -563,7 +563,7 @@ export default function NewClientForm({ organisations }: { organisations: Organi
         </button>
         <button
           type="button"
-          onClick={() => router.push("/portal/klienter")}
+          onClick={() => router.push("/cvb-base/klienter")}
           className={portalOutlineButtonClass}
         >
           Avbryt

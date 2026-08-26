@@ -66,7 +66,7 @@ export default function NewContractForm({
       });
       if (!response.ok) throw new Error("failed");
       const { contract } = (await response.json()) as { contract: Contract };
-      router.push(`/portal/avtal/${contract.id}`);
+      router.push(`/cvb-base/avtal/${contract.id}`);
     } catch {
       setSaveState("error");
     }

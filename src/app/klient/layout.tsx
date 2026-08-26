@@ -7,8 +7,8 @@ import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { readClientSession } from "@/lib/portal/session";
 
 export const metadata: Metadata = {
-  title: "Min utveckling | CVB Coaching",
-  description: "Din klientportal hos CVB Coaching.",
+  title: "CVB Base – Klient | CVB Coaching",
+  description: "CVB Base — din coaching hos CVB Coaching.",
   robots: { index: false, follow: false },
 };
 

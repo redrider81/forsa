@@ -3,8 +3,8 @@ import { portalSegmentActiveClass, portalSegmentClass, portalSegmentInactiveClas
 
 export default function CalendarSubnav({ active }: { active: "kalender" | "tillganglighet" }) {
   const items = [
-    { key: "kalender", label: "Kalender", href: "/portal/kalender" },
-    { key: "tillganglighet", label: "Tillgänglighet", href: "/portal/kalender/tillganglighet" },
+    { key: "kalender", label: "Kalender", href: "/cvb-base/kalender" },
+    { key: "tillganglighet", label: "Tillgänglighet", href: "/cvb-base/kalender/tillganglighet" },
   ] as const;
 
   return (

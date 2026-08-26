@@ -69,7 +69,7 @@ export default function ClientLifecycleActions({
         setBusy(false);
         return;
       }
-      router.push("/portal/klienter");
+      router.push("/cvb-base/klienter");
       router.refresh();
     } catch {
       setError("Klienten kunde inte raderas.");

@@ -12,7 +12,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const isHome = stripLocaleFromPath(pathname) === "/";
   // Portalen och inloggningen har egen navigation och egen ram.
   const isPortal =
-    pathname.startsWith("/portal") ||
+    pathname.startsWith("/cvb-base") ||
     pathname.startsWith("/klient") ||
     pathname.startsWith("/logga-in") ||
     pathname.startsWith("/coach-login") ||

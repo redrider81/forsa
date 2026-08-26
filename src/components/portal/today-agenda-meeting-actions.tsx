@@ -46,7 +46,7 @@ export function TodayAgendaMeetingActions({
   return (
     <div className="mt-5 border-t border-[var(--klient-border-muted)] pt-5">
       <div className="flex flex-wrap items-center gap-2.5">
-        <Link href={`/portal/mote/${sessionId}`} className={portalPrimaryButtonSmClass}>
+        <Link href={`/cvb-base/mote/${sessionId}`} className={portalPrimaryButtonSmClass}>
           Starta möte
         </Link>
         {clients.length > 0 ? (
@@ -101,7 +101,7 @@ export function TodayAgendaMeetingActions({
             <button
               type="button"
               disabled={!otherSessionId}
-              onClick={() => router.push(`/portal/mote/${otherSessionId}`)}
+              onClick={() => router.push(`/cvb-base/mote/${otherSessionId}`)}
               className={`${portalPrimaryButtonSmClass} sm:shrink-0`}
             >
               Starta

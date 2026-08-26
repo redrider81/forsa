@@ -9,14 +9,14 @@ import { readSession } from "@/lib/portal/session";
 import { demoHint } from "@/lib/portal/users";
 
 export const metadata: Metadata = {
-  title: "Coachinloggning | CVB Coaching",
-  description: "Inloggning för coacher i CVB Coaching.",
+  title: "CVB Base – Coach | CVB Coaching",
+  description: "Logga in i CVB Base som coach hos CVB Coaching.",
   robots: { index: false, follow: false },
 };
 
 export default async function CoachLoginPage() {
   const session = await readSession();
-  if (session?.role === "coach") redirect("/portal");
+  if (session?.role === "coach") redirect("/cvb-base");
 
   return (
     <main id="main-content" data-portal className="portal-login-bg flex min-h-[100svh] flex-col text-zinc-900">
@@ -30,19 +30,19 @@ export default async function CoachLoginPage() {
           </Link>
 
           <h1 className="mt-9 text-[1.9rem] font-medium leading-[1.15] tracking-tight text-zinc-900">
-            Coachportal
+            CVB Base
           </h1>
           <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-600">
             Tillgång till klienter, uppdrag, sessioner och förberedelser.
           </p>
 
           <div className="portal-login-glass mt-8 rounded-2xl border p-6 md:p-7">
-            <LoginForm demo={demoHint("coach")} role="coach" redirectTo="/portal" />
+            <LoginForm demo={demoHint("coach")} role="coach" redirectTo="/cvb-base" />
           </div>
 
           <p className="mt-6 text-[0.8125rem] leading-relaxed text-zinc-500">
             <Link href="/klient-login" className="text-zinc-700 underline underline-offset-4 hover:text-zinc-950">
-              Klientportal
+              Logga in som klient
             </Link>
           </p>
 

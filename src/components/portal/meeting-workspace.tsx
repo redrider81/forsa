@@ -103,7 +103,7 @@ export default function MeetingWorkspace({
       });
 
       if (response.ok) {
-        router.push("/portal");
+        router.push("/cvb-base");
       }
     } finally {
       setCompletingSession(false);

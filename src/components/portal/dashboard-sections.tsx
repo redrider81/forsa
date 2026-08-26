@@ -83,7 +83,7 @@ export function TodayAgendaSection({
             Ingen planerad insats idag
           </p>
         </div>
-        <Link href="/portal/kalender" className={portalQuietLinkClass}>
+        <Link href="/cvb-base/kalender" className={portalQuietLinkClass}>
           Visa kalender →
         </Link>
       </section>
@@ -215,7 +215,7 @@ export function UpcomingSection({ items }: { items: OperationsItem[] }) {
         )}
       </div>
       <div className="mt-3 border-t border-[var(--klient-border-muted)] pt-3">
-        <Link href="/portal/kalender" className={portalQuietLinkClass}>
+        <Link href="/cvb-base/kalender" className={portalQuietLinkClass}>
           Visa hela kalendern →
         </Link>
       </div>
@@ -243,7 +243,7 @@ export function RecentActivitySection({ items }: { items: ActivityItem[] }) {
           <div key={item.id}>
             {index > 0 ? <Divider /> : null}
             <RowLink
-              href={`/portal/klienter/${item.clientId}`}
+              href={`/cvb-base/klienter/${item.clientId}`}
               leading={<Avatar initials={item.clientInitials} size="sm" />}
               multiline
               title={item.label}

@@ -1369,7 +1369,7 @@ export function ClientOverview({
         {sortedClients.map((client) => (
           <Link
             key={client.id}
-            href={`/portal/klienter/${client.id}`}
+            href={`/cvb-base/klienter/${client.id}`}
             className="group -mx-3 block rounded-xl px-3 py-3.5 transition-colors duration-150 hover:bg-[var(--klient-text-block-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 md:grid md:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,0.75fr))_auto] md:items-center md:gap-3"
           >
             <div className="flex min-w-0 items-center gap-3">

@@ -11,7 +11,7 @@ export default function SiteFooter() {
   const locale = localeFromPathname(pathname);
   const t = getDictionaryForOptionalLocale(locale);
   const isPortal =
-    pathname.startsWith("/portal") ||
+    pathname.startsWith("/cvb-base") ||
     pathname.startsWith("/klient") ||
     pathname.startsWith("/logga-in") ||
     pathname.startsWith("/coach-login") ||

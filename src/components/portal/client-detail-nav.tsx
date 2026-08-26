@@ -8,8 +8,8 @@ import { portalSegmentActiveClass, portalSegmentClass, portalSegmentInactiveClas
 export default function ClientDetailNav({ clientId }: { clientId: string }) {
   const pathname = usePathname();
   const items = [
-    { href: `/portal/klienter/${clientId}`, label: "Översikt", exact: true },
-    { href: `/portal/klienter/${clientId}/avtal`, label: "Avtal & dokument", exact: false },
+    { href: `/cvb-base/klienter/${clientId}`, label: "Översikt", exact: true },
+    { href: `/cvb-base/klienter/${clientId}/avtal`, label: "Avtal & dokument", exact: false },
   ] as const;
 
   return (

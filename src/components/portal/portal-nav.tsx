@@ -6,13 +6,13 @@ import { useState, useTransition } from "react";
 import { portalButtonClass } from "@/components/portal/ui";
 
 const items = [
-  { href: "/portal", label: "Översikt", exact: true },
-  { href: "/portal/kalender", label: "Kalender", exact: false },
-  { href: "/portal/klienter", label: "Klienter", exact: false },
-  { href: "/portal/uppdrag", label: "Uppdrag", exact: false },
-  { href: "/portal/avtal", label: "Avtal", exact: false },
-  { href: "/portal/dokument", label: "Dokument", exact: false },
-  { href: "/portal/profil", label: "Profil", exact: false },
+  { href: "/cvb-base", label: "Översikt", exact: true },
+  { href: "/cvb-base/kalender", label: "Kalender", exact: false },
+  { href: "/cvb-base/klienter", label: "Klienter", exact: false },
+  { href: "/cvb-base/uppdrag", label: "Uppdrag", exact: false },
+  { href: "/cvb-base/avtal", label: "Avtal", exact: false },
+  { href: "/cvb-base/dokument", label: "Dokument", exact: false },
+  { href: "/cvb-base/profil", label: "Profil", exact: false },
 ] as const;
 
 function isActive(pathname: string, item: (typeof items)[number]): boolean {
