@@ -14,32 +14,32 @@ const processFaq: ProcessFaqItem[] = [
   {
     question: "Vad är det första samtalet?",
     answer:
-      "Ett kort och kostnadsfritt telefonsamtal där vi stämmer av vad du söker, om coaching är rätt stöd och om vi har förutsättningar för ett relevant samarbete. Det är inte en coachingsession och innebär inget åtagande.",
+      "Det första samtalet är ett kort och kostnadsfritt telefonsamtal. Du berättar lite om vad du söker, och vi känner efter om coaching är rätt väg och om det känns rätt att arbeta tillsammans. Det är inte en coachingsession och du förbinder dig inte till något.",
   },
   {
     question: "Vad händer om vi vill gå vidare?",
     answer:
-      "Då kommer vi överens om vad coachingsamarbetet ska fokusera på, dess omfattning och praktiska upplägg. Pris och övriga villkor är klargjorda innan samarbetet börjar.",
+      "Om vi båda vill gå vidare pratar vi igenom vad du vill arbeta med och hur vårt coachingsamarbete kan se ut. Vi kommer överens om omfattning, praktiskt upplägg och pris innan vi börjar.",
   },
   {
     question: "Hur börjar coachingsamarbetet?",
     answer:
-      "När upplägget är överenskommet bekräftar Carolina starten och det första coachingsamtalet planeras. Du får därefter tillgång till CVB Base som stöd för det fortsatta samarbetet.",
+      "När vi har kommit överens om hur vi vill arbeta tillsammans får du en personlig bekräftelse från mig och vi planerar vårt första coachingsamtal. Du får också tillgång till CVB Base, där vi samlar det som hör till vårt arbete tillsammans.",
   },
   {
     question: "Vad är CVB Base?",
     answer:
-      "CVB Base är CVB Coachings eget stöd runt coachingsamarbetet. Där kan du samla reflektioner, förbereda nästa samtal, återvända till tidigare arbete och ha relevant material samlat på ett ställe.",
+      "CVB Base är en del av hur jag arbetar med mina klienter. Där kan du samla reflektioner, förbereda sådant du vill ta med till nästa samtal och återvända till sådant vi tidigare har arbetat med. På så sätt finns sammanhanget kvar även mellan våra samtal.",
   },
   {
     question: "Om ett företag betalar för coachingen?",
     answer:
-      "Du är fortfarande den som coachas. I början av uppdraget klargör vi vem som betalar och vad som, om något, återkopplas till beställaren.",
+      "Det är fortfarande du som är min klient och våra samtal handlar om det du vill arbeta med. Innan vi börjar kommer vi överens om vem som betalar och vad som, om något, ska återkopplas till beställaren.",
   },
   {
     question: "Måste jag bestämma mig efter det första samtalet?",
     answer:
-      "Nej. Samtalet används för att avgöra om det finns ett relevant coachingsamarbete att gå vidare med. Vi går vidare först när båda vill det.",
+      "Nej. Det första samtalet är till för att vi båda ska kunna känna efter om det här är rätt. Vi går bara vidare om det känns bra och relevant för oss båda.",
   },
 ];
 
