@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const t = svDictionary;
 
 const principles = [
-  "Konfidentialitet, utan undantag.",
+  "Konfidentialitet.",
   "Frågor före råd. Du äger dina slutsatser.",
   "Precision framför uppmuntran.",
   "Uppföljning tills något faktiskt har hänt.",
