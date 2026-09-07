@@ -57,7 +57,7 @@ export const svDictionary = {
     confidentialityNote: "All kontakt hanteras konfidentiellt.",
     sections: {
       contact: "Kontaktuppgifter",
-      scheduling: "Önskad tid för samtal",
+      scheduling: "Boka ett inledande telefonsamtal",
       situation: "Situation",
       nextStep: "Nästa steg",
     },

@@ -1,19 +1,46 @@
 import type { Metadata } from "next";
 import ContactIntakeForm from "@/components/contact-intake-form";
 import ContactPageScrollReset from "@/components/contact-page-scroll-reset";
+import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 import HeroReveal from "@/components/animations/HeroReveal";
 
 export const metadata: Metadata = {
   title: "Boka ett första samtal | CVB Coaching",
   description:
-    "Välj en tid och skriv några rader om vad du vill ta upp. Samtalet är konfidentiellt, oavsett om du kommer på egen hand eller genom din arbetsgivare.",
+    "Boka ett kort och kostnadsfritt telefonsamtal där vi stämmer av om coaching är rätt stöd. Samtalet är konfidentiellt, oavsett om du kommer på egen hand eller genom din arbetsgivare.",
 };
 
-const passarNär = [
-  "Frågan angår dig på riktigt, inte bara på pappret.",
-  "Du vill tänka färdigt själv, inte få ett färdigt svar.",
-  "Det behöver ske utanför den egna kretsen, i förtroende.",
-  "Något ska förändras, inte bara diskuteras.",
+const processFaq: ProcessFaqItem[] = [
+  {
+    question: "Vad är det första samtalet?",
+    answer:
+      "Ett kort och kostnadsfritt telefonsamtal där vi stämmer av vad du söker, om coaching är rätt stöd och om vi har förutsättningar för ett relevant samarbete. Det är inte en coachingsession och innebär inget åtagande.",
+  },
+  {
+    question: "Vad händer om vi vill gå vidare?",
+    answer:
+      "Då kommer vi överens om vad coachingsamarbetet ska fokusera på, dess omfattning och praktiska upplägg. Pris och övriga villkor är klargjorda innan samarbetet börjar.",
+  },
+  {
+    question: "Hur börjar coachingsamarbetet?",
+    answer:
+      "När upplägget är överenskommet bekräftar Carolina starten och det första coachingsamtalet planeras. Du får därefter tillgång till CVB Base som stöd för det fortsatta samarbetet.",
+  },
+  {
+    question: "Vad är CVB Base?",
+    answer:
+      "CVB Base är CVB Coachings eget stöd runt coachingsamarbetet. Där kan du samla reflektioner, förbereda nästa samtal, återvända till tidigare arbete och ha relevant material samlat på ett ställe.",
+  },
+  {
+    question: "Om ett företag betalar för coachingen?",
+    answer:
+      "Du är fortfarande den som coachas. I början av uppdraget klargör vi vem som betalar och vad som, om något, återkopplas till beställaren.",
+  },
+  {
+    question: "Måste jag bestämma mig efter det första samtalet?",
+    answer:
+      "Nej. Samtalet används för att avgöra om det finns ett relevant coachingsamarbete att gå vidare med. Vi går vidare först när båda vill det.",
+  },
 ];
 
 export default function KontaktPage() {
@@ -33,7 +60,8 @@ export default function KontaktPage() {
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
               Välj en tid som passar och skriv några rader om vad du vill ta upp. Det första samtalet
-              använder vi till att avgöra om frågan hör hemma här och om vi fungerar ihop.
+              är ett kort, kostnadsfritt telefonsamtal där vi stämmer av om coaching är rätt stöd och
+              om vi vill gå vidare tillsammans.
             </p>
           </HeroReveal>
         </section>
@@ -45,17 +73,7 @@ export default function KontaktPage() {
             </div>
 
             <aside className="max-w-2xl border-t border-line-accent/30 pt-12 md:pt-16">
-              <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
-                Så vet du om det här är rätt
-              </h2>
-              <h3 className="mt-10 text-lg font-medium text-zinc-900">Passar när</h3>
-              <ul className="mt-4 divide-y divide-line-accent/25 border-y border-line-accent/30">
-                {passarNär.map((item) => (
-                  <li key={item} className="py-5 text-[1.0625rem] leading-[1.65] text-zinc-800">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <ProcessFaq heading="Vad händer efter att du bokat?" items={processFaq} />
             </aside>
           </div>
         </section>

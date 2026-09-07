@@ -56,7 +56,7 @@ export const enDictionary = {
     confidentialityNote: "All contact is handled confidentially.",
     sections: {
       contact: "Contact details",
-      scheduling: "Preferred time for the conversation",
+      scheduling: "Book an initial phone call",
       situation: "Current situation",
       nextStep: "Next step",
     },

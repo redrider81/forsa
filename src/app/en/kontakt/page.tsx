@@ -1,19 +1,46 @@
 import type { Metadata } from "next";
 import ContactIntakeForm from "@/components/contact-intake-form";
 import ContactPageScrollReset from "@/components/contact-page-scroll-reset";
+import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 import HeroReveal from "@/components/animations/HeroReveal";
 
 export const metadata: Metadata = {
   title: "Book an initial conversation | CVB Coaching",
   description:
-    "Pick a time and write a few lines about what you would like to bring. The conversation is confidential, whether you come on your own or through your employer.",
+    "Book a short, free phone call to work out whether coaching is the right support. The conversation is confidential, whether you come on your own or through your employer.",
 };
 
-const relevantWhen = [
-  "The question genuinely matters to you, not just on paper.",
-  "You want to finish the thinking yourself, not be handed an answer.",
-  "It needs to happen outside your own circle, in confidence.",
-  "Something is meant to change, not only be discussed.",
+const processFaq: ProcessFaqItem[] = [
+  {
+    question: "What is the first conversation?",
+    answer:
+      "A short, free phone call where we work out what you are looking for, whether coaching is the right support, and whether there is a basis for working together. It is not a coaching session, and it commits you to nothing.",
+  },
+  {
+    question: "What happens if we want to go ahead?",
+    answer:
+      "We agree what the coaching collaboration should focus on, its scope and how it will run in practice. Price and the other terms are settled before the work begins.",
+  },
+  {
+    question: "How does the coaching collaboration start?",
+    answer:
+      "Once the setup is agreed, Carolina confirms the start and the first coaching conversation is planned. You are then given access to CVB Base as support for the work that follows.",
+  },
+  {
+    question: "What is CVB Base?",
+    answer:
+      "CVB Base is CVB Coaching's own support around the coaching collaboration. It is where you can gather reflections, prepare for the next conversation, return to earlier work, and keep relevant material in one place.",
+  },
+  {
+    question: "What if a company is paying for the coaching?",
+    answer:
+      "You are still the person being coached. At the start of the engagement we settle who is paying and what, if anything, is fed back to whoever commissioned it.",
+  },
+  {
+    question: "Do I have to decide after the first conversation?",
+    answer:
+      "No. The conversation is there to work out whether there is a coaching collaboration worth going ahead with. We continue only when both of us want to.",
+  },
 ];
 
 export default function ContactPageEn() {
@@ -32,8 +59,8 @@ export default function ContactPageEn() {
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
               Pick a time that suits you and write a few lines about what you would like to bring.
-              We use the first conversation to work out whether the question belongs here and
-              whether we are a good fit.
+              The first conversation is a short, free phone call where we work out whether coaching
+              is the right support and whether we want to go ahead together.
             </p>
           </HeroReveal>
         </section>
@@ -45,18 +72,7 @@ export default function ContactPageEn() {
             </div>
 
             <aside className="max-w-2xl border-t border-line-accent/30 pt-12 md:pt-16">
-              <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
-                How to tell whether this is right
-              </h2>
-
-              <h3 className="mt-10 text-lg font-medium text-zinc-900">Right fit when</h3>
-              <ul className="mt-4 divide-y divide-line-accent/25 border-y border-line-accent/30">
-                {relevantWhen.map((item) => (
-                  <li key={item} className="py-5 text-[1.0625rem] leading-[1.65] text-zinc-800">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <ProcessFaq heading="What happens after you book?" items={processFaq} />
             </aside>
           </div>
         </section>

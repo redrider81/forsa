@@ -14,6 +14,12 @@ All timing, format, outcome, process and commercial statements that lacked custo
 
 Any future pricing requires explicit customer approval before public activation.
 
+**Godkänt september 2026:** det första samtalet får beskrivas som ett kort, kostnadsfritt
+telefonsamtal som inte är en coachingsession och inte innebär något åtagande. Ingen längd i
+minuter är godkänd — "kort" är den enda tidsangivelsen som får användas. Detta ersätter den
+tidigare borttagna formuleringen "Första samtalet är kostnadsfritt, 45 minuter och
+konfidentiellt" nedan, vars längdangivelse fortfarande inte är godkänd.
+
 ## Borttaget i copy-passen augusti 2026
 
 Följande ej godkända påståenden finns inte längre i koden och behöver inte godkännas:
