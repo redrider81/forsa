@@ -69,10 +69,17 @@ export default function HomePage() {
                   Det finns frågor man inte tänker färdigt ensam.
                 </h1>
               </div>
+              <p
+                data-hero-body
+                className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg"
+              >
+                Personlig coaching med Carolina von Braun — för dig som står i ett vägval, en
+                förändring eller en fråga i arbetslivet.
+              </p>
               <div className="mt-9 flex w-full flex-col items-center gap-4 md:mt-10 md:w-fit md:flex-row md:flex-wrap md:items-start md:justify-start md:gap-3.5">
                 <span data-hero-cta className="inline-flex justify-center">
                   <CtaLink href="/kontakt" variant="primary" translucent>
-                    {t.cta.primary}
+                    Boka ett inledande samtal
                   </CtaLink>
                 </span>
                 <span data-hero-cta className="inline-flex justify-center">
