@@ -155,6 +155,27 @@ export default function BusinessCoachingPage() {
           </StaggerCards>
         </section>
 
+        {/* Two-col: engagement */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Ett coachingsamarbete över tid
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                Ett uppdrag löper över en överenskommen period, och upplägget är detsamma oavsett om
+                jag arbetar med en medarbetare, en ledare eller ett team. Det är sammanhanget som
+                skiljer, inte arbetssättet.
+              </p>
+              <p>
+                Samtalen planerar vi tillsammans och fördelar över perioden. De följer inget fast
+                schema — vi lägger dem där de gör mest nytta, och flyttar dem när verksamheten kräver
+                det. Ramen är överenskommen, innehållet är ert.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
         {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">

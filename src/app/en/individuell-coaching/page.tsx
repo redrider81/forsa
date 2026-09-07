@@ -58,8 +58,7 @@ export default function IndividualCoachingPageEn() {
               get further with it than you do alone.
             </p>
             <p className="mt-6 max-w-3xl text-base leading-7 text-zinc-600">
-              If your employer is paying, or the question belongs to a team or an executive team,
-              see{" "}
+              If your employer is paying, or the question belongs to a team, see{" "}
               <Link href="/en/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
                 Business coaching
               </Link>
@@ -164,6 +163,31 @@ export default function IndividualCoachingPageEn() {
               </div>
             ))}
           </StaggerCards>
+        </section>
+
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              A coaching collaboration over time
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                When a question needs following over time, we turn the coaching into a collaboration
+                with an agreed frame. You and I settle what the work should focus on, and over what
+                period we work, before we start.
+              </p>
+              <p>
+                We plan the sessions together and spread them across the period. They follow no fixed
+                schedule — we place them where they do the most good, and move them when what you are
+                working on calls for something else.
+              </p>
+              <p>
+                During the period we check whether the focus still holds or the question has moved.
+                And the collaboration ends deliberately, with a final conversation about what the
+                period gave you and what you carry on with on your own.
+              </p>
+            </div>
+          </ScrollReveal>
         </section>
 
         <section className="py-16 md:py-20">

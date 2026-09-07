@@ -147,6 +147,26 @@ export default function BusinessCoachingPageEn() {
           </StaggerCards>
         </section>
 
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              A coaching collaboration over time
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                An engagement runs over an agreed period, and the shape of it is the same whether I
+                work with an employee, a leader or a team. What differs is the setting, not the way
+                of working.
+              </p>
+              <p>
+                We plan the sessions together and spread them across the period. They follow no fixed
+                schedule — we place them where they do the most good, and move them when the business
+                calls for it. The frame is agreed; the content is yours.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">

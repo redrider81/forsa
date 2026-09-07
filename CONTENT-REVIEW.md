@@ -8,7 +8,7 @@ All timing, format, outcome, process and commercial statements that lacked custo
 
 ## Standing principles
 
-1. **Prices and commercial packages are not approved by the customer and must not render publicly.** This covers prices, from-prices, price ranges, fixed packages, quote models, investment headings and minimum engagements. No public page in either language renders pricing or package copy today. `src/components/pricing-block.tsx` and `content/pricing.ts` remain as internal infrastructure but are no longer called from any public page — do not wire them back in without explicit approval.
+1. **Prices and commercial packages are not approved by the customer and must not render publicly.** This covers prices, from-prices, price ranges, fixed packages, quote models, investment headings and minimum engagements. No public page in either language renders pricing or package copy today. The unused `src/components/pricing-block.tsx` has been removed; it carried retired Executive coaching / ledningsgrupp package copy that must not reappear. `content/pricing.ts` remains as a neutral placeholder (all amounts `null`) — do not wire pricing back in without explicit approval.
 2. **Confidentiality may be described as a principle**, but not as an exact reporting model, retention period or data process until that has been decided.
 3. **No fixed programme formats** — group sizes, session counts, session durations, programme lengths, midpoint reviews or reporting procedures — may be presented as established offerings.
 

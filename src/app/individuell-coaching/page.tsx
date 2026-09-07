@@ -61,8 +61,7 @@ export default function IndividuellCoachingPage() {
               längre med den än du gör på egen hand.
             </p>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
-              Betalas samtalen av en arbetsgivare, eller gäller frågan ett team eller en
-              ledningsgrupp, se{" "}
+              Betalas samtalen av en arbetsgivare, eller gäller frågan ett team, se{" "}
               <Link href="/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
                 Business coaching
               </Link>
@@ -172,6 +171,32 @@ export default function IndividuellCoachingPage() {
               </div>
             ))}
           </StaggerCards>
+        </section>
+
+        {/* Two-col: engagement */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
+            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+              Ett coachingsamarbete över tid
+            </h2>
+            <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
+              <p>
+                När frågan behöver följas över tid gör vi coachingen till ett samarbete med en
+                överenskommen ram. Du och jag kommer överens om vad arbetet ska handla om, och över
+                hur lång period vi arbetar, innan vi börjar.
+              </p>
+              <p>
+                Samtalen planerar vi tillsammans och fördelar över perioden. De följer inget fast
+                schema — vi lägger dem där de gör mest nytta, och flyttar dem när det du arbetar med
+                kräver något annat.
+              </p>
+              <p>
+                Under perioden stämmer vi av om fokus fortfarande stämmer eller om frågan har flyttat
+                sig. Och samarbetet får ett medvetet avslut, ett sista samtal där vi går igenom vad
+                perioden gav och vad du tar vidare på egen hand.
+              </p>
+            </div>
+          </ScrollReveal>
         </section>
 
         {/* CTA */}
