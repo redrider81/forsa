@@ -72,13 +72,26 @@ const calendarClassNameOverrides = {
   button_next: "size-10 rounded-full hover:bg-zinc-100",
 };
 
-// Light CVB green for dates with real availability — dot when idle,
-// soft fill when the date is selected (replaces the default black pill).
+// Dagar med lediga tider bar tidigare bara en 3 px prick under siffran, vilket
+// var för svagt för att uppfattas. Nu fylls siffran med en mjuk grön platta,
+// och vald dag fylls helt i samma gröna skala — samma tokens som resten av
+// bokningsytan, så hierarkin blir ledig < vald utan att bli skrikig.
 const AVAILABLE_DAY_CLASS = cn(
-  "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-[#6BB5A8] *:after:transition-colors",
-  "[&[data-selected]:not(.range-middle)>button]:!bg-[#DFF0EC] [&[data-selected]:not(.range-middle)>button]:!text-[#3F7569] [&[data-selected]:not(.range-middle)>button]:hover:!bg-[#D0EDE6]",
-  "[&[data-selected]:not(.range-middle)>*]:after:bg-[#3F7569]",
+  "[&:not([data-selected])>button]:bg-[#DFF0EC] [&:not([data-selected])>button]:font-medium [&:not([data-selected])>button]:text-[#3F7569]",
+  "[&:not([data-selected])>button]:hover:bg-[#D0EDE6] [&:not([data-selected])>button]:hover:text-[#3F7569]",
 );
+
+// Vald dag fylls helt, så att den inte kan förväxlas med en dag som bara är
+// ledig. Fyllningen sätts som inline-stil via en egen DayButton i stället för
+// med en utility-klass: Calendar.tsx:s egna group-data-[selected]-klasser
+// genererar ingen CSS under Tailwind v4, och den valda dagen blev därför aldrig
+// markerad alls. Inline-stilen är den enda varianten som är oberoende av hur
+// klasserna genereras.
+const SELECTED_DAY_STYLE: React.CSSProperties = {
+  backgroundColor: "#3F7569",
+  color: "#ffffff",
+  fontWeight: 500,
+};
 
 const SELECTED_SLOT_CLASS =
   "border-[#6BB5A8] bg-[#DFF0EC] text-[#3F7569] shadow-[inset_0_0_0_1px_rgba(107,181,168,0.35)] ring-2 ring-[#6BB5A8]/25 hover:bg-[#D0EDE6]";
@@ -267,6 +280,17 @@ export default function ContactSchedulingPicker({
         <Card className="w-full max-w-5xl gap-0 rounded-2xl border-zinc-200/90 bg-white p-0 shadow-sm shadow-zinc-900/[0.04]">
           <CardContent className="p-0 md:grid md:grid-cols-[auto_minmax(26rem,1fr)] md:items-start">
             <div className="w-fit max-w-full shrink-0 self-start p-5 sm:p-7 md:p-8">
+              <p className="mb-5 flex items-start gap-2.5 text-[0.8125rem] leading-[1.6] text-zinc-600">
+                <span
+                  aria-hidden="true"
+                  className="mt-[0.15rem] inline-block size-4 shrink-0 rounded-full bg-[#DFF0EC] ring-1 ring-inset ring-[#3F7569]/25"
+                />
+                <span>
+                  {locale === "sv"
+                    ? "Grön markering visar dagar med lediga tider. Välj en dag för att se tiderna."
+                    : "The green marking shows days with available times. Pick a day to see the times."}
+                </span>
+              </p>
               <Calendar
                 mode="single"
                 locale={dayPickerLocale}
@@ -283,6 +307,39 @@ export default function ContactSchedulingPicker({
                 disabled={isDateDisabled}
                 modifiers={{ available: (date) => datesWithSlots.has(toIsoDate(date)) }}
                 modifiersClassNames={{ available: AVAILABLE_DAY_CLASS }}
+                components={{
+                  DayButton: ({ day, modifiers, style, ...buttonProps }) => {
+                    // day och modifiers är react-day-pickers egna props och ska
+                    // inte hamna på DOM-elementet — de plockas ut här.
+                    void day;
+                    return (
+                      <button
+                        {...buttonProps}
+                        style={modifiers.selected ? { ...style, ...SELECTED_DAY_STYLE } : style}
+                      />
+                    );
+                  },
+                }}
+                labels={{
+                  labelDayButton: (date, modifiers) => {
+                    const formatted = new Intl.DateTimeFormat(
+                      locale === "sv" ? "sv-SE" : "en-GB",
+                      { weekday: "long", day: "numeric", month: "long" },
+                    ).format(date);
+                    const parts: string[] = [
+                      modifiers.today
+                        ? `${locale === "sv" ? "Idag" : "Today"}, ${formatted}`
+                        : formatted,
+                    ];
+                    if (modifiers.selected) parts.push(locale === "sv" ? "vald dag" : "selected");
+                    if (modifiers.available) {
+                      parts.push(locale === "sv" ? "lediga tider finns" : "times available");
+                    } else if (modifiers.disabled) {
+                      parts.push(locale === "sv" ? "inga lediga tider" : "no times available");
+                    }
+                    return parts.join(" — ");
+                  },
+                }}
                 showOutsideDays={false}
                 className="bg-transparent p-0 [--cell-size:2.5rem] sm:[--cell-size:2.625rem] md:[--cell-size:2.875rem]"
                 classNames={calendarClassNameOverrides}
