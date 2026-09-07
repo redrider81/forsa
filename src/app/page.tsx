@@ -96,8 +96,6 @@ export default function HomePage() {
       <div className="relative z-10 isolate bg-zinc-100">
       <div className="mx-auto max-w-6xl px-6 pb-24 md:px-10">
 
-        <KineticTeamHybrid />
-
         <section
           id="coaching"
           data-parallax-section
@@ -120,6 +118,8 @@ export default function HomePage() {
             className="mt-20 md:mt-24"
           />
         </section>
+
+        <KineticTeamHybrid />
 
         <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
