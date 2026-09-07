@@ -14,32 +14,32 @@ const processFaq: ProcessFaqItem[] = [
   {
     question: "What is the first conversation?",
     answer:
-      "A short, free phone call where we work out what you are looking for, whether coaching is the right support, and whether there is a basis for working together. It is not a coaching session, and it commits you to nothing.",
+      "The first conversation is a short, complimentary phone call. You tell me a little about what you are looking for, and we get a sense of whether coaching is the right path and whether it feels right to work together. It is not a coaching session, and you are not committing to anything.",
   },
   {
     question: "What happens if we want to go ahead?",
     answer:
-      "We agree what the coaching collaboration should focus on, its scope and how it will run in practice. Price and the other terms are settled before the work begins.",
+      "If we both want to continue, we talk through what you would like to work on and what our coaching collaboration could look like. We agree on the scope, practical setup and price before we begin.",
   },
   {
     question: "How does the coaching collaboration start?",
     answer:
-      "Once the setup is agreed, Carolina confirms the start and the first coaching conversation is planned. You are then given access to CVB Base as support for the work that follows.",
+      "Once we have agreed on how we want to work together, you receive a personal confirmation from me and we plan our first coaching conversation. You will also get access to CVB Base, where we keep together what belongs to our work together.",
   },
   {
     question: "What is CVB Base?",
     answer:
-      "CVB Base is CVB Coaching's own support around the coaching collaboration. It is where you can gather reflections, prepare for the next conversation, return to earlier work, and keep relevant material in one place.",
+      "CVB Base is part of how I work with my clients. There you can collect reflections, prepare what you want to bring to the next conversation and return to things we have worked on before. This helps keep the context connected between our conversations.",
   },
   {
     question: "What if a company is paying for the coaching?",
     answer:
-      "You are still the person being coached. At the start of the engagement we settle who is paying and what, if anything, is fed back to whoever commissioned it.",
+      "You are still my client, and our conversations are about what you want to work on. Before we begin, we agree on who is paying and what, if anything, may be shared back with the purchaser.",
   },
   {
     question: "Do I have to decide after the first conversation?",
     answer:
-      "No. The conversation is there to work out whether there is a coaching collaboration worth going ahead with. We continue only when both of us want to.",
+      "No. The first conversation is there so we can both get a sense of whether this is right. We only move forward if it feels good and relevant for both of us.",
   },
 ];
 
