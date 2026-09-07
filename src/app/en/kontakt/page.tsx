@@ -14,7 +14,7 @@ const processFaq: ProcessFaqItem[] = [
   {
     question: "What is the first conversation?",
     answer:
-      "The first conversation is a short, complimentary phone call. You tell me a little about what you are looking for, and we get a sense of whether coaching is the right path and whether it feels right to work together. It is not a coaching session, and you are not committing to anything.",
+      "The first conversation is a short, free phone call. You tell me a little about what you are looking for, and we get a sense of whether coaching is the right path and whether it feels right to work together. It is not a coaching session, and you are not committing to anything.",
   },
   {
     question: "What happens if we want to go ahead?",
