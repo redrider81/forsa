@@ -117,7 +117,7 @@ export default function KineticTeamHybrid() {
             data-team-heading
             className="font-serif text-3xl font-medium leading-[1.12] tracking-tight text-zinc-900 md:text-[2.35rem]"
           >
-            Bakom CVB Coaching
+            Coaching med Carolina
           </h2>
           <div
             data-team-portrait
@@ -145,16 +145,18 @@ export default function KineticTeamHybrid() {
             className="absolute left-0 top-0 hidden h-full w-px origin-top bg-line-accent/25 md:block"
           />
           <p data-col-paragraph>
-            Bakom <strong className="font-semibold">CVB Coaching</strong> står Carolina von Braun, med erfarenhet från kapitalmarknad och
-            styrelsearbete – miljöer där beslut ofta får konkreta konsekvenser.
+            Jag heter Carolina von Braun och står bakom CVB Coaching. Jag arbetar med människor som
+            behöver få syn på sin situation klarare — privat eller i arbetslivet.
           </p>
           <p data-col-paragraph>
-            I coachrollen är uppgiften en annan: att göra tänkandet klarare utan att ta över
-            slutsatserna.
+            Med erfarenhet från arbetsliv där beslut får konkreta konsekvenser erbjuder jag ett
+            lugnt, professionellt och konfidentiellt samtalsrum. Min uppgift är inte att tala om vad
+            du ska göra, utan att hjälpa dig tänka, välja och gå vidare på ett sätt som håller för
+            dig.
           </p>
           <div data-col-paragraph className="mt-12">
             <CtaLink href="/om-oss" variant="primary">
-              Mer om mig
+              Läs om Carolina och hennes arbetssätt
             </CtaLink>
           </div>
         </div>

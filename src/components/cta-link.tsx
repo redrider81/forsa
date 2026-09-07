@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { MouseEvent, ReactNode } from "react";
-import { resetRouteScroll } from "@/lib/motion";
+import { prefersReducedMotion, resetRouteScroll } from "@/lib/motion";
 
 type CtaLinkProps = {
   href: string;
@@ -52,6 +52,16 @@ function isContactHref(href: string): boolean {
   return href === "/kontakt" || href === "/en/kontakt" || href.endsWith("/kontakt");
 }
 
+/** "/#coaching" or "#coaching" när vi redan står på samma sida. */
+function samePageHash(href: string): string | null {
+  const hashIndex = href.indexOf("#");
+  if (hashIndex === -1) return null;
+  const path = href.slice(0, hashIndex);
+  if (path && path !== "/" && path !== window.location.pathname) return null;
+  const hash = href.slice(hashIndex);
+  return hash.length > 1 ? hash : null;
+}
+
 function handleNavigate(
   event: MouseEvent<HTMLAnchorElement>,
   href: string,
@@ -60,7 +70,19 @@ function handleNavigate(
   onClick?.();
   if (isContactHref(href)) {
     resetRouteScroll();
+    return;
   }
+
+  // Ankarlänkar på samma sida rullar vi själva. Router-navigeringen landar inte
+  // alltid på målet när sidan har en sticky hero. Beteendet sätts explicit
+  // eftersom ScrollTrigger nollställer CSS scroll-behavior på html.
+  const hash = samePageHash(href);
+  if (!hash) return;
+  const target = document.querySelector(hash);
+  if (!target) return;
+  event.preventDefault();
+  target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  window.history.pushState(null, "", href);
 }
 
 export default function CtaLink({

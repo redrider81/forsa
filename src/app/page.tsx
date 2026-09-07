@@ -6,7 +6,6 @@ import HeroVideoBackground from "@/components/hero-video-background";
 import ParallaxController from "@/components/animations/ParallaxController";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
-import EditorialImageTransition from "@/components/animations/EditorialImageTransition";
 import CoachingServicesGrid from "@/components/coaching-services-grid";
 import EngagementSection from "@/components/engagement-section";
 import KineticTeamHybrid from "@/components/ui/kinetic-team-hybrid";
@@ -15,18 +14,17 @@ import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 export const metadata: Metadata = {
   title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
   description:
-    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare, ledare och team.",
+    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare och ledare i arbetslivet.",
 };
 
 const t = svDictionary;
 
 const relevancePoints = [
-  "Ett vägval ska avgöras innan du vet tillräckligt.",
-  "Du gör allt du brukar göra och kommer ändå inte vidare.",
-  "Rollen har vuxit fortare än mandatet.",
-  "En fas är slut — ett jobb, ett uppdrag, ett sätt att arbeta — och nästa har inte tagit form.",
-  "Prioriteringarna skiftar oftare än verksamheten hinner ställa om.",
-  "Beslut fattas i rummet men tappar kraft i vardagen.",
+  "Du står inför ett vägval och behöver förstå vad som faktiskt är viktigt för dig.",
+  "Du har fått ett nytt ansvar eller befinner dig i en förändring i arbetslivet.",
+  "Du vet att något behöver förändras men kommer inte vidare i hur.",
+  "Du behöver fatta ett beslut utan att ha alla svar ännu.",
+  "Du vill prata fritt, i förtroende och utanför din egen krets.",
 ];
 
 const passarNär = [
@@ -88,6 +86,12 @@ export default function HomePage() {
                   </CtaLink>
                 </span>
               </div>
+              <p
+                data-hero-cta
+                className="mt-5 text-[0.8125rem] leading-[1.6] text-white/75 drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]"
+              >
+                Ett första samtal är konfidentiellt.
+              </p>
             </HeroReveal>
           </div>
         </div>
@@ -99,7 +103,7 @@ export default function HomePage() {
         <section
           id="coaching"
           data-parallax-section
-          className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white pt-20 pb-0 md:pt-24"
+          className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white py-20 md:py-24"
         >
           <div className="mx-auto max-w-6xl px-6 md:px-10">
             <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
@@ -111,12 +115,10 @@ export default function HomePage() {
             <div className="mt-14">
               <CoachingServicesGrid locale="sv" />
             </div>
+            <p className="mt-10 max-w-2xl text-[0.9375rem] leading-[1.7] text-zinc-600">
+              Är du osäker på vilken väg som passar? Det avgör vi tillsammans i det första samtalet.
+            </p>
           </div>
-          <EditorialImageTransition
-            src="/supertable.png"
-            alt="Förberedelse inför ett coachingsamtal"
-            className="mt-20 md:mt-24"
-          />
         </section>
 
         <KineticTeamHybrid />
@@ -124,7 +126,7 @@ export default function HomePage() {
         <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
             <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-              Sex lägen där coaching hör hemma
+              När coaching kan vara rätt
             </h2>
             <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
               <ScrollReveal variant="staggerList" className="mt-0">
@@ -218,44 +220,46 @@ export default function HomePage() {
 
         <EngagementSection locale="sv" />
 
-        <section data-parallax-image-only className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white">
-          <EditorialImageTransition
-            src="/superoffice.png"
-            alt="Individuell coaching hos CVB Coaching"
-            breakout={false}
-          />
+        <section data-parallax-section className="py-20 md:py-24">
+          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+              När företaget tar första kontakten
+            </h2>
+            <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
+              <p>
+                CVB Coaching arbetar med enskilda medarbetare och ledare i arbetslivet. Företaget kan
+                initiera och finansiera coachingen, medan samtalen är personliga och konfidentiella.
+                Ramar och kontaktvägar tydliggörs i den första dialogen.
+              </p>
+            </div>
+          </ScrollReveal>
         </section>
 
         <section data-parallax-section className="py-20 md:py-24">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
             <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-              Göteborg, eller digitalt när det passar bättre
+              I Göteborg eller digitalt
             </h2>
             <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
-              <p>CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt.</p>
+              <p>
+                CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt, beroende på
+                vad som passar bäst.
+              </p>
               <p>Vad som sägs i samtalet stannar i samtalet.</p>
             </div>
           </ScrollReveal>
         </section>
 
-        <section data-parallax-image-only>
-          <EditorialImageTransition
-            src="/supermeeting.png"
-            alt="Business coaching i konfidentiellt samtal"
-            className="mt-20 md:mt-24"
-          />
-        </section>
-
         <section data-parallax-section id="kontakt" className="py-20 md:py-24">
           <ScrollReveal variant="ctaStack">
             <h2 data-cta-heading className="max-w-4xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.65rem]">
-              Nästa steg
+              Boka ett inledande samtal
             </h2>
             <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">
-              Skriv några rader om vad det gäller, och välj en tid. Samtalet är konfidentiellt.
+              Skriv några rader om vad det gäller och välj en tid. Samtalet är konfidentiellt.
             </p>
             <div data-cta-actions className="mt-12 flex flex-wrap gap-4">
-              <CtaLink href="/kontakt" variant="primary">{t.cta.primary}</CtaLink>
+              <CtaLink href="/kontakt" variant="primary">Boka ett inledande samtal</CtaLink>
             </div>
           </ScrollReveal>
         </section>

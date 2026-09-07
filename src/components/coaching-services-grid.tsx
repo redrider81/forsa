@@ -25,8 +25,8 @@ const servicesSv: Service[] = [
     href: "/individuell-coaching",
     title: "Individuell coaching",
     description:
-      "För dig som står inför ett vägval, en förändring eller ett beslut som inte låter sig skjutas upp.",
-    ctaLabel: "Läs mer",
+      "För dig som står inför ett vägval, en förändring eller ett beslut som behöver få ta plats.",
+    ctaLabel: "Läs om individuell coaching",
     image: "/individuell-coaching.jpg",
     imageAlt: "Individuellt coachingsamtal i lugn miljö",
   },
@@ -35,10 +35,12 @@ const servicesSv: Service[] = [
     href: "/business-coaching",
     title: "Business coaching",
     description:
-      "För medarbetare, ledare och team — där besluten också ska bära i organisationen.",
-    ctaLabel: "Läs mer",
+      "För medarbetare och ledare som behöver klarhet, riktning eller stöd i en arbetsrelaterad situation.",
+    ctaLabel: "Läs om business coaching",
+    // TODO: Replace business-coaching image with a calm one-to-one work-life coaching image.
+    // Avoid workshop, team, whiteboard, boardroom and dashboard imagery.
     image: "/business-coaching-workshop.jpg",
-    imageAlt: "Business coaching i workshopmiljö med whiteboard",
+    imageAlt: "Business coaching hos CVB Coaching",
   },
 ];
 
@@ -48,8 +50,8 @@ const servicesEn: Service[] = [
     href: "/en/individuell-coaching",
     title: "Individual coaching",
     description:
-      "For anyone facing a choice, a change or a decision that will not wait any longer.",
-    ctaLabel: "Learn more",
+      "For you who are facing a choice, a change or a decision that needs room to be thought through.",
+    ctaLabel: "Read about individual coaching",
     image: "/individuell-coaching.jpg",
     imageAlt: "Individual coaching session in a calm setting",
   },
@@ -58,10 +60,12 @@ const servicesEn: Service[] = [
     href: "/en/business-coaching",
     title: "Business coaching",
     description:
-      "For employees, leaders and teams — where decisions also have to hold in the organisation.",
-    ctaLabel: "Learn more",
+      "For employees and leaders who need clarity, direction or support in a work-related situation.",
+    ctaLabel: "Read about business coaching",
+    // TODO: Replace business-coaching image with a calm one-to-one work-life coaching image.
+    // Avoid workshop, team, whiteboard, boardroom and dashboard imagery.
     image: "/business-coaching-workshop.jpg",
-    imageAlt: "Business coaching in a workshop setting with a whiteboard",
+    imageAlt: "Business coaching at CVB Coaching",
   },
 ];
 

@@ -16,13 +16,13 @@ export const svDictionary = {
     coaching: "Coaching",
     about: "Om CVB Coaching",
     contact: "Kontakt",
-    login: "Logga in",
+    login: "Klientinloggning",
     leadershipLabel: "Två vägar in",
     startHereLabel: "Osäker?",
     unsureTitle: "Vet du inte vilken väg som är din?",
     unsureBody:
       "Börja med ett samtal. Vi avgör tillsammans var frågan hör hemma.",
-    bookFirstCall: "Boka ett första samtal →",
+    bookFirstCall: "Boka ett inledande samtal →",
   },
   footer: {
     description:

@@ -466,7 +466,7 @@ export default function SiteNavigation() {
           {
             href: "/business-coaching",
             label: "Business coaching",
-            text: "För medarbetare, ledare och team i arbetslivet.",
+            text: "För medarbetare och ledare i arbetslivet.",
           },
         ]
       : [
@@ -478,7 +478,7 @@ export default function SiteNavigation() {
           {
             href: "/business-coaching",
             label: "Business coaching",
-            text: "For employees, leaders and teams in working life.",
+            text: "For employees and leaders in working life.",
           },
         ];
   const headerRef = useRef<HTMLElement>(null);

@@ -16,7 +16,7 @@ export const enDictionary = {
     coaching: "Coaching",
     about: "About Carolina",
     contact: "Contact",
-    login: "Log in",
+    login: "Client login",
     leadershipLabel: "Two ways in",
     startHereLabel: "Not sure?",
     unsureTitle: "Not sure which way is yours?",
