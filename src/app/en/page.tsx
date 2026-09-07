@@ -16,7 +16,7 @@ import { enDictionary } from "@/lib/i18n/dictionaries/en";
 export const metadata: Metadata = {
   title: "CVB Coaching – individual and business coaching in Gothenburg",
   description:
-    "CVB Coaching in Gothenburg. Individual coaching for anyone facing a choice or a change, and business coaching for leaders, employees, teams and executive teams.",
+    "CVB Coaching in Gothenburg. Individual coaching for anyone facing a choice or a change, and business coaching for employees, leaders and teams.",
 };
 
 const relevancePoints = [

@@ -18,13 +18,11 @@ export const svDictionary = {
     contact: "Kontakt",
     login: "Logga in",
     leadershipLabel: "Två vägar in",
-    coachingLabel: "Inom business coaching",
     startHereLabel: "Osäker?",
     unsureTitle: "Vet du inte vilken väg som är din?",
     unsureBody:
       "Börja med ett samtal. Vi avgör tillsammans var frågan hör hemma.",
     bookFirstCall: "Boka ett första samtal →",
-    teamCoaching: "Teamcoaching",
   },
   footer: {
     description:
@@ -36,7 +34,6 @@ export const svDictionary = {
     clientPortal: "Logga in – klient",
     coachLogin: "Logga in – coach",
     copyright: "© 2026 CVB Coaching",
-    teamCoaching: "Teamcoaching",
   },
   cta: {
     primary: "Boka ett första samtal",

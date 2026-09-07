@@ -17,7 +17,7 @@ export default function SiteFooter() {
     pathname.startsWith("/coach-login") ||
     pathname.startsWith("/klient-login");
   const href = (path: string) => toLocalePath(path, locale);
-  // Två primära ingångar, med de specialiserade formaten underordnade.
+  // Två primära ingångar: individuell coaching och business coaching.
   const services =
     locale === "sv"
       ? [
@@ -27,20 +27,6 @@ export default function SiteFooter() {
       : [
           { href: "/individuell-coaching", label: "Individual coaching" },
           { href: "/business-coaching", label: "Business coaching" },
-        ];
-  const businessFormats =
-    locale === "sv"
-      ? [
-          { href: "/executive-coaching", label: "Executive coaching" },
-          { href: "/ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
-          { href: "/team-coaching", label: t.footer.teamCoaching },
-          { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
-        ]
-      : [
-          { href: "/executive-coaching", label: "Executive coaching" },
-          { href: "/ledningsgruppscoaching", label: "Executive team coaching" },
-          { href: "/team-coaching", label: t.footer.teamCoaching },
-          { href: "/coachande-ledarskap", label: "Coaching leadership" },
         ];
   const about =
     locale === "sv"
@@ -91,25 +77,6 @@ export default function SiteFooter() {
                 </li>
               ))}
             </ul>
-            {businessFormats.length > 0 ? (
-              <>
-                <p className="mt-7 text-xs font-medium tracking-[0.16em] text-zinc-400 uppercase">
-                  {locale === "sv" ? "Inom business coaching" : "Within business coaching"}
-                </p>
-                <ul className="mt-4 space-y-2.5">
-                  {businessFormats.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={href(item.href)}
-                        className="text-sm text-zinc-500 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : null}
           </div>
 
           <div className="md:col-span-3">

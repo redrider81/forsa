@@ -21,10 +21,6 @@ import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 const coachingPaths = [
   "/individuell-coaching",
   "/business-coaching",
-  "/executive-coaching",
-  "/ledningsgruppscoaching",
-  "/team-coaching",
-  "/coachande-ledarskap",
 ] as const;
 
 type CursorPosition = { left: number; width: number; opacity: number };
@@ -329,9 +325,6 @@ function MobileHeaderLanguageDropdown({
 const mobileNavLinkClass =
   "block rounded-md px-0.5 py-4 text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.01em] text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]";
 
-const mobileSubLinkClass =
-  "block rounded-md py-2.5 pl-3 text-[0.9375rem] leading-[1.45] text-zinc-600 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] aria-[current=page]:font-medium aria-[current=page]:text-[#92753a]";
-
 const mobileAudienceLinkClass =
   "block rounded-md py-3.5 pl-3 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3] aria-[current=page]:text-[#92753a]";
 
@@ -455,8 +448,6 @@ const megaBlockTitle =
 const megaBlockDesc =
   "mt-1 block text-sm leading-6 text-zinc-600 transition-colors duration-200 group-hover:text-zinc-700";
 
-const megaTextLink = `group -mx-2 block rounded-sm px-2 py-1.5 text-[0.9375rem] leading-6 text-zinc-900 transition-[color,transform] duration-200 ease-out motion-reduce:transition-colors motion-reduce:hover:translate-x-0 hover:translate-x-0.5 hover:text-[#92753a] aria-[current=page]:text-[#92753a] aria-[current=page]:translate-x-0 ${megaItemFocus}`;
-
 export default function SiteNavigation() {
   const pathname = usePathname();
   const router = useRouter();
@@ -475,7 +466,7 @@ export default function SiteNavigation() {
           {
             href: "/business-coaching",
             label: "Business coaching",
-            text: "För ledare, medarbetare, team och ledningsgrupper.",
+            text: "För medarbetare, ledare och team i arbetslivet.",
           },
         ]
       : [
@@ -487,22 +478,8 @@ export default function SiteNavigation() {
           {
             href: "/business-coaching",
             label: "Business coaching",
-            text: "For leaders, employees, teams and executive teams.",
+            text: "For employees, leaders and teams in working life.",
           },
-        ];
-  const coachingServices =
-    locale === "sv"
-      ? [
-          { href: "/executive-coaching", label: "Executive coaching" },
-          { href: "/ledningsgruppscoaching", label: "Ledningsgruppscoaching" },
-          { href: "/team-coaching", label: "Teamcoaching" },
-          { href: "/coachande-ledarskap", label: "Coachande ledarskap" },
-        ]
-      : [
-          { href: "/executive-coaching", label: "Executive coaching" },
-          { href: "/ledningsgruppscoaching", label: "Executive team coaching" },
-          { href: "/team-coaching", label: "Team coaching" },
-          { href: "/coachande-ledarskap", label: "Coaching leadership" },
         ];
   const headerRef = useRef<HTMLElement>(null);
   const mobileMenuId = useId();
@@ -803,7 +780,7 @@ export default function SiteNavigation() {
                     >
               <div className="border-t border-zinc-900/10 bg-zinc-50/95 shadow-[0_12px_40px_-28px_rgba(24,24,27,0.28)] backdrop-blur-md">
               <div className="mx-auto max-w-6xl px-6 py-8 md:px-10 md:py-9">
-                <div className="grid gap-8 md:grid-cols-[1fr_1.2fr_0.7fr] md:gap-10">
+                <div className="grid gap-8 md:grid-cols-[1fr_0.7fr] md:gap-10">
                   <div>
                     <p className={sectionLabelClass()}>{t.nav.leadershipLabel}</p>
                     <ul className="mt-4 space-y-5">
@@ -822,23 +799,6 @@ export default function SiteNavigation() {
                               {item.label}
                             </span>
                             <span className={megaBlockDesc}>{item.text}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className={sectionLabelClass()}>{t.nav.coachingLabel}</p>
-                    <ul className="mt-4 space-y-2.5">
-                      {coachingServices.map((item) => (
-                        <li key={item.href}>
-                          <Link
-                            href={localizedHref(item.href)}
-                            aria-current={barePathname === item.href ? "page" : undefined}
-                            className={megaTextLink}
-                          >
-                            {item.label}
                           </Link>
                         </li>
                       ))}
@@ -1018,21 +978,6 @@ export default function SiteNavigation() {
                         >
                           <span className={mobileAudienceTitleClass}>{item.label}</span>
                           <span className={mobileAudienceDescClass}>{item.text}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className={`${sectionLabelClass()} mt-5`}>{t.nav.coachingLabel}</p>
-                  <ul className="mt-2 space-y-0.5">
-                    {coachingServices.map((item) => (
-                      <li key={item.href}>
-                        <Link
-                          href={localizedHref(item.href)}
-                          aria-current={barePathname === item.href ? "page" : undefined}
-                          onClick={closeMobileMenu}
-                          className={mobileSubLinkClass}
-                        >
-                          {item.label}
                         </Link>
                       </li>
                     ))}

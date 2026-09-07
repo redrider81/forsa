@@ -15,7 +15,7 @@ import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 export const metadata: Metadata = {
   title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
   description:
-    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för ledare, medarbetare, team och ledningsgrupper.",
+    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare, ledare och team.",
 };
 
 const t = svDictionary;

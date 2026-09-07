@@ -21,8 +21,7 @@ const principles = [
 const audiences = [
   "Private clients facing a choice, a change or a decision that carries weight.",
   "Leaders and employees who need to think clearly with someone outside the organisation.",
-  "Teams and executive teams where accountability, priorities and decisions need sharpening.",
-  "Organisations developing several managers together.",
+  "Teams where accountability, priorities and decisions need sharpening.",
 ];
 
 export default function AboutPageEn() {

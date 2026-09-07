@@ -21,13 +21,11 @@ export type Dictionary = {
     about: string;
     contact: string;
     leadershipLabel: string;
-    coachingLabel: string;
     startHereLabel: string;
     unsureTitle: string;
     unsureBody: string;
     bookFirstCall: string;
     login: string;
-    teamCoaching: string;
   };
   footer: {
     description: string;
@@ -38,7 +36,6 @@ export type Dictionary = {
     clientPortal: string;
     coachLogin: string;
     copyright: string;
-    teamCoaching: string;
   };
   cta: {
     primary: string;

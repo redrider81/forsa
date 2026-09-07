@@ -24,8 +24,7 @@ const principles = [
 const audiences = [
   "Privatpersoner som står inför ett vägval, en förändring eller ett beslut som väger.",
   "Ledare och medarbetare som behöver tänka klart med någon utanför organisationen.",
-  "Team och ledningsgrupper där ansvar, prioritering och beslut behöver skärpas.",
-  "Organisationer som vill utveckla flera chefer inom ett gemensamt program.",
+  "Team där ansvar, prioritering och beslut behöver skärpas.",
 ];
 
 export default function AboutPage() {

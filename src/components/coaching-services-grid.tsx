@@ -35,7 +35,7 @@ const servicesSv: Service[] = [
     href: "/business-coaching",
     title: "Business coaching",
     description:
-      "För ledare, medarbetare, team och ledningsgrupper — där besluten också ska bära i organisationen.",
+      "För medarbetare, ledare och team — där besluten också ska bära i organisationen.",
     ctaLabel: "Läs mer",
     image: "/business-coaching-workshop.jpg",
     imageAlt: "Business coaching i workshopmiljö med whiteboard",
@@ -58,7 +58,7 @@ const servicesEn: Service[] = [
     href: "/en/business-coaching",
     title: "Business coaching",
     description:
-      "For leaders, employees, teams and executive teams — where decisions also have to hold in the organisation.",
+      "For employees, leaders and teams — where decisions also have to hold in the organisation.",
     ctaLabel: "Learn more",
     image: "/business-coaching-workshop.jpg",
     imageAlt: "Business coaching in a workshop setting with a whiteboard",

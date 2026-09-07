@@ -8,7 +8,7 @@ import StaggerCards from "@/components/animations/StaggerCards";
 export const metadata: Metadata = {
   title: "Business coaching i Göteborg | CVB Coaching",
   description:
-    "Business coaching hos CVB Coaching i Göteborg. För ledare, medarbetare, team och ledningsgrupper — executive coaching, ledningsgruppscoaching, teamcoaching och coachande ledarskap.",
+    "Business coaching hos CVB Coaching i Göteborg. Coaching i arbetslivet, enskilt med en medarbetare eller ledare, eller tillsammans med ett team.",
 };
 
 const relevanceList = [
@@ -18,29 +18,6 @@ const relevanceList = [
   "Beslut fattas i rummet men tappar kraft i vardagen.",
   "Friktion finns men benämns inte, och sänker tempot utan adressat.",
   "En nyckelperson ska bära mer och behöver någon att tänka med.",
-];
-
-const formats = [
-  {
-    href: "/executive-coaching",
-    title: "Executive coaching",
-    body: "För vd, grundare och seniora ledare. Ett rum utan intern agenda, för beslut med höga konsekvenser.",
-  },
-  {
-    href: "/ledningsgruppscoaching",
-    title: "Ledningsgruppscoaching",
-    body: "För ledningsgrupper där prioriteringar glider och beslut tappar kraft mellan mötena.",
-  },
-  {
-    href: "/team-coaching",
-    title: "Teamcoaching",
-    body: "För team och projektgrupper med höga krav och outtalat arbetssätt.",
-  },
-  {
-    href: "/coachande-ledarskap",
-    title: "Coachande ledarskap",
-    body: "Programformat för organisationer som vill utveckla chefers förmåga att leda genom samtal.",
-  },
 ];
 
 const nonGoals = [
@@ -80,8 +57,8 @@ export default function BusinessCoachingPage() {
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
               Business coaching är coaching i ett sammanhang där någon annan än deltagaren betalar,
-              och där besluten också ska hålla i organisationen. Det gäller enskilda ledare och
-              medarbetare lika väl som team och ledningsgrupper.
+              och där besluten också ska hålla i organisationen. Det gäller enskilda medarbetare och
+              ledare lika väl som team.
             </p>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
               Söker du coaching för egen räkning, se{" "}
@@ -126,36 +103,6 @@ export default function BusinessCoachingPage() {
                 </li>
               ))}
             </ul>
-          </ScrollReveal>
-        </section>
-
-        {/* Cards: formats */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <div data-col-left className="md:col-span-5">
-              <h2 className="text-3xl font-medium leading-tight tracking-tight">
-                Fyra former, samma arbetssätt
-              </h2>
-              <p className="mt-6 max-w-md text-lg leading-8 text-zinc-700">
-                Vilken form som passar avgörs av vem frågan angår. Det tar vi i det första samtalet
-                — ni behöver inte veta det i förväg.
-              </p>
-            </div>
-            <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
-              {formats.map((item) => (
-                <Link
-                  data-card
-                  key={item.href}
-                  href={item.href}
-                  className="group rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
-                >
-                  <span className="block text-lg font-medium leading-tight tracking-tight text-zinc-900 transition-colors group-hover:text-[#92753a]">
-                    {item.title}
-                  </span>
-                  <span className="mt-3 block leading-relaxed">{item.body}</span>
-                </Link>
-              ))}
-            </StaggerCards>
           </ScrollReveal>
         </section>
 

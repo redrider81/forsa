@@ -19,14 +19,7 @@ export const professionalServiceSchema = {
   email: "kontakt@cvbcoaching.se",
   areaServed: ["Göteborg", "Sverige"],
   availableLanguage: ["sv", "en"],
-  serviceType: [
-    "Individuell coaching",
-    "Business coaching",
-    "Executive coaching",
-    "Ledningsgruppscoaching",
-    "Teamcoaching",
-    "Coachande ledarskap",
-  ],
+  serviceType: ["Individuell coaching", "Business coaching"],
   founder: {
     "@type": "Person",
     name: "Carolina von Braun",

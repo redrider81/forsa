@@ -18,13 +18,11 @@ export const enDictionary = {
     contact: "Contact",
     login: "Log in",
     leadershipLabel: "Two ways in",
-    coachingLabel: "Within business coaching",
     startHereLabel: "Not sure?",
     unsureTitle: "Not sure which way is yours?",
     unsureBody:
       "Start with a conversation. We work out together where the question belongs.",
     bookFirstCall: "Book an initial conversation →",
-    teamCoaching: "Team coaching",
   },
   footer: {
     description: "Individual coaching and business coaching, from Gothenburg.",
@@ -35,7 +33,6 @@ export const enDictionary = {
     clientPortal: "Log in – client",
     coachLogin: "Log in – coach",
     copyright: "© 2026 CVB Coaching",
-    teamCoaching: "Team coaching",
   },
   cta: {
     primary: "Book an initial conversation",
