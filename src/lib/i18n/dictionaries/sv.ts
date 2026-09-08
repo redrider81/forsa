@@ -36,7 +36,7 @@ export const svDictionary = {
     copyright: "© 2026 CVB Coaching",
   },
   cta: {
-    primary: "Boka ett första samtal",
+    primary: "Boka ett inledande samtal",
     secondary: "Se de två sätten att arbeta",
     tertiary: "Omfattning och investering",
     engagementLink: "Så går det till →",

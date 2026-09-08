@@ -8,36 +8,34 @@ import StaggerCards from "@/components/animations/StaggerCards";
 export const metadata: Metadata = {
   title: "Business coaching i Göteborg | CVB Coaching",
   description:
-    "Business coaching hos CVB Coaching i Göteborg. Coaching i arbetslivet, enskilt med en medarbetare eller ledare, eller tillsammans med ett team.",
+    "Personlig business coaching med Carolina von Braun för medarbetare och ledare som behöver tänka klart i en arbetsrelaterad fråga. Företaget kan initiera och finansiera coachingen; samtalen är individuella och konfidentiella.",
 };
 
 const relevanceList = [
-  "Ett vägval ska avgöras innan informationen är komplett.",
-  "Ansvaret i en roll har vuxit fortare än mandatet.",
-  "Prioriteringarna skiftar oftare än verksamheten hinner ställa om.",
-  "Beslut fattas i rummet men tappar kraft i vardagen.",
-  "Friktion finns men benämns inte, och sänker tempot utan adressat.",
-  "En nyckelperson ska bära mer och behöver någon att tänka med.",
+  "Du står inför ett vägval eller beslut och behöver tänka klart innan du går vidare.",
+  "Du har fått ett större ansvar eller befinner dig i en förändring.",
+  "Prioriteringarna skiftar och du behöver sortera vad som är viktigast.",
+  "Ett beslut har fattats, men behöver få fäste i vardagen.",
+  "Du behöver prata fritt och konfidentiellt utanför den egna arbetsplatsen.",
 ];
 
 const nonGoals = [
-  "Inte managementkonsultation. Inga färdiga rekommendationer, och besluten förblir era.",
-  "Inte teambuilding eller övningar utan koppling till verkligt arbete.",
-  "Inte en engångsinsats som lämnas utan uppföljning.",
+  "Inte rådgivning med färdiga rekommendationer. Du äger dina beslut.",
+  "Inte terapi eller behandling. Om frågan handlar om ohälsa är terapi rätt väg.",
+  "Inte ett standardiserat program. Upplägget följer frågan och det du vill bli klarare i.",
 ];
 
 const processList = [
-  "Ett första samtal, konfidentiellt. Vi avgör tillsammans om frågan hör hemma här.",
-  "Mål, omfattning och sekretess är överenskomna innan arbetet börjar.",
-  "Vad som återkopplas till beställaren bestäms i förväg.",
-  "Avstämning mot målen under uppdragets gång.",
-  "Avslut mot de mål som sattes vid start, och beslut om fortsättning eller avslut.",
+  "Företaget kan ta den första kontakten och finansiera coachingen.",
+  "Jag pratar med företaget om behovet, ramarna för samarbetet och hur kontakten fungerar.",
+  "Coachingen sker sedan i en personlig och konfidentiell relation mellan Carolina och klienten.",
+  "Om någon återkoppling till beställaren är relevant är den tydligt överenskommen i förväg.",
 ];
 
 const valueList = [
-  "Kortare väg från diskussion till fattat beslut.",
-  "Ansvar som är uttalat i stället för underförstått.",
-  "Beslut som håller hela vägen ut i vardagen.",
+  "Vad frågan faktiskt handlar om.",
+  "Vilka alternativ som finns och vad de innebär.",
+  "Vilket nästa steg som är rätt för dig.",
 ];
 
 export default function BusinessCoachingPage() {
@@ -53,15 +51,18 @@ export default function BusinessCoachingPage() {
               Business coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Beslut som bär längre än till nästa möte.
+              En fråga i arbetslivet behöver ibland ett eget rum.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Business coaching är coaching i ett sammanhang där någon annan än deltagaren betalar,
-              och där besluten också ska hålla i organisationen. Det gäller enskilda medarbetare och
-              ledare lika väl som team.
+              Business coaching är personlig coaching i arbetslivet. Den passar medarbetare och
+              ledare som behöver tänka klart i en arbetsrelaterad fråga.
+            </p>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
+              Företaget kan ta den första kontakten och finansiera coachingen, medan samtalen är
+              individuella och konfidentiella.
             </p>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
-              Söker du coaching för egen räkning, se{" "}
+              Betalar du själv för coachingen, se{" "}
               <Link href="/individuell-coaching" className="underline underline-offset-2 hover:text-zinc-900">
                 Individuell coaching
               </Link>
@@ -74,16 +75,16 @@ export default function BusinessCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Kompetensen finns. Utrymmet att tänka gör det inte alltid.
+              Du tänker inte i ett vakuum
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                I en organisation är varje intern samtalspartner också part i frågan. Det gör det
-                svårt att pröva ett resonemang innan det blir ett besked.
+                I arbetslivet påverkas en fråga ofta av ansvar, relationer och förväntningar. I
+                coachingen är fokus ändå din situation, dina överväganden och dina val.
               </p>
               <p>
-                Det är den funktionen CVB Coaching fyller: en utomstående som inte har något att
-                vinna på vilket beslut ni landar i, bara på att det är genomtänkt.
+                Jag är en utomstående samtalspartner utan egen agenda i beslutet. Min uppgift är att
+                hjälpa dig tänka klart — inte att tala om för dig vad du ska göra.
               </p>
             </div>
           </ScrollReveal>
@@ -92,7 +93,7 @@ export default function BusinessCoachingPage() {
         {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium tracking-tight">
-            Sex lägen där det gör störst skillnad
+            När coaching i arbetslivet kan vara rätt
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -110,7 +111,7 @@ export default function BusinessCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Så ser ett uppdrag ut
+              Så fungerar ett samarbete
             </h2>
             <div data-col-right className="md:col-span-7">
               <ScrollReveal variant="staggerList">
@@ -144,7 +145,7 @@ export default function BusinessCoachingPage() {
 
         {/* Cards: value */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Förväntat utfall</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Det du kan bli klarare i</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
             {valueList.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
@@ -159,18 +160,16 @@ export default function BusinessCoachingPage() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              Ett coachingsamarbete över tid
+              Ett samarbete som följer frågan
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Ett uppdrag löper över en överenskommen period, och upplägget är detsamma oavsett om
-                jag arbetar med en medarbetare, en ledare eller ett team. Det är sammanhanget som
-                skiljer, inte arbetssättet.
+                Om frågan behöver följas över tid kommer du och jag överens om ett upplägg som passar
+                din situation.
               </p>
               <p>
-                Samtalen planerar vi tillsammans och fördelar över perioden. De följer inget fast
-                schema — vi lägger dem där de gör mest nytta, och flyttar dem när verksamheten kräver
-                det. Ramen är överenskommen, innehållet är ert.
+                Vi bestämmer rytmen tillsammans och stämmer löpande av om fokus fortfarande är rätt.
+                När arbetet är klart avslutar vi med ett samtal om vad du vill ta med dig vidare.
               </p>
             </div>
           </ScrollReveal>
@@ -180,14 +179,15 @@ export default function BusinessCoachingPage() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              Nästa steg
+              Boka ett inledande samtal
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Beskriv kort vilken fråga som ligger på bordet. Samtalet är konfidentiellt.
+              Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
+              Samtalet är konfidentiellt.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">
-                Boka ett första samtal
+                Boka ett inledande samtal
               </CtaLink>
             </div>
           </ScrollReveal>

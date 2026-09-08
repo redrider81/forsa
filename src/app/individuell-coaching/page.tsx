@@ -61,7 +61,8 @@ export default function IndividuellCoachingPage() {
               längre med den än du gör på egen hand.
             </p>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
-              Betalas samtalen av en arbetsgivare, eller gäller frågan ett team, se{" "}
+              Betalas coachingen av en arbetsgivare, eller gäller frågan din roll i arbetslivet,
+              se{" "}
               <Link href="/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
                 Business coaching
               </Link>
@@ -206,11 +207,12 @@ export default function IndividuellCoachingPage() {
               Nästa steg
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Skriv några rader om vad du vill ta upp, och välj en tid som passar.
+              Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat
+              allt. Samtalet är konfidentiellt.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">
-                Boka ett första samtal
+                Boka ett inledande samtal
               </CtaLink>
             </div>
           </ScrollReveal>

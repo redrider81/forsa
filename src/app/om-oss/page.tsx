@@ -23,8 +23,8 @@ const principles = [
 
 const audiences = [
   "Privatpersoner som står inför ett vägval, en förändring eller ett beslut som väger.",
-  "Ledare och medarbetare som behöver tänka klart med någon utanför organisationen.",
-  "Team där ansvar, prioritering och beslut behöver skärpas.",
+  "Medarbetare och ledare som behöver tänka klart med någon utanför den egna arbetsplatsen.",
+  "Personer som vill sortera ansvar, prioriteringar eller beslut i en arbetsrelaterad situation.",
 ];
 
 export default function AboutPage() {
@@ -56,12 +56,12 @@ export default function AboutPage() {
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                De flesta av oss har människor omkring oss som vill väl. Färre har någon vars enda
-                uppgift är att hjälpa oss tänka färdigt, utan att ha en åsikt om utgången.
+                De flesta har människor omkring sig som vill väl. Färre har någon vars enda
+                uppgift är att hjälpa dig att tänka färdigt, utan att ha en åsikt om utgången.
               </p>
               <p>
-                CVB Coaching finns för att göra den platsen tillgänglig — för den som kommer på egen
-                hand och för den som kommer genom sitt arbete.
+                Jag erbjuder den platsen — för dig som kommer på egen hand och för dig som kommer
+                genom ditt arbete.
               </p>
             </div>
           </ScrollReveal>
@@ -92,9 +92,9 @@ export default function AboutPage() {
                 varandra.
               </p>
               <p>
-                I coachingen är rollerna tydliga: klienten äger sina mål, insikter och beslut. CVB
-                Coachings uppgift är att skapa skärpa i tänkandet, utmana perspektiv och föra
-                samtalet framåt utan att ta över slutsatserna.
+                I coachingen är rollerna tydliga: klienten äger sina mål, insikter och beslut. Min
+                uppgift är att skapa skärpa i tänkandet, pröva perspektiv och föra samtalet framåt
+                utan att ta över dina slutsatser.
               </p>
             </div>
           </ScrollReveal>
@@ -124,7 +124,7 @@ export default function AboutPage() {
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>Vad som sägs i samtalet behandlas konfidentiellt.</p>
               <p>
-                När samtalen beställs av någon annan än deltagaren kommer vi överens om vad som
+                När samtalen beställs av någon annan än klienten kommer vi överens om vad som
                 återkopplas, innan arbetet börjar.
               </p>
             </div>
@@ -162,10 +162,11 @@ export default function AboutPage() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              Nästa steg
+              Boka ett inledande samtal
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Skriv några rader om vad du vill ta upp, och välj en tid som passar.
+              Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
+              Samtalet är konfidentiellt.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">{t.cta.primary}</CtaLink>
