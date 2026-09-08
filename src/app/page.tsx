@@ -190,7 +190,8 @@ export default function HomePage() {
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">01</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Klarhet</h3>
                 <p data-row-body className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl">
-                  Vi sorterar vad frågan faktiskt handlar om och vad som är viktigast för dig.
+                  Jag hjälper dig att sortera vad frågan faktiskt handlar om och vad som är
+                  viktigast för dig.
                 </p>
               </div>
             </article>
@@ -199,7 +200,8 @@ export default function HomePage() {
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">02</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Beslut</h3>
                 <p data-row-body className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl">
-                  Vi prövar dina alternativ och ser vad du väljer, vad du väljer bort och varför.
+                  Jag hjälper dig att pröva dina alternativ och se vad du väljer, vad du väljer
+                  bort och varför.
                 </p>
               </div>
             </article>
@@ -264,8 +266,8 @@ export default function HomePage() {
               </p>
               <p>
                 Därefter sker coachingen i en personlig och konfidentiell relation mellan Carolina
-                och klienten. I det första samtalet pratar vi om behovet, ramarna för samarbetet och
-                hur kontakten fungerar.
+                och klienten. I den första dialogen pratar jag med företaget om behovet, ramarna
+                för samarbetet och hur kontakten fungerar.
               </p>
             </div>
           </ScrollReveal>

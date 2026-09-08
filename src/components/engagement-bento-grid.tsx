@@ -17,25 +17,25 @@ const stepsSv: Step[] = [
   {
     index: "01",
     title: "Första samtalet",
-    body: "Konfidentiellt. Vi pratar om din situation och ser tillsammans om coaching är rätt stöd och om vi fungerar bra ihop.",
+    body: "Konfidentiellt. Du berättar om din situation, och tillsammans ser vi om coaching är rätt stöd och om vi fungerar bra ihop.",
     layout: "md:col-span-6 lg:col-span-7",
   },
   {
     index: "02",
     title: "Vad du vill bli klarare i",
-    body: "Vi sätter ord på vad du vill bli klarare i och vad du vill kunna göra annorlunda.",
+    body: "Jag hjälper dig att sätta ord på vad du vill bli klarare i och vad du vill kunna göra annorlunda.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "03",
     title: "Samtalen",
-    body: "Vi bestämmer rytmen tillsammans. Varje samtal avslutas med något du tar med dig vidare.",
+    body: "Du och jag bestämmer rytmen tillsammans. Varje samtal avslutas med något du tar med dig vidare.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "04",
     title: "Avslut",
-    body: "Vi stämmer av mot det du ville uppnå och ser tillsammans om arbetet är klart eller ska fortsätta.",
+    body: "Du och jag stämmer av mot det du ville uppnå och ser tillsammans om arbetet är klart eller ska fortsätta.",
     layout: "md:col-span-6 lg:col-span-7",
   },
 ];
