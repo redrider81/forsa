@@ -17,25 +17,25 @@ const stepsSv: Step[] = [
   {
     index: "01",
     title: "Första samtalet",
-    body: "Konfidentiellt. Vi avgör tillsammans om frågan hör hemma här, och om vi fungerar ihop.",
+    body: "Konfidentiellt. Vi pratar om din situation och ser tillsammans om coaching är rätt stöd och om vi fungerar bra ihop.",
     layout: "md:col-span-6 lg:col-span-7",
   },
   {
     index: "02",
-    title: "Vad du vill ha ut",
-    body: "Vi sätter ord på vad som ska vara annorlunda när vi är klara. Utan det blir samtal bara samtal.",
+    title: "Vad du vill bli klarare i",
+    body: "Vi sätter ord på vad som behöver bli annorlunda för att samtalen ska göra verklig skillnad.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "03",
     title: "Samtalen",
-    body: "Vi bestämmer rytmen tillsammans. Varje samtal slutar med något du tar med dig.",
+    body: "Vi bestämmer rytmen tillsammans. Varje samtal avslutas med något du tar med dig vidare.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "04",
     title: "Avslut",
-    body: "Vi stämmer av mot det du ville uppnå, och avgör om arbetet är klart eller ska fortsätta.",
+    body: "Vi stämmer av mot det du ville uppnå och avgör om arbetet är klart eller ska fortsätta.",
     layout: "md:col-span-6 lg:col-span-7",
   },
 ];
@@ -44,19 +44,19 @@ const stepsEn: Step[] = [
   {
     index: "01",
     title: "The first conversation",
-    body: "Confidential. We work out together whether the question belongs here, and whether we are a good fit.",
+    body: "Confidential. We talk about your situation and work out together whether coaching is the right support and whether we are a good fit.",
     layout: "md:col-span-6 lg:col-span-7",
   },
   {
     index: "02",
-    title: "What you want from it",
-    body: "We put into words what should be different by the end. Without that, sessions are only sessions.",
+    title: "What you want to get clearer about",
+    body: "We put into words what needs to be different for the conversations to make a real difference.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "03",
     title: "The sessions",
-    body: "We set the rhythm together. Every session ends with something you take away with you.",
+    body: "We set the rhythm together. Every conversation ends with something you take further.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {

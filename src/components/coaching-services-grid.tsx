@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,8 +13,6 @@ type Service = {
   title: string;
   description: string;
   ctaLabel: string;
-  image?: string;
-  imageAlt?: string;
   spanClass?: string;
 };
 
@@ -27,8 +24,6 @@ const servicesSv: Service[] = [
     description:
       "För dig som står inför ett vägval, en förändring eller ett beslut som behöver få ta plats.",
     ctaLabel: "Läs om individuell coaching",
-    image: "/individuell-coaching.jpg",
-    imageAlt: "Individuellt coachingsamtal i lugn miljö",
   },
   {
     index: "02",
@@ -37,10 +32,6 @@ const servicesSv: Service[] = [
     description:
       "För medarbetare och ledare som behöver klarhet, riktning eller stöd i en arbetsrelaterad situation.",
     ctaLabel: "Läs om business coaching",
-    // TODO: Replace business-coaching image with a calm one-to-one work-life coaching image.
-    // Avoid workshop, team, whiteboard, boardroom and dashboard imagery.
-    image: "/business-coaching-workshop.jpg",
-    imageAlt: "Business coaching hos CVB Coaching",
   },
 ];
 
@@ -52,8 +43,6 @@ const servicesEn: Service[] = [
     description:
       "For you who are facing a choice, a change or a decision that needs room to be thought through.",
     ctaLabel: "Read about individual coaching",
-    image: "/individuell-coaching.jpg",
-    imageAlt: "Individual coaching session in a calm setting",
   },
   {
     index: "02",
@@ -62,10 +51,6 @@ const servicesEn: Service[] = [
     description:
       "For employees and leaders who need clarity, direction or support in a work-related situation.",
     ctaLabel: "Read about business coaching",
-    // TODO: Replace business-coaching image with a calm one-to-one work-life coaching image.
-    // Avoid workshop, team, whiteboard, boardroom and dashboard imagery.
-    image: "/business-coaching-workshop.jpg",
-    imageAlt: "Business coaching at CVB Coaching",
   },
 ];
 
@@ -338,19 +323,7 @@ export default function CoachingServicesGrid({ locale }: Props) {
                     →
                   </span>
                 </div>
-                {service.image ? (
-                  <div className="relative mt-6 aspect-[5/4] w-full overflow-hidden rounded-xl border border-zinc-200/80 bg-zinc-100">
-                    <Image
-                      src={service.image}
-                      alt={service.imageAlt ?? service.title}
-                      fill
-                      sizes="(min-width: 768px) 28vw, 100vw"
-                      className="object-cover object-center"
-                      quality={85}
-                    />
-                  </div>
-                ) : null}
-                <h3 className={`text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900 ${service.image ? "mt-6" : "mt-7"}`}>
+                <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">
                   {service.title}
                 </h3>
                 <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">

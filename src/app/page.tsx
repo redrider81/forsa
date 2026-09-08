@@ -90,7 +90,7 @@ export default function HomePage() {
                 data-hero-cta
                 className="mt-5 text-[0.8125rem] leading-[1.6] text-white/75 drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]"
               >
-                Ett första samtal är konfidentiellt.
+                Ett första samtal är konfidentiellt. Du behöver inte ha formulerat allt.
               </p>
             </HeroReveal>
           </div>
@@ -190,7 +190,7 @@ export default function HomePage() {
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">01</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Klarhet</h3>
                 <p data-row-body className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl">
-                  Frågan du kommer med är sällan den som avgör. Arbetet börjar med att skilja dem åt.
+                  Vi sorterar vad frågan faktiskt handlar om och vad som är viktigast för dig.
                 </p>
               </div>
             </article>
@@ -199,8 +199,7 @@ export default function HomePage() {
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">02</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Beslut</h3>
                 <p data-row-body className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl">
-                  Ett beslut prövas innan det fattas. Vad du väger mot vad, vad du faktiskt vet och
-                  vad du väljer bort.
+                  Vi prövar dina alternativ och ser vad du väljer, vad du väljer bort och varför.
                 </p>
               </div>
             </article>
@@ -209,8 +208,7 @@ export default function HomePage() {
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">03</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Riktning</h3>
                 <p data-row-body className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl">
-                  Det avgörande händer mellan samtalen. Vi stämmer av vad du faktiskt gjorde, inte vad
-                  du tänkte göra.
+                  Du omsätter det du kommit fram till i nästa steg som fungerar i din vardag.
                 </p>
               </div>
             </article>
@@ -220,6 +218,39 @@ export default function HomePage() {
 
         <EngagementSection locale="sv" />
 
+        <section data-parallax-section className="py-16 md:py-20">
+          <ScrollReveal variant="fadeUp">
+            <h2 className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+              Du behöver inte veta allt från början
+            </h2>
+            <p className="mt-6 max-w-2xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
+              Du behöver inte veta i förväg hur många samtal som behövs eller exakt vad frågan ska
+              heta. Det klarnar i det första samtalet.
+            </p>
+            <div className="mt-9">
+              <CtaLink href="/kontakt" variant="primary">Boka ett inledande samtal</CtaLink>
+            </div>
+          </ScrollReveal>
+        </section>
+
+        <section data-parallax-section className="border-t border-line-accent/30 py-16 md:py-20">
+          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+            <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+              Stöd mellan samtalen
+            </h2>
+            <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
+              <p>
+                Coaching handlar inte bara om vad som sägs i rummet. När det är relevant används CVB
+                Base som ett personligt stöd för förberedelse, reflektion och material mellan samtal.
+              </p>
+              <p>
+                Det hjälper dig att behålla sammanhanget i det du arbetar med — utan att ersätta det
+                personliga samtalet.
+              </p>
+            </div>
+          </ScrollReveal>
+        </section>
+
         <section data-parallax-section className="py-20 md:py-24">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
             <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
@@ -228,8 +259,11 @@ export default function HomePage() {
             <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
               <p>
                 CVB Coaching arbetar med enskilda medarbetare och ledare i arbetslivet. Företaget kan
-                initiera och finansiera coachingen, medan samtalen är personliga och konfidentiella.
-                Ramar och kontaktvägar tydliggörs i den första dialogen.
+                ta den första kontakten och finansiera coachingen.
+              </p>
+              <p>
+                Därefter sker coachingen i en personlig och konfidentiell relation mellan Carolina
+                och klienten. I det första samtalet tydliggör vi behov, ramar och kontaktvägar.
               </p>
             </div>
           </ScrollReveal>
@@ -256,11 +290,15 @@ export default function HomePage() {
               Boka ett inledande samtal
             </h2>
             <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">
-              Skriv några rader om vad det gäller och välj en tid. Samtalet är konfidentiellt.
+              Skriv kort om det du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
+              Samtalet är konfidentiellt.
             </p>
             <div data-cta-actions className="mt-12 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">Boka ett inledande samtal</CtaLink>
             </div>
+            <p data-cta-actions className="mt-5 text-[0.875rem] leading-[1.6] text-zinc-500">
+              Personlig coaching · Konfidentiella samtal · Göteborg eller digitalt
+            </p>
           </ScrollReveal>
         </section>
 
