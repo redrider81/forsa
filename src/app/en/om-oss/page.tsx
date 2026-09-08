@@ -20,8 +20,8 @@ const principles = [
 
 const audiences = [
   "Private clients facing a choice, a change or a decision that carries weight.",
-  "Leaders and employees who need to think clearly with someone outside the organisation.",
-  "Teams where accountability, priorities and decisions need sharpening.",
+  "Employees and leaders who need to think clearly with someone outside their own workplace.",
+  "People who want to sort out responsibility, priorities or decisions in a work-related situation.",
 ];
 
 export default function AboutPageEn() {
@@ -52,11 +52,11 @@ export default function AboutPageEn() {
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
                 Most of us have people around us who mean well. Fewer have someone whose only job is
-                to help us finish the thinking, without holding a view on how it ends.
+                to help you finish the thinking, without holding a view on how it ends.
               </p>
               <p>
-                CVB Coaching exists to make that available — to people who come on their own, and to
-                people who come through their work.
+                I offer that space — for you who come on your own, and for you who come through
+                your work.
               </p>
             </div>
           </ScrollReveal>
@@ -117,8 +117,8 @@ export default function AboutPageEn() {
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>What is said in the session is treated in confidence.</p>
               <p>
-                When the sessions are commissioned by someone other than the participant, we agree
-                what is shared back before the work begins.
+                When the sessions are commissioned by someone other than the client, we agree what
+                is shared back before the work begins.
               </p>
             </div>
           </ScrollReveal>
@@ -154,14 +154,15 @@ export default function AboutPageEn() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              Next step
+              Book an introductory conversation
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Write a few lines about what you would like to bring, and pick a time that suits you.
+              Tell me briefly what you would like to talk about and choose a time. You do not need to
+              have everything formulated. The conversation is confidential.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">
-                Book an initial conversation
+                Book an introductory conversation
               </CtaLink>
             </div>
           </ScrollReveal>

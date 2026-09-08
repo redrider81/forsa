@@ -22,7 +22,7 @@ export const enDictionary = {
     unsureTitle: "Not sure which way is yours?",
     unsureBody:
       "Start with a conversation. We work out together where the question belongs.",
-    bookFirstCall: "Book an initial conversation →",
+    bookFirstCall: "Book an introductory conversation →",
   },
   footer: {
     description: "Individual coaching and business coaching, from Gothenburg.",
@@ -35,7 +35,7 @@ export const enDictionary = {
     copyright: "© 2026 CVB Coaching",
   },
   cta: {
-    primary: "Book an initial conversation",
+    primary: "Book an introductory conversation",
     secondary: "Two ways in",
     tertiary: "Scope",
     engagementLink: "How it works →",

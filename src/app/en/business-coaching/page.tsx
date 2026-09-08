@@ -8,35 +8,34 @@ import StaggerCards from "@/components/animations/StaggerCards";
 export const metadata: Metadata = {
   title: "Business coaching in Gothenburg | CVB Coaching",
   description:
-    "Business coaching at CVB Coaching in Gothenburg. Coaching in working life, one to one with an employee or a leader, or together with a team.",
+    "Personal business coaching with Carolina von Braun for employees and leaders who need to think clearly about a work-related question. A company may initiate and fund the coaching; the conversations are individual and confidential.",
 };
 
 const relevanceList = [
-  "A choice has to be settled before the information is complete.",
-  "Accountability in a role has grown faster than the mandate.",
-  "Priorities shift more often than the organisation can adjust.",
-  "Decisions are made in the room but lose force in day-to-day work.",
-  "Tension is there but never gets named, and it slows everything down.",
-  "A key person is being asked to carry more and needs someone to think with.",
+  "You are facing a choice or decision and need to think clearly before moving forward.",
+  "You have taken on greater responsibility or are going through a change.",
+  "Priorities are shifting and you need to sort out what matters most.",
+  "A decision has been made but needs to take root in everyday work.",
+  "You need to speak freely and confidentially outside your workplace.",
 ];
 
 const nonGoals = [
-  "Not management consulting. No ready-made recommendations, and the decisions stay yours.",
-  "Not team-building or exercises detached from real work.",
+  "Not advice with ready-made recommendations. You own your decisions.",
+  "Not therapy or treatment. If the question is about ill health, therapy is the right route.",
+  "Not a standardised programme. The shape follows the question and what you want to get clearer about.",
 ];
 
 const processList = [
-  "A first conversation, in confidence. We work out together whether the question belongs here.",
-  "Objectives, scope and confidentiality are agreed before the work begins.",
-  "What is shared back with whoever commissioned the work is settled up front.",
-  "Progress is reviewed against the objectives as the work goes on.",
-  "The work closes against what was set out at the start, and you decide whether it continues.",
+  "A company may make the first contact and fund the coaching.",
+  "I speak with the company about the need, the boundaries of the collaboration and how contact works.",
+  "The coaching then happens in a personal, confidential relationship between Carolina and the client.",
+  "If any feedback to the buyer is relevant, it is clearly agreed in advance.",
 ];
 
 const outcomes = [
-  "A shorter path from discussion to a decision made.",
-  "Accountability that is spoken rather than assumed.",
-  "Decisions that hold all the way into day-to-day work.",
+  "What the question is really about.",
+  "Which options exist and what they involve.",
+  "What next step is right for you.",
 ];
 
 export default function BusinessCoachingPageEn() {
@@ -50,15 +49,18 @@ export default function BusinessCoachingPageEn() {
               Business coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
-              Decisions that outlast the meeting.
+              A work-life question sometimes needs its own space.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Business coaching is coaching in a setting where someone other than the participant is
-              paying, and where the decisions also have to hold in the organisation. That covers
-              individual employees and leaders as much as teams.
+              Business coaching is personal coaching in a work-life context. It is for employees and
+              leaders who need to think clearly about a work-related question.
+            </p>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
+              A company may make the first contact and fund the coaching, while the conversations
+              remain individual and confidential.
             </p>
             <p className="mt-6 max-w-3xl text-base leading-7 text-zinc-600">
-              If you are booking for yourself, see{" "}
+              If you are funding the coaching yourself, see{" "}
               <Link href="/en/individuell-coaching" className="underline underline-offset-2 hover:text-zinc-900">
                 Individual coaching
               </Link>
@@ -70,16 +72,17 @@ export default function BusinessCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              The experience is there. The space to think is not always.
+              You do not think in a vacuum
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                Inside an organisation, every conversation partner also has a stake in the question.
-                That makes it hard to test an argument before it becomes an announcement.
+                At work, a question is often shaped by responsibility, relationships, and
+                expectations. In coaching, the focus is still your situation, your considerations,
+                and your choices.
               </p>
               <p>
-                That is what CVB Coaching provides: an outside perspective with no stake in which
-                decision you make — only in whether it has been properly thought through.
+                I am an outside conversation partner with no stake in your decision. My role is to
+                help you think clearly — not to tell you what to do.
               </p>
             </div>
           </ScrollReveal>
@@ -87,7 +90,7 @@ export default function BusinessCoachingPageEn() {
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium tracking-tight">
-            Six situations where it makes the greatest difference
+            When coaching at work can be right
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -104,7 +107,7 @@ export default function BusinessCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              How an engagement works
+              How a company-funded collaboration works
             </h2>
             <div data-col-right className="md:col-span-7">
               <ScrollReveal variant="staggerList">
@@ -136,7 +139,7 @@ export default function BusinessCoachingPageEn() {
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">Expected outcome</h2>
+          <h2 className="text-3xl font-medium tracking-tight">What you can become clearer about</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
             {outcomes.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
@@ -150,18 +153,16 @@ export default function BusinessCoachingPageEn() {
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
-              A coaching collaboration over time
+              A collaboration that follows the question
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                An engagement runs over an agreed period, and the shape of it is the same whether I
-                work with an employee, a leader or a team. What differs is the setting, not the way
-                of working.
+                If the question needs following over time, you and I agree a shape that suits your
+                situation.
               </p>
               <p>
-                We plan the sessions together and spread them across the period. They follow no fixed
-                schedule — we place them where they do the most good, and move them when the business
-                calls for it. The frame is agreed; the content is yours.
+                We set the rhythm together and keep checking whether the focus is still right. When
+                the work is done, we close with a conversation about what you want to take forward.
               </p>
             </div>
           </ScrollReveal>
@@ -170,14 +171,15 @@ export default function BusinessCoachingPageEn() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              Next step
+              Book an introductory conversation
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Briefly describe the question on the table. The conversation is confidential.
+              Tell me briefly what you would like to talk about and choose a time. You do not need to
+              have everything formulated. The conversation is confidential.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">
-                Book an initial conversation
+                Book an introductory conversation
               </CtaLink>
             </div>
           </ScrollReveal>

@@ -6,7 +6,6 @@ import HeroVideoBackground from "@/components/hero-video-background";
 import ParallaxController from "@/components/animations/ParallaxController";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
-import EditorialImageTransition from "@/components/animations/EditorialImageTransition";
 import CoachingServicesGrid from "@/components/coaching-services-grid";
 import EngagementSection from "@/components/engagement-section";
 import type { Metadata } from "next";
@@ -16,7 +15,7 @@ import { enDictionary } from "@/lib/i18n/dictionaries/en";
 export const metadata: Metadata = {
   title: "CVB Coaching – individual and business coaching in Gothenburg",
   description:
-    "CVB Coaching in Gothenburg. Individual coaching for anyone facing a choice or a change, and business coaching for employees, leaders and teams.",
+    "CVB Coaching in Gothenburg. Individual coaching for anyone facing a choice or a change, and business coaching for employees and leaders in working life.",
 };
 
 const relevancePoints = [
@@ -81,6 +80,13 @@ export default function HomePageEn() {
                     </CtaLink>
                   </span>
                 </div>
+                <p
+                  data-hero-cta
+                  className="mt-5 text-[0.8125rem] leading-[1.6] text-white/75 drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]"
+                >
+                  A first conversation is confidential. You do not need to have everything
+                  formulated.
+                </p>
               </HeroReveal>
             </div>
           </div>
@@ -126,7 +132,7 @@ export default function HomePageEn() {
             <section
               id="coaching"
               data-parallax-section
-              className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white pt-20 pb-0 md:pt-24"
+              className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white py-20 md:py-24"
             >
               <div className="mx-auto max-w-6xl px-6 md:px-10">
                 <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
@@ -139,11 +145,6 @@ export default function HomePageEn() {
                   <CoachingServicesGrid locale="en" />
                 </div>
               </div>
-              <EditorialImageTransition
-                src="/supertable.png"
-                alt="Preparing for a coaching session"
-                className="mt-20 md:mt-24"
-              />
             </section>
 
             <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
@@ -290,15 +291,42 @@ export default function HomePageEn() {
 
             <EngagementSection locale="en" />
 
-            <section
-              data-parallax-image-only
-              className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 bg-white"
-            >
-              <EditorialImageTransition
-                src="/superoffice.png"
-                alt="Individual coaching at CVB Coaching"
-                breakout={false}
-              />
+            <section data-parallax-section className="border-t border-line-accent/30 py-16 md:py-20">
+              <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                  Support between conversations
+                </h2>
+                <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
+                  <p>
+                    Between conversations it can help to gather your thoughts and prepare the next
+                    step. When it is useful, CVB Base is there as a simple support for reflection and
+                    relevant material.
+                  </p>
+                  <p>
+                    It makes it easier to keep the context of what you are working on — without
+                    replacing the personal conversation.
+                  </p>
+                </div>
+              </ScrollReveal>
+            </section>
+
+            <section data-parallax-section className="py-20 md:py-24">
+              <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                  When a company makes the first contact
+                </h2>
+                <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
+                  <p>
+                    CVB Coaching works with individual employees and leaders in working life. A
+                    company may make the first contact and fund the coaching.
+                  </p>
+                  <p>
+                    The coaching then happens in a personal, confidential relationship between
+                    Carolina and the client. In the first conversation we talk about the need, the
+                    boundaries of the collaboration and how contact works.
+                  </p>
+                </div>
+              </ScrollReveal>
             </section>
 
             <section data-parallax-section className="py-20 md:py-24">
@@ -315,22 +343,14 @@ export default function HomePageEn() {
               </ScrollReveal>
             </section>
 
-            <section data-parallax-image-only>
-              <EditorialImageTransition
-                src="/supermeeting.png"
-                alt="Business coaching in a confidential session"
-                className="mt-20 md:mt-24"
-              />
-            </section>
-
             <section data-parallax-section id="kontakt" className="py-20 md:py-24">
               <ScrollReveal variant="ctaStack">
                 <h2 data-cta-heading className="max-w-4xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.65rem]">
-                  Next step
+                  Book an introductory conversation
                 </h2>
                 <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">
-                  Write a few lines about what it concerns, and pick a time. The conversation is
-                  confidential.
+                  Tell me briefly what you would like to talk about and choose a time. You do not
+                  need to have everything formulated. The conversation is confidential.
                 </p>
                 <div data-cta-actions className="mt-12 flex flex-wrap gap-4">
                   <CtaLink href="/en/kontakt" variant="primary">

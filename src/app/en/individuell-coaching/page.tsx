@@ -58,7 +58,8 @@ export default function IndividualCoachingPageEn() {
               get further with it than you do alone.
             </p>
             <p className="mt-6 max-w-3xl text-base leading-7 text-zinc-600">
-              If your employer is paying, or the question belongs to a team, see{" "}
+              If your employer is funding the coaching, or the question concerns your role at work,
+              see{" "}
               <Link href="/en/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
                 Business coaching
               </Link>
@@ -193,14 +194,15 @@ export default function IndividualCoachingPageEn() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
-              Next step
+              Book an introductory conversation
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Write a few lines about what you would like to bring, and pick a time that suits you.
+              Tell me briefly what you would like to talk about and choose a time. You do not need to
+              have everything formulated. The conversation is confidential.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">
-                Book an initial conversation
+                Book an introductory conversation
               </CtaLink>
             </div>
           </ScrollReveal>

@@ -5,7 +5,7 @@ import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 import HeroReveal from "@/components/animations/HeroReveal";
 
 export const metadata: Metadata = {
-  title: "Book an initial conversation | CVB Coaching",
+  title: "Book an introductory conversation | CVB Coaching",
   description:
     "Book a short, free phone call to work out whether coaching is the right support. The conversation is confidential, whether you come on your own or through your employer.",
 };
