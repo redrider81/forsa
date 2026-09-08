@@ -240,12 +240,13 @@ export default function HomePage() {
             </h2>
             <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
               <p>
-                Coaching handlar inte bara om vad som sägs i rummet. När det är relevant används CVB
-                Base som ett personligt stöd för förberedelse, reflektion och material mellan samtal.
+                Coaching fortsätter ofta mellan samtalen. När det är hjälpsamt används CVB Base som
+                ett enkelt stöd för att förbereda dig, samla tankar och ha relevant material på ett
+                ställe.
               </p>
               <p>
-                Det hjälper dig att behålla sammanhanget i det du arbetar med — utan att ersätta det
-                personliga samtalet.
+                Det gör det lättare att behålla sammanhanget i det du arbetar med — utan att ersätta
+                det personliga samtalet.
               </p>
             </div>
           </ScrollReveal>

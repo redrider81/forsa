@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Locale } from "@/lib/i18n/config";
-import { isMobile, motion, prefersReducedMotion, refreshScrollTriggers, revealScrollTrigger, showTargets } from "@/lib/motion";
+import { motion, prefersReducedMotion, refreshScrollTriggers, revealScrollTrigger, showTargets } from "@/lib/motion";
 
 type Step = {
   index: string;
@@ -79,7 +79,13 @@ type Props = {
   locale: Locale;
 };
 
-function buildMobileReveal(
+/**
+ * Alla fyra stegen tonas in en gång när sektionen kommer in i vyn och blir
+ * sedan kvar. Tidigare låg korten 2–4 bakom en scrub-styrd tidslinje på
+ * desktop, vilket gjorde att de kunde stå kvar dolda — innehållet får inte
+ * vara beroende av hur långt besökaren har hunnit rulla.
+ */
+function buildStepsReveal(
   panel: HTMLElement,
   cards: NodeListOf<HTMLElement>,
   steps: NodeListOf<HTMLElement>,
@@ -87,10 +93,12 @@ function buildMobileReveal(
   accents: NodeListOf<HTMLElement>,
   footnote: HTMLElement | null,
 ) {
+  // Korten hålls synliga hela tiden och animeras bara i position. Innehållet får
+  // aldrig vara beroende av att en scroll-animation hinner köra.
   gsap.set(steps, { autoAlpha: 1, opacity: 0.35, force3D: true });
   gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
   gsap.set(steps[0], { opacity: 1 });
-  gsap.set(cards, { autoAlpha: 0, y: 14, force3D: true });
+  gsap.set(cards, { autoAlpha: 1, y: 14, force3D: true });
   gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
   gsap.set(accents[0], { scaleX: 1 });
   if (footnote) {
@@ -102,7 +110,6 @@ function buildMobileReveal(
   tl.to(
     cards,
     {
-      autoAlpha: 1,
       y: 0,
       duration: motion.duration.medium,
       ease: motion.ease.reveal,
@@ -129,82 +136,6 @@ function buildMobileReveal(
       0.15,
     );
   }
-}
-
-function buildProgressTimeline(
-  panel: HTMLElement,
-  cards: NodeListOf<HTMLElement>,
-  steps: NodeListOf<HTMLElement>,
-  lines: NodeListOf<HTMLElement>,
-  accents: NodeListOf<HTMLElement>,
-  footnote: HTMLElement | null,
-) {
-  gsap.set(steps, { autoAlpha: 1, y: 0, opacity: 0.35, force3D: true });
-  gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(steps[0], { opacity: 1 });
-
-  cards.forEach((card, index) => {
-    if (index === 0) {
-      gsap.set(card, { autoAlpha: 1, x: 0, y: 0, force3D: true });
-      return;
-    }
-    gsap.set(card, { autoAlpha: 0, x: -12, y: 16, force3D: true });
-  });
-
-  gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(accents[0], { scaleX: 1 });
-
-  if (footnote) {
-    gsap.set(footnote, { autoAlpha: 0, y: 12, force3D: true });
-  }
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: panel,
-      start: "top 72%",
-      end: "bottom 18%",
-      scrub: 0.55,
-      invalidateOnRefresh: true,
-    },
-  });
-
-  cards.forEach((card, index) => {
-    if (index === 0) return;
-
-    const segmentStart = (index - 1) * 0.2 + 0.05;
-
-    const line = lines[index - 1];
-    if (line) {
-      tl.to(line, { scaleX: 1, duration: 0.22, ease: motion.ease.reveal }, segmentStart);
-    }
-
-    tl.to(
-      steps[index],
-      { opacity: 1, duration: 0.1, ease: "none" },
-      segmentStart + 0.1,
-    );
-
-    tl.to(
-      card,
-      { autoAlpha: 1, x: 0, y: 0, duration: 0.26, ease: motion.ease.reveal },
-      segmentStart + 0.04,
-    );
-
-    const accent = accents[index];
-    if (accent) {
-      tl.to(accent, { scaleX: 1, duration: 0.18, ease: motion.ease.reveal }, segmentStart + 0.1);
-    }
-  });
-
-  if (footnote) {
-    tl.to(
-      footnote,
-      { autoAlpha: 1, y: 0, duration: 0.24, ease: motion.ease.reveal },
-      0.82,
-    );
-  }
-
-  tl.to({}, { duration: 0.12 });
 }
 
 export default function EngagementBentoGrid({ locale }: Props) {
@@ -238,18 +169,7 @@ export default function EngagementBentoGrid({ locale }: Props) {
 
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      if (isMobile()) {
-        buildMobileReveal(panel, cards, progressSteps, progressLines, accents, footnote);
-      } else {
-        buildProgressTimeline(
-          panel,
-          cards,
-          progressSteps,
-          progressLines,
-          accents,
-          footnote,
-        );
-      }
+      buildStepsReveal(panel, cards, progressSteps, progressLines, accents, footnote);
       refreshScrollTriggers();
     }, root);
 
