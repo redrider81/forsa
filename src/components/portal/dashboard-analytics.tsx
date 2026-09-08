@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState, useEffect, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useId, useState, type CSSProperties, type ReactNode } from "react";
 import type { CoachingSession, Commitment } from "@/lib/portal/types";
 import { formatShortDate } from "@/lib/portal/format";
 import { chartBarCycle, chartSemantic, portalColors } from "@/lib/portal/portal-colors";
@@ -933,7 +933,7 @@ export function AnalyticsBento({
             })}
           </div>
 
-          <div className="mt-3 pt-3 flex items-center justify-between" style={{ borderTop: `1px solid ${PALETTE.gridLine}` }}>
+          <div className="mt-3 flex items-center justify-between pt-3" style={{ borderTop: `1px solid ${PALETTE.gridLine}` }}>
             <div>
               <div className="text-[1.125rem] font-semibold" style={{ color: PALETTE.emerald }}>
                 {completedLast30}
