@@ -22,7 +22,7 @@ const servicesSv: Service[] = [
     href: "/individuell-coaching",
     title: "Individuell coaching",
     description:
-      "För dig som står inför ett vägval, en förändring eller ett beslut som behöver få ta plats.",
+      "För dig som står inför ett vägval, en förändring eller ett beslut som du vill tänka färdigt.",
     ctaLabel: "Läs om individuell coaching",
   },
   {

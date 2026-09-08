@@ -22,7 +22,7 @@ const t = svDictionary;
 const relevancePoints = [
   "Du står inför ett vägval och behöver förstå vad som faktiskt är viktigt för dig.",
   "Du har fått ett nytt ansvar eller befinner dig i en förändring i arbetslivet.",
-  "Du vet att något behöver förändras men kommer inte vidare i hur.",
+  "Du vet att något behöver förändras, men ser ännu inte hur du vill gå vidare.",
   "Du behöver fatta ett beslut utan att ha alla svar ännu.",
   "Du vill prata fritt, i förtroende och utanför din egen krets.",
 ];
@@ -224,8 +224,8 @@ export default function HomePage() {
               Du behöver inte veta allt från början
             </h2>
             <p className="mt-6 max-w-2xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800">
-              Du behöver inte veta i förväg hur många samtal som behövs eller exakt vad frågan ska
-              heta. Det klarnar i det första samtalet.
+              Du behöver inte veta i förväg hur många samtal som behövs eller ha formulerat frågan
+              helt. Det klarnar i det första samtalet.
             </p>
             <div className="mt-9">
               <CtaLink href="/kontakt" variant="primary">Boka ett inledande samtal</CtaLink>
@@ -240,9 +240,9 @@ export default function HomePage() {
             </h2>
             <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
               <p>
-                Coaching fortsätter ofta mellan samtalen. När det är hjälpsamt används CVB Base som
-                ett enkelt stöd för att förbereda dig, samla tankar och ha relevant material på ett
-                ställe.
+                Mellan samtalen kan det vara hjälpsamt att samla tankar och förbereda nästa steg.
+                När det passar används CVB Base som ett enkelt stöd för reflektion och relevant
+                material.
               </p>
               <p>
                 Det gör det lättare att behålla sammanhanget i det du arbetar med — utan att ersätta
@@ -264,7 +264,8 @@ export default function HomePage() {
               </p>
               <p>
                 Därefter sker coachingen i en personlig och konfidentiell relation mellan Carolina
-                och klienten. I det första samtalet tydliggör vi behov, ramar och kontaktvägar.
+                och klienten. I det första samtalet pratar vi om behovet, ramarna för samarbetet och
+                hur kontakten fungerar.
               </p>
             </div>
           </ScrollReveal>
@@ -291,7 +292,7 @@ export default function HomePage() {
               Boka ett inledande samtal
             </h2>
             <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">
-              Skriv kort om det du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
+              Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
               Samtalet är konfidentiellt.
             </p>
             <div data-cta-actions className="mt-12 flex flex-wrap gap-4">

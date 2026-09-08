@@ -23,7 +23,7 @@ const stepsSv: Step[] = [
   {
     index: "02",
     title: "Vad du vill bli klarare i",
-    body: "Vi sätter ord på vad som behöver bli annorlunda för att samtalen ska göra verklig skillnad.",
+    body: "Vi sätter ord på vad du vill bli klarare i och vad du vill kunna göra annorlunda.",
     layout: "md:col-span-6 lg:col-span-5",
   },
   {
@@ -35,7 +35,7 @@ const stepsSv: Step[] = [
   {
     index: "04",
     title: "Avslut",
-    body: "Vi stämmer av mot det du ville uppnå och avgör om arbetet är klart eller ska fortsätta.",
+    body: "Vi stämmer av mot det du ville uppnå och ser tillsammans om arbetet är klart eller ska fortsätta.",
     layout: "md:col-span-6 lg:col-span-7",
   },
 ];

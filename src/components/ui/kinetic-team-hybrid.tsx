@@ -145,8 +145,9 @@ export default function KineticTeamHybrid() {
             className="absolute left-0 top-0 hidden h-full w-px origin-top bg-line-accent/25 md:block"
           />
           <p data-col-paragraph>
-            Jag heter Carolina von Braun och står bakom CVB Coaching. Jag arbetar med människor som
-            behöver få syn på sin situation klarare — privat eller i arbetslivet.
+            Jag heter Carolina von Braun. CVB Coaching är min personliga coachingpraktik. Jag
+            arbetar med människor som behöver få syn på sin situation klarare — privat eller i
+            arbetslivet.
           </p>
           <p data-col-paragraph>
             Med erfarenhet från arbetsliv där beslut får konkreta konsekvenser erbjuder jag ett
