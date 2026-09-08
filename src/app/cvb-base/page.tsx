@@ -11,6 +11,10 @@ import { todayIso } from "@/lib/portal/format";
 import { listPendingCoachBookings } from "@/lib/portal/booking";
 import { listPendingPublicBookingRequests } from "@/lib/portal/availability";
 import {
+  bookingEmailIsSimulated,
+  listFailedBookingNotifications,
+} from "@/lib/portal/booking-notifications";
+import {
   RecentActivitySection,
   TodayAgendaSection,
   UpcomingSection,
@@ -18,6 +22,8 @@ import {
 import { RequiresActionSection } from "@/components/portal/requires-action-section";
 import DashboardBookingRequests from "@/components/portal/dashboard-booking-requests";
 import DashboardWebsiteRequests from "@/components/portal/dashboard-website-requests";
+import DashboardEmailNotice from "@/components/portal/dashboard-email-notice";
+import DashboardFailedEmails from "@/components/portal/dashboard-failed-emails";
 import { AnalyticsBento, ClientOverview } from "@/components/portal/dashboard-analytics";
 import { PageHeading } from "@/components/portal/ui";
 
@@ -26,7 +32,15 @@ export default async function PortalOverviewPage() {
   if (!session) return null;
 
   const today = todayIso();
-  const [operations, data, state, repositoryData, bookingRequests, websiteRequests] =
+  const [
+    operations,
+    data,
+    state,
+    repositoryData,
+    bookingRequests,
+    websiteRequests,
+    failedEmails,
+  ] =
     await Promise.all([
       getOperationsOverview(session.coachId, today),
       getDashboardData(session.coachId, today),
@@ -36,6 +50,7 @@ export default async function PortalOverviewPage() {
       // RLS-scoped to this coach; the page already returns null without a
       // coach session, so no other role can reach this data.
       listPendingPublicBookingRequests(),
+      listFailedBookingNotifications(),
     ]);
 
   const { week } = operations;
@@ -100,6 +115,20 @@ export default async function PortalOverviewPage() {
           today={today}
         />
       </div>
+
+      {/* Server-decided: the boolean is computed here and only finished
+          markup reaches the browser, never the configuration behind it. */}
+      {bookingEmailIsSimulated() && (
+        <div className="mt-5 portal-dash-section portal-dash-section--2">
+          <DashboardEmailNotice />
+        </div>
+      )}
+
+      {failedEmails.length > 0 && (
+        <div className="mt-5 portal-dash-section portal-dash-section--2">
+          <DashboardFailedEmails items={failedEmails} />
+        </div>
+      )}
 
       {websiteRequests.length > 0 && (
         <div className="mt-5 portal-dash-section portal-dash-section--2">

@@ -90,6 +90,85 @@ export async function listBookingNotifications(
   }));
 }
 
+/**
+ * Coach-facing labels for the four notification events. Operational
+ * shorthand, not customer copy — it says who the message was for, never
+ * what it contained.
+ */
+const EVENT_LABEL_SV: Record<BookingNotificationEvent, string> = {
+  customer_request_received: "Kvitto till kund",
+  coach_new_request: "Ny förfrågan till Carolina",
+  customer_request_accepted: "Bekräftelse till kund",
+  customer_request_declined: "Besked till kund",
+};
+
+export type FailedBookingNotification = {
+  requestId: string;
+  eventType: BookingNotificationEvent;
+  label: string;
+  visitorName: string;
+  requestedStartAt: string;
+  requestedEndAt: string;
+  /** The retry route rebuilds the payload from stored data for all four events. */
+  canRetry: boolean;
+};
+
+/**
+ * Every booking notification of this coach's that is stuck in `failed`.
+ *
+ * Both reads run under the coach's own RLS policies, so another coach's
+ * rows, a client, or an anonymous caller can never appear here. The
+ * columns carrying operational secrets — dispatch_token, idempotency_key,
+ * recipient_email, last_error_code, last_error_message — are deliberately
+ * never selected, so they cannot reach a rendered page by accident.
+ */
+export async function listFailedBookingNotifications(): Promise<FailedBookingNotification[]> {
+  const supabase = await createSupabaseServerClient();
+
+  const { data: failed } = await supabase
+    .from("public_booking_notifications")
+    .select("request_id, event_type")
+    .eq("status", "failed")
+    .order("created_at", { ascending: true });
+
+  if (!failed || failed.length === 0) return [];
+
+  const requestIds = [...new Set(failed.map((row) => row.request_id))];
+  const { data: requests } = await supabase
+    .from("public_booking_requests")
+    .select("id, name, requested_start_at, requested_end_at")
+    .in("id", requestIds);
+
+  const byId = new Map((requests ?? []).map((row) => [row.id, row]));
+
+  return failed.flatMap((row) => {
+    const request = byId.get(row.request_id);
+    // A row whose request is not visible under RLS is skipped rather than
+    // rendered without context.
+    if (!request) return [];
+    const eventType = row.event_type as BookingNotificationEvent;
+    return [
+      {
+        requestId: row.request_id,
+        eventType,
+        label: EVENT_LABEL_SV[eventType] ?? "Bokningsmejl",
+        visitorName: request.name,
+        requestedStartAt: request.requested_start_at,
+        requestedEndAt: request.requested_end_at,
+        canRetry: eventType in EVENT_LABEL_SV,
+      },
+    ];
+  });
+}
+
+/**
+ * Whether booking email is actually leaving the machine. Read server-side
+ * only — the boolean is what reaches a page, never the variable's value.
+ */
+export function bookingEmailIsSimulated(): boolean {
+  return !isEmailSendEnabled();
+}
+
 type RecordArgs = {
   requestId: string;
   event: BookingNotificationEvent;
