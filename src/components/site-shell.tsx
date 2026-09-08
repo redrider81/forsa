@@ -16,6 +16,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     pathname.startsWith("/klient") ||
     pathname.startsWith("/logga-in") ||
     pathname.startsWith("/coach-login") ||
+    pathname.startsWith("/carolina") ||
     pathname.startsWith("/klient-login");
 
   useEffect(() => {

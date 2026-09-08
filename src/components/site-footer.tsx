@@ -15,6 +15,7 @@ export default function SiteFooter() {
     pathname.startsWith("/klient") ||
     pathname.startsWith("/logga-in") ||
     pathname.startsWith("/coach-login") ||
+    pathname.startsWith("/carolina") ||
     pathname.startsWith("/klient-login");
   const href = (path: string) => toLocalePath(path, locale);
   // Två primära ingångar: individuell coaching och business coaching.
@@ -53,10 +54,10 @@ export default function SiteFooter() {
             </p>
             <div className="mt-5">
               <a
-                href="mailto:kontakt@cvbcoaching.se"
+                href="mailto:info@cvbcoaching.se"
                 className="inline-block text-sm text-zinc-700 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50"
               >
-                kontakt@cvbcoaching.se
+                info@cvbcoaching.se
               </a>
             </div>
           </div>
