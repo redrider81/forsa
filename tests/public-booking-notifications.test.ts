@@ -714,6 +714,129 @@ describe("skarpt läge med ofullständig konfiguration", () => {
   });
 });
 
+// ------------------------------------------------------------------ reply-to
+
+describe("svarsadress", () => {
+  type Sent = { to: string; replyTo?: string; idempotencyKey: string; subject: string };
+
+  /** Captures the exact payload handed to the provider. */
+  function capturingProvider(sent: Sent[]) {
+    return {
+      send: vi.fn(async (payload: Sent) => {
+        sent.push({
+          to: payload.to,
+          replyTo: payload.replyTo,
+          idempotencyKey: payload.idempotencyKey,
+          subject: payload.subject,
+        });
+        return { id: "msg" };
+      }),
+    };
+  }
+
+  it("sätter Reply-To till Carolinas brevlåda på kundens kvittens", async () => {
+    enableLiveSending();
+    const sent: Sent[] = [];
+    vi.mocked(createResendBookingProvider).mockReturnValue(capturingProvider(sent));
+
+    await bookRequest();
+
+    const receipt = sent.find((entry) => entry.to === "anna@example.com");
+    expect(receipt?.replyTo).toBe(RESULT_EMAIL_RECIPIENT);
+  });
+
+  it("sätter Reply-To på acceptmejlet", async () => {
+    const created = await bookRequest();
+    const { requestId } = (await created.json()) as { requestId: string };
+    asCoach();
+
+    enableLiveSending();
+    const sent: Sent[] = [];
+    vi.mocked(createResendBookingProvider).mockReturnValue(capturingProvider(sent));
+
+    await respond(requestId, "accept");
+
+    expect(sent).toHaveLength(1);
+    expect(sent[0].to).toBe("anna@example.com");
+    expect(sent[0].replyTo).toBe(RESULT_EMAIL_RECIPIENT);
+  });
+
+  it("sätter Reply-To på declinemejlet", async () => {
+    const created = await bookRequest();
+    const { requestId } = (await created.json()) as { requestId: string };
+    asCoach();
+
+    enableLiveSending();
+    const sent: Sent[] = [];
+    vi.mocked(createResendBookingProvider).mockReturnValue(capturingProvider(sent));
+
+    await respond(requestId, "decline");
+
+    expect(sent).toHaveLength(1);
+    expect(sent[0].to).toBe("anna@example.com");
+    expect(sent[0].replyTo).toBe(RESULT_EMAIL_RECIPIENT);
+  });
+
+  it("sätter ingen Reply-To på operatörsnotisen, och byter inte mottagare", async () => {
+    enableLiveSending();
+    const sent: Sent[] = [];
+    vi.mocked(createResendBookingProvider).mockReturnValue(capturingProvider(sent));
+
+    await bookRequest();
+
+    const operator = sent.find((entry) => entry.to === RESULT_EMAIL_RECIPIENT);
+    expect(operator).toBeDefined();
+    // It already lands in that mailbox; a Reply-To pointing at itself adds
+    // nothing, and the recipient must not have shifted.
+    expect(operator?.replyTo).toBeUndefined();
+    expect(sent.map((entry) => entry.to).sort()).toEqual(
+      ["anna@example.com", RESULT_EMAIL_RECIPIENT].sort(),
+    );
+  });
+
+  it("följer den konfigurerade operatörsadressen", async () => {
+    process.env.BOOKING_OPERATOR_EMAIL = "carolina@example.test";
+    enableLiveSending();
+    const sent: Sent[] = [];
+    vi.mocked(createResendBookingProvider).mockReturnValue(capturingProvider(sent));
+
+    await bookRequest();
+
+    // No new environment variable: Reply-To reuses the operator resolution.
+    expect(sent.find((e) => e.to === "anna@example.com")?.replyTo).toBe("carolina@example.test");
+    expect(sent.find((e) => e.to === "carolina@example.test")?.replyTo).toBeUndefined();
+  });
+
+  it("lämnar idempotensnyckeln oförändrad", async () => {
+    enableLiveSending();
+    const sent: Sent[] = [];
+    vi.mocked(createResendBookingProvider).mockReturnValue(capturingProvider(sent));
+
+    const response = await bookRequest();
+    const { requestId } = (await response.json()) as { requestId: string };
+
+    expect(sent.find((e) => e.to === "anna@example.com")?.idempotencyKey).toBe(
+      bookingIdempotencyKey(requestId, "customer_request_received"),
+    );
+    expect(sent.find((e) => e.to === RESULT_EMAIL_RECIPIENT)?.idempotencyKey).toBe(
+      bookingIdempotencyKey(requestId, "coach_new_request"),
+    );
+  });
+
+  it("rör inte simulerat läge", async () => {
+    // No EMAIL_SEND_ENABLED: nothing reaches a provider at all, so there is
+    // no Reply-To to set and the recorded outcome is unchanged.
+    const response = await bookRequest();
+    const { requestId } = (await response.json()) as { requestId: string };
+
+    expect(createResendBookingProvider).not.toHaveBeenCalled();
+    expect(notification(requestId, "customer_request_received")?.status).toBe("sent");
+    expect(notification(requestId, "customer_request_received")?.provider_message_id).toBe(
+      "simulated",
+    );
+  });
+});
+
 // ------------------------------------------------------------------ retry
 
 describe("omsändning", () => {

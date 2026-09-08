@@ -16,7 +16,7 @@ export const professionalServiceSchema = {
   "@type": "ProfessionalService",
   name: "CVB Coaching",
   url: "https://www.cvbcoaching.se",
-  email: "kontakt@cvbcoaching.se",
+  email: "info@cvbcoaching.se",
   areaServed: ["Göteborg", "Sverige"],
   availableLanguage: ["sv", "en"],
   serviceType: ["Individuell coaching", "Business coaching"],

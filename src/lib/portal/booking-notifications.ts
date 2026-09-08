@@ -210,6 +210,10 @@ async function dispatchOne(
 ): Promise<BookingNotificationOutcome> {
   const recipientType = BOOKING_EVENT_RECIPIENT[event];
   const to = recipientType === "coach" ? resolveOperatorRecipient() : input.context.email;
+  // Customer mail is sent from a technical address no one reads, so a reply
+  // is pointed at the same operator mailbox the coach notification goes to.
+  // Operator mail needs none: it already arrives in that mailbox.
+  const replyTo = recipientType === "customer" ? resolveOperatorRecipient() : undefined;
 
   await recordResult({
     requestId: input.requestId,
@@ -262,6 +266,7 @@ async function dispatchOne(
       subject: email.subject,
       body: email.body,
       idempotencyKey: bookingIdempotencyKey(input.requestId, event),
+      replyTo,
     });
 
     await recordResult({

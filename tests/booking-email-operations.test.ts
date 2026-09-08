@@ -655,3 +655,34 @@ describe("konfiguration för skarp sändning", () => {
     expect(envExample).not.toContain("@gmail");
   });
 });
+
+// ------------------------------------------------------------------ public contact identity
+
+describe("publik kontaktidentitet", () => {
+  it("använder den allmänna brevlådan i strukturerad data", async () => {
+    const { professionalServiceSchema } = await import("@/components/json-ld");
+    expect(professionalServiceSchema.email).toBe("info@cvbcoaching.se");
+  });
+
+  it("visar samma adress i sidfoten som i strukturerad data", async () => {
+    const { professionalServiceSchema } = await import("@/components/json-ld");
+    const footer = readFileSync(
+      new URL("../src/components/site-footer.tsx", import.meta.url),
+      "utf-8",
+    );
+    expect(footer).toContain(professionalServiceSchema.email);
+    expect(footer).toContain(`mailto:${professionalServiceSchema.email}`);
+  });
+
+  it("håller de tre adressrollerna åtskilda i publik yta", async () => {
+    const { professionalServiceSchema } = await import("@/components/json-ld");
+    const footer = readFileSync(
+      new URL("../src/components/site-footer.tsx", import.meta.url),
+      "utf-8",
+    );
+    for (const notPublic of ["kontakt@cvbcoaching.se", "carolina@cvbcoaching.se", "bokning@"]) {
+      expect(footer).not.toContain(notPublic);
+      expect(JSON.stringify(professionalServiceSchema)).not.toContain(notPublic);
+    }
+  });
+});

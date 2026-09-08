@@ -16,6 +16,8 @@ export type BookingEmailProvider = {
     subject: string;
     body: string;
     idempotencyKey: string;
+    /** Where a reply should land. Omitted for operator mail. */
+    replyTo?: string;
   }) => Promise<{ id: string }>;
 };
 
@@ -38,9 +40,11 @@ export function createResendBookingProvider(): BookingEmailProvider {
   const resend = new Resend(apiKey);
 
   return {
-    async send({ from, to, subject, body, idempotencyKey }) {
+    async send({ from, to, subject, body, idempotencyKey, replyTo }) {
       const result = await resend.emails.send(
-        { from, to, subject, text: body },
+        // replyTo is only present on customer mail: the From address is a
+        // technical sending identity, not a mailbox anyone reads.
+        { from, to, subject, text: body, ...(replyTo ? { replyTo } : {}) },
         // Resend de-duplicates on this header, so the same logical event can
         // be retried without the recipient receiving it twice.
         { idempotencyKey },
