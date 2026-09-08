@@ -11,6 +11,7 @@ copy. Det gällande varumärket är **CVB Coaching**.
 | `homepage-copy.md` | Copyunderlag för startsidan |
 | `executive-coaching-copy.md` | Copyunderlag för executive coaching |
 | `forsa-reference-audit.md` | Referensgranskning av tidigare version |
+| `cvb-p0a-public-booking-release.md` | Driftsättningsrunbook för det publika bokningsflödet (P0-A) |
 
 Teknisk dokumentation för portalen, AI-integrationen och environment variables
 finns i projektets `README.md`.

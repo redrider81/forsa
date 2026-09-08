@@ -636,6 +636,84 @@ describe("leverantörsfel", () => {
   });
 });
 
+// ------------------------------------------------------------------ release config
+
+describe("skarpt läge med ofullständig konfiguration", () => {
+  it("misslyckas stängt när EMAIL_FROM saknas, utan att bryta bokningen", async () => {
+    // Real-send mode turned on, but the sender identity is not configured.
+    process.env.EMAIL_SEND_ENABLED = "true";
+    process.env.RESEND_API_KEY = "test-key";
+    delete process.env.EMAIL_FROM;
+
+    const response = await bookRequest();
+    const payload = (await response.json()) as { ok: boolean; requestId: string };
+
+    // The booking is untouched and reported as successful.
+    expect(response.status).toBe(200);
+    expect(payload.ok).toBe(true);
+    expect(store.requests).toHaveLength(1);
+    expect(store.requests[0].status).toBe("pending");
+    expect(store.windowIsBlocked(SLOT_START, SLOT_END)).toBe(true);
+
+    // Nothing was silently treated as sent, and no provider was reached.
+    for (const event of ["customer_request_received", "coach_new_request"]) {
+      const row = notification(payload.requestId, event);
+      expect(row?.status).toBe("failed");
+      expect(row?.last_error_code).toBe("missing_from_address");
+      expect(row?.provider_message_id).toBeNull();
+    }
+    expect(createResendBookingProvider).not.toHaveBeenCalled();
+  });
+
+  it("markerar aldrig ett utskick som simulerat när skarpt läge är på", async () => {
+    process.env.EMAIL_SEND_ENABLED = "true";
+    process.env.RESEND_API_KEY = "test-key";
+    delete process.env.EMAIL_FROM;
+
+    const response = await bookRequest();
+    const { requestId } = (await response.json()) as { requestId: string };
+
+    // "simulated" must never appear once real sending is enabled — that is
+    // the exact confusion this configuration check exists to prevent.
+    expect(notification(requestId, "customer_request_received")?.provider_message_id).not.toBe(
+      "simulated",
+    );
+  });
+
+  it("läcker ingen konfiguration till det publika svaret", async () => {
+    process.env.EMAIL_SEND_ENABLED = "true";
+    process.env.RESEND_API_KEY = "super-secret-key";
+    delete process.env.EMAIL_FROM;
+
+    const response = await bookRequest();
+    const payload = (await response.json()) as Record<string, unknown>;
+
+    expect(Object.keys(payload)).toEqual(["ok", "requestId"]);
+    const serialized = JSON.stringify(payload);
+    for (const secret of [
+      "super-secret-key",
+      "EMAIL_FROM",
+      "EMAIL_SEND_ENABLED",
+      "missing_from_address",
+      RESULT_EMAIL_RECIPIENT,
+    ]) {
+      expect(serialized).not.toContain(secret);
+    }
+  });
+
+  it("simulerat läge är oförändrat", async () => {
+    // No EMAIL_SEND_ENABLED at all: the established local default.
+    const response = await bookRequest();
+    const { requestId } = (await response.json()) as { requestId: string };
+
+    expect(notification(requestId, "customer_request_received")?.status).toBe("sent");
+    expect(notification(requestId, "customer_request_received")?.provider_message_id).toBe(
+      "simulated",
+    );
+    expect(createResendBookingProvider).not.toHaveBeenCalled();
+  });
+});
+
 // ------------------------------------------------------------------ retry
 
 describe("omsändning", () => {

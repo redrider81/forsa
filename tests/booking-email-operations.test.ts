@@ -594,3 +594,64 @@ describe("skicka om", () => {
     }
   });
 });
+
+// ------------------------------------------------------------------ release config
+
+describe("konfiguration för skarp sändning", () => {
+  it("vägrar bygga en provider utan API-nyckel, och avslöjar inget värde", async () => {
+    // The real factory, not the mock: this is the guard that stops a
+    // half-configured production environment from sending silently.
+    const actual = await vi.importActual<typeof import("@/lib/email/booking-provider")>(
+      "@/lib/email/booking-provider",
+    );
+
+    delete process.env.RESEND_API_KEY;
+    let thrown: unknown;
+    try {
+      actual.createResendBookingProvider();
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(actual.BookingEmailError);
+    expect((thrown as { code: string }).code).toBe("missing_api_key");
+    // The message names the problem, never the variable's value.
+    expect((thrown as Error).message).not.toContain("RESEND_API_KEY");
+  });
+
+  it("bygger en provider när nyckeln finns", async () => {
+    const actual = await vi.importActual<typeof import("@/lib/email/booking-provider")>(
+      "@/lib/email/booking-provider",
+    );
+    process.env.RESEND_API_KEY = "test-key";
+    expect(() => actual.createResendBookingProvider()).not.toThrow();
+  });
+
+  it("håller e-postkonfigurationen utanför publika och klientkontexter", () => {
+    // Every module that reads mail configuration is server-only, so it
+    // cannot be pulled into a client bundle even by mistake.
+    for (const file of [
+      "../src/lib/email/result-email.ts",
+      "../src/lib/email/booking-provider.ts",
+      "../src/lib/email/booking-emails.ts",
+      "../src/lib/portal/booking-notifications.ts",
+    ]) {
+      const source = readFileSync(new URL(file, import.meta.url), "utf-8");
+      expect(source.startsWith('import "server-only";')).toBe(true);
+    }
+  });
+
+  it("exponerar ingen e-postkonfiguration via NEXT_PUBLIC_", () => {
+    const envExample = readFileSync(new URL("../.env.example", import.meta.url), "utf-8");
+    expect(envExample).not.toMatch(/NEXT_PUBLIC_[A-Z_]*(EMAIL|RESEND|MAIL|OPERATOR)/);
+    expect(librarySource).not.toContain("NEXT_PUBLIC_");
+  });
+
+  it("dokumenterar operatörsmottagaren utan att avslöja en adress", () => {
+    const envExample = readFileSync(new URL("../.env.example", import.meta.url), "utf-8");
+    expect(envExample).toContain("BOOKING_OPERATOR_EMAIL");
+    // Documented as a name only — the example file never carries a real value.
+    expect(envExample).not.toMatch(/BOOKING_OPERATOR_EMAIL=\S/);
+    expect(envExample).not.toContain("@gmail");
+  });
+});

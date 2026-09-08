@@ -172,6 +172,10 @@ Se `.env.example`. Kopiera till `.env.local` lokalt.
 | `PORTAL_SESSION_SECRET` | Ja i produktion | Signerar sessionscookien. `openssl rand -base64 32`. |
 | `PORTAL_DEMO_PASSWORD` | Nej | Lösenord för demokontot. |
 | `PORTAL_SHOW_DEMO_HINT` | Nej | `false` döljer den förifyllda demoinloggningen. |
+| `EMAIL_SEND_ENABLED` | Ja för skarp e-post | Måste vara exakt `true`. Allt annat ger simulerat läge där inget skickas. Endast server-side. |
+| `RESEND_API_KEY` | Ja när e-post är på | Nyckel till e-postleverantören. Endast server-side. |
+| `EMAIL_FROM` | Ja när e-post är på | Verifierad avsändaridentitet. Endast server-side. |
+| `BOOKING_OPERATOR_EMAIL` | Nej | Mottagare för operatörsnotiser om nya förfrågningar. Utan värde används portalens etablerade coachadress. Endast server-side. |
 
 ### Vercel
 
@@ -181,5 +185,13 @@ innan live-demo:
 - `OPENAI_API_KEY`
 - `PORTAL_SESSION_SECRET`
 - valfritt: `OPENAI_MODEL`, `PORTAL_DEMO_PASSWORD`, `PORTAL_SHOW_DEMO_HINT`
+
+För skarpa bokningsmejl krävs dessutom `EMAIL_SEND_ENABLED=true`,
+`RESEND_API_KEY` och `EMAIL_FROM` — och `EMAIL_SEND_ENABLED` sätts till `true`
+endast i den miljö som faktiskt ska skicka. Ingen av e-postvariablerna får
+`NEXT_PUBLIC_`-prefix; med det prefixet hamnar värdet i webbläsarbundeln.
+
+Deployprocessen för bokningsflödet beskrivs i
+`docs/cvb-p0a-public-booking-release.md`.
 
 Secrets committas aldrig i repot.
