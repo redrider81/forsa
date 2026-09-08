@@ -287,8 +287,8 @@ export default function ContactSchedulingPicker({
                 />
                 <span>
                   {locale === "sv"
-                    ? "Grön markering visar dagar med lediga tider. Välj en dag för att se tiderna."
-                    : "The green marking shows days with available times. Pick a day to see the times."}
+                    ? "Grön markering visar dagar med lediga tidsfönster. Välj en dag för att se dem."
+                    : "The green marking shows days with available time windows. Pick a day to see them."}
                 </span>
               </p>
               <Calendar
@@ -333,9 +333,9 @@ export default function ContactSchedulingPicker({
                     ];
                     if (modifiers.selected) parts.push(locale === "sv" ? "vald dag" : "selected");
                     if (modifiers.available) {
-                      parts.push(locale === "sv" ? "lediga tider finns" : "times available");
+                      parts.push(locale === "sv" ? "lediga tidsfönster finns" : "time windows available");
                     } else if (modifiers.disabled) {
-                      parts.push(locale === "sv" ? "inga lediga tider" : "no times available");
+                      parts.push(locale === "sv" ? "inga lediga tidsfönster" : "no time windows available");
                     }
                     return parts.join(" — ");
                   },
@@ -385,13 +385,13 @@ export default function ContactSchedulingPicker({
                   <p className="col-span-1 text-[0.875rem] leading-relaxed text-zinc-500 sm:col-span-2 md:col-span-1">
                     {locale === "sv" ? (
                       <>
-                        Inga lediga tider denna månad.
+                        Inga lediga tidsfönster denna månad.
                         <br />
                         Bläddra gärna framåt i kalendern.
                       </>
                     ) : (
                       <>
-                        No available times this month.
+                        No available time windows this month.
                         <br />
                         Feel free to browse forward.
                       </>
@@ -399,14 +399,14 @@ export default function ContactSchedulingPicker({
                   </p>
                 ) : (
                   <p className="col-span-1 text-[0.875rem] leading-relaxed text-zinc-500 sm:col-span-2 md:col-span-1">
-                    {locale === "sv" ? "Inga lediga tider för valt datum." : "No available times for the selected date."}
+                    {locale === "sv" ? "Inga lediga tidsfönster för valt datum." : "No available time windows for the selected date."}
                   </p>
                 )}
               </div>
 
               <div className="mt-8 rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5">
                 <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
-                  {locale === "sv" ? "Vald tid" : "Selected time"}
+                  {locale === "sv" ? "Valt tidsfönster" : "Selected time window"}
                 </p>
                 <p
                   className={cn(
@@ -419,8 +419,13 @@ export default function ContactSchedulingPicker({
                   {selectedSlotStart && selectedSlotEnd
                     ? `${formatSelectedDateLabel(selectedSlotStart, locale)} · ${formatSlotInterval(selectedSlotStart, selectedSlotEnd)}`
                     : locale === "sv"
-                      ? "Välj en tid ovan"
-                      : "Choose a time above"}
+                      ? "Välj ett tidsfönster ovan"
+                      : "Choose a time window above"}
+                </p>
+                <p className="mt-2 text-[0.8125rem] leading-[1.6] text-zinc-500">
+                  {locale === "sv"
+                    ? "Tidsfönstret är när Carolina kan ringa upp — inte samtalets längd."
+                    : "The time window is when Carolina can call you — not the length of the conversation."}
                 </p>
 
                 <div className="mt-6 space-y-3.5">

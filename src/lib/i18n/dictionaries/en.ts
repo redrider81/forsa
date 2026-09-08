@@ -47,7 +47,7 @@ export const enDictionary = {
     selectRequired: "Please choose an option.",
     successMessage: "Thank you. Your request has been received.",
     bookingSuccessMessage:
-      "Thank you for your request. CVB Coaching will follow up with a confirmation.",
+      "Thank you for your request. I have received it and will come back to you about the selected time window. A confirmation of the request is on its way to your inbox.",
     submitError: "Your request could not be sent right now. Please try again shortly.",
     ariaLabel: "Contact form",
     optional: "optional",
@@ -73,10 +73,11 @@ export const enDictionary = {
       clarity: "What needs to become clearer?",
       timing: "When do you want to move forward?",
       preferredDate: "Date",
-      preferredTime: "Time of day",
+      preferredTime: "Time window",
     },
-    schedulingHint: "Choose a time that suits you. CVB Coaching will confirm the booking.",
-    timeSlotAria: "Select time of day",
+    schedulingHint:
+      "Choose a time window that works for you. Carolina will call you during the selected period. The conversation is short and free.",
+    timeSlotAria: "Select time window",
     timeWindows: {
       "08_10": "08:00–10:00",
       "10_12": "10:00–12:00",

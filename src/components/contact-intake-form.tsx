@@ -4,7 +4,6 @@ import { type FormEvent, type ReactNode, useState } from "react";
 import ContactSchedulingPicker from "@/components/contact-scheduling-picker";
 import { localeFromPathname, type Locale } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
-import { buildContactConfirmationEmail } from "@/lib/contact/confirmation-email";
 import { PUBLIC_BOOKING_SLUG, type ContactIntakePayload } from "@/lib/contact/intake-types";
 import { usePathname } from "next/navigation";
 
@@ -163,8 +162,6 @@ function buildRequestMessage(payload: ContactIntakePayload): string {
 }
 
 async function submitContactIntake(payload: ContactIntakePayload, locale: Locale): Promise<void> {
-  void buildContactConfirmationEmail(payload, locale);
-
   const response = await fetch("/api/public/tillganglighet/boka", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -176,6 +173,9 @@ async function submitContactIntake(payload: ContactIntakePayload, locale: Locale
       message: buildRequestMessage(payload),
       startAt: payload.onskadTid,
       endAt: payload.onskadTidSlut,
+      // Persisted with the request so the later accept/decline emails stay
+      // in the language the visitor used.
+      locale,
     }),
   });
 

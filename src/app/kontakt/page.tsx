@@ -14,7 +14,7 @@ const processFaq: ProcessFaqItem[] = [
   {
     question: "Vad är det första samtalet?",
     answer:
-      "Det första samtalet är ett kort och kostnadsfritt telefonsamtal. Du berättar lite om vad du söker, och vi känner efter om coaching är rätt väg och om det känns rätt att arbeta tillsammans. Det är inte en coachingsession och du förbinder dig inte till något.",
+      "Det första samtalet är ett kort och kostnadsfritt telefonsamtal. Tvåtimmarsperioden du väljer i kalendern är ett tidsfönster — den period jag kan ringa upp inom, inte samtalets längd. Du berättar lite om vad du söker, och vi känner efter om coaching är rätt väg och om det känns rätt att arbeta tillsammans. Det är inte en coachingsession och du förbinder dig inte till något.",
   },
   {
     question: "Vad händer om vi vill gå vidare?",
@@ -59,9 +59,10 @@ export default function KontaktPage() {
               Börja med ett samtal.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Välj en tid som passar och skriv några rader om vad du vill ta upp. Det första samtalet
-              är ett kort, kostnadsfritt telefonsamtal där vi stämmer av om coaching är rätt stöd och
-              om vi vill gå vidare tillsammans.
+              Välj ett tidsfönster som passar och skriv några rader om vad du vill ta upp. Jag
+              ringer upp under den valda perioden. Det första samtalet är ett kort, kostnadsfritt
+              telefonsamtal där vi stämmer av om coaching är rätt stöd och om vi vill gå vidare
+              tillsammans.
             </p>
           </HeroReveal>
         </section>

@@ -48,7 +48,7 @@ export const svDictionary = {
     selectRequired: "Välj ett alternativ.",
     successMessage: "Tack. Din förfrågan är mottagen.",
     bookingSuccessMessage:
-      "Tack för din förfrågan. CVB Coaching återkommer med en bekräftelse.",
+      "Tack för din förfrågan. Jag har fått den och återkommer med besked om det valda tidsfönstret. En bekräftelse på förfrågan är på väg till din e-post.",
     submitError: "Förfrågan kunde inte skickas just nu. Försök igen om en stund.",
     ariaLabel: "Kontaktformulär",
     optional: "valfritt",
@@ -74,10 +74,11 @@ export const svDictionary = {
       clarity: "Vad behöver bli tydligare?",
       timing: "När vill du komma vidare?",
       preferredDate: "Datum",
-      preferredTime: "Tid på dagen",
+      preferredTime: "Tidsfönster",
     },
-    schedulingHint: "Välj en tid som passar dig. CVB Coaching bekräftar bokningen.",
-    timeSlotAria: "Välj tid på dagen",
+    schedulingHint:
+      "Välj ett tidsfönster som passar dig. Carolina återkommer per telefon under den valda perioden. Samtalet är kort och kostnadsfritt.",
+    timeSlotAria: "Välj tidsfönster",
     timeWindows: {
       "08_10": "08:00–10:00",
       "10_12": "10:00–12:00",

@@ -41,6 +41,8 @@ export type PublicBookingRequest = {
   status: "pending" | "accepted" | "declined" | "cancelled";
   createdAt: string;
   respondedAt: string | null;
+  /** Language the visitor used, so later emails stay in that language. */
+  locale: "sv" | "en";
 };
 
 export type PublicSlot = { date: string; startAt: string; endAt: string };
@@ -233,6 +235,7 @@ export async function listPendingPublicBookingRequests(): Promise<PublicBookingR
     status: row.status as PublicBookingRequest["status"],
     createdAt: row.created_at,
     respondedAt: row.responded_at,
+    locale: row.locale === "en" ? "en" : "sv",
   }));
 }
 
@@ -258,7 +261,38 @@ export async function listAcceptedPublicBookingRequests(): Promise<PublicBooking
     status: row.status as PublicBookingRequest["status"],
     createdAt: row.created_at,
     respondedAt: row.responded_at,
+    locale: row.locale === "en" ? "en" : "sv",
   }));
+}
+
+/**
+ * One request, read under the coach's own RLS policy. Used after an accept
+ * or decline commits, to build the customer email from stored data rather
+ * than from anything the browser sent.
+ */
+export async function getPublicBookingRequestForCoach(
+  requestId: string,
+): Promise<PublicBookingRequest | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("public_booking_requests")
+    .select("*")
+    .eq("id", requestId)
+    .maybeSingle();
+  if (error || !data) return null;
+  return {
+    id: data.id,
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    message: data.message,
+    requestedStartAt: data.requested_start_at,
+    requestedEndAt: data.requested_end_at,
+    status: data.status as PublicBookingRequest["status"],
+    createdAt: data.created_at,
+    respondedAt: data.responded_at,
+    locale: data.locale === "en" ? "en" : "sv",
+  };
 }
 
 export async function respondToPublicBookingRequest(

@@ -14,7 +14,7 @@ const processFaq: ProcessFaqItem[] = [
   {
     question: "What is the first conversation?",
     answer:
-      "The first conversation is a short, free phone call. You tell me a little about what you are looking for, and we get a sense of whether coaching is the right path and whether it feels right to work together. It is not a coaching session, and you are not committing to anything.",
+      "The first conversation is a short, free phone call. The two-hour period you choose in the calendar is a time window — the period within which I can call you, not the length of the conversation. You tell me a little about what you are looking for, and we get a sense of whether coaching is the right path and whether it feels right to work together. It is not a coaching session, and you are not committing to anything.",
   },
   {
     question: "What happens if we want to go ahead?",
@@ -58,9 +58,10 @@ export default function ContactPageEn() {
               Start with a conversation.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Pick a time that suits you and write a few lines about what you would like to bring.
-              The first conversation is a short, free phone call where we work out whether coaching
-              is the right support and whether we want to go ahead together.
+              Pick a time window that suits you and write a few lines about what you would like to
+              bring. I will call you during the selected period. The first conversation is a short,
+              free phone call where we work out whether coaching is the right support and whether we
+              want to go ahead together.
             </p>
           </HeroReveal>
         </section>

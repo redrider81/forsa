@@ -1005,12 +1005,76 @@ export type Database = {
           },
         ]
       }
+      public_booking_notifications: {
+        Row: {
+          attempt_count: number
+          created_at: string
+          event_type: string
+          id: string
+          idempotency_key: string
+          last_attempt_at: string | null
+          last_error_code: string | null
+          last_error_message: string | null
+          provider_accepted_at: string | null
+          provider_message_id: string | null
+          recipient_email: string | null
+          recipient_type: string
+          request_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          created_at?: string
+          event_type: string
+          id?: string
+          idempotency_key: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string | null
+          recipient_type: string
+          request_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          created_at?: string
+          event_type?: string
+          id?: string
+          idempotency_key?: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string | null
+          recipient_type?: string
+          request_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_booking_notifications_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "public_booking_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       public_booking_requests: {
         Row: {
           coach_id: string
           created_at: string
+          dispatch_token: string
           email: string
           id: string
+          locale: string
           message: string | null
           name: string
           phone: string | null
@@ -1022,8 +1086,10 @@ export type Database = {
         Insert: {
           coach_id: string
           created_at?: string
+          dispatch_token?: string
           email: string
           id?: string
+          locale?: string
           message?: string | null
           name: string
           phone?: string | null
@@ -1035,8 +1101,10 @@ export type Database = {
         Update: {
           coach_id?: string
           created_at?: string
+          dispatch_token?: string
           email?: string
           id?: string
+          locale?: string
           message?: string | null
           name?: string
           phone?: string | null
@@ -1390,13 +1458,14 @@ export type Database = {
         Args: {
           p_email: string
           p_end_at: string
+          p_locale?: string
           p_message: string
           p_name: string
           p_phone: string
           p_slug: string
           p_start_at: string
         }
-        Returns: string
+        Returns: { dispatch_token: string; request_id: string }[]
       }
       current_client_id: { Args: never; Returns: string }
       current_coach_id: { Args: never; Returns: string }
@@ -1435,6 +1504,19 @@ export type Database = {
           end_time: string
           start_time: string
         }[]
+      }
+      record_public_booking_notification_result: {
+        Args: {
+          p_dispatch_token?: string | null
+          p_error_code?: string | null
+          p_error_message?: string | null
+          p_event_type: string
+          p_provider_message_id?: string | null
+          p_recipient_email?: string | null
+          p_request_id: string
+          p_status: string
+        }
+        Returns: undefined
       }
       respond_public_booking_request: {
         Args: { p_action: string; p_request_id: string }
