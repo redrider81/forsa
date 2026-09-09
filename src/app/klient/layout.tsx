@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import "@/components/klient/klient-tokens.css";
-import { KlientBottomNav, KlientDesktopNav } from "@/components/klient/klient-nav";
+import { KlientBottomNav, KlientDesktopNav, KlientFaqShortcut } from "@/components/klient/klient-nav";
 import { LogoMark } from "@/components/brand/logo";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { readClientSession } from "@/lib/portal/session";
@@ -42,6 +42,13 @@ export default async function KlientLayout({ children }: { children: React.React
               >
                 {formatWeekdayDate(today)}
               </time>
+
+              {/* FAQ på mobil. Bottenraden rymmer sex destinationer med bibehållen
+                  träffyta — den sjunde ligger därför här. Från md finns FAQ i
+                  huvudnavigationen och genvägen döljs. */}
+              <div className="order-2 -my-1 shrink-0 md:hidden">
+                <KlientFaqShortcut />
+              </div>
 
               <div className="order-3 hidden w-full pb-1 md:block lg:order-2 lg:flex lg:w-auto lg:min-w-0 lg:flex-1 lg:justify-center lg:pb-0">
                 <KlientDesktopNav />

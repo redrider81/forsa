@@ -525,3 +525,157 @@
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------- faq
+
+   Klientens FAQ. Ingen ny visuell dialekt: kategorin är ett `klient-card`
+   som växlar från `--quiet` till primär yta när den öppnas.
+
+   Höjdrörelsen görs med grid-template-rows 0fr → 1fr. `visibility` fälls
+   ned med samma varaktighet, så att länkar i en stängd panel varken kan
+   tabbas till eller läsas upp.
+   ================================================================ */
+
+.klient-faq-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.klient-faq-heading {
+  margin: 0;
+  font: inherit;
+}
+
+.klient-faq-trigger {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 1.25rem;
+  border-radius: var(--klient-radius-card);
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .klient-faq-trigger {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.klient-faq-trigger:focus-visible {
+  outline: 2px solid var(--klient-focus-ring);
+  outline-offset: 2px;
+}
+
+.klient-faq-indicator {
+  position: relative;
+  display: flex;
+  height: 1.75rem;
+  width: 1.75rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.0625rem;
+  border-radius: 9999px;
+  border: 1px solid var(--klient-border-hairline);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--klient-accent-gold-muted);
+  transition:
+    background-color 240ms cubic-bezier(0.32, 0.72, 0, 1),
+    border-color 240ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.klient-faq-trigger:hover .klient-faq-indicator {
+  border-color: var(--klient-accent-gold-line);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.klient-faq-indicator-bar {
+  position: absolute;
+  height: 1.5px;
+  width: 0.6875rem;
+  border-radius: 9999px;
+  background: currentColor;
+  transition: transform 240ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.klient-faq-indicator-bar--vertical {
+  transform: rotate(90deg);
+}
+
+.klient-faq-item.is-open .klient-faq-indicator-bar--vertical {
+  transform: rotate(90deg) scaleX(0);
+}
+
+.klient-faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 240ms cubic-bezier(0.32, 0.72, 0, 1),
+    visibility 240ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.klient-faq-item.is-open .klient-faq-panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.klient-faq-panel-clip {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.klient-faq-panel-inner {
+  padding: 0 1.5rem 1.5rem;
+  opacity: 0;
+  transition: opacity 220ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@media (min-width: 768px) {
+  .klient-faq-panel-inner {
+    padding: 0 2rem 2rem;
+  }
+}
+
+.klient-faq-item.is-open .klient-faq-panel-inner {
+  opacity: 1;
+  transition-delay: 40ms;
+}
+
+/* Rytm i stället för ramar: en hårfin linje mellan frågorna, ingen runt dem. */
+.klient-faq-list > .klient-faq-entry + .klient-faq-entry {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--klient-border-hairline);
+  padding-top: 1.5rem;
+}
+
+.klient-faq-link {
+  color: var(--klient-accent-gold-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--klient-accent-gold-line);
+  text-underline-offset: 5px;
+  border-radius: var(--klient-radius-control);
+  transition: color 200ms ease, text-decoration-color 200ms ease;
+}
+
+.klient-faq-link:hover {
+  color: var(--klient-accent-gold-deep);
+  text-decoration-color: var(--klient-accent-gold);
+}
+
+.klient-faq-link:focus-visible {
+  outline: 2px solid var(--klient-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .klient-faq-panel,
+  .klient-faq-panel-inner,
+  .klient-faq-indicator,
+  .klient-faq-indicator-bar {
+    transition: none !important;
+  }
+}
