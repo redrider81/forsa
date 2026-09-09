@@ -17,7 +17,7 @@ export default async function ClientAvtalPage() {
   const contracts = await listOwnClientContracts();
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <header className="pb-1">
         <h1 className="text-[1.75rem] font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2rem]">Avtal</h1>
         <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">Dina coachningsavtal med CVB Coaching.</p>

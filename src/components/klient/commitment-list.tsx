@@ -3,7 +3,12 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import StatusControl from "@/components/klient/status-control";
-import { Empty, MetaLabel, SectionTitle, ZoneTag, klientButtonSmClass } from "@/components/klient/klient-ui";
+import {
+  BentoEmpty,
+  BentoLabel,
+  BentoTitle,
+  bentoQuietLinkClass,
+} from "@/components/klient/bento";
 import type { CommitmentStatus } from "@/lib/portal/types";
 
 export type ClientCommitment = {
@@ -108,74 +113,56 @@ export default function CommitmentList({ commitments, activeCount, overviewLimit
 
   return (
     <>
-      <ZoneTag>Aktuellt fokus</ZoneTag>
-      <SectionTitle id="commitments-heading">Dina åtaganden</SectionTitle>
-      <p className="mt-1.5 text-[0.8125rem] text-zinc-500">{activeLabel}</p>
+      <div>
+        <BentoLabel>Aktuellt fokus</BentoLabel>
+        <BentoTitle id="commitments-heading" className="mt-2.5">
+          Dina åtaganden
+        </BentoTitle>
+        <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">{activeLabel}</p>
+      </div>
 
       {error ? (
-        <p role="alert" className="mt-4 text-[0.8125rem] text-zinc-700">
+        <p role="alert" className="mt-4 text-[0.8125rem] text-stone-700">
           {error}
         </p>
       ) : null}
 
-      <div className="mt-5">
+      <div className="mt-7">
         {displayed.length === 0 ? (
-          <Empty>Inga aktuella åtaganden just nu.</Empty>
+          <BentoEmpty>Inga aktuella åtaganden just nu.</BentoEmpty>
         ) : (
-          <ul className="divide-y divide-[var(--klient-border-muted)]">
+          <ul className="grid gap-4 lg:grid-cols-3">
             {displayed.map((commitment) => (
-              <li
-                key={commitment.id}
-                className="py-4 transition-colors duration-150 first:pt-0 last:pb-0 hover:bg-zinc-50/40 md:px-2 md:-mx-2 md:rounded-lg motion-reduce:transition-none"
-              >
-                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-5">
-                  <p className="flex-1 text-[0.9375rem] font-medium leading-[1.6] text-zinc-900">
-                    {commitment.text}
-                  </p>
-
-                  <StatusControl
-                    commitmentId={commitment.id}
-                    status={commitment.status}
-                    disabled={busyId === commitment.id}
-                    align="right"
-                    onChange={(nextStatus) =>
-                      void update(commitment.id, nextStatus, commitment.clientNote)
-                    }
-                  />
-                </div>
-
-                {(commitment.sessionLabel || commitment.dueLabel) && (
-                  <dl className="mt-2.5 flex flex-wrap gap-x-6 gap-y-2">
+              <li key={commitment.id} className="klient-tile flex flex-col p-5 md:p-6">
+                {/* Kontext först och tyst, sedan åtagandet självt. */}
+                {commitment.sessionLabel || commitment.dueLabel ? (
+                  <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.8125rem] text-stone-500">
                     {commitment.sessionLabel ? (
-                      <div>
-                        <MetaLabel>Kopplat till</MetaLabel>
-                        <dd className="mt-0.5 text-[0.8125rem] text-zinc-500">
-                          {commitment.sessionLabel}
-                        </dd>
-                      </div>
+                      <span className="font-medium text-stone-600">{commitment.sessionLabel}</span>
+                    ) : null}
+                    {commitment.sessionLabel && commitment.dueLabel ? (
+                      <span aria-hidden="true" className="text-stone-300">
+                        ·
+                      </span>
                     ) : null}
                     {commitment.dueLabel ? (
-                      <div>
-                        <MetaLabel>Tidsram</MetaLabel>
-                        <dd className="mt-0.5 text-[0.8125rem] text-zinc-500">
-                          {commitment.dueLabel}
-                        </dd>
-                      </div>
+                      <span>{commitment.dueLabel}</span>
                     ) : null}
-                  </dl>
-                )}
+                  </p>
+                ) : null}
+
+                <p className="mt-3 text-[0.9375rem] font-medium leading-[1.55] tracking-[-0.005em] text-stone-900">
+                  {commitment.text}
+                </p>
 
                 {commitment.clientNote ? (
-                  <div className="mt-2.5">
-                    <MetaLabel>Notering</MetaLabel>
-                    <p className="mt-0.5 text-[0.875rem] leading-relaxed text-zinc-500">
-                      ”{commitment.clientNote}”
-                    </p>
-                  </div>
+                  <p className="klient-rule--quiet mt-4 pl-3.5 text-[0.875rem] leading-[1.7] text-stone-600">
+                    {commitment.clientNote}
+                  </p>
                 ) : null}
 
                 {noteFor === commitment.id ? (
-                  <div className="mt-3">
+                  <div className="klient-swap mt-5">
                     <label htmlFor={`note-${commitment.id}`} className="sr-only">
                       Kort reflektion om åtagandet
                     </label>
@@ -185,28 +172,44 @@ export default function CommitmentList({ commitments, activeCount, overviewLimit
                       onChange={(event) => setNote(event.target.value)}
                       rows={3}
                       placeholder="Kort notering."
-                      className="w-full resize-y rounded-xl border border-[#e6e0d3] bg-white px-4 py-3 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+                      className="w-full resize-y rounded-[var(--klient-radius-control)] border border-[var(--klient-border-muted)] bg-white px-3.5 py-3 text-[0.9375rem] leading-[1.7] text-stone-900 placeholder:text-stone-400 focus:border-[var(--klient-accent-gold-line)] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-focus-ring)]"
                     />
                     <button
                       type="button"
                       onClick={() => void update(commitment.id, commitment.status, note)}
-                      className={`mt-4 ${klientButtonSmClass}`}
+                      className={`mt-3 ${bentoQuietLinkClass}`}
                     >
                       Spara
                     </button>
                   </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setNoteFor(commitment.id);
-                      setNote(commitment.clientNote ?? "");
-                    }}
-                    className={`mt-5 ${klientButtonSmClass}`}
-                  >
-                    {commitment.clientNote ? "Ändra notering" : "Lägg till notering"}
-                  </button>
-                )}
+                ) : null}
+
+                {/* Status och åtgärd delar en tyst fot — inte en verktygsrad. */}
+                <div className="mt-auto flex items-center justify-between gap-3 border-t border-[var(--klient-border-hairline)] pt-4 md:pt-5">
+                  <StatusControl
+                    commitmentId={commitment.id}
+                    status={commitment.status}
+                    disabled={busyId === commitment.id}
+                    align="left"
+                    compact
+                    onChange={(nextStatus) =>
+                      void update(commitment.id, nextStatus, commitment.clientNote)
+                    }
+                  />
+
+                  {noteFor === commitment.id ? null : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNoteFor(commitment.id);
+                        setNote(commitment.clientNote ?? "");
+                      }}
+                      className="shrink-0 rounded-full px-1 text-[0.8125rem] font-medium text-stone-500 underline decoration-[var(--klient-border-muted)] decoration-1 underline-offset-4 transition-colors duration-200 hover:text-[var(--klient-accent-gold-muted)] hover:decoration-[var(--klient-accent-gold-line)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-focus-ring)] focus-visible:ring-offset-2 motion-reduce:transition-none"
+                    >
+                      {commitment.clientNote ? "Ändra notering" : "Lägg till notering"}
+                    </button>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -216,7 +219,7 @@ export default function CommitmentList({ commitments, activeCount, overviewLimit
           <button
             type="button"
             onClick={() => setExpanded((value) => !value)}
-            className={`mt-6 ${klientButtonSmClass}`}
+            className={`mt-6 ${bentoQuietLinkClass}`}
           >
             {expanded ? "Visa färre" : `Visa alla åtaganden (${commitments.length})`}
           </button>

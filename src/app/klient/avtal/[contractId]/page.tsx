@@ -14,7 +14,7 @@ export default async function ClientAvtalDetailPage({ params }: { params: Promis
   const signatures = await listContractSignatures(contractId);
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-4xl space-y-6">
       <ContractWorkspace initialContract={contract} initialSignatures={signatures} viewerRole="klient" />
     </div>
   );

@@ -1,57 +1,41 @@
-import Link from "next/link";
-import { Chapter, ZoneTag } from "@/components/klient/klient-ui";
+import {
+  BentoDivider,
+  BentoQuietLink,
+  BentoStat,
+  BentoTitle,
+} from "@/components/klient/bento";
+import { formatDate, formatShortDate } from "@/lib/portal/format";
 
-type StatProps = {
-  value: number;
-  label: string;
-  href?: string;
+type RecentSession = {
+  id: string;
+  number: number;
+  date: string;
+  clientFocus: string;
 };
-
-function StatMetric({ value, label, href }: StatProps) {
-  const content = (
-    <>
-      <p className="text-center text-[2rem] font-medium tabular-nums leading-none tracking-tight text-zinc-900 md:text-[2.25rem]">
-        {value}
-      </p>
-      <p className="mt-2 text-center text-[0.8125rem] leading-snug text-zinc-600">{label}</p>
-    </>
-  );
-
-  const interactiveClass =
-    "group block px-3 py-3 text-center transition-[background-color,box-shadow] duration-150 hover:bg-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/12 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-surface-neutral)] motion-reduce:transition-none md:py-4";
-
-  if (href?.startsWith("#")) {
-    return (
-      <a href={href} className={interactiveClass}>
-        {content}
-      </a>
-    );
-  }
-
-  if (href) {
-    return (
-      <Link href={href} className={interactiveClass}>
-        {content}
-      </Link>
-    );
-  }
-
-  return <div className="px-3 py-3 text-center md:py-4">{content}</div>;
-}
 
 type Props = {
   completedSessions: number;
   activeCommitments: number;
   completedCommitments: number;
   reflections: number;
+  /** Klientens startdatum — ger historiken en lugn tidsram. */
+  startedAt?: string;
+  /** Senast genomförda sessionerna, nyast först. Redan klientfiltrerade. */
+  recentSessions?: RecentSession[];
 };
 
-/** Overview band — kompakt statistik med tydlig grid och dividers. */
+/**
+ * "Coaching hittills" — historisk kontext, inte KPI:er. Den kronologiska
+ * listan bär tyngden; siffrorna är medvetet lågmälda. Inga ringar, procent,
+ * streaks eller betyg.
+ */
 export default function DevelopmentOverview({
   completedSessions,
   activeCommitments,
   completedCommitments,
   reflections,
+  startedAt,
+  recentSessions = [],
 }: Props) {
   const metrics = [
     { value: completedSessions, label: "Genomförda sessioner", href: "/klient/sessioner" },
@@ -61,21 +45,54 @@ export default function DevelopmentOverview({
   ] as const;
 
   return (
-    <Chapter surface="neutral" aria-labelledby="development-overview-heading">
-      <ZoneTag tone="neutral">Översikt</ZoneTag>
-      <h2 id="development-overview-heading" className="sr-only">
-        Utveckling i korthet
-      </h2>
-      <div className="mt-5 grid grid-cols-2 md:grid-cols-4 md:divide-x md:divide-[var(--klient-border-muted)]">
-        {metrics.map((metric, index) => (
-          <div
+    <div className="flex h-full flex-col">
+      <div>
+        <BentoTitle id="development-overview-heading">Din väg så här långt</BentoTitle>
+        {startedAt ? (
+          <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">
+            Sedan {formatDate(startedAt)}
+          </p>
+        ) : null}
+      </div>
+
+      {/* Kronologin väger tyngst — den ligger först och får serif. */}
+      {recentSessions.length > 0 ? (
+        <ol className="mt-7 flex-1 space-y-6">
+          {recentSessions.map((item) => (
+            <li key={item.id} className="klient-marker pl-7">
+              <p className="text-[0.8125rem] text-stone-500">
+                <span className="font-medium text-stone-700">Session {item.number}</span>
+                <span aria-hidden="true" className="px-1.5 text-stone-300">
+                  ·
+                </span>
+                {formatShortDate(item.date)}
+              </p>
+              <p className="mt-2 text-[0.9375rem] leading-[1.65] text-stone-700">
+                {item.clientFocus}
+              </p>
+            </li>
+          ))}
+        </ol>
+      ) : null}
+
+      <BentoDivider className="mt-8" />
+
+      {/* Siffrorna är kontext, inte prestation. */}
+      <div className="-mx-2.5 mt-6 grid grid-cols-2 gap-y-4 sm:grid-cols-4">
+        {metrics.map((metric) => (
+          <BentoStat
             key={metric.label}
-            className={`${index >= 2 ? "border-t border-[var(--klient-border-muted)] pt-1 md:border-t-0 md:pt-0" : ""} ${index % 2 === 1 ? "border-l border-[var(--klient-border-muted)] md:border-l-0" : ""}`}
-          >
-            <StatMetric value={metric.value} label={metric.label} href={metric.href} />
-          </div>
+            value={metric.value}
+            label={metric.label}
+            href={metric.href}
+          />
         ))}
       </div>
-    </Chapter>
+
+      <BentoDivider className="mt-7" />
+      <div className="pt-5">
+        <BentoQuietLink href="/klient/sessioner">Visa alla sessioner</BentoQuietLink>
+      </div>
+    </div>
   );
 }

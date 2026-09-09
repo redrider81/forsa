@@ -10,6 +10,11 @@ import {
   klientButtonSmClass,
   ZoneTag,
 } from "@/components/klient/klient-ui";
+import {
+  BentoSerif,
+  bentoPrimaryActionClass,
+  bentoQuietLinkClass,
+} from "@/components/klient/bento";
 
 type Props = {
   prompt?: string;
@@ -66,9 +71,8 @@ export default function ReflectionComposer({
     if (variant === "overview") {
       return (
         <div>
-          <ZoneTag tone="muted">Reflektion</ZoneTag>
-          <SectionTitle>Vad har hänt sedan sist?</SectionTitle>
-          <p className="mt-2 max-w-prose text-[0.8125rem] leading-relaxed text-zinc-500">
+          <BentoSerif>Vad har hänt sedan sist?</BentoSerif>
+          <p className="mt-4 max-w-prose text-[0.875rem] leading-[1.7] text-stone-600">
             En kort reflektion mellan sessionerna. Delas endast med Carolina.
           </p>
           <button
@@ -77,12 +81,19 @@ export default function ReflectionComposer({
               setOpen(true);
               setSaved(false);
             }}
-            className={`mt-4 w-full sm:w-auto ${klientButtonClass}`}
+            className={`mt-6 ${bentoPrimaryActionClass}`}
           >
             Skriv en reflektion
           </button>
           {saved ? (
-            <p role="status" className="mt-3 text-[0.8125rem] text-[#7d6432]">
+            <p
+              role="status"
+              className="mt-3.5 flex items-center gap-2 text-[0.8125rem] text-[var(--klient-accent-gold-muted)]"
+            >
+              <span
+                aria-hidden="true"
+                className="size-1.5 shrink-0 rounded-full bg-[var(--klient-accent-gold)]"
+              />
               Reflektion sparad.
             </p>
           ) : null}
@@ -94,7 +105,7 @@ export default function ReflectionComposer({
       <Chapter surface="primary">
         <Label>Reflektion</Label>
         <SectionTitle>Ny reflektion</SectionTitle>
-        <p className="mt-2 text-[0.8125rem] leading-relaxed text-zinc-500">
+        <p className="mt-2 text-[0.8125rem] leading-relaxed text-stone-500">
           Dokumentera en reflektion mellan sessionerna. Delas endast med Carolina.
         </p>
         <button
@@ -116,12 +127,9 @@ export default function ReflectionComposer({
     );
   }
 
-  const formContent = (
+  const overviewForm = (
     <>
-      <ZoneTag tone={variant === "overview" ? "muted" : "gold"}>Reflektion</ZoneTag>
-      <SectionTitle>
-        {prompt ?? (variant === "overview" ? "Vad har hänt sedan sist?" : "Ny reflektion")}
-      </SectionTitle>
+      <BentoSerif>{prompt ?? "Vad har hänt sedan sist?"}</BentoSerif>
 
       <label htmlFor="reflection-text" className="sr-only">
         Din reflektion
@@ -133,11 +141,58 @@ export default function ReflectionComposer({
         rows={7}
         autoFocus
         placeholder="Dina egna ord."
-        className="mt-4 w-full resize-y rounded-xl border border-[#e6e0d3] bg-white px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+        className="klient-swap mt-4 w-full resize-y rounded-[var(--klient-radius-nested)] border border-[var(--klient-border-muted)] bg-white px-4 py-3.5 text-[0.9375rem] leading-[1.75] text-stone-900 placeholder:text-stone-400 focus:border-[var(--klient-accent-gold-line)] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-focus-ring)]"
       />
 
       {error ? (
-        <p role="alert" className="mt-3 text-[0.8125rem] text-zinc-700">
+        <p role="alert" className="mt-3 text-[0.8125rem] text-stone-700">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="mt-4 flex flex-col gap-2.5 sm:flex-row">
+        <button
+          type="button"
+          onClick={() => void save()}
+          disabled={saving}
+          className={`${bentoPrimaryActionClass} sm:flex-1`}
+        >
+          {saving ? "Sparar…" : "Spara"}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            setError(null);
+          }}
+          className={bentoQuietLinkClass}
+        >
+          Avbryt
+        </button>
+      </div>
+    </>
+  );
+
+  const formContent = (
+    <>
+      <ZoneTag tone="gold">Reflektion</ZoneTag>
+      <SectionTitle>{prompt ?? "Ny reflektion"}</SectionTitle>
+
+      <label htmlFor="reflection-text" className="sr-only">
+        Din reflektion
+      </label>
+      <textarea
+        id="reflection-text"
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+        rows={7}
+        autoFocus
+        placeholder="Dina egna ord."
+        className="mt-4 w-full resize-y rounded-xl border border-[#e6e0d3] bg-white px-4 py-3.5 text-[0.9375rem] leading-[1.7] text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-focus-ring)]"
+      />
+
+      {error ? (
+        <p role="alert" className="mt-3 text-[0.8125rem] text-stone-700">
           {error}
         </p>
       ) : null}
@@ -165,8 +220,8 @@ export default function ReflectionComposer({
     </>
   );
 
-  if (variant === "overview" && embedded) {
-    return <div>{formContent}</div>;
+  if (variant === "overview") {
+    return embedded ? <div>{overviewForm}</div> : <Chapter surface="primary">{overviewForm}</Chapter>;
   }
 
   return <Chapter surface="primary">{formContent}</Chapter>;

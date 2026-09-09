@@ -39,7 +39,7 @@ export default function MaterialWorkspace({ clientId, materials, linkContext }: 
   }
 
   return (
-    <div className="klient-overview space-y-8 md:space-y-10">
+    <div className="mx-auto w-full max-w-4xl space-y-8 md:space-y-10">
       <header>
         <h1 className="text-[1.75rem] font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2rem]">
           Material

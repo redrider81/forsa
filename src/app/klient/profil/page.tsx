@@ -18,7 +18,7 @@ export default async function ClientProfilePage() {
   const { client } = view;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <ProfileEditor
         initial={{
           name: client.name,
