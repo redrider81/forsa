@@ -14,11 +14,15 @@ import { faqCategories as clientFaqCategories } from "@/components/klient/faq-co
  */
 export default function FaqAccordion({
   categories = clientFaqCategories,
+  variant = "client",
 }: {
   categories?: FaqCategory[];
+  variant?: "client" | "coach";
 }) {
   const baseId = useId().replace(/:/g, "");
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(
+    variant === "coach" ? (categories[0]?.id ?? null) : null,
+  );
   const triggers = useRef<Array<HTMLButtonElement | null>>([]);
 
   function focusTrigger(index: number) {
@@ -28,7 +32,7 @@ export default function FaqAccordion({
   }
 
   return (
-    <div className="klient-faq-stack">
+    <div className={`klient-faq-stack ${variant === "coach" ? "portal-faq-stack" : ""}`}>
       {categories.map((category, index) => {
         const open = openId === category.id;
         const headerId = `${baseId}-faq-header-${category.id}`;
@@ -37,7 +41,7 @@ export default function FaqAccordion({
         return (
           <section
             key={category.id}
-            className={`klient-card klient-faq-item ${open ? "is-open" : "klient-card--quiet"}`}
+            className={`klient-card klient-faq-item ${variant === "coach" ? "portal-faq-item" : ""} ${open ? "is-open" : "klient-card--quiet"}`}
           >
             <h2 className="klient-faq-heading">
               <button
@@ -66,6 +70,11 @@ export default function FaqAccordion({
                 }}
                 className="klient-faq-trigger"
               >
+                {variant === "coach" ? (
+                  <span aria-hidden="true" className="portal-faq-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                ) : null}
                 <span className="min-w-0 flex-1">
                   <span className="block text-[1.0625rem] font-medium leading-snug tracking-[-0.015em] text-stone-900 md:text-[1.125rem]">
                     {category.title}

@@ -184,6 +184,163 @@
   }
 }
 
+/* ---------------------------------------------------------------- coach-faq
+
+   En mer redaktionell guideyta för coachportalen. FAQ:n återanvänder samma
+   tillgängliga dragspel som klienten, men får coachportalens stramare språk.
+   ================================================================ */
+
+[data-portal] .portal-faq-page {
+  padding-bottom: 2rem;
+}
+
+[data-portal] .portal-faq-hero {
+  position: relative;
+  max-width: 46rem;
+  padding: 1.5rem 0 3rem;
+}
+
+[data-portal] .portal-faq-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--klient-accent-gold-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+[data-portal] .portal-faq-eyebrow-line {
+  width: 2rem;
+  height: 1px;
+  background: var(--klient-accent-gold);
+}
+
+[data-portal] .portal-faq-title {
+  max-width: 13ch;
+  margin-top: 1.25rem;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  color: var(--klient-text-primary);
+}
+
+[data-portal] .portal-faq-lead {
+  max-width: 43rem;
+  margin-top: 1.5rem;
+  color: #52525b;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+[data-portal] .portal-faq-hint {
+  margin-top: 1.25rem;
+  color: #71717a;
+  font-size: 0.8125rem;
+}
+
+[data-portal] .portal-faq-content {
+  padding-top: 0.25rem;
+}
+
+[data-portal] .portal-faq-stack {
+  gap: 0.625rem;
+}
+
+[data-portal] .portal-faq-item {
+  overflow: hidden;
+  border: 1px solid rgba(63, 63, 70, 0.11);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.025);
+  backdrop-filter: blur(14px);
+  transition:
+    border-color 240ms cubic-bezier(0.32, 0.72, 0, 1),
+    background-color 240ms cubic-bezier(0.32, 0.72, 0, 1),
+    box-shadow 240ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 240ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+[data-portal] .portal-faq-item:hover {
+  border-color: rgba(146, 117, 58, 0.28);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+[data-portal] .portal-faq-item.is-open {
+  border-color: rgba(146, 117, 58, 0.32);
+  background: #fff;
+  box-shadow: 0 18px 42px -28px rgba(24, 24, 27, 0.38);
+}
+
+[data-portal] .portal-faq-item .klient-faq-trigger {
+  align-items: center;
+  gap: 1rem;
+  border-radius: 1rem;
+  padding: 1.25rem 1.25rem;
+}
+
+[data-portal] .portal-faq-number {
+  align-self: flex-start;
+  min-width: 1.75rem;
+  padding-top: 0.15rem;
+  color: var(--klient-accent-gold-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+[data-portal] .portal-faq-item .klient-faq-indicator {
+  height: 2rem;
+  width: 2rem;
+  border-color: rgba(146, 117, 58, 0.18);
+  background: rgba(146, 117, 58, 0.07);
+}
+
+[data-portal] .portal-faq-item.is-open .klient-faq-indicator {
+  border-color: rgba(146, 117, 58, 0.3);
+  background: rgba(146, 117, 58, 0.11);
+}
+
+[data-portal] .portal-faq-item .klient-faq-panel-inner {
+  margin-left: 2.75rem;
+  padding: 0 1.5rem 1.75rem;
+}
+
+[data-portal] .portal-faq-item .klient-faq-list {
+  border-top: 1px solid rgba(63, 63, 70, 0.09);
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  [data-portal] .portal-faq-hero {
+    padding-top: 2rem;
+    padding-bottom: 3.75rem;
+  }
+
+  [data-portal] .portal-faq-item .klient-faq-trigger {
+    gap: 1.5rem;
+    padding: 1.5rem 1.75rem;
+  }
+
+  [data-portal] .portal-faq-item .klient-faq-panel-inner {
+    margin-left: 3.25rem;
+    padding: 0 2rem 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-portal] .portal-faq-item {
+    transition: none !important;
+  }
+}
+
 
 /* ================================================================
    KLIENTPORTAL — premium bento-yta.
