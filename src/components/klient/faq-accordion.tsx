@@ -1,7 +1,8 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { faqCategories } from "@/components/klient/faq-content";
+import type { FaqCategory } from "@/components/faq/faq-types";
+import { faqCategories as clientFaqCategories } from "@/components/klient/faq-content";
 
 /**
  * FAQ-dragspel för klientportalen.
@@ -11,20 +12,24 @@ import { faqCategories } from "@/components/klient/faq-content";
  * `visibility: hidden` via klassen, så länkar i dem hamnar aldrig i
  * tabbordningen.
  */
-export default function FaqAccordion() {
+export default function FaqAccordion({
+  categories = clientFaqCategories,
+}: {
+  categories?: FaqCategory[];
+}) {
   const baseId = useId().replace(/:/g, "");
   const [openId, setOpenId] = useState<string | null>(null);
   const triggers = useRef<Array<HTMLButtonElement | null>>([]);
 
   function focusTrigger(index: number) {
-    const count = faqCategories.length;
+    const count = categories.length;
     const next = ((index % count) + count) % count;
     triggers.current[next]?.focus();
   }
 
   return (
     <div className="klient-faq-stack">
-      {faqCategories.map((category, index) => {
+      {categories.map((category, index) => {
         const open = openId === category.id;
         const headerId = `${baseId}-faq-header-${category.id}`;
         const panelId = `${baseId}-faq-panel-${category.id}`;
@@ -56,7 +61,7 @@ export default function FaqAccordion() {
                     focusTrigger(0);
                   } else if (event.key === "End") {
                     event.preventDefault();
-                    focusTrigger(faqCategories.length - 1);
+                    focusTrigger(categories.length - 1);
                   }
                 }}
                 className="klient-faq-trigger"

@@ -16,6 +16,7 @@ const items = [
   { href: "/cvb-base/avtal", label: "Avtal", exact: false },
   { href: "/cvb-base/dokument", label: "Dokument", exact: false },
   { href: "/cvb-base/profil", label: "Profil", exact: false },
+  { href: "/cvb-base/faq", label: "FAQ", exact: false },
 ] as const;
 
 function isActive(pathname: string, item: (typeof items)[number]): boolean {

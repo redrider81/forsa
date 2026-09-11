@@ -7,21 +7,7 @@
  * vad systemet faktiskt gör.
  */
 
-export type FaqEntry = {
-  question: string;
-  /** Ett stycke per element. Håll dem korta. */
-  answer: string[];
-  /** Kontaktuppgift som renderas som en mailto-länk sist i svaret. */
-  contactEmail?: string;
-};
-
-export type FaqCategory = {
-  id: string;
-  title: string;
-  /** En rad kontext i stängt läge. */
-  summary: string;
-  entries: FaqEntry[];
-};
+import type { FaqCategory } from "@/components/faq/faq-types";
 
 export const faqCategories: FaqCategory[] = [
   {
