@@ -30,7 +30,7 @@ const servicesSv: Service[] = [
     href: "/business-coaching",
     title: "Business coaching",
     description:
-      "För medarbetare och ledare som behöver klarhet, riktning eller stöd i en arbetsrelaterad situation.",
+      "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
     ctaLabel: "Läs om business coaching",
   },
 ];

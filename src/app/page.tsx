@@ -71,8 +71,8 @@ export default function HomePage() {
                 data-hero-body
                 className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg"
               >
-                Personlig coaching med Carolina von Braun — för dig som står i ett vägval, en
-                förändring eller en fråga i arbetslivet.
+                Professionell coaching med Carolina von Braun för dig som står inför ett vägval,
+                en förändring eller en fråga där nästa steg ännu inte är självklart.
               </p>
               <div className="mt-9 flex w-full flex-col items-center gap-4 md:mt-10 md:w-fit md:flex-row md:flex-wrap md:items-start md:justify-start md:gap-3.5">
                 <span data-hero-cta className="inline-flex justify-center">
@@ -90,7 +90,7 @@ export default function HomePage() {
                 data-hero-cta
                 className="mt-5 text-[0.8125rem] leading-[1.6] text-white/75 drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]"
               >
-                Ett första samtal är konfidentiellt. Du behöver inte ha formulerat allt.
+                Kort och kostnadsfritt första telefonsamtal.
               </p>
             </HeroReveal>
           </div>
@@ -99,6 +99,11 @@ export default function HomePage() {
 
       <div className="relative z-10 isolate bg-zinc-100">
       <div className="mx-auto max-w-6xl px-6 pb-24 md:px-10">
+
+        <p className="max-w-3xl py-10 text-[0.875rem] leading-[1.6] text-zinc-500 md:py-12">
+          Diplomerad coach vid Gothia Akademi · ICF-ackrediterad coachutbildning på Level 1 och
+          Level 2 · Göteborg och digitalt
+        </p>
 
         <section
           id="coaching"
@@ -190,8 +195,8 @@ export default function HomePage() {
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">01</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Klarhet</h3>
                 <p data-row-body className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl">
-                  Jag hjälper dig att sortera vad frågan faktiskt handlar om och vad som är
-                  viktigast för dig.
+                  Jag lyssnar och ställer frågor som hjälper dig att sortera vad frågan faktiskt
+                  handlar om och vad som är viktigast för dig.
                 </p>
               </div>
             </article>
@@ -200,8 +205,8 @@ export default function HomePage() {
                 <p data-row-index className="text-[0.6875rem] font-medium tabular-nums tracking-[0.32em] text-zinc-400">02</p>
                 <h3 data-row-title className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]">Beslut</h3>
                 <p data-row-body className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-700 md:max-w-xl md:justify-self-end lg:max-w-2xl">
-                  Jag hjälper dig att pröva dina alternativ och se vad du väljer, vad du väljer
-                  bort och varför.
+                  Jag hjälper dig att pröva dina alternativ och de antaganden de vilar på, så att
+                  du ser vad du väljer, vad du väljer bort och varför.
                 </p>
               </div>
             </article>
@@ -238,17 +243,14 @@ export default function HomePage() {
         <section data-parallax-section className="border-t border-line-accent/30 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
             <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
-              Stöd mellan samtalen
+              Samtalet står i centrum. CVB Base hjälper dig att behålla sammanhanget mellan
+              samtalen.
             </h2>
             <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
               <p>
-                Mellan samtalen kan det vara hjälpsamt att samla tankar och förbereda nästa steg.
-                När det passar används CVB Base som ett enkelt stöd för reflektion och relevant
-                material.
-              </p>
-              <p>
-                Det gör det lättare att behålla sammanhanget i det du arbetar med — utan att ersätta
-                det personliga samtalet.
+                När det är relevant använder du CVB Base för att förbereda frågor, samla
+                reflektioner och återvända till sådant du vill följa över tid. Det ersätter inte
+                coachingen, utan ger dig en plats för det som händer mellan samtalen.
               </p>
             </div>
           </ScrollReveal>

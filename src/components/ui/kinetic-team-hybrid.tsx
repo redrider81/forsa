@@ -145,15 +145,14 @@ export default function KineticTeamHybrid() {
             className="absolute left-0 top-0 hidden h-full w-px origin-top bg-line-accent/25 md:block"
           />
           <p data-col-paragraph>
-            Jag heter Carolina von Braun. CVB Coaching är min personliga coachingpraktik. Jag
-            arbetar med människor som behöver få syn på sin situation klarare — privat eller i
-            arbetslivet.
+            Jag heter Carolina von Braun och driver CVB Coaching. Jag är diplomerad coach vid
+            Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och
+            Level 2.
           </p>
           <p data-col-paragraph>
-            Med erfarenhet från arbetsliv där beslut får konkreta konsekvenser erbjuder jag ett
-            lugnt, professionellt och konfidentiellt samtalsrum. Min uppgift är inte att tala om vad
-            du ska göra, utan att hjälpa dig tänka, välja och gå vidare på ett sätt som håller för
-            dig.
+            Min yrkesbakgrund omfattar bland annat värdepappershandel på Nordea och
+            styrelseuppdrag inom fastighetsförvaltning och investeringar. Den erfarenheten finns
+            med som bakgrund i samtalet — inte som ett facit för dina beslut.
           </p>
           <div data-col-paragraph className="mt-12">
             <CtaLink href="/om-oss" variant="primary">
