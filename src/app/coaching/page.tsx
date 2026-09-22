@@ -243,28 +243,33 @@ export default function CoachingPage() {
             Vad arbetet består av
           </h2>
           <div className="mt-24 border-t border-zinc-300 md:mt-40">
-            {workRows.map((row, index) => (
+            {workRows.map((row) => (
               <article
                 key={row.index}
                 data-editorial-row
-                className={`border-b border-zinc-300 py-16 md:py-28 ${index === 1 ? "lg:pl-[8.333%]" : ""}`}
+                className="border-b border-zinc-300 py-12 md:py-20"
               >
                 <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-x-8">
-                  {/* Sifferkolumnen är ren struktur — titeln och brödtexten bär
-                      innehållet, så siffran hålls utanför tillgänglighetsträdet. */}
-                  <p
-                    data-row-index
-                    aria-hidden="true"
-                    className="font-serif text-[clamp(4.5rem,9vw,8rem)] leading-[0.72] tracking-[-0.065em] text-zinc-200 md:col-span-3"
-                  >
-                    {row.index}
-                  </p>
-                  <h3
-                    data-row-title
-                    className="text-2xl font-medium leading-tight tracking-tight text-zinc-900 md:col-span-3 md:text-3xl"
-                  >
-                    {row.title}
-                  </h3>
+                  {/* Index och titel hör ihop. På smal skärm står de på samma rad;
+                      från md upplöses omslaget (contents) så att båda blir egna
+                      kolumner i radens gemensamma rutnät. */}
+                  <div className="flex items-baseline gap-4 md:contents">
+                    {/* Siffran är struktur, inte innehåll — titeln och brödtexten
+                        bär betydelsen, så den hålls utanför tillgänglighetsträdet. */}
+                    <span
+                      data-row-index
+                      aria-hidden="true"
+                      className="min-w-[1.75rem] shrink-0 font-serif tabular-nums text-[1.375rem] leading-tight tracking-[-0.02em] text-zinc-400 md:col-span-1 md:min-w-0 md:text-[clamp(1.5rem,1.8vw,1.75rem)]"
+                    >
+                      {row.index}
+                    </span>
+                    <h3
+                      data-row-title
+                      className="text-2xl font-medium leading-tight tracking-tight text-zinc-900 md:col-span-4 md:col-start-2 md:text-3xl"
+                    >
+                      {row.title}
+                    </h3>
+                  </div>
                   <p
                     data-row-body
                     className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-5 md:col-start-8"
@@ -292,30 +297,30 @@ export default function CoachingPage() {
 
           <EditorialRowsReveal className="mt-20 md:mt-28">
             <ol className="border-t border-zinc-300">
-              {processSteps.map((step, index) => (
+              {processSteps.map((step) => (
                 <li
                   key={step.index}
                   data-editorial-row
                   className="relative border-b border-zinc-300 py-10 md:py-14"
                 >
-                  <div
-                    className={`grid gap-6 md:grid-cols-12 md:items-start md:gap-8 ${
-                      index % 2 === 1 ? "lg:pl-[8.333%]" : ""
-                    }`}
-                  >
-                    <span
-                      data-row-index
-                      aria-hidden="true"
-                      className="font-serif text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.75] tracking-[-0.06em] text-zinc-200 md:col-span-2"
-                    >
-                      {step.index}
-                    </span>
-                    <h3
-                      data-row-title
-                      className="text-xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:col-span-4 md:text-2xl"
-                    >
-                      {step.title}
-                    </h3>
+                  {/* Samma rutnätsdisciplin som scen 02, men tätare index —
+                      processen är operativ, inte signaturscen. */}
+                  <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-8">
+                    <div className="flex items-baseline gap-4 md:contents">
+                      <span
+                        data-row-index
+                        aria-hidden="true"
+                        className="min-w-[1.6rem] shrink-0 font-serif tabular-nums text-[1.25rem] leading-tight tracking-[-0.02em] text-zinc-400 md:col-span-1 md:min-w-0 md:text-[clamp(1.25rem,1.4vw,1.375rem)]"
+                      >
+                        {step.index}
+                      </span>
+                      <h3
+                        data-row-title
+                        className="text-xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:col-span-4 md:col-start-2 md:text-2xl"
+                      >
+                        {step.title}
+                      </h3>
+                    </div>
                     <p
                       data-row-body
                       className="max-w-xl text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:col-span-5 md:col-start-8 md:text-[1.0625rem]"
@@ -477,17 +482,16 @@ export default function CoachingPage() {
           </div>
 
           {/* Praktiskt är komponerat som redaktionella rader i stället för en
-              definitionslista med panelkänsla: titeln står ensam till vänster,
-              texten börjar långt in, och raderna förskjuts i sidled. */}
+              definitionslista med panelkänsla: serif-titel ensam till vänster,
+              smal textspalt långt in, hårfina linjer och hög radhöjd. Alla rader
+              delar samma rutnät — variationen kommer från innehållet. */}
           <EditorialRowsReveal className="mt-16 md:mt-24">
             <dl>
-              {practical.map((item, index) => (
+              {practical.map((item) => (
                 <div
                   key={item.title}
                   data-editorial-row
-                  className={`grid gap-4 border-t border-zinc-300 py-12 md:grid-cols-12 md:gap-x-8 md:py-20 ${
-                    index === 1 ? "lg:pl-[8.333%]" : ""
-                  } ${index === 2 ? "lg:pl-[16.666%]" : ""}`}
+                  className="grid gap-4 border-t border-zinc-300 py-12 md:grid-cols-12 md:gap-x-8 md:py-20"
                 >
                   <dt
                     data-row-title
