@@ -55,15 +55,24 @@ export default function EngagementSection({ locale }: Props) {
   }, []);
 
   return (
-    <section id="uppdrag" data-parallax-section className="pt-16 pb-8 md:pt-20 md:pb-10">
+    <section
+      id="uppdrag"
+      data-parallax-section
+      className="bg-[#f1f0ec] py-24 md:py-32 lg:py-40"
+    >
       <div
         ref={ref}
-        className="grid gap-10 md:grid-cols-12 md:items-start md:gap-x-16"
+        className="mx-auto max-w-7xl px-6 md:px-10"
       >
-        <h2 className="text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:col-span-4 md:text-[2.1rem]">
-          {titles[locale]}
-        </h2>
-        <div className="md:col-span-8">
+        <div className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
+          <p className="text-xs font-medium tabular-nums tracking-[0.32em] text-[#967844] md:col-span-2">
+            04
+          </p>
+          <h2 className="max-w-4xl font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[0.94] tracking-[-0.045em] text-zinc-900 md:col-span-8 md:col-start-5">
+            {titles[locale]}
+          </h2>
+        </div>
+        <div className="mt-20 md:mt-28">
           <EngagementBentoGrid locale={locale} />
         </div>
       </div>

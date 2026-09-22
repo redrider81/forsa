@@ -10,7 +10,6 @@ type Step = {
   index: string;
   title: string;
   body: string;
-  layout: string;
 };
 
 const stepsSv: Step[] = [
@@ -18,25 +17,21 @@ const stepsSv: Step[] = [
     index: "01",
     title: "Första samtalet",
     body: "Konfidentiellt. Du berättar om din situation, och tillsammans ser vi om coaching är rätt stöd och om vi fungerar bra ihop.",
-    layout: "md:col-span-6 lg:col-span-7",
   },
   {
     index: "02",
     title: "Vad du vill bli klarare i",
     body: "Jag hjälper dig att sätta ord på vad du vill bli klarare i och vad du vill kunna göra annorlunda.",
-    layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "03",
     title: "Samtalen",
     body: "Du och jag bestämmer rytmen tillsammans. Varje samtal avslutas med något du tar med dig vidare.",
-    layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "04",
     title: "Avslut",
     body: "Du och jag stämmer av mot det du ville uppnå och ser tillsammans om arbetet är klart eller ska fortsätta.",
-    layout: "md:col-span-6 lg:col-span-7",
   },
 ];
 
@@ -45,25 +40,21 @@ const stepsEn: Step[] = [
     index: "01",
     title: "The first conversation",
     body: "Confidential. We talk about your situation and work out together whether coaching is the right support and whether we are a good fit.",
-    layout: "md:col-span-6 lg:col-span-7",
   },
   {
     index: "02",
     title: "What you want to get clearer about",
     body: "We put into words what needs to be different for the conversations to make a real difference.",
-    layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "03",
     title: "The sessions",
     body: "We set the rhythm together. Every conversation ends with something you take further.",
-    layout: "md:col-span-6 lg:col-span-5",
   },
   {
     index: "04",
     title: "Closing",
     body: "We look back at what you set out to do, and decide whether the work is finished or continues.",
-    layout: "md:col-span-6 lg:col-span-7",
   },
 ];
 
@@ -71,9 +62,6 @@ const footnotes: Record<Locale, string> = {
   sv: "Upplägget följer frågan och vad du vill få ut av samtalen.",
   en: "The shape of the work follows the question and what you want to get out of the sessions.",
 };
-
-const tileClass =
-  "group relative flex flex-col rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-[0_1px_2px_rgba(24,24,27,0.04)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-[0_16px_40px_-28px_rgba(24,24,27,0.28)] motion-reduce:transition-none md:p-7";
 
 type Props = {
   locale: Locale;
@@ -95,12 +83,10 @@ function buildStepsReveal(
 ) {
   // Korten hålls synliga hela tiden och animeras bara i position. Innehållet får
   // aldrig vara beroende av att en scroll-animation hinner köra.
-  gsap.set(steps, { autoAlpha: 1, opacity: 0.35, force3D: true });
+  gsap.set(steps, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
   gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(steps[0], { opacity: 1 });
-  gsap.set(cards, { autoAlpha: 1, y: 14, force3D: true });
+  gsap.set(cards, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
   gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(accents[0], { scaleX: 1 });
   if (footnote) {
     gsap.set(footnote, { autoAlpha: 0, y: 10, force3D: true });
   }
@@ -110,20 +96,32 @@ function buildStepsReveal(
   tl.to(
     cards,
     {
+      autoAlpha: 1,
       y: 0,
-      duration: motion.duration.medium,
+      duration: motion.duration.long,
       ease: motion.ease.reveal,
-      stagger: 0.07,
+      stagger: 0.1,
       force3D: true,
     },
     0,
   );
   tl.to(
     lines,
-    { scaleX: 1, duration: motion.duration.medium, ease: motion.ease.reveal, stagger: 0.05, force3D: true },
+    { scaleX: 1, duration: motion.duration.long, ease: motion.ease.editorial, stagger: 0.08, force3D: true },
     0.05,
   );
-  tl.to(steps, { opacity: 1, duration: 0.12, stagger: 0.04, ease: "none" }, 0.08);
+  tl.to(
+    steps,
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: motion.duration.medium,
+      ease: motion.ease.reveal,
+      stagger: 0.08,
+      force3D: true,
+    },
+    0.08,
+  );
   tl.to(
     accents,
     { scaleX: 1, duration: motion.duration.short, ease: motion.ease.reveal, stagger: 0.05, force3D: true },
@@ -182,58 +180,56 @@ export default function EngagementBentoGrid({ locale }: Props) {
   return (
     <div ref={rootRef}>
       <div ref={panelRef}>
-        <ol
-          aria-hidden="true"
-          className="mb-8 hidden max-w-2xl items-center md:flex"
-        >
-          {steps.map((step, index) => (
-            <li key={step.index} className="flex flex-1 items-center last:flex-none">
-              <span
-                data-progress-step
-                className="text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 transition-opacity duration-200 md:text-[0.9375rem]"
-              >
-                {step.index}
-              </span>
-              {index < steps.length - 1 ? (
-                <span data-progress-track className="mx-3 h-2 flex-1 overflow-hidden rounded-full bg-line-track">
-                  <span data-progress-line className="block h-full w-full rounded-full" />
-                </span>
-              ) : null}
-            </li>
-          ))}
-        </ol>
-
-        <div className="grid grid-cols-1 gap-3.5 md:grid-cols-12 md:gap-4">
-            {steps.map((step) => (
-              <article
+        <ol className="border-t border-zinc-300">
+            {steps.map((step, index) => (
+              <li
                 key={step.index}
                 data-bento-card
-                className={`${tileClass} ${step.layout}`}
+                className="relative border-b border-zinc-300 py-10 md:py-14"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 md:text-[0.9375rem]">
+                <span
+                  data-progress-line
+                  aria-hidden="true"
+                  className="absolute left-0 top-[-1px] h-px w-full origin-left bg-[#967844]/70"
+                />
+                <div
+                  className={`grid gap-6 md:grid-cols-12 md:items-start md:gap-8 ${
+                    index % 2 === 1 ? "lg:pl-[8.333%]" : ""
+                  }`}
+                >
+                  <span
+                    data-progress-step
+                    aria-hidden="true"
+                    className="font-serif text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.75] tracking-[-0.06em] text-zinc-200 md:col-span-2"
+                  >
                     {step.index}
                   </span>
-                  <span data-bento-accent aria-hidden="true" className="block h-0.5 w-10 origin-left overflow-hidden rounded-full md:w-14">
-                    <span className="block h-full w-full rounded-full" />
-                  </span>
+                  <h3 className="text-xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:col-span-4 md:text-2xl">
+                    {step.title}
+                  </h3>
+                  <div className="md:col-span-5 md:col-start-8">
+                    <p className="max-w-xl text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
+                      {step.body}
+                    </p>
+                    <span
+                      data-bento-accent
+                      aria-hidden="true"
+                      className="mt-8 block h-px w-12 origin-left overflow-hidden"
+                    >
+                      <span className="block h-full w-full bg-[#967844]" />
+                    </span>
+                  </div>
                 </div>
-                <h3 className="mt-5 text-lg font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.2rem]">
-                  {step.title}
-                </h3>
-                <p className="mt-2.5 text-[0.98rem] font-[450] leading-[1.65] text-zinc-700 md:text-[1.02rem]">
-                  {step.body}
-                </p>
-              </article>
+              </li>
             ))}
+        </ol>
 
             <p
               data-bento-footnote
-              className="rounded-2xl border border-zinc-200/70 bg-zinc-900/[0.025] px-6 py-5 text-[0.98rem] font-[450] leading-[1.65] text-zinc-800 md:col-span-12 md:px-7 md:py-6 md:text-[1.02rem]"
+              className="ml-auto mt-10 max-w-xl border-l border-[#967844]/60 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]"
             >
               {footnotes[locale]}
             </p>
-        </div>
       </div>
     </div>
   );

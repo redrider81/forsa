@@ -152,3 +152,62 @@ button:focus-visible {
     transform: none !important;
   }
 }
+
+/*
+ * Hero i kort liggande vy (t.ex. telefon i landskapsläge, ~844x390).
+ *
+ * Vid 768px bredd slår `md:` på och hjältetexten positioneras som på desktop
+ * (top 66%, translate -50%). Med bara ~390px höjd hamnar rubriken då bakom
+ * navigeringen och CTA:er samt mikrotext klipps bort av `overflow-hidden`.
+ * Det är inte ett breddproblem utan ett höjdproblem, så villkoret är höjdstyrt.
+ *
+ * Kolumnen ankras i underkant i stället för att centreras, vilket gör
+ * navigeringskrock omöjlig, och skalan stramas åt så att hela hjälten ryms
+ * på en skärm. Gäller bara inom detta villkor — normala vyer är orörda.
+ */
+@media (min-width: 768px) and (max-height: 500px) {
+  /* Positionerad kolumn (föräldern till HeroReveal). */
+  [data-hero-sticky] div:has(> div > [data-hero-body]) {
+    top: auto;
+    bottom: clamp(1rem, 6svh, 2rem);
+    /* Tailwind v4 centrerar via egenskapen `translate`, matad av
+       --tw-translate-y. `translate: none` optimeras bort av CSS-minifieraren
+       som initialvärde, så variabeln nollställs i stället. */
+    --tw-translate-y: 0;
+    transform: none;
+    max-width: min(46rem, 89vw);
+  }
+
+  /* HeroReveal-wrappern och rubrikens inre behållare får samma bredd. */
+  [data-hero-sticky] div:has(> [data-hero-body]) {
+    max-width: min(46rem, 89vw);
+  }
+
+  [data-hero-sticky] div:has(> [data-hero-headline]) {
+    max-width: none;
+  }
+
+  [data-hero-sticky] [data-hero-headline] {
+    font-size: clamp(1.5rem, 3.4vw, 2.25rem);
+    line-height: 1.07;
+  }
+
+  [data-hero-sticky] [data-hero-body] {
+    margin-top: 0.7rem;
+    max-width: 66ch;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* CTA-raden: matchar bara behållaren vars barn är knapparna (span),
+     inte HeroReveal-wrappern vars data-hero-cta-barn är mikrotexten (p). */
+  [data-hero-sticky] div:has(> span[data-hero-cta]) {
+    margin-top: 0.9rem;
+    gap: 0.6rem;
+  }
+
+  [data-hero-sticky] p[data-hero-cta] {
+    margin-top: 0.55rem;
+    font-size: 0.75rem;
+  }
+}

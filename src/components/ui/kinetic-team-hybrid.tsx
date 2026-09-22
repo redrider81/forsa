@@ -66,11 +66,11 @@ export default function KineticTeamHybrid() {
       }
 
       if (divider) {
-        gsap.set(divider, { scaleY: 0, transformOrigin: "top center", force3D: true });
+        gsap.set(divider, { scaleX: 0, transformOrigin: "left center", force3D: true });
         tl.to(
           divider,
           {
-            scaleY: 1,
+            scaleX: 1,
             duration: motion.duration.medium,
             ease: motion.ease.editorial,
             force3D: true,
@@ -80,12 +80,11 @@ export default function KineticTeamHybrid() {
       }
 
       if (paragraphs.length) {
-        gsap.set(paragraphs, { autoAlpha: 0, x: 14, y: motion.reveal.ySoft, force3D: true });
+        gsap.set(paragraphs, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
         tl.to(
           paragraphs,
           {
             autoAlpha: 1,
-            x: 0,
             y: 0,
             duration: motion.duration.medium,
             ease: motion.ease.reveal,
@@ -109,27 +108,34 @@ export default function KineticTeamHybrid() {
     <section
       ref={sectionRef}
       data-hero-reveal-first
-      className="group/section relative border-t border-line-accent/35 bg-gradient-to-b from-[#f8f7f4] via-zinc-100 to-[#f3f2ee] py-20 md:py-24"
+      data-parallax-section
+      className="group/section relative overflow-hidden bg-zinc-950 text-zinc-100"
     >
-      <div className="grid gap-10 md:grid-cols-12 md:items-stretch md:gap-x-0 md:gap-y-0">
-        <div data-col-left className="md:col-span-5 md:pr-10 lg:pr-14">
+      {/* Kapitelnumret står som liten guldsiffra nedan. Den jättelika skuggsiffran
+          upprepade samma nummer i postformat — samma visuella språk som scenernas
+          interna 01/02/03 — och är borttagen för att hålla de två nivåerna åtskilda. */}
+      <div className="mx-auto grid max-w-7xl gap-y-12 px-6 py-24 md:grid-cols-12 md:gap-x-8 md:px-10 md:py-32 lg:py-40">
+        <div data-col-left className="relative md:col-span-5 md:row-span-2">
+          <p className="mb-12 text-xs font-medium tabular-nums tracking-[0.32em] text-[#b89a60] md:mb-16">
+            03
+          </p>
           <h2
             data-team-heading
-            className="font-serif text-3xl font-medium leading-[1.12] tracking-tight text-zinc-900 md:text-[2.35rem]"
+            className="max-w-sm font-serif text-[clamp(2.8rem,5vw,5.6rem)] font-medium leading-[0.94] tracking-[-0.045em] text-white"
           >
             Coaching med Carolina
           </h2>
           <div
             data-team-portrait
-            className="relative mt-8 aspect-[4/5] w-full overflow-hidden rounded-2xl border border-zinc-200/80 bg-zinc-200/40 shadow-[0_10px_40px_-16px_rgb(24_24_27_/_0.18)] transition-[transform,box-shadow] duration-500 motion-reduce:transition-none md:group-hover/section:-translate-y-1 md:group-hover/section:shadow-[0_18px_48px_-14px_rgb(24_24_27_/_0.22)]"
+            className="relative mt-12 aspect-[4/5] w-full max-w-md overflow-hidden bg-zinc-900 md:mt-20"
           >
             <Image
               src={CAROLINA_IMAGE}
               alt="Carolina von Braun, coach och grundare av CVB Coaching"
               fill
-              sizes="(min-width: 768px) 38vw, 100vw"
-              className="object-cover object-[center_22%] transition-transform duration-700 motion-reduce:transition-none md:group-hover/section:scale-[1.03]"
-              quality={85}
+              sizes="(min-width: 1280px) 31rem, (min-width: 768px) 40vw, 100vw"
+              className="object-cover object-[center_22%] transition-transform duration-700 motion-reduce:transition-none md:group-hover/section:scale-[1.015]"
+              quality={75}
               priority
             />
           </div>
@@ -137,25 +143,32 @@ export default function KineticTeamHybrid() {
 
         <div
           data-col-right
-          className="relative space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:flex md:max-w-xl md:flex-col md:justify-center md:pl-10 md:justify-self-end lg:pl-14"
+          className="relative text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-6 md:col-start-7 md:row-start-2 md:self-end lg:col-span-5 lg:col-start-8"
         >
           <span
             data-team-divider
             aria-hidden="true"
-            className="absolute left-0 top-0 hidden h-full w-px origin-top bg-line-accent/25 md:block"
+            className="mb-10 block h-px w-full origin-left bg-[#967844]/60 md:mb-14"
           />
-          <p data-col-paragraph>
+          <p data-col-paragraph className="max-w-xl">
             Jag heter Carolina von Braun och driver CVB Coaching. Jag är diplomerad coach vid
-            Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och
-            Level 2.
+            Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och Level
+            2.
           </p>
-          <p data-col-paragraph>
-            Min yrkesbakgrund omfattar bland annat värdepappershandel på Nordea och
-            styrelseuppdrag inom fastighetsförvaltning och investeringar. Den erfarenheten finns
-            med som bakgrund i samtalet — inte som ett facit för dina beslut.
+          <p data-col-paragraph className="mt-9 max-w-xl text-xl leading-[1.55] text-zinc-100 md:mt-12 md:text-2xl">
+            Min yrkesbakgrund omfattar bland annat värdepappershandel på Nordea och styrelseuppdrag
+            inom fastighetsförvaltning och investeringar. Den erfarenheten finns med som bakgrund i
+            samtalet — inte som ett facit för dina beslut.
           </p>
-          <div data-col-paragraph className="mt-12">
-            <CtaLink href="/om-oss" variant="primary">
+          <p
+            data-col-paragraph
+            className="mt-9 max-w-xl border-t border-white/15 pt-8 text-[0.875rem] leading-[1.65] text-zinc-400"
+          >
+            Diplomerad coach vid Gothia Akademi · ICF-ackrediterad coachutbildning på Level 1 och
+            Level 2 · Göteborg och digitalt
+          </p>
+          <div data-col-paragraph className="mt-12 md:mt-16">
+            <CtaLink href="/om-oss" variant="secondary" translucent>
               Läs om Carolina och hennes arbetssätt
             </CtaLink>
           </div>

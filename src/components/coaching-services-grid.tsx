@@ -3,9 +3,15 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import CtaLink from "@/components/cta-link";
+import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
-import { isMobile, motion, prefersReducedMotion, refreshScrollTriggers, revealScrollTrigger, showTargets } from "@/lib/motion";
+import {
+  motion,
+  prefersReducedMotion,
+  refreshScrollTriggers,
+  revealScrollTrigger,
+  showTargets,
+} from "@/lib/motion";
 
 type Service = {
   index: string;
@@ -13,7 +19,6 @@ type Service = {
   title: string;
   description: string;
   ctaLabel: string;
-  spanClass?: string;
 };
 
 const servicesSv: Service[] = [
@@ -54,14 +59,11 @@ const servicesEn: Service[] = [
   },
 ];
 
-const cardClass =
-  "group relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-8 shadow-[0_1px_2px_rgba(24,24,27,0.05)] md:p-9";
-
 type Props = {
   locale: Locale;
 };
 
-function buildMobileReveal(
+function buildEditorialReveal(
   panel: HTMLElement,
   cards: NodeListOf<HTMLElement>,
   steps: NodeListOf<HTMLElement>,
@@ -69,144 +71,62 @@ function buildMobileReveal(
   accents: NodeListOf<HTMLElement>,
   arrows: NodeListOf<HTMLElement>,
 ) {
-  gsap.set(steps, { autoAlpha: 1, opacity: 0.35, force3D: true });
+  gsap.set(steps, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
   gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(steps[0], { opacity: 1 });
-  gsap.set(cards, { autoAlpha: 0, y: 14, force3D: true });
+  gsap.set(cards, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
   gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(accents[0], { scaleX: 1 });
-  gsap.set(arrows, { autoAlpha: 0, force3D: true });
-  gsap.set(arrows[0], { autoAlpha: 0.55 });
+  gsap.set(arrows, { autoAlpha: 0, x: -6, force3D: true });
 
   const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(panel) });
 
   tl.to(
-    cards,
+    steps,
     {
       autoAlpha: 1,
       y: 0,
       duration: motion.duration.medium,
       ease: motion.ease.reveal,
-      stagger: 0.07,
+      stagger: 0.12,
       force3D: true,
-      onComplete: () => {
-        cards.forEach((card) => {
-          card.style.pointerEvents = "auto";
-        });
-      },
     },
     0,
   );
   tl.to(
-    lines,
-    { scaleX: 1, duration: motion.duration.long, ease: motion.ease.reveal, stagger: 0.08, force3D: true },
-    0.05,
-  );
-  tl.to(steps, { opacity: 1, duration: 0.12, stagger: 0.04, ease: "none" }, 0.08);
-  tl.to(
-    accents,
-    { scaleX: 1, duration: motion.duration.medium, ease: motion.ease.reveal, stagger: 0.08, force3D: true },
-    0.1,
-  );
-  tl.to(
-    arrows,
-    { autoAlpha: 0.55, x: 0, duration: motion.duration.short, ease: motion.ease.revealSoft, stagger: 0.05, force3D: true },
-    0.12,
-  );
-}
-
-function buildProgressTimeline(
-  panel: HTMLElement,
-  cards: NodeListOf<HTMLElement>,
-  steps: NodeListOf<HTMLElement>,
-  lines: NodeListOf<HTMLElement>,
-  accents: NodeListOf<HTMLElement>,
-  arrows: NodeListOf<HTMLElement>,
-) {
-  gsap.set(steps, { autoAlpha: 1, y: 0, opacity: 0.35, force3D: true });
-  gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(steps[0], { opacity: 1 });
-
-  cards.forEach((card, index) => {
-    if (index === 0) {
-      gsap.set(card, { autoAlpha: 1, x: 0, y: 0, force3D: true });
-      card.style.pointerEvents = "auto";
-      return;
-    }
-    gsap.set(card, { autoAlpha: 0, x: -12, y: 16, force3D: true });
-    card.style.pointerEvents = "none";
-  });
-
-  gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(accents[0], { scaleX: 1 });
-  gsap.set(arrows, { autoAlpha: 0, x: -4, force3D: true });
-  gsap.set(arrows[0], { autoAlpha: 0.55, x: 0 });
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: panel,
-      start: "top 72%",
-      end: "bottom 18%",
-      scrub: 1,
-      invalidateOnRefresh: true,
+    cards,
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: motion.duration.long,
+      ease: motion.ease.reveal,
+      stagger: 0.12,
+      force3D: true,
     },
-  });
-
-  cards.forEach((card, index) => {
-    if (index === 0) return;
-
-    const segmentStart = (index - 1) * 0.3 + 0.05;
-
-    const line = lines[index - 1];
-    if (line) {
-      tl.to(
-        line,
-        { scaleX: 1, duration: 0.38, ease: motion.ease.reveal },
-        segmentStart,
-      );
-    }
-
-    tl.to(
-      steps[index],
-      { opacity: 1, duration: 0.1, ease: "none" },
-      segmentStart + 0.1,
-    );
-
-    tl.to(
-      card,
-      {
-        autoAlpha: 1,
-        x: 0,
-        y: 0,
-        duration: 0.26,
-        ease: motion.ease.reveal,
-        onStart: () => {
-          card.style.pointerEvents = "auto";
-        },
-      },
-      segmentStart + 0.04,
-    );
-
-    const accent = accents[index];
-    if (accent) {
-      tl.to(
-        accent,
-        { scaleX: 1, duration: 0.32, ease: motion.ease.reveal },
-        segmentStart + 0.1,
-      );
-    }
-
-    const arrow = arrows[index];
-    if (arrow) {
-      tl.to(
-        arrow,
-        { autoAlpha: 0.55, x: 0, duration: 0.14, ease: motion.ease.revealSoft },
-        segmentStart + 0.14,
-      );
-    }
-  });
-
-  tl.to({}, { duration: 0.12 });
+    0.08,
+  );
+  tl.to(
+    lines,
+    {
+      scaleX: 1,
+      duration: motion.duration.long,
+      ease: motion.ease.editorial,
+      stagger: 0.1,
+      force3D: true,
+    },
+    0.14,
+  );
+  tl.to(
+    [...accents, ...arrows],
+    {
+      autoAlpha: 1,
+      scaleX: 1,
+      x: 0,
+      duration: motion.duration.short,
+      ease: motion.ease.revealSoft,
+      stagger: 0.08,
+      force3D: true,
+    },
+    0.22,
+  );
 }
 
 export default function CoachingServicesGrid({ locale }: Props) {
@@ -243,100 +163,85 @@ export default function CoachingServicesGrid({ locale }: Props) {
 
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      if (isMobile()) {
-        buildMobileReveal(panel, cards, steps, lines, accents, arrows);
-      } else {
-        buildProgressTimeline(panel, cards, steps, lines, accents, arrows);
-      }
+      buildEditorialReveal(panel, cards, steps, lines, accents, arrows);
       refreshScrollTriggers();
     }, root);
 
     return () => {
       ctx.revert();
       showTargets(targets);
-      cards.forEach((card) => {
-        card.style.pointerEvents = "auto";
-      });
     };
   }, []);
 
   return (
-    <div ref={rootRef} data-coaching-scroll-root className="pb-8 md:pb-12">
-      <div ref={panelRef} data-coaching-scroll-panel className="bg-white">
-        <ol
-          data-progress-rail
-          aria-hidden="true"
-          className="mb-12 hidden w-full items-center md:flex"
-        >
+    <div ref={rootRef} data-coaching-scroll-root>
+      <div ref={panelRef} data-coaching-scroll-panel>
+        <ol className="grid gap-y-3 md:grid-cols-12 md:gap-x-8 md:gap-y-0">
           {services.map((service, index) => (
             <li
-              key={service.index}
-              className={`flex items-center ${
-                index < services.length - 1 ? "min-w-0 flex-1" : "shrink-0"
-              }`}
-            >
-              <span
-                data-progress-step
-                className="shrink-0 text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 transition-opacity duration-200 md:text-[0.9375rem]"
-              >
-                {service.index}
-              </span>
-              {index < services.length - 1 ? (
-                <span data-progress-track className="mx-4 h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-line-track">
-                  <span data-progress-line className="block h-full w-full rounded-full" />
-                </span>
-              ) : null}
-            </li>
-          ))}
-        </ol>
-
-        <div
-          className={`grid gap-5 md:grid-cols-2 md:gap-6 ${
-            services.length > 2 ? "lg:grid-cols-3" : ""
-          }`}
-        >
-          {services.map((service) => (
-            <article
               key={service.href}
               data-card
-              className={`${cardClass} ${service.spanClass ?? ""}`}
+              className={
+                index === 0
+                  ? "md:col-span-8"
+                  : "md:col-span-8 md:col-start-5 md:mt-16"
+              }
             >
-                <div className="flex items-center gap-3 md:gap-4">
+              <Link
+                href={service.href}
+                className="group relative block border-t border-zinc-300 py-9 transition-colors duration-300 hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-white md:py-12"
+              >
+                <span
+                  data-progress-line
+                  aria-hidden="true"
+                  className="absolute left-0 top-[-1px] h-px w-full origin-left bg-[#967844]/70"
+                />
+                <span className="grid gap-7 sm:grid-cols-[minmax(6rem,0.7fr)_2fr] sm:items-end md:gap-10">
                   <span
+                    data-progress-step
                     aria-hidden="true"
-                    className="shrink-0 text-sm font-semibold tabular-nums tracking-[0.35em] text-zinc-900 md:text-[0.9375rem]"
+                    className="font-serif text-[clamp(4.75rem,9vw,8.5rem)] leading-[0.72] tracking-[-0.065em] text-zinc-200 transition-colors duration-300 group-hover:text-[#967844]"
                   >
                     {service.index}
                   </span>
-                  <span
-                    data-card-accent
-                    aria-hidden="true"
-                    className="block h-px min-w-0 max-w-[5rem] flex-1 origin-left md:max-w-[6rem]"
-                  >
-                    <span className="block h-px w-full" />
+                  <span className="block pb-1">
+                    <span className="flex items-start justify-between gap-5">
+                      {/* Rubriknivån behålls från tidigare layout: raden är visuellt en
+                          textrad, men titeln ska fortfarande ligga i sidans rubrikträd. */}
+                      <span
+                        role="heading"
+                        aria-level={3}
+                        className="text-[1.55rem] font-medium leading-[1.12] tracking-tight text-zinc-900 md:text-[2rem]"
+                      >
+                        {service.title}
+                      </span>
+                      <span
+                        data-card-arrow
+                        aria-hidden="true"
+                        className="mt-1 text-xl text-zinc-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-zinc-900 motion-reduce:transition-none"
+                      >
+                        →
+                      </span>
+                    </span>
+                    <span className="mt-4 block max-w-xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-600">
+                      {service.description}
+                    </span>
+                    <span className="mt-7 inline-flex items-center text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-900">
+                      {service.ctaLabel}
+                    </span>
+                    <span
+                      data-card-accent
+                      aria-hidden="true"
+                      className="mt-8 block h-px w-16 origin-left overflow-hidden"
+                    >
+                      <span className="block h-full w-full bg-[#967844]" />
+                    </span>
                   </span>
-                  <span
-                    data-card-arrow
-                    aria-hidden="true"
-                    className="shrink-0 text-sm text-zinc-400"
-                  >
-                    →
-                  </span>
-                </div>
-                <h3 className="mt-7 text-[1.4rem] font-medium leading-[1.2] tracking-tight text-zinc-900">
-                  {service.title}
-                </h3>
-                <p className="mt-3.5 grow text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
-                  {service.description}
-                </p>
-                <div className="mt-8">
-                  <CtaLink href={service.href} variant="primary">
-                    {service.ctaLabel}
-                  </CtaLink>
-                </div>
-              </article>
-            ))}
-        </div>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );
