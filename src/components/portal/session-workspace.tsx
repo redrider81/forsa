@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { AiDisclaimer, AiResult, AiResultActions, AiSkeleton } from "@/components/portal/ai-result";
 import {
@@ -15,6 +16,7 @@ import {
 } from "@/components/portal/ui";
 
 type Stage = "idle" | "loading" | "draft" | "error";
+type ApproveStage = "idle" | "loading" | "shared" | "error";
 
 /**
  * Insikten och åtagandet är klientens, inte coachens. Prefixen är formulerade
@@ -35,19 +37,25 @@ export default function SessionWorkspace({
   sessionId,
   clientName,
   clientFirstName,
+  shareComplete = false,
 }: {
   clientId: string;
   sessionId: string;
   clientName: string;
   clientFirstName: string;
+  /** Sammanfattningen är redan godkänd och delad från databasen. */
+  shareComplete?: boolean;
 }) {
+  const router = useRouter();
   const [notes, setNotes] = useState("");
   const [stage, setStage] = useState<Stage>("idle");
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
-  const [approved, setApproved] = useState(false);
+  const [approveStage, setApproveStage] = useState<ApproveStage>(shareComplete ? "shared" : "idle");
+  const [approveError, setApproveError] = useState<string | null>(null);
   const notesRef = useRef<HTMLTextAreaElement>(null);
+  const shared = approveStage === "shared";
 
   function addLine(prefix: string) {
     setNotes((current) => {
@@ -71,7 +79,8 @@ export default function SessionWorkspace({
     }
     setStage("loading");
     setError(null);
-    setApproved(false);
+    setApproveStage("idle");
+    setApproveError(null);
     setEditing(false);
     try {
       const response = await fetch("/api/portal/ai/sessionssammanfattning", {
@@ -90,6 +99,35 @@ export default function SessionWorkspace({
     } catch {
       setError("Det gick inte att nå tjänsten just nu. Kontrollera uppkopplingen och försök igen.");
       setStage("error");
+    }
+  }
+
+  async function approveSummary() {
+    if (draft.trim().length < 15) {
+      setApproveError("Sammanfattningen saknar innehåll att godkänna.");
+      setApproveStage("error");
+      return;
+    }
+    setApproveStage("loading");
+    setApproveError(null);
+    try {
+      const response = await fetch("/api/portal/mote/sammanfattning", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clientId, sessionId, draft }),
+      });
+      const data = (await response.json()) as { ok: boolean; error?: string };
+      if (!response.ok || !data.ok) {
+        setApproveError(data.error ?? "Det gick inte att godkänna sammanfattningen.");
+        setApproveStage("error");
+        return;
+      }
+      setApproveStage("shared");
+      setEditing(false);
+      router.refresh();
+    } catch {
+      setApproveError("Det gick inte att nå tjänsten just nu. Kontrollera uppkopplingen och försök igen.");
+      setApproveStage("error");
     }
   }
 
@@ -161,7 +199,7 @@ export default function SessionWorkspace({
         {stage === "draft" ? (
           <article className={`mt-5 ${portalInsetClass}`}>
             <div className="mb-4">
-              <SectionLabel>{approved ? "Godkänd sammanfattning" : "Utkast · ej godkänt"}</SectionLabel>
+              <SectionLabel>{shared ? "Godkänd sammanfattning" : "Utkast · ej godkänt"}</SectionLabel>
             </div>
 
             {editing ? (
@@ -202,20 +240,24 @@ export default function SessionWorkspace({
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setApproved(true);
-                  setEditing(false);
-                }}
+                onClick={() => void approveSummary()}
+                disabled={shared || approveStage === "loading"}
                 className={portalButtonSmClass}
               >
-                Godkänn och dela
+                {approveStage === "loading" ? "Godkänner…" : "Godkänn och dela"}
               </button>
               <AiActionButton compact onClick={() => void createSummary()}>
                 Generera om
               </AiActionButton>
             </div>
 
-            {approved ? (
+            {approveStage === "error" && approveError ? (
+              <p role="alert" className="mt-3.5 text-[0.8125rem] leading-relaxed text-red-700">
+                {approveError}
+              </p>
+            ) : null}
+
+            {shared ? (
               <p role="status" className="mt-3.5 text-[0.8125rem] leading-relaxed text-[#7d6432]">
                 Godkänd och delad med {clientFirstName}.
               </p>

@@ -48,7 +48,7 @@ export default function BusinessCoachingPageEn() {
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
               Business coaching
             </p>
-            <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
+            <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
               A work-life question sometimes needs its own space.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
@@ -71,7 +71,7 @@ export default function BusinessCoachingPageEn() {
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+            <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
               You do not think in a vacuum
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
@@ -89,7 +89,7 @@ export default function BusinessCoachingPageEn() {
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">
+          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
             When coaching at work can be right
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
@@ -106,7 +106,7 @@ export default function BusinessCoachingPageEn() {
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+            <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
               How a company-funded collaboration works
             </h2>
             <div data-col-right className="md:col-span-7">
@@ -125,7 +125,7 @@ export default function BusinessCoachingPageEn() {
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">What it is not</h2>
+          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What it is not</h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
               {nonGoals.map((item) => (
@@ -139,7 +139,7 @@ export default function BusinessCoachingPageEn() {
         </section>
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium tracking-tight">What you can become clearer about</h2>
+          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What you can become clearer about</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
             {outcomes.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
@@ -152,7 +152,7 @@ export default function BusinessCoachingPageEn() {
 
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-tight tracking-tight md:col-span-5">
+            <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
               A collaboration that follows the question
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
@@ -170,7 +170,7 @@ export default function BusinessCoachingPageEn() {
 
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
-            <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-tight md:text-4xl">
+            <h2 className="max-w-4xl text-3xl font-medium leading-[1.25] tracking-tight md:text-4xl">
               Book an introductory conversation
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">

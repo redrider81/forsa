@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import CtaLink from "@/components/cta-link";
 import type { Locale } from "@/lib/i18n/config";
 import {
   motion,
@@ -33,10 +34,10 @@ const servicesSv: Service[] = [
   {
     index: "02",
     href: "/business-coaching",
-    title: "Business coaching",
+    title: "Företags coaching",
     description:
       "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
-    ctaLabel: "Läs om business coaching",
+    ctaLabel: "Läs om företags coaching",
   },
 ];
 
@@ -61,40 +62,26 @@ const servicesEn: Service[] = [
 
 type Props = {
   locale: Locale;
+  /**
+   * Startsidan bär de två vägarna inuti en längre akt och behöver ett tätare
+   * radavstånd för att öppningen inte ska ta över fältet. /en behåller det
+   * ursprungliga, luftigare måttet.
+   */
+  dense?: boolean;
+  /** Startsidan: redaktionella rader utan kortyta. */
+  variant?: "cards" | "editorial";
 };
 
 function buildEditorialReveal(
   panel: HTMLElement,
   cards: NodeListOf<HTMLElement>,
-  steps: NodeListOf<HTMLElement>,
-  lines: NodeListOf<HTMLElement>,
-  accents: NodeListOf<HTMLElement>,
   arrows: NodeListOf<HTMLElement>,
 ) {
-  if (steps.length) {
-    gsap.set(steps, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
-  }
-  gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
   gsap.set(cards, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
-  gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
   gsap.set(arrows, { autoAlpha: 0, x: -6, force3D: true });
 
   const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(panel) });
 
-  if (steps.length) {
-    tl.to(
-      steps,
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: motion.duration.medium,
-        ease: motion.ease.reveal,
-        stagger: 0.12,
-        force3D: true,
-      },
-      0,
-    );
-  }
   tl.to(
     cards,
     {
@@ -102,60 +89,45 @@ function buildEditorialReveal(
       y: 0,
       duration: motion.duration.long,
       ease: motion.ease.reveal,
-      stagger: 0.12,
-      force3D: true,
-    },
-    0.08,
-  );
-  tl.to(
-    lines,
-    {
-      scaleX: 1,
-      duration: motion.duration.long,
-      ease: motion.ease.editorial,
       stagger: 0.1,
       force3D: true,
     },
-    0.14,
+    0,
   );
   tl.to(
-    [...accents, ...arrows],
+    arrows,
     {
       autoAlpha: 1,
-      scaleX: 1,
       x: 0,
       duration: motion.duration.short,
       ease: motion.ease.revealSoft,
       stagger: 0.08,
       force3D: true,
     },
-    0.22,
+    0.12,
   );
 }
 
-export default function CoachingServicesGrid({ locale }: Props) {
+export default function CoachingServicesGrid({
+  locale,
+  dense = false,
+  variant = "cards",
+}: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const services = locale === "en" ? servicesEn : servicesSv;
+  const cardPadding = dense ? "p-7 md:p-9" : "p-8 md:p-10 lg:p-11";
+  const editorial = variant === "editorial";
 
   useEffect(() => {
     const root = rootRef.current;
     const panel = panelRef.current;
     if (!root || !panel) return;
 
-    const steps = panel.querySelectorAll<HTMLElement>("[data-progress-step]");
-    const lines = panel.querySelectorAll<HTMLElement>("[data-progress-line]");
     const cards = panel.querySelectorAll<HTMLElement>("[data-card]");
-    const accents = panel.querySelectorAll<HTMLElement>("[data-card-accent]");
     const arrows = panel.querySelectorAll<HTMLElement>("[data-card-arrow]");
 
-    const targets = [
-      ...steps,
-      ...lines,
-      ...cards,
-      ...accents,
-      ...arrows,
-    ].filter(Boolean) as HTMLElement[];
+    const targets = [...cards, ...arrows].filter(Boolean) as HTMLElement[];
 
     if (prefersReducedMotion()) {
       showTargets(targets);
@@ -167,7 +139,7 @@ export default function CoachingServicesGrid({ locale }: Props) {
 
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      buildEditorialReveal(panel, cards, steps, lines, accents, arrows);
+      buildEditorialReveal(panel, cards, arrows);
       refreshScrollTriggers();
     }, root);
 
@@ -180,67 +152,90 @@ export default function CoachingServicesGrid({ locale }: Props) {
   return (
     <div ref={rootRef} data-coaching-scroll-root>
       <div ref={panelRef} data-coaching-scroll-panel>
-        <ol className="grid gap-y-3 md:grid-cols-12 md:gap-x-8 md:gap-y-0">
-          {services.map((service, index) => (
-            <li
-              key={service.href}
-              data-card
-              className={
-                index === 0
-                  ? "md:col-span-8"
-                  : "md:col-span-8 md:col-start-5 md:mt-16"
-              }
-            >
+        {editorial ? (
+          <ul className="grid border-t border-zinc-300 md:grid-cols-2 md:items-stretch">
+            {services.map((service, serviceIndex) => (
+              <li
+                key={service.href}
+                data-card
+                className={`flex min-h-0 flex-col border-b border-zinc-300 ${
+                  serviceIndex === 0 ? "md:border-r md:border-zinc-300" : ""
+                }`}
+              >
+                <div
+                  className={`flex flex-1 flex-col py-11 md:py-14 ${
+                    serviceIndex === 0
+                      ? "px-7 md:pl-9 md:pr-12 lg:pl-11 lg:pr-16"
+                      : "px-7 md:pl-14 md:pr-9 lg:pl-16 lg:pr-11"
+                  }`}
+                >
+                  <span className="text-xs font-medium tabular-nums tracking-[0.32em] text-zinc-900">
+                    {service.index}
+                  </span>
+                  <span
+                    role="heading"
+                    aria-level={3}
+                    className="mt-5 block font-serif text-[clamp(1.5rem,2.2vw,1.75rem)] font-medium leading-[1.15] tracking-[-0.02em] text-zinc-900 md:mt-6"
+                  >
+                    {service.title}
+                  </span>
+                  <p className="mt-4 max-w-md flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
+                    {service.description}
+                  </p>
+                  <div className="group mt-8 md:mt-10">
+                    <CtaLink href={service.href} variant="tertiary">
+                      <span className="inline-flex items-center gap-2">
+                        {service.ctaLabel}
+                        <span
+                          data-card-arrow
+                          aria-hidden="true"
+                          className="transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                        >
+                          →
+                        </span>
+                      </span>
+                    </CtaLink>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+        <ul className="grid gap-4 md:grid-cols-2 md:gap-5 lg:gap-6">
+          {services.map((service) => (
+            <li key={service.href} data-card className="min-h-0">
               <Link
                 href={service.href}
-                className="group relative block border-t border-zinc-300 py-9 transition-colors duration-300 hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-white md:py-12"
+                className={`group flex h-full flex-col border border-zinc-300/90 bg-[#f9f8f5] ${cardPadding} transition-[border-color,background-color] duration-300 hover:border-zinc-400 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4`}
               >
+                <span className="text-xs font-medium tabular-nums tracking-[0.32em] text-zinc-900">
+                  {service.index}
+                </span>
                 <span
-                  data-progress-line
-                  aria-hidden="true"
-                  className="absolute left-0 top-[-1px] h-px w-full origin-left bg-[#967844]/70"
-                />
-                {/* Individuell och business coaching är två sammanhang, inte en
-                    ordningsföljd — den dekorativa siffran är därför borttagen. */}
-                <span className="block">
-                  <span className="block pb-1">
-                    <span className="flex items-start justify-between gap-5">
-                      {/* Rubriknivån behålls från tidigare layout: raden är visuellt en
-                          textrad, men titeln ska fortfarande ligga i sidans rubrikträd. */}
-                      <span
-                        role="heading"
-                        aria-level={3}
-                        className="text-[1.55rem] font-medium leading-[1.12] tracking-tight text-zinc-900 md:text-[2rem]"
-                      >
-                        {service.title}
-                      </span>
-                      <span
-                        data-card-arrow
-                        aria-hidden="true"
-                        className="mt-1 text-xl text-zinc-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-zinc-900 motion-reduce:transition-none"
-                      >
-                        →
-                      </span>
-                    </span>
-                    <span className="mt-4 block max-w-xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-600">
-                      {service.description}
-                    </span>
-                    <span className="mt-7 inline-flex items-center text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-900">
-                      {service.ctaLabel}
-                    </span>
-                    <span
-                      data-card-accent
-                      aria-hidden="true"
-                      className="mt-8 block h-px w-16 origin-left overflow-hidden"
-                    >
-                      <span className="block h-full w-full bg-[#967844]" />
-                    </span>
+                  role="heading"
+                  aria-level={3}
+                  className="mt-5 text-[1.35rem] font-medium leading-[1.3] tracking-tight text-zinc-900 md:mt-6 md:text-[1.5rem]"
+                >
+                  {service.title}
+                </span>
+                <span className="mt-4 flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
+                  {service.description}
+                </span>
+                <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition-[decoration-color,color] duration-300 group-hover:decoration-zinc-900">
+                  {service.ctaLabel}
+                  <span
+                    data-card-arrow
+                    aria-hidden="true"
+                    className="no-underline transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                  >
+                    →
                   </span>
                 </span>
               </Link>
             </li>
           ))}
-        </ol>
+        </ul>
+        )}
       </div>
     </div>
   );

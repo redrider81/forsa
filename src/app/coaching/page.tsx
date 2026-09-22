@@ -143,13 +143,13 @@ const faqItems: ProcessFaqItem[] = [
   },
 ];
 
-/**
- * Kapitelmetadata. Guldet på ljus yta är en mörkare variant av #967844:
- * varumärkesguldet ger 3,73:1 mot #f4f3ef, vilket underkänns av WCAG AA för
- * text i 12 px. Den här nyansen ger 5,07:1 och ligger kvar i samma familj.
- */
-const chapterLight = "text-xs font-medium tabular-nums tracking-[0.32em] text-[#7d6435]";
-const chapterDark = "text-xs font-medium tabular-nums tracking-[0.32em] text-[#b89a60]";
+const chapterBase = "text-xs font-medium tabular-nums tracking-[0.32em]";
+const chapterIndexOnLight = `${chapterBase} text-zinc-900`;
+const chapterIndexOnDark = `${chapterBase} text-white`;
+/** Etiketter på ljus yta — samma skala som hero, inte kapitelindex. */
+const chapterLabelLight =
+  "text-xs font-medium uppercase tracking-[0.16em] text-[#7d6435]";
+const chapterDark = chapterIndexOnDark;
 
 export default function CoachingPage() {
   return (
@@ -161,13 +161,13 @@ export default function CoachingPage() {
             <div className="grid md:grid-cols-12 md:gap-x-8">
               <div className="md:col-span-2">
                 <div data-hero-line className="mb-8 h-px w-12 origin-left bg-[#7d6435]" />
-                <p data-hero-label className={chapterLight}>
+                <p data-hero-label className={chapterLabelLight}>
                   Coaching
                 </p>
               </div>
               <h1
                 data-hero-headline
-                className="mt-14 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[0.88] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
+                className="mt-14 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[1.2] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
               >
                 Vad coaching innebär hos CVB.
               </h1>
@@ -211,8 +211,8 @@ export default function CoachingPage() {
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
             <div data-col-left className="md:col-span-5">
-              <p className={chapterLight}>01</p>
-              <h2 className="mt-10 max-w-md font-serif text-[clamp(3rem,6vw,6.5rem)] font-medium leading-[0.94] tracking-[-0.045em] text-zinc-900 md:mt-16">
+              <p className={chapterIndexOnLight}>01</p>
+              <h2 className="mt-10 max-w-md font-serif text-[clamp(3rem,6vw,6.5rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900 md:mt-16">
                 När coaching kan vara rätt
               </h2>
             </div>
@@ -221,7 +221,7 @@ export default function CoachingPage() {
                 <ul className="divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                   {relevancePoints.map((point) => (
                     <li key={point} data-list-item className="grid grid-cols-[1rem_1fr] gap-5 py-6 md:py-7">
-                      <span className="mt-[0.72rem] h-1 w-1 bg-[#967844]" aria-hidden />
+                      <span className="mt-[0.72rem] h-1 w-1 shrink-0 bg-zinc-900" aria-hidden />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -235,10 +235,10 @@ export default function CoachingPage() {
       {/* ---------- 02 · Vad arbetet består av — glesaste scenen, sidans signatur ---------- */}
       <section className="bg-[#f4f3ef] py-32 md:py-52 lg:py-64">
         <EditorialRowsReveal className="mx-auto max-w-7xl px-6 md:px-10">
-          <p className={chapterLight}>02</p>
+          <p className={chapterIndexOnLight}>02</p>
           <h2
             data-section-heading
-            className="mt-10 max-w-3xl font-serif text-[clamp(2.8rem,6vw,6rem)] font-medium leading-[0.96] tracking-[-0.04em] text-zinc-900 md:mt-16"
+            className="mt-10 max-w-3xl font-serif text-[clamp(2.8rem,6vw,6rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:mt-16"
           >
             Vad arbetet består av
           </h2>
@@ -265,7 +265,7 @@ export default function CoachingPage() {
                     </span>
                     <h3
                       data-row-title
-                      className="text-2xl font-medium leading-tight tracking-tight text-zinc-900 md:col-span-4 md:col-start-2 md:text-3xl"
+                      className="text-2xl font-medium leading-[1.3] tracking-tight text-zinc-900 md:col-span-4 md:col-start-2 md:text-3xl"
                     >
                       {row.title}
                     </h3>
@@ -287,9 +287,9 @@ export default function CoachingPage() {
       <section className="bg-white py-20 md:py-24 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
-            <p data-col-left className={`${chapterLight} md:col-span-2`}>03</p>
+            <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>03</p>
             <div data-col-right className="md:col-span-8 md:col-start-5">
-              <h2 className="max-w-4xl font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[0.94] tracking-[-0.045em] text-zinc-900">
+              <h2 className="max-w-4xl font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900">
                 Så går det till
               </h2>
             </div>
@@ -316,7 +316,7 @@ export default function CoachingPage() {
                       </span>
                       <h3
                         data-row-title
-                        className="text-xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:col-span-4 md:col-start-2 md:text-2xl"
+                        className="text-xl font-medium leading-[1.3] tracking-tight text-zinc-900 md:col-span-4 md:col-start-2 md:text-2xl"
                       >
                         {step.title}
                       </h3>
@@ -331,7 +331,7 @@ export default function CoachingPage() {
                 </li>
               ))}
             </ol>
-            <p className="ml-auto mt-10 max-w-xl border-l border-[#967844]/60 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]">
+            <p className="ml-auto mt-10 max-w-xl border-l border-zinc-300 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]">
               Upplägget följer frågan och vad du vill få ut av samtalen.
             </p>
           </EditorialRowsReveal>
@@ -339,21 +339,21 @@ export default function CoachingPage() {
       </section>
 
       {/* ---------- 04 · CVB Base (mörk scen) ---------- */}
-      <section className="bg-zinc-950 py-28 text-zinc-100 md:py-40 lg:py-48">
+      <section className="bg-surface-dark py-28 text-zinc-100 md:py-40 lg:py-48">
         <ScrollReveal
           variant="splitColumn"
           className="mx-auto grid max-w-7xl gap-14 px-6 md:grid-cols-12 md:gap-x-8 md:px-10"
         >
           <div data-col-left className="md:col-span-7">
             <p className={chapterDark}>04</p>
-            <h2 className="mt-12 max-w-3xl font-serif text-[clamp(3rem,4.4vw,4.75rem)] font-medium text-balance leading-[0.98] tracking-[-0.04em] text-white md:mt-16">
+            <h2 className="mt-12 max-w-3xl font-serif text-[clamp(3rem,4.4vw,4.75rem)] font-medium text-balance leading-[1.14] tracking-[-0.04em] text-white md:mt-16">
               Samtalet står i centrum. CVB Base hjälper dig att behålla sammanhanget mellan
               samtalen.
             </h2>
           </div>
           <div
             data-col-right
-            className="space-y-8 border-t border-[#967844]/60 pt-10 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-8 md:mt-40 md:pt-12"
+            className="space-y-8 border-t border-white/60 pt-10 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-8 md:mt-40 md:pt-12"
           >
             <p data-col-paragraph>
               När det är relevant använder du CVB Base för att förbereda frågor, samla reflektioner
@@ -369,14 +369,14 @@ export default function CoachingPage() {
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
             <div data-col-left className="md:col-span-5">
-              <p className={chapterLight}>05</p>
-              <h2 className="mt-10 max-w-md font-serif text-[clamp(2.25rem,4vw,4rem)] font-medium leading-[1] tracking-[-0.035em] text-zinc-900 md:mt-16">
+              <p className={chapterIndexOnLight}>05</p>
+              <h2 className="mt-10 max-w-md font-serif text-[clamp(2.25rem,4vw,4rem)] font-medium leading-[1.18] tracking-[-0.035em] text-zinc-900 md:mt-16">
                 När coaching är relevant — och när den inte är det
               </h2>
             </div>
             <div data-col-right className="grid gap-14 md:col-span-7 md:col-start-6 md:grid-cols-2 md:gap-10 md:pt-24">
               <ScrollReveal variant="staggerList">
-                <h3 className="text-lg font-medium text-zinc-900">Coaching kan vara relevant när</h3>
+                <h3 className="text-lg font-medium leading-[1.35] text-zinc-900">Coaching kan vara relevant när</h3>
                 <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-700">
                   {passarNär.map((item) => (
                     <li key={item} data-list-item className="border-t border-zinc-300 pt-5">
@@ -386,7 +386,7 @@ export default function CoachingPage() {
                 </ul>
               </ScrollReveal>
               <ScrollReveal variant="staggerList">
-                <h3 className="text-lg font-medium text-zinc-900">Coaching är inte rätt stöd när</h3>
+                <h3 className="text-lg font-medium leading-[1.35] text-zinc-900">Coaching är inte rätt stöd när</h3>
                 <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-600">
                   {mindreRelevant.map((item) => (
                     <li key={item} data-list-item className="border-t border-zinc-300 pt-5">
@@ -405,7 +405,7 @@ export default function CoachingPage() {
           Den är flyttad hit som en egen paus i stället för att upprepas. */}
       <section className="flex min-h-[72svh] items-center bg-[#f4f3ef] pb-28 pt-12 md:min-h-[86svh] md:pb-40">
         <ScrollReveal variant="fadeUp" className="mx-auto w-full max-w-7xl px-6 md:px-10">
-          <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[0.98] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
+          <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
             Individuell coaching och business coaching utgår från samma arbetssätt.
           </p>
         </ScrollReveal>
@@ -415,9 +415,9 @@ export default function CoachingPage() {
       <section id="vagar" className="scroll-mt-28 bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
-            <p data-col-left className={`${chapterLight} md:col-span-2`}>06</p>
+            <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>06</p>
             <div data-col-right className="md:col-span-8 md:col-start-5">
-              <h2 className="font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1] tracking-[-0.035em] text-zinc-900">
+              <h2 className="font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1.18] tracking-[-0.035em] text-zinc-900">
                 Individuell coaching eller business coaching
               </h2>
             </div>
@@ -439,7 +439,7 @@ export default function CoachingPage() {
                         <span
                           role="heading"
                           aria-level={3}
-                          className="block font-serif text-[2rem] font-medium leading-[1.05] tracking-[-0.03em] text-zinc-900 transition-colors duration-300 group-hover:text-[#7d6435] md:text-[2.75rem]"
+                          className="block font-serif text-[2rem] font-medium leading-[1.2] tracking-[-0.03em] text-zinc-900 transition-colors duration-300 group-hover:text-[#7d6435] md:text-[2.75rem]"
                         >
                           {route.title}
                         </span>
@@ -463,7 +463,7 @@ export default function CoachingPage() {
                 </li>
               ))}
             </ul>
-            <p className="ml-auto mt-16 max-w-xl border-l border-[#967844]/60 pl-6 text-[0.9375rem] leading-[1.7] text-zinc-600 md:pl-8">
+            <p className="ml-auto mt-16 max-w-xl border-l border-zinc-300 pl-6 text-[0.9375rem] leading-[1.7] text-zinc-600 md:pl-8">
               Är du osäker på vilken form av coaching som är relevant för din fråga? Det klargör vi
               i det första samtalet.
             </p>
@@ -477,8 +477,10 @@ export default function CoachingPage() {
           {/* Rubriken hålls på metadata-skala: raderna nedan bär scenen visuellt,
               men sektionen behöver fortfarande sin plats i rubrikträdet. */}
           <div className="flex items-baseline gap-6">
-            <p className={chapterLight}>07</p>
-            <h2 className={chapterLight}>Praktiskt</h2>
+            <p className={chapterIndexOnLight}>07</p>
+            <h2 className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.03em] text-zinc-900">
+              Praktiskt
+            </h2>
           </div>
 
           {/* Praktiskt är komponerat som redaktionella rader i stället för en
@@ -495,7 +497,7 @@ export default function CoachingPage() {
                 >
                   <dt
                     data-row-title
-                    className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.05] tracking-[-0.03em] text-zinc-900 md:col-span-5"
+                    className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.03em] text-zinc-900 md:col-span-5"
                   >
                     {item.title}
                   </dt>
@@ -516,7 +518,7 @@ export default function CoachingPage() {
       <section className="bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="fadeUp" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
-            <p className={`${chapterLight} md:col-span-2`}>08</p>
+            <p className={`${chapterIndexOnLight} md:col-span-2`}>08</p>
             <div className="md:col-span-9 md:col-start-4">
               <ProcessFaq heading="Vanliga frågor" items={faqItems} variant="editorial" />
             </div>
@@ -525,11 +527,11 @@ export default function CoachingPage() {
       </section>
 
       {/* ---------- 09 · Avslut ---------- */}
-      <section className="bg-zinc-950 py-24 text-zinc-100 md:py-32 lg:py-40">
+      <section className="bg-surface-dark py-24 text-zinc-100 md:py-32 lg:py-40">
         <ScrollReveal variant="ctaStack" className="mx-auto max-w-7xl px-6 md:px-10">
           <h2
             data-cta-heading
-            className="max-w-5xl font-serif text-[clamp(3rem,8vw,8rem)] font-medium leading-[0.9] tracking-[-0.05em] text-white"
+            className="max-w-5xl font-serif text-[clamp(3rem,8vw,8rem)] font-medium leading-[1.12] tracking-[-0.05em] text-white"
           >
             Boka ett inledande samtal
           </h2>

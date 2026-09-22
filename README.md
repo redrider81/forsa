@@ -24,10 +24,10 @@ npm run dev
 ## Struktur
 
 ```
-src/app/                    publika sidor (sv) + /en (engelska)
-src/app/logga-in/           inloggning till portalen
-src/app/portal/             inloggad portal (kräver session)
-src/app/api/portal/         auth- och AI-endpoints (server-side)
+src/app/                    publika sidor (sv) + /en (engelska) — live på https://cvbcoaching.se/
+src/app/cvb-base/           coachprodukten CVB Base (kräver inloggning)
+src/app/klient/             klientportalen (kräver inloggning)
+src/app/api/portal/         auth-, AI- och arbetsflödes-endpoints (server-side)
 src/components/portal/      portalens UI-komponenter
 src/lib/portal/             domänmodell, testdata, accesslager, session
 src/lib/ai/                 OpenAI-integration, kontextbygge, kontextlås
@@ -36,46 +36,31 @@ tests/                      enhetstester
 
 ## Persistens — läs detta först
 
-Nuvarande klientdata är fiktiv demodata. Persistenslagret är avsiktligt begränsat
-tills CVB Coaching-konceptet är godkänt. Produktionsversionen ska använda ett
-separat persistent datalager med auth och RLS.
+**Publik webbplats:** https://cvbcoaching.se/ är live.
+
+**CVB Base och klientportalen** använder Supabase som primärt persistenslager:
+Auth, tabeller, RLS, Storage och säkerhetsdefinierade RPC:er. Inloggning sker via
+Supabase Auth — inte via en egen sessionscookie.
+
+**Pilot/demo-data:** innehållet i databasen är fiktivt (se migrations under
+`supabase/migrations/`). Det är produktionssatt arkitektur med demodata — inte
+bevis på att verkliga coachingklienter använder systemet i produktion.
 
 Konkret:
 
-- **Seed-data** (`src/lib/portal/data/`) är statisk och deterministisk. Den är
-  källan för klienter, uppdrag, sessioner, insikter och dokument.
-- **Demo-state** är det klienten själv lägger till i portalen: reflektioner,
-  förberedelse inför nästa samtal och statusändringar på åtaganden. Det lagras
-  i en HMAC-signerad httpOnly-cookie (`cvb_demo_state`) och färdas med varje request.
+- **Seed-data** (`src/lib/portal/data/`) är statisk och deterministisk. Den
+  används i enhetstester och som referens för domänmodellen.
+- **Runtime-data** läses och skrivs via Supabase (`fetchPortalRepositoryData`,
+  klient- och coach-API:er, RPC:er). Reflektioner, förberedelse, åtaganden,
+  coachanteckningar och godkända sessionssammanfattningar persisteras i databasen.
+- **Demo-state-cookie** (`cvb_demo_state`) är kvar som läsbar legacy på några
+  coachvyer men skrivs inte längre av API:erna efter Supabase-migreringen.
 
-Cookien valdes för att den fungerar identiskt på varje serverless-instans. Ett
-filsystem gör inte det: på Vercel är filsystemet skrivskyddat, `/tmp` är
-instansbundet och processminne försvinner mellan anrop. Ingen del av koden antar
-att lokala filskrivningar överlever.
+Data-access är abstraherat i `src/lib/portal/repository.ts`:
 
-| | Demo-state i cookie |
-| --- | --- |
-| Överlever refresh | Ja |
-| Överlever utloggning och ny inloggning | Ja |
-| Överlever omstart av webbläsaren | Ja (30 dagar) |
-| Fungerar på alla serverless-instanser | Ja |
-| Delas mellan klient- och coachinloggning i samma webbläsare | Ja — det är vad demoflödet bygger på |
-| **Synkas mellan olika enheter eller webbläsare** | **Nej** |
-
-Den sista raden är den verkliga begränsningen. Emma och Carolina måste
-demonstreras i samma webbläsare. Det är ett medvetet val, inte en bugg, och
-försvinner när ett riktigt datalager kopplas in.
-
-### Migrering till databas
-
-Data-access är abstraherat i `src/lib/portal/repository.ts`. Funktionerna finns
-i två former:
-
-- rena `build*`/`list*` som tar ett `DemoState` och är enhetstestade
-- tunna `get*`-omslag som läser tillståndet
-
-Vid migrering byts bara omslagen mot databasanrop. UI, domänmodell och AI-lager
-är oberoende av var datan kommer ifrån.
+- rena `build*`/`list*` som tar en `PortalRepositoryData`-ögonblicksbild och är
+  enhetstestade
+- tunna `get*`-omslag som hämtar ögonblicksbilden från Supabase via RLS
 
 ## Portalen
 
@@ -84,9 +69,9 @@ Två separata ingångar, ingen publik registrering:
 | Roll | Väg | Demokonto |
 | --- | --- | --- |
 | Klient | **Klientportal** i huvudnavigationen → `/klient-login` → `/klient` | `emma@northlinestudio.se` |
-| Coach | Diskret i footern → `/coach-login` → `/portal` | `carolina@cvbcoaching.se` |
+| Coach | `/carolina` → `/cvb-base` | `carolina@cvbcoaching.se` |
 
-`/logga-in` finns kvar som redirect till `/coach-login` så att bokmärken fungerar.
+`/coach-login` och `/logga-in` redirectar till `/carolina` så att bokmärken fungerar.
 
 Lösenordet styrs av `PORTAL_DEMO_PASSWORD`; utan variabel används `cvb-demo-2026`.
 Inloggningsvyerna förifyller uppgifterna så att demon kan köras utan instruktion —
@@ -131,6 +116,7 @@ Tre funktioner, alla server-side:
 | `POST /api/portal/ai/klient` (`mode: "fraga"`) | Fråga om aktuell klient |
 | `POST /api/portal/ai/organisation` | Fråga om aktuellt uppdrag |
 | `POST /api/portal/ai/sessionssammanfattning` | Strukturera anteckningar till utkast |
+| `POST /api/portal/mote/sammanfattning` | Godkänn och dela sessionssammanfattning med klienten |
 
 ### Kontextlås
 
@@ -169,7 +155,8 @@ Se `.env.example`. Kopiera till `.env.local` lokalt.
 | --- | --- | --- |
 | `OPENAI_API_KEY` | Ja, för AI | OpenAI-nyckel. Endast server-side. |
 | `OPENAI_MODEL` | Nej | Låser en annan modell än den primära `gpt-5.6`. |
-| `PORTAL_SESSION_SECRET` | Ja i produktion | Signerar sessionscookien. `openssl rand -base64 32`. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Ja för CVB Base | Supabase-projektets URL. |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Ja för CVB Base | Supabase publishable key. |
 | `PORTAL_DEMO_PASSWORD` | Nej | Lösenord för demokontot. |
 | `PORTAL_SHOW_DEMO_HINT` | Nej | `false` döljer den förifyllda demoinloggningen. |
 | `EMAIL_SEND_ENABLED` | Ja för skarp e-post | Måste vara exakt `true`. Allt annat ger simulerat läge där inget skickas. Endast server-side. |
@@ -182,8 +169,9 @@ Se `.env.example`. Kopiera till `.env.local` lokalt.
 Lägg in följande i projektets **Environment Variables** (Production och Preview)
 innan live-demo:
 
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `OPENAI_API_KEY`
-- `PORTAL_SESSION_SECRET`
 - valfritt: `OPENAI_MODEL`, `PORTAL_DEMO_PASSWORD`, `PORTAL_SHOW_DEMO_HINT`
 
 För skarpa bokningsmejl krävs dessutom `EMAIL_SEND_ENABLED=true`,

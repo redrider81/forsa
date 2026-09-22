@@ -63,12 +63,12 @@ export default function HomePageEn() {
                 <div className="relative w-full md:max-w-lg lg:max-w-xl">
                   <h1
                     data-hero-headline
-                    className="relative mx-auto max-w-[18ch] text-4xl font-medium leading-[1.1] tracking-tight text-balance text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-5xl md:mx-0 md:max-w-none md:text-6xl md:leading-[1.08] lg:text-7xl"
+                    className="relative mx-auto max-w-[18ch] text-4xl font-medium leading-[1.22] tracking-tight text-balance text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-5xl md:mx-0 md:max-w-none md:text-6xl md:leading-[1.2] lg:text-7xl"
                   >
                     Some questions are difficult to think through alone.
                   </h1>
                 </div>
-                <div className="mt-9 flex w-full flex-col items-center gap-4 md:mt-10 md:w-fit md:flex-row md:flex-wrap md:items-start md:justify-start md:gap-3.5">
+                <div className="mt-9 flex w-full flex-row flex-wrap items-center justify-center gap-3 sm:gap-3.5 md:mt-10 md:relative md:left-1/2 md:w-screen md:max-w-[100vw] md:-translate-x-1/2">
                   <span data-hero-cta className="inline-flex justify-center">
                     <CtaLink href="/en/kontakt" variant="primary" translucent>
                       {t.cta.primary}
@@ -101,7 +101,7 @@ export default function HomePageEn() {
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16 md:gap-y-10">
                 <h2
                   data-col-left
-                  className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:pr-4 md:text-[2.1rem]"
+                  className="md:col-span-5 text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:pr-4 md:text-[2.1rem]"
                 >
                   You will be working with me.
                 </h2>
@@ -135,7 +135,7 @@ export default function HomePageEn() {
               className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 bg-white py-20 md:py-24"
             >
               <div className="mx-auto max-w-6xl px-6 md:px-10">
-                <h2 className="max-w-3xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                <h2 className="max-w-3xl text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   Two ways in
                 </h2>
                 <p className="mt-6 max-w-2xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
@@ -149,7 +149,7 @@ export default function HomePageEn() {
 
             <section data-parallax-section className="relative z-10 bg-zinc-100 py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
-                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   Six situations where coaching belongs
                 </h2>
                 <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
@@ -169,7 +169,7 @@ export default function HomePageEn() {
 
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
-                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   How to tell whether this is right
                 </h2>
                 <div data-col-right className="md:col-span-7 md:max-w-xl md:justify-self-end">
@@ -204,7 +204,7 @@ export default function HomePageEn() {
               <EditorialRowsReveal className="mx-auto max-w-6xl px-6 md:px-10">
                 <h2
                   data-section-heading
-                  className="max-w-2xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]"
+                  className="max-w-2xl text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.1rem]"
                 >
                   What the work involves
                 </h2>
@@ -222,7 +222,7 @@ export default function HomePageEn() {
                       </p>
                       <h3
                         data-row-title
-                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                        className="text-xl font-medium leading-[1.25] tracking-tight text-zinc-900 md:text-[1.3125rem]"
                       >
                         Clarity
                       </h3>
@@ -248,7 +248,7 @@ export default function HomePageEn() {
                       </p>
                       <h3
                         data-row-title
-                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                        className="text-xl font-medium leading-[1.25] tracking-tight text-zinc-900 md:text-[1.3125rem]"
                       >
                         Decisions
                       </h3>
@@ -271,7 +271,7 @@ export default function HomePageEn() {
                       </p>
                       <h3
                         data-row-title
-                        className="text-xl font-medium leading-tight tracking-tight text-zinc-900 md:text-[1.3125rem]"
+                        className="text-xl font-medium leading-[1.25] tracking-tight text-zinc-900 md:text-[1.3125rem]"
                       >
                         Direction
                       </h3>
@@ -293,7 +293,7 @@ export default function HomePageEn() {
 
             <section data-parallax-section className="border-t border-line-accent/30 py-16 md:py-20">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
-                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   Support between conversations
                 </h2>
                 <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
@@ -312,7 +312,7 @@ export default function HomePageEn() {
 
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
-                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   When a company makes the first contact
                 </h2>
                 <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
@@ -331,7 +331,7 @@ export default function HomePageEn() {
 
             <section data-parallax-section className="py-20 md:py-24">
               <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-16">
-                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.1rem]">
+                <h2 data-col-left className="md:col-span-5 text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.1rem]">
                   Gothenburg, or online where that suits better
                 </h2>
                 <div data-col-right className="space-y-7 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-800 md:col-span-7 md:max-w-xl md:justify-self-end">
@@ -345,7 +345,7 @@ export default function HomePageEn() {
 
             <section data-parallax-section id="kontakt" className="py-20 md:py-24">
               <ScrollReveal variant="ctaStack">
-                <h2 data-cta-heading className="max-w-4xl text-3xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:text-[2.65rem]">
+                <h2 data-cta-heading className="max-w-4xl text-3xl font-medium leading-[1.28] tracking-tight text-zinc-900 md:text-[2.65rem]">
                   Book an introductory conversation
                 </h2>
                 <p data-cta-body className="mt-8 max-w-3xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-800">

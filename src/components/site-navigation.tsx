@@ -27,7 +27,7 @@ const coachingPaths = [
 type CursorPosition = { left: number; width: number; opacity: number };
 
 const navCursorClass =
-  "pointer-events-none absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-full bg-zinc-300/95 backdrop-blur-sm motion-reduce:transition-none transition-[left,width,opacity] duration-200 ease-out";
+  "pointer-events-none absolute top-0.5 z-0 h-[calc(100%-0.25rem)] rounded-full bg-zinc-300/95 backdrop-blur-sm motion-reduce:transition-none transition-[left,width,opacity] duration-200 ease-out";
 
 function navTabClass(isActive: boolean, overlay = false) {
   const ringOffset = overlay
@@ -38,7 +38,7 @@ function navTabClass(isActive: boolean, overlay = false) {
     : overlay
       ? "text-zinc-800 hover:text-zinc-950"
       : "text-zinc-700 hover:text-zinc-900";
-  return `relative z-10 inline-flex cursor-pointer items-center rounded-full px-4 py-2 text-sm font-medium ${tone} ${ringOffset} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900`;
+  return `relative z-10 inline-flex cursor-pointer items-center rounded-full px-5 py-2.5 text-[0.9375rem] font-medium leading-snug md:px-5 md:py-3 md:text-base ${tone} ${ringOffset} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900`;
 }
 
 function syncCursorFromElement(
@@ -87,7 +87,7 @@ function DesktopNavTabs({
   return (
     <ul
       ref={listRef}
-      className="relative flex w-fit items-center gap-2 rounded-full p-1"
+      className="relative flex w-fit items-center gap-2.5 rounded-full p-1.5 md:gap-3"
       onMouseLeave={restToActive}
     >
       {children({ listRef, setPosition })}
@@ -165,7 +165,7 @@ function NavChevron({ open }: { open?: boolean }) {
     <svg
       aria-hidden="true"
       viewBox="0 0 12 12"
-      className={`h-2.5 w-2.5 shrink-0 opacity-75 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+      className={`h-2.5 w-2.5 shrink-0 opacity-75 transition-transform duration-150 md:h-3 md:w-3 ${open ? "rotate-180" : ""}`}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
@@ -186,7 +186,7 @@ function LoginIcon() {
     <svg
       aria-hidden="true"
       viewBox="0 0 24 24"
-      className="h-3.5 w-3.5 shrink-0 text-current"
+      className="h-4 w-4 shrink-0 text-current md:h-[1.125rem] md:w-[1.125rem]"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.6"
@@ -384,7 +384,7 @@ function LanguageMenu({
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700/90 bg-zinc-700/90 px-3 py-1.5 text-xs font-medium tracking-wide text-white transition-colors hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100"
+        className="inline-flex items-center gap-2 rounded-full border border-zinc-700/90 bg-zinc-700/90 px-4 py-2.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 md:px-4 md:py-3 md:text-[0.9375rem]"
       >
         {locale === "en" ? "EN" : "SV"}
         <NavChevron open={open} />
@@ -718,12 +718,12 @@ export default function SiteNavigation() {
         isHome ? `absolute left-0 right-0 top-0 ${headerSurface}` : `sticky top-0 border-b ${headerSurface}`
       }`}
     >
-      <div className="hidden w-full items-center justify-between px-6 py-5 md:flex md:px-10 lg:px-14 lg:py-6">
+      <div className="hidden w-full items-center justify-between px-6 py-6 md:flex md:px-10 lg:px-14 lg:py-7">
         <Link
           href={localizedHref("/")}
           className={`shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          <LogoMark className="block h-[4.25rem] w-auto translate-y-1 lg:h-20" priority />
+          <LogoMark className="block h-24 w-auto translate-y-0.5 lg:h-[7rem]" priority />
         </Link>
 
         <nav aria-label={t.nav.mainAria} className="ml-auto">
@@ -918,7 +918,7 @@ export default function SiteNavigation() {
                 <li className="list-none">
                   <Link
                     href="/klient-login"
-                    className={`inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-700 px-3.5 py-1.5 text-xs font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 ${
+                    className={`inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-700 px-4 py-2.5 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 md:px-4 md:py-3 md:text-[0.9375rem] ${
                       isHome
                         ? "focus-visible:ring-offset-white/40"
                         : "focus-visible:ring-offset-zinc-100"
@@ -949,7 +949,7 @@ export default function SiteNavigation() {
           href={localizedHref("/")}
           className={`min-w-0 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
         >
-          <LogoMark className="mt-1 block h-14 w-auto" priority />
+          <LogoMark className="mt-0.5 block h-[4.25rem] w-auto" priority />
         </Link>
         <div className={mobileHeaderControlCluster + " ml-auto"}>
           <MobileHeaderLanguageDropdown locale={locale} pathname={pathname} />
@@ -991,7 +991,7 @@ export default function SiteNavigation() {
         }`}
       >
         <div className="flex items-center justify-between border-b border-zinc-900/6 px-6 py-5">
-          <LogoMark className="h-8 w-auto" />
+          <LogoMark className="h-11 w-auto" />
           <button
             type="button"
             aria-label={t.nav.menuClose}

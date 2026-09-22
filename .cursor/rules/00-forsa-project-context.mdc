@@ -32,7 +32,7 @@ This is a solo project. Work directly on main unless the user explicitly says ot
 The live product brand is **CVB Coaching** (Carolina von Braun), after a rebrand from Forsa.
 
 - Repo, GitHub remote, package name (`forsa-site`), and folder names still say Forsa.
-- `docs/` is pre-rebrand reference material for tone and copy. Do not treat those files as current brand copy.
+- Early files in `docs/` (`project-brief.md`, homepage and executive copy, copy style guide, reference audit) are pre-rebrand tone reference. Do not treat them as current brand copy. Current operational docs are `CONTENT-REVIEW.md`, `docs/cvb-p0a-public-booking-release.md`, and `docs/audit-export/`.
 - Public site and portal UI, metadata, and i18n dictionaries use CVB Coaching.
 - `/om-forsa` and `/en/om-forsa` permanently redirect to `/om-oss` and `/en/om-oss`.
 
@@ -77,33 +77,42 @@ Expected values:
 - project root: /Users/redrider/Nordleid-Dev/Kundprojekt/Forsa/forsa
 - branch: main
 - remote origin: https://github.com/redrider81/forsa.git
+- `main` tracks `origin/main` with no ahead/behind
 - latest history should include:
-  - b08ac88 Restructure the clients view as a vertical series of engagements
-  - a6f5d0e Add client portal, demo persistence, executive copy, and CVB logo
-  - 7acf2b5 Rebrand to CVB Coaching and add coaching portal with OpenAI
-  - ae219d8 Fix editorial image reveal flash
-  - 723f23b Fix editorial image loading performance
+  - c5109de refactor: align coaching editorial rows
+  - 4e1ac36 refactor: clarify coaching choice language
+  - 41f5e6d refactor: strengthen coaching editorial direction
+  - b9080c1 feat: add editorial coaching overview
+  - e8ea957 feat: complete editorial homepage redesign
 
-Older Forsa commits (37edde4, e3da655, fde2d11, 533bb2e, fdfc74b) must still be in history.
+These earlier commits must still be in history: b08ac88, a6f5d0e, 7acf2b5, ae219d8, 723f23b, 37edde4, e3da655, fde2d11, 533bb2e, fdfc74b.
+
+Working tree as of 2026-09-22 is dirty. Do not overwrite, revert, or commit it unless the user asks. In progress: session-summary approval (session workspace, session page, database types, `supabase/migrations/20260911010000_cvb_base_approve_session_summary.sql`, `src/lib/portal/session-summary.ts`, `src/app/api/portal/mote/sammanfattning/`, `tests/session-summary-approval.test.ts`), plus uncommitted edits in `README.md` and `src/components/ui/kinetic-team-hybrid.tsx`, and untracked `public/carolina-von-braun.webp`.
 
 If these expectations do not match, stop and report the mismatch before doing anything.
 
 ## Stack and layout
 
 - Next.js 16 App Router, React 19, Tailwind CSS v4, GSAP, TypeScript
-- Public site: Swedish default routes plus `/en` (see `src/lib/i18n/`)
-- Coach portal: `/coach-login` → `/portal`
+- Public site is live at https://cvbcoaching.se/: Swedish default routes plus `/en` (see `src/lib/i18n/`)
+- Public offer is two entries: `/individuell-coaching` and `/business-coaching` (English equivalents under `/en`). Former specialist routes permanently redirect to business coaching: executive coaching, ledningsgruppscoaching, team coaching, coachande ledarskap.
+- `/om-forsa` and `/en/om-forsa` permanently redirect to `/om-oss` and `/en/om-oss`
+- `/portal` and `/portal/:path*` permanently redirect to `/cvb-base`
+- Coach entry: `/carolina` → `/cvb-base` when a coach session exists. `/coach-login` redirects to `/carolina`. `/logga-in` redirects to `/coach-login`. Unauthenticated `/cvb-base` redirects to `/coach-login`.
 - Client portal: `/klient-login` → `/klient`
-- `/logga-in` redirects to `/coach-login`
-- Portal data: seed in `src/lib/portal/data/`; demo mutations in HMAC-signed cookie `cvb_demo_state`
-- Access layer: `src/lib/portal/repository.ts`
-- AI: server-only OpenAI in `src/lib/ai/` with context lock in `src/lib/ai/scope.ts`
+- Runtime persistence is Supabase (Auth, tables, RLS, Storage, RPCs). Login is Supabase Auth, not a custom session cookie.
+- Seed data in `src/lib/portal/data/` is static. It is for unit tests and the domain model, not runtime writes.
+- Access layer: `src/lib/portal/repository.ts` (`build*`/`list*` on a snapshot; `get*` reads Supabase via RLS)
+- `cvb_demo_state` is readable legacy on some coach views. APIs no longer write it.
+- AI: server-only OpenAI in `src/lib/ai/` with context lock in `src/lib/ai/scope.ts`. Primary model is `gpt-5.6` unless `OPENAI_MODEL` overrides it.
+- Public booking (P0-A) is shipped: visitor request, pending window, coach accept/decline, email send state. An accepted introductory call is not a coaching client. See `docs/cvb-p0a-public-booking-release.md`.
+- Public copy: no prices, packages, fixed programme formats, or unapproved timing claims. See `CONTENT-REVIEW.md`.
 - Tests: Vitest under `tests/`
 
 Demo accounts (password from `PORTAL_DEMO_PASSWORD`, otherwise `cvb-demo-2026`):
 
 - Client: `emma@northlinestudio.se` → `/klient`
-- Coach: `carolina@cvbcoaching.se` → `/portal`
+- Coach: `carolina@cvbcoaching.se` → `/cvb-base` via `/carolina`
 
 Portal data is fictional. Do not introduce real client data.
 
@@ -136,7 +145,7 @@ Preserve:
 - full footer
 - linked home service cards
 - bilingual public site
-- portal architecture (session, demo-state cookie, repository, AI context lock)
+- portal architecture (Supabase Auth and RLS, repository, AI context lock; `cvb_demo_state` stays legacy-readable)
 - Vercel/GitHub connection
 - main branch workflow
 

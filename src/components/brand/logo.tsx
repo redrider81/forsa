@@ -11,19 +11,31 @@ import Image from "next/image";
 export function LogoMark({
   className = "h-9 w-auto",
   priority = false,
+  withCoaching = true,
 }: {
   className?: string;
   priority?: boolean;
+  withCoaching?: boolean;
 }) {
   return (
-    <Image
-      src="/cvb-monogram.png"
-      alt="CVB Coaching"
-      width={512}
-      height={511}
-      className={className}
-      priority={priority}
-    />
+    <span className="inline-flex flex-col items-center gap-3.5 leading-none">
+      <Image
+        src="/cvb-monogram.png"
+        alt="CVB Coaching"
+        width={512}
+        height={511}
+        className={className}
+        priority={priority}
+      />
+      {withCoaching ? (
+        <span
+          className="font-serif text-[0.8125rem] font-normal uppercase tracking-[0.24em] text-[#92753a] sm:text-[0.875rem] md:text-[0.9375rem] lg:text-[1rem]"
+          aria-hidden="true"
+        >
+          coaching
+        </span>
+      ) : null}
+    </span>
   );
 }
 

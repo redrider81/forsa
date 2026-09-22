@@ -37,7 +37,7 @@ export default async function CarolinaLoginPage() {
             <LogoMark className="h-16 w-auto" priority />
           </Link>
 
-          <h1 className="mt-9 text-[1.9rem] font-medium leading-[1.15] tracking-tight text-zinc-900">
+          <h1 className="mt-9 text-[1.9rem] font-medium leading-[1.28] tracking-tight text-zinc-900">
             CVB Base
           </h1>
           <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-600">

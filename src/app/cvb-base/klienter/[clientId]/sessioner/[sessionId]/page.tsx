@@ -169,6 +169,7 @@ export default async function SessionPage({
         sessionId={coachingSession.id}
         clientName={client.name}
         clientFirstName={firstName}
+        shareComplete={summary?.approved ?? false}
       />
     </div>
   );

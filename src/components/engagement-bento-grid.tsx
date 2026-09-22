@@ -76,17 +76,11 @@ type Props = {
 function buildStepsReveal(
   panel: HTMLElement,
   cards: NodeListOf<HTMLElement>,
-  steps: NodeListOf<HTMLElement>,
   lines: NodeListOf<HTMLElement>,
-  accents: NodeListOf<HTMLElement>,
   footnote: HTMLElement | null,
 ) {
-  // Korten hålls synliga hela tiden och animeras bara i position. Innehållet får
-  // aldrig vara beroende av att en scroll-animation hinner köra.
-  gsap.set(steps, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
   gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
   gsap.set(cards, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
-  gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
   if (footnote) {
     gsap.set(footnote, { autoAlpha: 0, y: 10, force3D: true });
   }
@@ -110,28 +104,11 @@ function buildStepsReveal(
     { scaleX: 1, duration: motion.duration.long, ease: motion.ease.editorial, stagger: 0.08, force3D: true },
     0.05,
   );
-  tl.to(
-    steps,
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: motion.duration.medium,
-      ease: motion.ease.reveal,
-      stagger: 0.08,
-      force3D: true,
-    },
-    0.08,
-  );
-  tl.to(
-    accents,
-    { scaleX: 1, duration: motion.duration.short, ease: motion.ease.reveal, stagger: 0.05, force3D: true },
-    0.1,
-  );
   if (footnote) {
     tl.to(
       footnote,
       { autoAlpha: 1, y: 0, duration: motion.duration.medium, ease: motion.ease.reveal },
-      0.15,
+      0.12,
     );
   }
 }
@@ -146,19 +123,11 @@ export default function EngagementBentoGrid({ locale }: Props) {
     const panel = panelRef.current;
     if (!root || !panel) return;
 
-    const progressSteps = panel.querySelectorAll<HTMLElement>("[data-progress-step]");
     const progressLines = panel.querySelectorAll<HTMLElement>("[data-progress-line]");
     const cards = panel.querySelectorAll<HTMLElement>("[data-bento-card]");
-    const accents = panel.querySelectorAll<HTMLElement>("[data-bento-accent]");
     const footnote = panel.querySelector<HTMLElement>("[data-bento-footnote]");
 
-    const targets = [
-      ...progressSteps,
-      ...progressLines,
-      ...cards,
-      ...accents,
-      footnote,
-    ].filter(Boolean) as HTMLElement[];
+    const targets = [...progressLines, ...cards, footnote].filter(Boolean) as HTMLElement[];
 
     if (prefersReducedMotion()) {
       showTargets(targets);
@@ -167,7 +136,7 @@ export default function EngagementBentoGrid({ locale }: Props) {
 
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      buildStepsReveal(panel, cards, progressSteps, progressLines, accents, footnote);
+      buildStepsReveal(panel, cards, progressLines, footnote);
       refreshScrollTriggers();
     }, root);
 
@@ -181,7 +150,7 @@ export default function EngagementBentoGrid({ locale }: Props) {
     <div ref={rootRef}>
       <div ref={panelRef}>
         <ol className="border-t border-zinc-300">
-            {steps.map((step, index) => (
+            {steps.map((step) => (
               <li
                 key={step.index}
                 data-bento-card
@@ -190,34 +159,23 @@ export default function EngagementBentoGrid({ locale }: Props) {
                 <span
                   data-progress-line
                   aria-hidden="true"
-                  className="absolute left-0 top-[-1px] h-px w-full origin-left bg-[#967844]/70"
+                  className="absolute left-0 top-[-1px] h-px w-full origin-left bg-zinc-400/70"
                 />
-                <div
-                  className={`grid gap-6 md:grid-cols-12 md:items-start md:gap-8 ${
-                    index % 2 === 1 ? "lg:pl-[8.333%]" : ""
-                  }`}
-                >
+                <div className="grid gap-6 md:grid-cols-12 md:items-center md:gap-x-8">
                   <span
                     data-progress-step
                     aria-hidden="true"
-                    className="font-serif text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.75] tracking-[-0.06em] text-zinc-200 md:col-span-2"
+                    className="whitespace-nowrap font-serif tabular-nums text-[clamp(3.25rem,6vw,5.75rem)] leading-[0.88] tracking-[-0.06em] text-zinc-500 md:col-span-2"
                   >
                     {step.index}
                   </span>
-                  <h3 className="text-xl font-medium leading-[1.15] tracking-tight text-zinc-900 md:col-span-4 md:text-2xl">
+                  <h3 className="text-xl font-medium leading-[1.3] tracking-tight text-zinc-900 md:col-span-4 md:col-start-3 md:text-2xl">
                     {step.title}
                   </h3>
                   <div className="md:col-span-5 md:col-start-8">
                     <p className="max-w-xl text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
                       {step.body}
                     </p>
-                    <span
-                      data-bento-accent
-                      aria-hidden="true"
-                      className="mt-8 block h-px w-12 origin-left overflow-hidden"
-                    >
-                      <span className="block h-full w-full bg-[#967844]" />
-                    </span>
                   </div>
                 </div>
               </li>
@@ -226,7 +184,7 @@ export default function EngagementBentoGrid({ locale }: Props) {
 
             <p
               data-bento-footnote
-              className="ml-auto mt-10 max-w-xl border-l border-[#967844]/60 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]"
+              className="ml-auto mt-10 max-w-xl border-l border-zinc-300 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]"
             >
               {footnotes[locale]}
             </p>

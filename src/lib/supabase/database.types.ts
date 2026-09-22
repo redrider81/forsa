@@ -1432,6 +1432,20 @@ export type Database = {
         Args: { p_client_id: string }
         Returns: boolean
       }
+      approve_session_summary: {
+        Args: {
+          p_awareness: string
+          p_client_id: string
+          p_commitments: string[]
+          p_focus: string
+          p_follow_up: string[]
+          p_insights: string[]
+          p_new_perspectives: string[]
+          p_possible_next_focus: string
+          p_session_id: string
+        }
+        Returns: string
+      }
       complete_coaching_session: {
         Args: {
           p_awareness: string

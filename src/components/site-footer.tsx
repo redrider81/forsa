@@ -1,10 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { LogoMark } from "@/components/brand/logo";
+import { Mail } from "lucide-react";
+import { Footer } from "@/components/ui/footer-section";
 import { localeFromPathname, toLocalePath } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 import { usePathname } from "next/navigation";
+
+/** Publik kontakt — samma adress som i strukturerad data (json-ld). */
+const PUBLIC_EMAIL = "info@cvbcoaching.se";
+const PUBLIC_MAILTO = "mailto:info@cvbcoaching.se";
 
 export default function SiteFooter() {
   const pathname = usePathname();
@@ -18,100 +22,82 @@ export default function SiteFooter() {
     pathname.startsWith("/carolina") ||
     pathname.startsWith("/klient-login");
   const href = (path: string) => toLocalePath(path, locale);
-  // Två primära ingångar: individuell coaching och business coaching.
-  const services =
-    locale === "sv"
-      ? [
-          { href: "/individuell-coaching", label: "Individuell coaching" },
-          { href: "/business-coaching", label: "Business coaching" },
-        ]
-      : [
-          { href: "/individuell-coaching", label: "Individual coaching" },
-          { href: "/business-coaching", label: "Business coaching" },
-        ];
-  const about =
-    locale === "sv"
-      ? [
-          { href: "/om-oss", label: "Om CVB Coaching" },
-          { href: "/kontakt", label: "Kontakt" },
-        ]
-      : [
-          { href: "/om-oss", label: "About Carolina" },
-          { href: "/kontakt", label: "Contact" },
-        ];
 
   if (isPortal) return null;
 
+  const columns =
+    locale === "sv"
+      ? [
+          {
+            label: "Coaching",
+            links: [
+              { title: "Individuell coaching", href: href("/individuell-coaching") },
+              { title: "Business coaching", href: href("/business-coaching") },
+              { title: "Så fungerar coaching", href: href("/coaching") },
+            ],
+          },
+          {
+            label: "Om",
+            links: [{ title: "Om CVB Coaching", href: href("/om-oss") }],
+          },
+          {
+            label: "Praktiskt",
+            links: [
+              { title: "Kontakt", href: href("/kontakt") },
+              { title: "Boka inledande samtal", href: href("/kontakt") },
+            ],
+          },
+          {
+            label: "Direkt",
+            links: [
+              {
+                title: PUBLIC_EMAIL,
+                href: PUBLIC_MAILTO,
+                external: true,
+                icon: Mail,
+              },
+              { title: t.nav.login, href: "/klient-login" },
+            ],
+          },
+        ]
+      : [
+          {
+            label: "Coaching",
+            links: [
+              { title: "Individual coaching", href: href("/individuell-coaching") },
+              { title: "Business coaching", href: href("/business-coaching") },
+              { title: "How coaching works", href: href("/coaching") },
+            ],
+          },
+          {
+            label: "About",
+            links: [{ title: "About Carolina", href: href("/om-oss") }],
+          },
+          {
+            label: "Practical",
+            links: [
+              { title: "Contact", href: href("/kontakt") },
+              { title: "Book an introductory call", href: href("/kontakt") },
+            ],
+          },
+          {
+            label: "Contact",
+            links: [
+              {
+                title: PUBLIC_EMAIL,
+                href: PUBLIC_MAILTO,
+                external: true,
+                icon: Mail,
+              },
+              { title: t.nav.login, href: "/klient-login" },
+            ],
+          },
+        ];
+
   return (
-    <footer className="mt-auto border-t border-zinc-300 bg-zinc-50">
-      <div className="mx-auto max-w-6xl px-6 py-12 md:px-10 md:py-16">
-        <div className="grid gap-10 md:grid-cols-12">
-
-          <div className="md:col-span-5">
-            <LogoMark className="h-14 w-auto" />
-            <p className="mt-7 max-w-xs text-sm leading-relaxed text-zinc-600">
-              {t.footer.description}
-            </p>
-            <div className="mt-5">
-              <a
-                href="mailto:info@cvbcoaching.se"
-                className="inline-block text-sm text-zinc-700 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50"
-              >
-                info@cvbcoaching.se
-              </a>
-            </div>
-          </div>
-
-          <div className="md:col-span-4">
-            <p className="text-xs font-medium tracking-[0.16em] text-zinc-500 uppercase">
-              {t.footer.services}
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {services.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={href(item.href)}
-                    className="text-sm text-zinc-600 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="md:col-span-3">
-            <p className="text-xs font-medium tracking-[0.16em] text-zinc-500 uppercase">
-              {t.footer.about}
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {about.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={href(item.href)}
-                    className="text-sm text-zinc-600 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-        </div>
-
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-zinc-200 pt-6">
-          <p className="text-xs text-zinc-400">{t.footer.copyright}</p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <Link
-              href="/klient-login"
-              className="text-xs text-zinc-400 transition-colors hover:text-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
-            >
-              {t.nav.login}
-            </Link>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer
+      columns={columns}
+      copyright={t.footer.copyright}
+    />
   );
 }

@@ -54,7 +54,7 @@ export default function ContactPageEn() {
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
               Contact
             </p>
-            <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-tight tracking-tight md:text-6xl">
+            <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
               Start with a conversation.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
