@@ -104,12 +104,12 @@ export default function HomePage() {
                 <p data-col-left className="text-xs font-medium tabular-nums tracking-[0.32em] text-[#967844] md:col-span-2">
                   01
                 </p>
-                <div data-col-right className="md:col-span-7 md:col-start-5">
-                  <h2 className="font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[0.92] tracking-[-0.045em] text-zinc-900">
-                    Två vägar in
+                <div data-col-right className="md:col-span-8 md:col-start-5">
+                  <h2 className="font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1] tracking-[-0.035em] text-zinc-900">
+                    Individuell coaching eller business coaching
                   </h2>
                   <p className="mt-8 max-w-xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-600 md:mt-10">
-                    Samma arbetssätt, två sammanhang: för dig själv eller i arbetslivet.
+                    Båda utgår från samma arbetssätt.
                   </p>
                 </div>
               </ScrollReveal>
@@ -117,7 +117,8 @@ export default function HomePage() {
                 <CoachingServicesGrid locale="sv" />
               </div>
               <p className="ml-auto mt-16 max-w-xl border-l border-[#967844]/60 pl-6 text-[0.9375rem] leading-[1.7] text-zinc-600 md:pl-8">
-                Är du osäker på vilken väg som passar? Det avgör vi tillsammans i det första samtalet.
+                Är du osäker på vilken form av coaching som är relevant för din fråga? Det klargör
+                vi i det första samtalet.
               </p>
             </div>
           </section>
@@ -146,12 +147,12 @@ export default function HomePage() {
               </ScrollReveal>
 
               <ScrollReveal variant="splitColumn" className="mt-32 grid gap-12 border-t border-zinc-300 pt-16 md:mt-44 md:grid-cols-12 md:gap-x-8 md:pt-20">
-                <h2 data-col-left className="max-w-md font-serif text-4xl font-medium leading-[1.02] tracking-[-0.035em] text-zinc-900 md:col-span-4 md:text-5xl">
-                  Så vet du om det här är rätt
+                <h2 data-col-left className="max-w-md font-serif text-4xl font-medium text-balance leading-[1.02] tracking-[-0.035em] text-zinc-900 md:col-span-4 md:text-5xl">
+                  När coaching är relevant — och när den inte är det
                 </h2>
                 <div data-col-right className="grid gap-14 md:col-span-7 md:col-start-6 md:grid-cols-2 md:gap-10">
                   <ScrollReveal variant="staggerList">
-                    <h3 className="text-lg font-medium text-zinc-900">Passar när</h3>
+                    <h3 className="text-lg font-medium text-zinc-900">Coaching kan vara relevant när</h3>
                     <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-700">
                       {passarNär.map((item) => (
                         <li key={item} data-list-item className="border-t border-zinc-300 pt-5">
@@ -161,7 +162,7 @@ export default function HomePage() {
                     </ul>
                   </ScrollReveal>
                   <ScrollReveal variant="staggerList">
-                    <h3 className="text-lg font-medium text-zinc-900">Mindre rätt när</h3>
+                    <h3 className="text-lg font-medium text-zinc-900">Coaching är inte rätt stöd när</h3>
                     <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-600">
                       {mindreRelevant.map((item) => (
                         <li key={item} data-list-item className="border-t border-zinc-300 pt-5">

@@ -71,7 +71,9 @@ function buildEditorialReveal(
   accents: NodeListOf<HTMLElement>,
   arrows: NodeListOf<HTMLElement>,
 ) {
-  gsap.set(steps, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+  if (steps.length) {
+    gsap.set(steps, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+  }
   gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
   gsap.set(cards, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
   gsap.set(accents, { scaleX: 0, transformOrigin: "left center", force3D: true });
@@ -79,18 +81,20 @@ function buildEditorialReveal(
 
   const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(panel) });
 
-  tl.to(
-    steps,
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: motion.duration.medium,
-      ease: motion.ease.reveal,
-      stagger: 0.12,
-      force3D: true,
-    },
-    0,
-  );
+  if (steps.length) {
+    tl.to(
+      steps,
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: motion.duration.medium,
+        ease: motion.ease.reveal,
+        stagger: 0.12,
+        force3D: true,
+      },
+      0,
+    );
+  }
   tl.to(
     cards,
     {
@@ -196,14 +200,9 @@ export default function CoachingServicesGrid({ locale }: Props) {
                   aria-hidden="true"
                   className="absolute left-0 top-[-1px] h-px w-full origin-left bg-[#967844]/70"
                 />
-                <span className="grid gap-7 sm:grid-cols-[minmax(6rem,0.7fr)_2fr] sm:items-end md:gap-10">
-                  <span
-                    data-progress-step
-                    aria-hidden="true"
-                    className="font-serif text-[clamp(4.75rem,9vw,8.5rem)] leading-[0.72] tracking-[-0.065em] text-zinc-200 transition-colors duration-300 group-hover:text-[#967844]"
-                  >
-                    {service.index}
-                  </span>
+                {/* Individuell och business coaching är två sammanhang, inte en
+                    ordningsföljd — den dekorativa siffran är därför borttagen. */}
+                <span className="block">
                   <span className="block pb-1">
                     <span className="flex items-start justify-between gap-5">
                       {/* Rubriknivån behålls från tidigare layout: raden är visuellt en

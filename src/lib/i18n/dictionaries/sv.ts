@@ -17,11 +17,11 @@ export const svDictionary = {
     about: "Om CVB Coaching",
     contact: "Kontakt",
     login: "Klientinloggning",
-    leadershipLabel: "Två vägar in",
+    leadershipLabel: "Individuell och business coaching",
     startHereLabel: "Osäker?",
-    unsureTitle: "Vet du inte vilken väg som är din?",
+    unsureTitle: "Osäker på vilken coaching som är relevant?",
     unsureBody:
-      "Börja med ett samtal. Vi avgör tillsammans var frågan hör hemma.",
+      "Börja med ett samtal. Vi klargör vilken form av coaching som är relevant för din fråga.",
     bookFirstCall: "Boka ett inledande samtal →",
   },
   footer: {
@@ -37,7 +37,7 @@ export const svDictionary = {
   },
   cta: {
     primary: "Boka ett inledande samtal",
-    secondary: "Se de två sätten att arbeta",
+    secondary: "Individuell eller business coaching",
     tertiary: "Omfattning och investering",
     engagementLink: "Så går det till →",
   },

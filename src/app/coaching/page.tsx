@@ -184,15 +184,15 @@ export default function CoachingPage() {
                 data-hero-body
                 className="max-w-md text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-4 md:col-start-7"
               >
-                Den här sidan beskriver hur arbetet går till, när det kan vara rätt och hur du tar
-                nästa steg.
+                Den här sidan beskriver när coaching kan vara relevant, hur arbetet går till och
+                vad du kan förvänta dig.
               </p>
               <div data-hero-cta className="md:col-span-2 md:col-start-11 md:justify-self-end">
                 <Link
                   href="#vagar"
                   className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
                 >
-                  Se de två sätten att arbeta
+                  Individuell eller business coaching
                   <span
                     aria-hidden="true"
                     className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
@@ -341,7 +341,7 @@ export default function CoachingPage() {
         >
           <div data-col-left className="md:col-span-7">
             <p className={chapterDark}>04</p>
-            <h2 className="mt-12 max-w-3xl font-serif text-[clamp(3rem,4.4vw,4.75rem)] font-medium leading-[0.98] tracking-[-0.04em] text-white md:mt-16">
+            <h2 className="mt-12 max-w-3xl font-serif text-[clamp(3rem,4.4vw,4.75rem)] font-medium text-balance leading-[0.98] tracking-[-0.04em] text-white md:mt-16">
               Samtalet står i centrum. CVB Base hjälper dig att behålla sammanhanget mellan
               samtalen.
             </h2>
@@ -359,19 +359,19 @@ export default function CoachingPage() {
         </ScrollReveal>
       </section>
 
-      {/* ---------- 05 · Så vet du om det här är rätt — tätast ---------- */}
+      {/* ---------- 05 · När coaching är relevant — tätast ---------- */}
       <section className="bg-[#f4f3ef] pb-16 pt-20 md:pb-20 md:pt-24">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
             <div data-col-left className="md:col-span-5">
               <p className={chapterLight}>05</p>
-              <h2 className="mt-10 max-w-md font-serif text-[clamp(2.75rem,5.5vw,5.5rem)] font-medium leading-[0.96] tracking-[-0.045em] text-zinc-900 md:mt-16">
-                Så vet du om det här är rätt
+              <h2 className="mt-10 max-w-md font-serif text-[clamp(2.25rem,4vw,4rem)] font-medium leading-[1] tracking-[-0.035em] text-zinc-900 md:mt-16">
+                När coaching är relevant — och när den inte är det
               </h2>
             </div>
             <div data-col-right className="grid gap-14 md:col-span-7 md:col-start-6 md:grid-cols-2 md:gap-10 md:pt-24">
               <ScrollReveal variant="staggerList">
-                <h3 className="text-lg font-medium text-zinc-900">Passar när</h3>
+                <h3 className="text-lg font-medium text-zinc-900">Coaching kan vara relevant när</h3>
                 <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-700">
                   {passarNär.map((item) => (
                     <li key={item} data-list-item className="border-t border-zinc-300 pt-5">
@@ -381,7 +381,7 @@ export default function CoachingPage() {
                 </ul>
               </ScrollReveal>
               <ScrollReveal variant="staggerList">
-                <h3 className="text-lg font-medium text-zinc-900">Mindre rätt när</h3>
+                <h3 className="text-lg font-medium text-zinc-900">Coaching är inte rätt stöd när</h3>
                 <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-600">
                   {mindreRelevant.map((item) => (
                     <li key={item} data-list-item className="border-t border-zinc-300 pt-5">
@@ -401,19 +401,19 @@ export default function CoachingPage() {
       <section className="flex min-h-[72svh] items-center bg-[#f4f3ef] pb-28 pt-12 md:min-h-[86svh] md:pb-40">
         <ScrollReveal variant="fadeUp" className="mx-auto w-full max-w-7xl px-6 md:px-10">
           <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[0.98] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
-            Samma arbetssätt, två sammanhang: för dig själv eller i arbetslivet.
+            Individuell coaching och business coaching utgår från samma arbetssätt.
           </p>
         </ScrollReveal>
       </section>
 
-      {/* ---------- 06 · Två vägar in ---------- */}
+      {/* ---------- 06 · Individuell eller business coaching ---------- */}
       <section id="vagar" className="scroll-mt-28 bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
             <p data-col-left className={`${chapterLight} md:col-span-2`}>06</p>
-            <div data-col-right className="md:col-span-7 md:col-start-5">
-              <h2 className="font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[0.92] tracking-[-0.045em] text-zinc-900">
-                Två vägar in
+            <div data-col-right className="md:col-span-8 md:col-start-5">
+              <h2 className="font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1] tracking-[-0.035em] text-zinc-900">
+                Individuell coaching eller business coaching
               </h2>
             </div>
           </ScrollReveal>
@@ -426,19 +426,15 @@ export default function CoachingPage() {
                     href={route.href}
                     className="group block py-12 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-white md:py-16"
                   >
+                    {/* Individuell och business coaching är två sammanhang, inte
+                        en ordningsföljd — därför ingen numrering här. Titeln får
+                        börja i första kolumnen i stället. */}
                     <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-x-8">
-                      <span
-                        data-row-index
-                        aria-hidden="true"
-                        className="font-serif text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.75] tracking-[-0.06em] text-zinc-200 transition-colors duration-300 group-hover:text-[#967844] md:col-span-2"
-                      >
-                        {route.index}
-                      </span>
-                      <span data-row-title className="block md:col-span-4">
+                      <span data-row-title className="block md:col-span-5">
                         <span
                           role="heading"
                           aria-level={3}
-                          className="block text-[1.75rem] font-medium leading-[1.1] tracking-tight text-zinc-900 md:text-[2.25rem]"
+                          className="block font-serif text-[2rem] font-medium leading-[1.05] tracking-[-0.03em] text-zinc-900 transition-colors duration-300 group-hover:text-[#7d6435] md:text-[2.75rem]"
                         >
                           {route.title}
                         </span>
@@ -463,7 +459,8 @@ export default function CoachingPage() {
               ))}
             </ul>
             <p className="ml-auto mt-16 max-w-xl border-l border-[#967844]/60 pl-6 text-[0.9375rem] leading-[1.7] text-zinc-600 md:pl-8">
-              Är du osäker på vilken väg som passar? Det avgör vi tillsammans i det första samtalet.
+              Är du osäker på vilken form av coaching som är relevant för din fråga? Det klargör vi
+              i det första samtalet.
             </p>
           </EditorialRowsReveal>
         </div>
