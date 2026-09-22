@@ -19,6 +19,7 @@ import { localeFromPathname, stripLocaleFromPath, toLocalePath, type Locale } fr
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 
 const coachingPaths = [
+  "/coaching",
   "/individuell-coaching",
   "/business-coaching",
 ] as const;
@@ -455,6 +456,16 @@ export default function SiteNavigation() {
   const barePathname = stripLocaleFromPath(pathname);
   const t = getDictionaryForOptionalLocale(locale);
   const localizedHref = (path: string) => toLocalePath(path, locale);
+  // Översiktssidan finns bara på svenska. Ingen engelsk motsvarighet skapas
+  // förrän copy är godkänd, så länken visas inte på /en.
+  const coachingOverview =
+    locale === "sv"
+      ? {
+          href: "/coaching",
+          label: "Coaching",
+          text: "Så fungerar coaching hos CVB: när den kan vara rätt, vad arbetet består av och hur ett samarbete går till.",
+        }
+      : null;
   const coachingAudiences =
     locale === "sv"
       ? [
@@ -782,6 +793,24 @@ export default function SiteNavigation() {
               <div className="mx-auto max-w-6xl px-6 py-8 md:px-10 md:py-9">
                 <div className="grid gap-8 md:grid-cols-[1fr_0.7fr] md:gap-10">
                   <div>
+                    {coachingOverview ? (
+                      <div className="mb-7 border-b border-zinc-900/10 pb-6">
+                        <Link
+                          href={coachingOverview.href}
+                          aria-current={barePathname === coachingOverview.href ? "page" : undefined}
+                          className={megaBlockLink}
+                        >
+                          <span
+                            className={`${megaBlockTitle} ${
+                              barePathname === coachingOverview.href ? "text-[#92753a]" : ""
+                            }`}
+                          >
+                            {coachingOverview.label}
+                          </span>
+                          <span className={megaBlockDesc}>{coachingOverview.text}</span>
+                        </Link>
+                      </div>
+                    ) : null}
                     <p className={sectionLabelClass()}>{t.nav.leadershipLabel}</p>
                     <ul className="mt-4 space-y-5">
                       {coachingAudiences.map((item) => (
@@ -966,6 +995,19 @@ export default function SiteNavigation() {
                 }`}
               >
                 <div className="pb-4 pl-1">
+                  {coachingOverview ? (
+                    <div className="border-b border-zinc-900/6 pb-4 pt-2">
+                      <Link
+                        href={coachingOverview.href}
+                        aria-current={barePathname === coachingOverview.href ? "page" : undefined}
+                        onClick={closeMobileMenu}
+                        className={mobileAudienceLinkClass}
+                      >
+                        <span className={mobileAudienceTitleClass}>{coachingOverview.label}</span>
+                        <span className={mobileAudienceDescClass}>{coachingOverview.text}</span>
+                      </Link>
+                    </div>
+                  ) : null}
                   <p className={`${sectionLabelClass()} pt-2`}>{t.nav.leadershipLabel}</p>
                   <ul className="mt-2 space-y-1">
                     {coachingAudiences.map((item) => (
