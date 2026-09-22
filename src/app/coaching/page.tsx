@@ -154,46 +154,60 @@ const chapterDark = "text-xs font-medium tabular-nums tracking-[0.32em] text-[#b
 export default function CoachingPage() {
   return (
     <main id="main-content" className="min-h-screen bg-[#f4f3ef] text-zinc-900">
-      {/* ---------- 00 · Hero ---------- */}
-      <section className="border-b border-zinc-300 px-6 pb-24 pt-36 md:px-10 md:pb-32 md:pt-44 lg:pb-40">
-        <div className="mx-auto max-w-7xl">
+      {/* ---------- 00 · Hero — gles, hög, asymmetrisk ---------- */}
+      <section className="flex min-h-[92svh] flex-col justify-between px-6 pb-20 pt-36 md:min-h-[112svh] md:px-10 md:pb-24 md:pt-52 lg:min-h-[118svh]">
+        <div className="mx-auto w-full max-w-7xl">
           <HeroReveal>
-            <div data-hero-line className="mb-10 h-px w-12 origin-left bg-[#967844] md:mb-14" />
-            <p data-hero-label className={chapterLight}>
-              Coaching
-            </p>
-            <h1
-              data-hero-headline
-              className="mt-10 max-w-[16ch] font-serif text-[clamp(3rem,8.5vw,9rem)] font-medium leading-[0.9] tracking-[-0.05em] text-zinc-900 md:mt-14"
-            >
-              Vad coaching innebär hos CVB.
-            </h1>
-            <div className="mt-14 grid gap-10 border-t border-zinc-300 pt-10 md:mt-20 md:grid-cols-12 md:gap-x-8 md:pt-12">
+            <div className="grid md:grid-cols-12 md:gap-x-8">
+              <div className="md:col-span-2">
+                <div data-hero-line className="mb-8 h-px w-12 origin-left bg-[#7d6435]" />
+                <p data-hero-label className={chapterLight}>
+                  Coaching
+                </p>
+              </div>
+              <h1
+                data-hero-headline
+                className="mt-14 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[0.88] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
+              >
+                Vad coaching innebär hos CVB.
+              </h1>
+            </div>
+          </HeroReveal>
+        </div>
+
+        {/* Stödtexten ligger medvetet långt ned och långt till höger: öppningen
+            ska läsas som en sida som börjar, inte som ett introblock. */}
+        <div className="mx-auto mt-32 w-full max-w-7xl md:mt-0">
+          <HeroReveal>
+            <div className="grid gap-12 md:grid-cols-12 md:gap-x-8">
               <p
                 data-hero-body
-                className="max-w-2xl text-[1.125rem] font-[450] leading-[1.7] text-zinc-700 md:col-span-6"
+                className="max-w-md text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-4 md:col-start-7"
               >
-                Samma arbetssätt, två sammanhang: för dig själv eller i arbetslivet. Den här sidan
-                beskriver hur arbetet går till, när det kan vara rätt och hur du tar nästa steg.
+                Den här sidan beskriver hur arbetet går till, när det kan vara rätt och hur du tar
+                nästa steg.
               </p>
-              <div
-                data-hero-cta
-                className="flex flex-col gap-4 md:col-span-5 md:col-start-8 md:flex-row md:flex-wrap md:items-start md:gap-3.5"
-              >
-                <CtaLink href="/kontakt" variant="primary">
-                  Boka ett inledande samtal
-                </CtaLink>
-                <CtaLink href="#vagar" variant="secondary">
+              <div data-hero-cta className="md:col-span-2 md:col-start-11 md:justify-self-end">
+                <Link
+                  href="#vagar"
+                  className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
+                >
                   Se de två sätten att arbeta
-                </CtaLink>
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+                  >
+                    ↓
+                  </span>
+                </Link>
               </div>
             </div>
           </HeroReveal>
         </div>
       </section>
 
-      {/* ---------- 01 · När coaching kan vara rätt ---------- */}
-      <section className="bg-white py-24 md:py-32 lg:py-40">
+      {/* ---------- 01 · När coaching kan vara rätt — tät ---------- */}
+      <section className="bg-white py-20 md:py-24 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
             <div data-col-left className="md:col-span-5">
@@ -218,8 +232,8 @@ export default function CoachingPage() {
         </div>
       </section>
 
-      {/* ---------- 02 · Vad arbetet består av ---------- */}
-      <section className="bg-[#f4f3ef] py-24 md:py-32 lg:py-40">
+      {/* ---------- 02 · Vad arbetet består av — glesaste scenen, sidans signatur ---------- */}
+      <section className="bg-[#f4f3ef] py-32 md:py-52 lg:py-64">
         <EditorialRowsReveal className="mx-auto max-w-7xl px-6 md:px-10">
           <p className={chapterLight}>02</p>
           <h2
@@ -228,12 +242,12 @@ export default function CoachingPage() {
           >
             Vad arbetet består av
           </h2>
-          <div className="mt-20 border-t border-zinc-300 md:mt-28">
+          <div className="mt-24 border-t border-zinc-300 md:mt-40">
             {workRows.map((row, index) => (
               <article
                 key={row.index}
                 data-editorial-row
-                className={`border-b border-zinc-300 py-12 md:py-16 ${index === 1 ? "lg:pl-[8.333%]" : ""}`}
+                className={`border-b border-zinc-300 py-16 md:py-28 ${index === 1 ? "lg:pl-[8.333%]" : ""}`}
               >
                 <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-x-8">
                   {/* Sifferkolumnen är ren struktur — titeln och brödtexten bär
@@ -264,8 +278,8 @@ export default function CoachingPage() {
         </EditorialRowsReveal>
       </section>
 
-      {/* ---------- 03 · Så går det till ---------- */}
-      <section className="bg-white py-24 md:py-32 lg:py-40">
+      {/* ---------- 03 · Så går det till — tät ---------- */}
+      <section className="bg-white py-20 md:py-24 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
             <p data-col-left className={`${chapterLight} md:col-span-2`}>03</p>
@@ -345,8 +359,8 @@ export default function CoachingPage() {
         </ScrollReveal>
       </section>
 
-      {/* ---------- 05 · Så vet du om det här är rätt ---------- */}
-      <section className="bg-[#f4f3ef] py-24 md:py-32 lg:py-40">
+      {/* ---------- 05 · Så vet du om det här är rätt — tätast ---------- */}
+      <section className="bg-[#f4f3ef] pb-16 pt-20 md:pb-20 md:pt-24">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
             <div data-col-left className="md:col-span-5">
@@ -381,8 +395,19 @@ export default function CoachingPage() {
         </div>
       </section>
 
+      {/* ---------- Paus · Statement ----------
+          Frasen stod tidigare två gånger på sidan (hero och rubriken nedan).
+          Den är flyttad hit som en egen paus i stället för att upprepas. */}
+      <section className="flex min-h-[72svh] items-center bg-[#f4f3ef] pb-28 pt-12 md:min-h-[86svh] md:pb-40">
+        <ScrollReveal variant="fadeUp" className="mx-auto w-full max-w-7xl px-6 md:px-10">
+          <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[0.98] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
+            Samma arbetssätt, två sammanhang: för dig själv eller i arbetslivet.
+          </p>
+        </ScrollReveal>
+      </section>
+
       {/* ---------- 06 · Två vägar in ---------- */}
-      <section id="vagar" className="scroll-mt-28 bg-white py-24 md:py-32 lg:py-40">
+      <section id="vagar" className="scroll-mt-28 bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
             <p data-col-left className={`${chapterLight} md:col-span-2`}>06</p>
@@ -390,9 +415,6 @@ export default function CoachingPage() {
               <h2 className="font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[0.92] tracking-[-0.045em] text-zinc-900">
                 Två vägar in
               </h2>
-              <p className="mt-8 max-w-xl text-[1.0625rem] font-[450] leading-[1.7] text-zinc-600 md:mt-10">
-                Samma arbetssätt, två sammanhang: för dig själv eller i arbetslivet.
-              </p>
             </div>
           </ScrollReveal>
 
@@ -448,35 +470,49 @@ export default function CoachingPage() {
       </section>
 
       {/* ---------- 07 · Praktiskt ---------- */}
-      <section className="bg-[#f4f3ef] py-24 md:py-32 lg:py-40">
+      <section className="bg-[#f4f3ef] py-24 md:py-36 lg:py-44">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
-            <div data-col-left className="md:col-span-4">
-              <p className={chapterLight}>07</p>
-              <h2 className="mt-10 max-w-sm font-serif text-[clamp(2.5rem,4.5vw,4.5rem)] font-medium leading-[0.98] tracking-[-0.04em] text-zinc-900 md:mt-16">
-                Praktiskt
-              </h2>
-            </div>
-            <div data-col-right className="md:col-span-7 md:col-start-6">
-              <dl className="divide-y divide-zinc-300 border-y border-zinc-300">
-                {practical.map((item) => (
-                  <div key={item.title} data-col-paragraph className="py-8 md:py-10">
-                    <dt className="text-lg font-medium leading-snug tracking-tight text-zinc-900">
-                      {item.title}
-                    </dt>
-                    <dd className="mt-4 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600">
-                      {item.body}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </ScrollReveal>
+          {/* Rubriken hålls på metadata-skala: raderna nedan bär scenen visuellt,
+              men sektionen behöver fortfarande sin plats i rubrikträdet. */}
+          <div className="flex items-baseline gap-6">
+            <p className={chapterLight}>07</p>
+            <h2 className={chapterLight}>Praktiskt</h2>
+          </div>
+
+          {/* Praktiskt är komponerat som redaktionella rader i stället för en
+              definitionslista med panelkänsla: titeln står ensam till vänster,
+              texten börjar långt in, och raderna förskjuts i sidled. */}
+          <EditorialRowsReveal className="mt-16 md:mt-24">
+            <dl>
+              {practical.map((item, index) => (
+                <div
+                  key={item.title}
+                  data-editorial-row
+                  className={`grid gap-4 border-t border-zinc-300 py-12 md:grid-cols-12 md:gap-x-8 md:py-20 ${
+                    index === 1 ? "lg:pl-[8.333%]" : ""
+                  } ${index === 2 ? "lg:pl-[16.666%]" : ""}`}
+                >
+                  <dt
+                    data-row-title
+                    className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.05] tracking-[-0.03em] text-zinc-900 md:col-span-5"
+                  >
+                    {item.title}
+                  </dt>
+                  <dd
+                    data-row-body
+                    className="max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-6 md:col-start-7"
+                  >
+                    {item.body}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </EditorialRowsReveal>
         </div>
       </section>
 
       {/* ---------- 08 · Vanliga frågor ---------- */}
-      <section className="bg-white py-24 md:py-32 lg:py-40">
+      <section className="bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="fadeUp" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
             <p className={`${chapterLight} md:col-span-2`}>08</p>
