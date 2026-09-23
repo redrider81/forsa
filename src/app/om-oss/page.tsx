@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
@@ -23,7 +24,9 @@ const CHAPTER_ON_DARK = `${CHAPTER} text-white`;
 const LABEL =
   "text-xs font-medium uppercase tracking-[0.16em] text-[#7d6435]";
 const BODY = "text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600";
-const BODY_STACK = `space-y-6 ${BODY}`;
+const BODY_STACK = `space-y-7 ${BODY}`;
+const SECTION_STACK = "mt-32 md:mt-48";
+const SECTION_GRID = "grid gap-14 md:grid-cols-12 md:gap-x-8 md:gap-y-16";
 
 const principles = [
   "Konfidentialitet.",
@@ -44,26 +47,18 @@ export default function AboutPage() {
       <JsonLd data={carolinaPersonSchema} />
 
       {/* Hero */}
-      <section className="px-6 pb-20 pt-32 md:px-10 md:pb-28 md:pt-44 lg:pt-52">
+      <section className="px-6 pb-24 pt-32 md:px-10 md:pb-36 md:pt-44 lg:pb-40 lg:pt-52">
         <div className="mx-auto max-w-7xl">
           <HeroReveal>
-            <div className="grid md:grid-cols-12 md:gap-x-8">
-              <div className="md:col-span-2">
-                <div data-hero-line className="mb-8 h-px w-12 origin-left bg-[#7d6435]" />
-                <p data-hero-label className={LABEL}>
-                  Om Carolina
-                </p>
-              </div>
-              <h1
-                data-hero-headline
-                className={`mt-12 max-w-[16ch] ${DISPLAY} text-zinc-900 md:col-span-10 md:mt-0`}
-              >
-                Personen du ska ha samtalen med.
-              </h1>
-            </div>
+            <h1
+              data-hero-headline
+              className={`max-w-[16ch] text-left ${DISPLAY} text-zinc-900 md:max-w-[18ch]`}
+            >
+              Personen du ska ha samtalen med.
+            </h1>
             <p
               data-hero-body
-              className={`mt-14 max-w-xl md:ml-[16.666%] md:mt-20 ${BODY}`}
+              className={`mt-16 max-w-xl text-left md:mt-24 ${BODY}`}
             >
               Att välja coach är att välja vem man tänker högt inför. Här är vad du behöver veta om
               mig för att avgöra om det ska vara jag.
@@ -73,9 +68,9 @@ export default function AboutPage() {
       </section>
 
       {/* Ljus yta */}
-      <div className="pb-28 md:pb-40">
+      <div className="pb-32 md:pb-52">
         <section className="mx-auto max-w-7xl px-6 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
+          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
               Varför CVB Coaching finns
             </h2>
@@ -92,28 +87,39 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
+        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
+          <ScrollReveal variant="splitColumn" className={`${SECTION_GRID} md:items-stretch`}>
             <div data-col-left className="md:col-span-5">
               <p className={LABEL}>Coach</p>
               <h2 className={`mt-6 ${DISPLAY_SM} text-zinc-900`}>Carolina von Braun</h2>
-              <p className={`mt-4 ${BODY}`}>CVB Coaching, Göteborg</p>
             </div>
-            <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7`}>
+            <figure className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden rounded-[1.25rem] md:col-span-5 md:row-start-2 md:mt-12 md:aspect-auto md:h-full md:min-h-[20rem] md:rounded-[1.75rem]">
+              <Image
+                src="/carolina-om-oss.jpg"
+                alt="Carolina von Braun, coach och grundare av CVB Coaching."
+                fill
+                sizes="(min-width: 768px) 20rem, 94vw"
+                className="object-cover object-[center_22%]"
+                quality={80}
+              />
+            </figure>
+            <div
+              data-col-right
+              className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:row-start-2 md:mt-12 md:flex md:min-h-0 md:flex-col md:justify-between md:space-y-0 md:gap-8 lg:gap-10`}
+            >
               <p>
-                Carolina von Braun heter jag som driver CVB Coaching i Göteborg och är utbildad och
-                diplomerad coach vid Gothia Akademi genom ICF-ackrediterad coachutbildning på Level 1
-                och Level 2.
+                Jag heter Carolina von Braun och driver CVB Coaching i Göteborg. Jag är diplomerad coach
+                vid Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och Level
+                2.
               </p>
               <p>
-                Bakgrunden omfattar värdepappershandel på Nordea, styrelseuppdrag inom
+                Min yrkesbakgrund omfattar värdepappershandel på Nordea, styrelseuppdrag inom
                 fastighetsförvaltning och investeringar samt studier i marknadsföring vid
-                Handelshögskolan vid Göteborgs universitet. Erfarenheten ger en affärsmässig
-                förståelse för situationer där ansvar, vägval och konsekvenser behöver vägas mot
-                varandra.
+                Handelshögskolan vid Göteborgs universitet. Den erfarenheten tar jag med mig som
+                bakgrund och förståelse — inte som ett facit för dina beslut.
               </p>
               <p>
-                I coachingen är rollerna tydliga: klienten äger sina mål, insikter och beslut. Min
+                I coachingen är rollerna tydliga: du äger dina mål, insikter och beslut. Min
                 uppgift är att skapa skärpa i tänkandet, pröva perspektiv och föra samtalet framåt
                 utan att ta över dina slutsatser.
               </p>
@@ -121,15 +127,15 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
+        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
+          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-sm ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
               Principer
             </h2>
             <ScrollReveal
               variant="staggerList"
               data-col-right
-              className="grid gap-4 md:col-span-6 md:col-start-7 md:grid-cols-2 md:gap-5"
+              className="grid gap-5 md:col-span-6 md:col-start-7 md:grid-cols-2 md:gap-6"
             >
               {principles.map((item, index) => (
                 <div
@@ -145,8 +151,8 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
+        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
+          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
               Konfidentialitet
             </h2>
@@ -160,8 +166,8 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
+        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
+          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
               Vilka jag arbetar med
             </h2>
@@ -169,7 +175,7 @@ export default function AboutPage() {
               <ScrollReveal variant="staggerList">
                 <ul className="divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                   {audiences.map((item) => (
-                    <li key={item} data-list-item className="grid grid-cols-[1rem_1fr] gap-5 py-6 md:py-7">
+                    <li key={item} data-list-item className="grid grid-cols-[1rem_1fr] gap-5 py-7 md:py-8">
                       <span className="mt-[0.72rem] h-1 w-1 shrink-0 bg-zinc-900" aria-hidden />
                       <span>{item}</span>
                     </li>
@@ -180,8 +186,8 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
+        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
+          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-lg ${DISPLAY_SM} text-balance text-zinc-900 md:col-span-5`}>
               Göteborg, eller digitalt när det passar bättre
             </h2>
@@ -193,10 +199,33 @@ export default function AboutPage() {
             </div>
           </ScrollReveal>
         </section>
+
+        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
+          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
+            <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
+              Det första samtalet är till för att känna efter.
+            </h2>
+            <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
+              <p>
+                Du behöver inte ha formulerat frågan färdigt. I ett kort och kostnadsfritt första
+                telefonsamtal får du berätta var du befinner dig, förstå om coaching är rätt stöd och
+                känna efter om Carolina är rätt person att prata med.
+              </p>
+              <p className="text-[0.875rem] leading-[1.6] text-zinc-500">
+                Det är inte en coachingsession och innebär inget åtagande.
+              </p>
+              <div>
+                <CtaLink href="/kontakt" variant="primary">
+                  Boka ett inledande samtal
+                </CtaLink>
+              </div>
+            </div>
+          </ScrollReveal>
+        </section>
       </div>
 
       {/* Avslut — samma mörka CTA-yta som startsidan */}
-      <section className="bg-surface-dark py-24 text-zinc-100 md:py-32 lg:py-40">
+      <section className="bg-surface-dark py-28 text-zinc-100 md:py-36 lg:py-44">
         <ScrollReveal variant="ctaStack" className="mx-auto max-w-7xl px-6 md:px-10">
           <p className={CHAPTER_ON_DARK}>07</p>
           <h2 data-cta-heading className={`mt-10 max-w-3xl ${DISPLAY} text-white md:mt-14`}>
@@ -211,6 +240,9 @@ export default function AboutPage() {
               <CtaLink href="/kontakt" variant="secondary" translucent>
                 {t.cta.primary}
               </CtaLink>
+              <p className="mt-6 text-[0.875rem] leading-[1.6] text-zinc-400">
+                Kort och kostnadsfritt. Inte en coachingsession. Inget åtagande.
+              </p>
               <p className="mt-6 text-[0.875rem] leading-[1.6] text-zinc-400">
                 Personlig coaching · Konfidentiella samtal · Göteborg eller digitalt
               </p>
