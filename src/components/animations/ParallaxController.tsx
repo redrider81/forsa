@@ -10,7 +10,7 @@ import {
   motion,
   parallaxScrollTrigger,
   prefersReducedMotion,
-  refreshScrollTriggers,
+  scheduleScrollRevealRefresh,
 } from "@/lib/motion";
 
 type Props = {
@@ -64,14 +64,18 @@ export default function ParallaxController({ children }: Props) {
         },
       );
 
-      refreshScrollTriggers();
+      scheduleScrollRevealRefresh();
     }, root);
+
+    const onLoad = () => scheduleScrollRevealRefresh();
+    window.addEventListener("load", onLoad, { once: true });
 
     // On width changes only recompute positions; never force-complete reveals
     // here (that would snap scroll reveals on resize, e.g. mobile orientation).
     const unbindRefresh = bindParallaxRefresh(() => ScrollTrigger.refresh());
 
     return () => {
+      window.removeEventListener("load", onLoad);
       unbindRefresh();
       ctx?.revert();
     };

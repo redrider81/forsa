@@ -26,6 +26,7 @@ export type Dictionary = {
     unsureBody: string;
     bookFirstCall: string;
     login: string;
+    loginAriaLabel: string;
   };
   footer: {
     description: string;

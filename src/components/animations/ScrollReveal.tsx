@@ -9,6 +9,7 @@ import {
   prefersReducedMotion,
   refreshScrollTriggers,
   revealScrollTrigger,
+  scheduleScrollRevealRefresh,
   showTargets,
 } from "@/lib/motion";
 
@@ -172,6 +173,8 @@ export default function ScrollReveal({
 
       refreshScrollTriggers();
     }, ref);
+
+    scheduleScrollRevealRefresh();
 
     return () => {
       ctx?.revert();

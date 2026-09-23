@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import CtaLink from "@/components/cta-link";
+import { LogoMark } from "@/components/brand/logo";
 import SiteNavigation from "@/components/site-navigation";
 import HeroReveal from "@/components/animations/HeroReveal";
 import HeroVideoBackground from "@/components/hero-video-background";
@@ -42,6 +43,9 @@ const t = svDictionary;
 
 const DISPLAY =
   "font-serif text-[clamp(2.75rem,5.6vw,5.25rem)] font-medium leading-[1.12] tracking-[-0.04em]";
+/** Base-akt: något mer auktoritet än standard DISPLAY, tak ~72px på stor desktop. */
+const DISPLAY_BASE =
+  "font-serif text-[clamp(2.75rem,6vw,4.5rem)] font-medium leading-[1.12] tracking-[-0.04em]";
 const DISPLAY_SM =
   "font-serif text-[clamp(2.125rem,4.2vw,3.5rem)] font-medium leading-[1.18] tracking-[-0.035em]";
 const SUB =
@@ -104,6 +108,25 @@ const firstCallValueRows = [
     index: "03",
     title: "Nästa steg",
     body: "Du går därifrån med en tydligare bild av vad som skulle hjälpa dig vidare — oavsett om vi fortsätter eller inte.",
+  },
+];
+
+const cvbBaseBenefits = [
+  {
+    title: "Coaching som fortsätter mellan samtalen",
+    body: "Förbered nästa samtal, fånga reflektioner när de uppstår och återvänd till det som blivit viktigt utan att behöva börja om från början varje gång.",
+  },
+  {
+    title: "Byggt för både individen och företagsuppdraget",
+    body: "När ett företag finansierar coachingen finns flera relationer samtidigt. CVB Base är utformat för att hålla uppdragsgivarens ramar, Carolinas arbete och klientens personliga coachingrelation tydligt åtskilda.",
+  },
+  {
+    title: "Du bestämmer vad du delar",
+    body: "Eget material kan vara privat. Det du väljer att dela kan Carolina använda som underlag i coachingen, medan hennes egna arbetsanteckningar hålls utanför klientvyn.",
+  },
+  {
+    title: "Ett sammanhang för hela coachingprocessen",
+    body: "Riktning, sessioner, godkända sammanfattningar, åtaganden, reflektioner och relevant material kan hållas samman runt samma coachingarbete i stället för att spridas mellan mejl, dokument och separata verktyg.",
   },
 ];
 
@@ -172,7 +195,7 @@ export default function HomePage() {
               <ScrollReveal variant="splitColumn" className="max-w-3xl">
                 <div data-col-left>
                   <h2 className={`${DISPLAY} text-zinc-900`}>
-                    Individuell coaching eller företags coaching
+                    Individuell coaching eller företagscoaching
                   </h2>
                 </div>
               </ScrollReveal>
@@ -180,6 +203,10 @@ export default function HomePage() {
               <div className="mt-14 md:mt-16">
                 <CoachingServicesGrid locale="sv" dense variant="editorial" />
               </div>
+
+              <p className="mt-10 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-12">
+                Samtalet står i centrum. När det är relevant hålls arbetet samman mellan samtalen.
+              </p>
 
               {/* Rörelse 2 — när coaching kan vara rätt · dokumentär bild + lista */}
               <ScrollReveal
@@ -410,33 +437,93 @@ export default function HomePage() {
           >
             {/* -------------------- AKT 05 · KONTINUITET -------------------- */}
             <section className="mx-auto max-w-7xl px-6 md:px-10">
-              <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
+              <ScrollReveal
+                variant="splitColumn"
+                className="grid gap-12 md:grid-cols-12 md:items-start md:gap-x-8 lg:gap-x-10"
+              >
                 <div data-col-left className="md:col-span-7">
-                  <p className={CHAPTER_ON_DARK}>06</p>
-                  <h2 className={`mt-10 max-w-3xl ${DISPLAY} text-white md:mt-14`}>
-                    Samtalet står i centrum. CVB Base behåller sammanhanget mellan samtalen.
+                  <LogoMark
+                    descriptor="base"
+                    withCoaching={false}
+                    className="h-12 w-auto md:h-14 lg:h-16"
+                  />
+                  <h2 className={`mt-6 max-w-3xl ${DISPLAY_BASE} text-white md:mt-8 lg:max-w-4xl`}>
+                    Utvecklat för professionell coaching i svensk kontext.
                   </h2>
+                  <div className="mt-8 space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:mt-10">
+                    <p data-col-paragraph className="max-w-2xl">
+                      CVB Coaching utvecklar CVB Base för individuell coaching och företagscoaching i svenska
+                      sammanhang. Det är ett svenskspråkigt digitalt stöd som utvecklas för att hålla ihop det som
+                      är viktigt före, mellan och efter samtalen — i situationer där en klient, en uppdragsgivare och
+                      en coach behöver tydliga ramar.
+                    </p>
+                    <p data-col-paragraph className="max-w-2xl">
+                      Tydliga roller och kontroll över vad som delas är därför en integrerad del av CVB Base — inte
+                      ett tillägg runt coachingen.
+                    </p>
+                  </div>
                 </div>
-                <div
-                  data-col-right
-                  className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-8 md:mt-14"
-                >
-                  <p data-col-paragraph className="max-w-xl">
-                    När det är relevant använder du CVB Base för att förbereda frågor, samla
-                    reflektioner och återvända till sådant du vill följa över tid. Det ersätter inte
-                    coachingen, utan ger dig en plats för det som händer mellan samtalen.
+
+                <div className="md:col-span-12">
+                  <div className="mt-12 border-t border-white/20 md:mt-16">
+                    <div className="grid md:grid-cols-12 md:gap-x-8 lg:gap-x-10">
+                      {cvbBaseBenefits.map((row, index) => {
+                        const isPrivacyRow = index === 2;
+                        const columnClass =
+                          index === 0
+                            ? "md:col-span-5"
+                            : index === 1
+                              ? "md:col-span-5 md:col-start-8"
+                              : index === 2
+                                ? "md:col-span-5 md:border-t md:border-white/20"
+                                : "md:col-span-5 md:col-start-8 md:border-t md:border-white/20";
+
+                        return (
+                          <article
+                            key={row.title}
+                            className={`border-b border-white/20 ${columnClass} ${
+                              isPrivacyRow ? "py-10 md:py-12" : "py-7 md:py-9"
+                            }`}
+                          >
+                            <h3
+                              className={`font-serif font-medium leading-[1.3] tracking-[-0.02em] text-white ${
+                                isPrivacyRow
+                                  ? "text-xl md:text-[1.4375rem]"
+                                  : "text-lg md:text-[1.3125rem]"
+                              }`}
+                            >
+                              {row.title}
+                            </h3>
+                            <p
+                              className={`mt-2.5 max-w-md text-[1rem] font-[450] leading-[1.72] md:mt-3 md:text-[1.0625rem] md:leading-[1.75] lg:max-w-lg ${
+                                isPrivacyRow ? "text-zinc-300" : "text-zinc-400"
+                              }`}
+                            >
+                              {row.body}
+                            </p>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <p className="mt-12 max-w-2xl border-t border-white/20 pt-10 font-serif text-lg font-medium italic leading-[1.45] tracking-[-0.02em] text-zinc-400 md:mt-14 md:max-w-3xl md:pt-12 md:text-xl lg:max-w-4xl">
+                    Personlig coaching med Carolina. CVB Base som stöd före, mellan och efter samtalen.
                   </p>
-                  <figure className="relative mt-10 aspect-[4/3] w-full max-w-xl overflow-hidden rounded-[1.25rem] md:mt-12 md:rounded-[1.75rem] lg:rounded-[2rem]">
-                    <Image
-                      src="/cvb-base-ipad.jpg"
-                      alt="Person som håller en surfplatta — CVB Base mellan samtalen."
-                      fill
-                      sizes="(min-width: 768px) 36vw, 94vw"
-                      className="object-cover object-center"
-                      quality={80}
-                    />
-                  </figure>
                 </div>
+
+                <figure
+                  data-col-right
+                  className="relative aspect-[4/5] w-full max-w-xl overflow-hidden rounded-[1.25rem] md:col-span-5 md:col-start-8 md:row-start-1 md:mt-6 md:aspect-[2/3] md:max-w-2xl md:self-start md:rounded-[1.75rem] lg:mt-10 lg:rounded-[2rem]"
+                >
+                  <Image
+                    src="/cvb-base-ipad.jpg"
+                    alt="Person som håller en surfplatta — CVB Base mellan samtalen."
+                    fill
+                    sizes="(min-width: 768px) 36vw, 94vw"
+                    className="object-cover object-center"
+                    quality={80}
+                  />
+                </figure>
               </ScrollReveal>
             </section>
 

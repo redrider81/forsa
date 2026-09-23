@@ -101,20 +101,44 @@ export function resetRouteScroll(): void {
   body.style.scrollBehavior = previousBody;
 }
 
-/** Refresh ScrollTriggers and complete reveals already in the viewport. */
+/** Refresh ScrollTriggers and complete reveals already in the viewport or passed on scroll. */
 export function refreshScrollTriggers(): void {
   if (typeof window === "undefined") return;
   gsap.registerPlugin(ScrollTrigger);
-  ScrollTrigger.refresh();
+  ScrollTrigger.refresh(true);
+
   ScrollTrigger.getAll().forEach((st) => {
     if (!st.vars.once || !st.animation) return;
+
+    const scroll = st.scroll();
+    const start = st.start;
     const trigger = st.trigger;
-    if (!(trigger instanceof Element)) return;
-    const rect = trigger.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+
+    let intersectsViewport = false;
+    if (trigger instanceof Element) {
+      const rect = trigger.getBoundingClientRect();
+      intersectsViewport = rect.top < window.innerHeight * 0.92 && rect.bottom > 0;
+    }
+
+    const scrolledPastStart = typeof start === "number" && scroll >= start;
+
+    if (intersectsViewport || scrolledPastStart) {
       st.animation.progress(1);
     }
   });
+}
+
+/** Run reveal completion after layout, fonts and late-loading media. */
+export function scheduleScrollRevealRefresh(): void {
+  refreshScrollTriggers();
+  requestAnimationFrame(() => {
+    refreshScrollTriggers();
+  });
+  if (document.readyState === "complete") {
+    requestAnimationFrame(() => refreshScrollTriggers());
+  } else {
+    window.addEventListener("load", () => refreshScrollTriggers(), { once: true });
+  }
 }
 
 export function bindParallaxRefresh(onRefresh: () => void, delayMs = 200): () => void {

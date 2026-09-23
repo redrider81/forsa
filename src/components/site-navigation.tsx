@@ -181,20 +181,12 @@ const mobileHeaderControlCluster =
 const mobileHeaderIconButton =
   "inline-flex h-11 w-11 items-center justify-center rounded-full text-zinc-800 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
-function LoginIcon() {
+function ClientLoginNavLabel({ fullLabel }: { fullLabel: string }) {
   return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className="h-4 w-4 shrink-0 text-current md:h-[1.125rem] md:w-[1.125rem]"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-    >
-      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" strokeLinecap="round" />
-      <path d="M10 17l5-5-5-5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M15 12H3" strokeLinecap="round" />
-    </svg>
+    <>
+      <span className="min-[480px]:hidden">CVB Base</span>
+      <span className="hidden min-[480px]:inline">{fullLabel}</span>
+    </>
   );
 }
 
@@ -918,14 +910,14 @@ export default function SiteNavigation() {
                 <li className="list-none">
                   <Link
                     href="/klient-login"
+                    aria-label={t.nav.loginAriaLabel}
                     className={`inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-700 px-4 py-2.5 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 md:px-4 md:py-3 md:text-[0.9375rem] ${
                       isHome
                         ? "focus-visible:ring-offset-white/40"
                         : "focus-visible:ring-offset-zinc-100"
                     }`}
                   >
-                    <LoginIcon />
-                    {t.nav.login}
+                    <ClientLoginNavLabel fullLabel={t.nav.login} />
                   </Link>
                 </li>
                 <li className="list-none">
@@ -1116,11 +1108,11 @@ export default function SiteNavigation() {
             </span>
             <Link
               href="/klient-login"
+              aria-label={t.nav.loginAriaLabel}
               onClick={closeMobileMenu}
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]"
             >
-              <LoginIcon />
-              {t.nav.login}
+              <ClientLoginNavLabel fullLabel={t.nav.login} />
             </Link>
           </div>
         </div>
