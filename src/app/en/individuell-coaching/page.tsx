@@ -31,9 +31,10 @@ const focusList = [
 const nonGoals = [
   "Not therapy or treatment. If the question is about ill health, therapy is the right route, and I will say so.",
   "Not advice. I will not take over your decisions or hand you my view as the answer.",
+  "Not encouragement. You get resistance when it is needed, not cheering.",
 ];
 
-const outcomes = [
+const valueList = [
   "You know what the question is actually about, not only how it feels.",
   "You make the decision instead of carrying it.",
   "You have a way of thinking that holds up the next time too.",
@@ -43,6 +44,8 @@ export default function IndividualCoachingPageEn() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
+
+        {/* Hero */}
         <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
@@ -57,7 +60,7 @@ export default function IndividualCoachingPageEn() {
               actually taking up room — a choice, a change, a question that will not let go — and
               get further with it than you do alone.
             </p>
-            <p className="mt-6 max-w-3xl text-base leading-7 text-zinc-600">
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
               If your employer is funding the coaching, or the question concerns your role at work,
               see{" "}
               <Link href="/en/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
@@ -68,6 +71,7 @@ export default function IndividualCoachingPageEn() {
           </HeroReveal>
         </section>
 
+        {/* Two-col: premise */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
@@ -87,6 +91,7 @@ export default function IndividualCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
             Where things tend to get stuck
@@ -103,6 +108,7 @@ export default function IndividualCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* Cards: focus */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
@@ -118,6 +124,7 @@ export default function IndividualCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* Two-col: how */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
@@ -140,6 +147,7 @@ export default function IndividualCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* List: non-goals */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What it is not</h2>
           <ScrollReveal variant="staggerList" className="mt-8">
@@ -154,10 +162,11 @@ export default function IndividualCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* Cards: value */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What you take away</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
-            {outcomes.map((item, index) => (
+            {valueList.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
                 <p className="text-xs tracking-[0.18em] text-zinc-500">{`0${index + 1}`}</p>
                 {item}
@@ -166,6 +175,7 @@ export default function IndividualCoachingPageEn() {
           </StaggerCards>
         </section>
 
+        {/* Two-col: engagement */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
@@ -191,14 +201,15 @@ export default function IndividualCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-[1.25] tracking-tight md:text-4xl">
-              Book an introductory conversation
+              Next step
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Tell me briefly what you would like to talk about and choose a time. You do not need to
-              have everything formulated. The conversation is confidential.
+              Tell me briefly what you would like to talk about and choose a time. You do not need
+              to have everything formulated. The conversation is confidential.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">
@@ -207,6 +218,7 @@ export default function IndividualCoachingPageEn() {
             </div>
           </ScrollReveal>
         </section>
+
       </div>
     </main>
   );

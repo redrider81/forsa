@@ -448,16 +448,24 @@ export default function SiteNavigation() {
   const barePathname = stripLocaleFromPath(pathname);
   const t = getDictionaryForOptionalLocale(locale);
   const localizedHref = (path: string) => toLocalePath(path, locale);
-  // Översiktssidan finns bara på svenska. Ingen engelsk motsvarighet skapas
-  // förrän copy är godkänd, så länken visas inte på /en.
-  const coachingOverview =
+  // Översiktssidan finns på båda språken. href är språklös och lokaliseras
+  // där länken renderas.
+  const coachingOverview = {
+    href: "/coaching",
+    label: "Coaching",
+    text:
+      locale === "sv"
+        ? "Så fungerar coaching hos CVB: när den kan vara rätt, vad arbetet består av och hur ett samarbete går till."
+        : "How coaching works at CVB: when it can be right, what the work involves and how a collaboration works.",
+  };
+  const coachingSubmenuLabel = (open: boolean) =>
     locale === "sv"
-      ? {
-          href: "/coaching",
-          label: "Coaching",
-          text: "Så fungerar coaching hos CVB: när den kan vara rätt, vad arbetet består av och hur ett samarbete går till.",
-        }
-      : null;
+      ? open
+        ? "Stäng undermeny för Coaching"
+        : "Visa undermeny för Coaching"
+      : open
+        ? "Close Coaching submenu"
+        : "Show Coaching submenu";
   const coachingAudiences =
     locale === "sv"
       ? [
@@ -759,44 +767,12 @@ export default function SiteNavigation() {
                   >
                     {/* Coaching är en egen sida, inte bara en meny. Ordet är därför
                         en riktig länk till /coaching och chevronen en separat knapp
-                        som öppnar panelen. På engelska finns ingen översiktssida
-                        ännu, så där är hela fliken kvar som enbart menyknapp. */}
-                    {coachingOverview ? (
-                      <span className="inline-flex items-center">
-                        <Link
-                          href={coachingOverview.href}
-                          aria-current={barePathname === coachingOverview.href ? "page" : undefined}
-                          className={`${navTabClass(coachingActive, isHome)} pr-1.5`}
-                          onFocus={() => {
-                            if (coachingTabRef.current) {
-                              syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
-                            }
-                          }}
-                        >
-                          {t.nav.coaching}
-                        </Link>
-                        <button
-                          type="button"
-                          aria-expanded={megaOpen}
-                          aria-controls={coachingMenuId}
-                          aria-label={megaOpen ? "Stäng undermeny för Coaching" : "Visa undermeny för Coaching"}
-                          onClick={() => (megaOpen ? closeMega() : openMega())}
-                          className={`${navTabClass(coachingActive, isHome)} pl-0.5 pr-3`}
-                          onFocus={() => {
-                            if (coachingTabRef.current) {
-                              syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
-                            }
-                          }}
-                        >
-                          <NavChevron open={megaOpen} />
-                        </button>
-                      </span>
-                    ) : (
-                      <button
-                        type="button"
-                        aria-expanded={megaOpen}
-                        aria-controls={coachingMenuId}
-                        className={`gap-1.5 ${navTabClass(coachingActive, isHome)}`}
+                        som öppnar panelen. */}
+                    <span className="inline-flex items-center">
+                      <Link
+                        href={localizedHref(coachingOverview.href)}
+                        aria-current={barePathname === coachingOverview.href ? "page" : undefined}
+                        className={`${navTabClass(coachingActive, isHome)} pr-1.5`}
                         onFocus={() => {
                           if (coachingTabRef.current) {
                             syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
@@ -804,9 +780,23 @@ export default function SiteNavigation() {
                         }}
                       >
                         {t.nav.coaching}
+                      </Link>
+                      <button
+                        type="button"
+                        aria-expanded={megaOpen}
+                        aria-controls={coachingMenuId}
+                        aria-label={coachingSubmenuLabel(megaOpen)}
+                        onClick={() => (megaOpen ? closeMega() : openMega())}
+                        className={`${navTabClass(coachingActive, isHome)} pl-0.5 pr-3`}
+                        onFocus={() => {
+                          if (coachingTabRef.current) {
+                            syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
+                          }
+                        }}
+                      >
                         <NavChevron open={megaOpen} />
                       </button>
-                    )}
+                    </span>
 
                     <div
                       ref={megaPanelRef}
@@ -821,24 +811,22 @@ export default function SiteNavigation() {
               <div className="mx-auto max-w-6xl px-6 py-8 md:px-10 md:py-9">
                 <div className="grid gap-8 md:grid-cols-[1fr_0.42fr] md:gap-16">
                   <div>
-                    {coachingOverview ? (
-                      <div className="mb-9 max-w-xl">
-                        <Link
-                          href={coachingOverview.href}
-                          aria-current={barePathname === coachingOverview.href ? "page" : undefined}
-                          className={megaBlockLink}
+                    <div className="mb-9 max-w-xl">
+                      <Link
+                        href={localizedHref(coachingOverview.href)}
+                        aria-current={barePathname === coachingOverview.href ? "page" : undefined}
+                        className={megaBlockLink}
+                      >
+                        <span
+                          className={`block font-serif text-[1.5rem] font-medium leading-[1.15] tracking-[-0.02em] text-zinc-900 transition-colors duration-200 group-hover:text-[#92753a] ${
+                            barePathname === coachingOverview.href ? "text-[#92753a]" : ""
+                          }`}
                         >
-                          <span
-                            className={`block font-serif text-[1.5rem] font-medium leading-[1.15] tracking-[-0.02em] text-zinc-900 transition-colors duration-200 group-hover:text-[#92753a] ${
-                              barePathname === coachingOverview.href ? "text-[#92753a]" : ""
-                            }`}
-                          >
-                            {coachingOverview.label}
-                          </span>
-                          <span className={`${megaBlockDesc} max-w-md`}>{coachingOverview.text}</span>
-                        </Link>
-                      </div>
-                    ) : null}
+                          {coachingOverview.label}
+                        </span>
+                        <span className={`${megaBlockDesc} max-w-md`}>{coachingOverview.text}</span>
+                      </Link>
+                    </div>
                     <p className={sectionLabelClass()}>{t.nav.leadershipLabel}</p>
                     <ul className="mt-5 space-y-5">
                       {coachingAudiences.map((item) => (
@@ -1010,34 +998,20 @@ export default function SiteNavigation() {
               {/* Samma uppdelning som på desktop: ordet leder till sidan,
                   chevronen fäller ut de två vägarna. */}
               <div className="flex items-stretch">
-                {coachingOverview ? (
-                  <Link
-                    href={coachingOverview.href}
-                    aria-current={barePathname === coachingOverview.href ? "page" : undefined}
-                    onClick={closeMobileMenu}
-                    className={`flex-1 rounded-lg px-1 py-3 text-left text-[1.0625rem] font-medium leading-snug text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 ${
-                      coachingActive ? "text-[#92753a]" : ""
-                    }`}
-                  >
-                    {t.nav.coaching}
-                  </Link>
-                ) : (
-                  <span
-                    className={`flex-1 px-1 py-3 text-[1.0625rem] font-medium leading-snug text-zinc-900 ${
-                      coachingActive ? "text-[#92753a]" : ""
-                    }`}
-                  >
-                    {t.nav.coaching}
-                  </span>
-                )}
+                <Link
+                  href={localizedHref(coachingOverview.href)}
+                  aria-current={barePathname === coachingOverview.href ? "page" : undefined}
+                  onClick={closeMobileMenu}
+                  className={`flex-1 rounded-lg px-1 py-3 text-left text-[1.0625rem] font-medium leading-snug text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 ${
+                    coachingActive ? "text-[#92753a]" : ""
+                  }`}
+                >
+                  {t.nav.coaching}
+                </Link>
                 <button
                   type="button"
                   aria-expanded={mobileCoachingOpen}
-                  aria-label={
-                    mobileCoachingOpen
-                      ? "Stäng undermeny för Coaching"
-                      : "Visa undermeny för Coaching"
-                  }
+                  aria-label={coachingSubmenuLabel(mobileCoachingOpen)}
                   onClick={() => setMobileCoachingOpen((prev) => !prev)}
                   className={`flex w-11 shrink-0 items-center justify-center rounded-lg text-zinc-900 transition-colors hover:text-[#92753a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 ${
                     coachingActive ? "text-[#92753a]" : ""

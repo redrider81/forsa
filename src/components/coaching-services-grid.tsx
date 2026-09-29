@@ -47,7 +47,7 @@ const servicesEn: Service[] = [
     href: "/en/individuell-coaching",
     title: "Individual coaching",
     description:
-      "For you who are facing a choice, a change or a decision that needs room to be thought through.",
+      "For anyone facing a choice, a change or a decision they want to think through fully.",
     ctaLabel: "Read about individual coaching",
   },
   {
@@ -55,7 +55,7 @@ const servicesEn: Service[] = [
     href: "/en/business-coaching",
     title: "Business coaching",
     description:
-      "For employees and leaders who need clarity, direction or support in a work-related situation.",
+      "For employees and leaders with a question in working life — new responsibility, a difficult relationship or a decision that affects others.",
     ctaLabel: "Read about business coaching",
   },
 ];

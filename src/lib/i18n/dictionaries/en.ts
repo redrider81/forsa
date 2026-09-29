@@ -14,15 +14,15 @@ export const enDictionary = {
     menuClose: "Close menu",
     home: "Home",
     coaching: "Coaching",
-    about: "About Carolina",
+    about: "About CVB Coaching",
     contact: "Contact",
     login: "CVB Base · Log in",
     loginAriaLabel: "Log in to CVB Base",
-    leadershipLabel: "Two ways in",
+    leadershipLabel: "Individual and business coaching",
     startHereLabel: "Not sure?",
-    unsureTitle: "Not sure which way is yours?",
+    unsureTitle: "Not sure which kind of coaching is relevant?",
     unsureBody:
-      "Start with a conversation. We work out together where the question belongs.",
+      "Start with a conversation. We clarify which kind of coaching is relevant to your question.",
     bookFirstCall: "Book an introductory conversation →",
   },
   footer: {
@@ -37,8 +37,8 @@ export const enDictionary = {
   },
   cta: {
     primary: "Book an introductory conversation",
-    secondary: "Two ways in",
-    tertiary: "Scope",
+    secondary: "Individual or business coaching",
+    tertiary: "Scope and investment",
     engagementLink: "How it works →",
   },
   form: {

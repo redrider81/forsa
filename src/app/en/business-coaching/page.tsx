@@ -16,7 +16,7 @@ const relevanceList = [
   "You have taken on greater responsibility or are going through a change.",
   "Priorities are shifting and you need to sort out what matters most.",
   "A decision has been made but needs to take root in everyday work.",
-  "You need to speak freely and confidentially outside your workplace.",
+  "You need to speak freely and confidentially outside your own workplace.",
 ];
 
 const nonGoals = [
@@ -26,22 +26,24 @@ const nonGoals = [
 ];
 
 const processList = [
-  "A company may make the first contact and fund the coaching.",
+  "The company may make the first contact and fund the coaching.",
   "I speak with the company about the need, the boundaries of the collaboration and how contact works.",
-  "The coaching then happens in a personal, confidential relationship between Carolina and the client.",
-  "If any feedback to the buyer is relevant, it is clearly agreed in advance.",
+  "The coaching then takes place in a personal, confidential relationship between Carolina and the client.",
+  "If any feedback to the commissioning company is relevant, it is clearly agreed in advance.",
 ];
 
-const outcomes = [
+const valueList = [
   "What the question is really about.",
   "Which options exist and what they involve.",
-  "What next step is right for you.",
+  "Which next step is right for you.",
 ];
 
 export default function BusinessCoachingPageEn() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-12 md:px-10 md:pt-16">
+
+        {/* Hero */}
         <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
@@ -49,18 +51,18 @@ export default function BusinessCoachingPageEn() {
               Business coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              A work-life question sometimes needs its own space.
+              A question at work sometimes needs a space of its own.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Business coaching is personal coaching in a work-life context. It is for employees and
+              Business coaching is personal coaching in working life. It suits employees and
               leaders who need to think clearly about a work-related question.
             </p>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              A company may make the first contact and fund the coaching, while the conversations
+              The company may make the first contact and fund the coaching, while the conversations
               remain individual and confidential.
             </p>
-            <p className="mt-6 max-w-3xl text-base leading-7 text-zinc-600">
-              If you are funding the coaching yourself, see{" "}
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
+              If you are paying for the coaching yourself, see{" "}
               <Link href="/en/individuell-coaching" className="underline underline-offset-2 hover:text-zinc-900">
                 Individual coaching
               </Link>
@@ -69,6 +71,7 @@ export default function BusinessCoachingPageEn() {
           </HeroReveal>
         </section>
 
+        {/* Two-col: premise */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
@@ -76,18 +79,18 @@ export default function BusinessCoachingPageEn() {
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                At work, a question is often shaped by responsibility, relationships, and
-                expectations. In coaching, the focus is still your situation, your considerations,
-                and your choices.
+                At work, a question is often shaped by responsibility, relationships and expectations.
+                In coaching, the focus is still your situation, your considerations and your choices.
               </p>
               <p>
-                I am an outside conversation partner with no stake in your decision. My role is to
-                help you think clearly — not to tell you what to do.
+                I am an outside conversation partner with no agenda of my own in the decision. My task
+                is to help you think clearly — not to tell you what to do.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
+        {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
             When coaching at work can be right
@@ -104,10 +107,11 @@ export default function BusinessCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* List: process */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
-              How a company-funded collaboration works
+              How a collaboration works
             </h2>
             <div data-col-right className="md:col-span-7">
               <ScrollReveal variant="staggerList">
@@ -124,6 +128,7 @@ export default function BusinessCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* List: non-goals */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What it is not</h2>
           <ScrollReveal variant="staggerList" className="mt-8">
@@ -138,10 +143,11 @@ export default function BusinessCoachingPageEn() {
           </ScrollReveal>
         </section>
 
+        {/* Cards: value */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What you can become clearer about</h2>
+          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What you can get clearer about</h2>
           <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
-            {outcomes.map((item, index) => (
+            {valueList.map((item, index) => (
               <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
                 <p className="text-xs tracking-[0.18em] text-zinc-500">{`0${index + 1}`}</p>
                 {item}
@@ -150,6 +156,7 @@ export default function BusinessCoachingPageEn() {
           </StaggerCards>
         </section>
 
+        {/* Two-col: engagement */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
             <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
@@ -157,17 +164,18 @@ export default function BusinessCoachingPageEn() {
             </h2>
             <div data-col-right className="space-y-6 text-lg leading-8 text-zinc-700 md:col-span-7">
               <p>
-                If the question needs following over time, you and I agree a shape that suits your
-                situation.
+                If the question needs following over time, you and I agree on a setup that suits
+                your situation.
               </p>
               <p>
-                We set the rhythm together and keep checking whether the focus is still right. When
-                the work is done, we close with a conversation about what you want to take forward.
+                We set the rhythm together and check regularly whether the focus is still right.
+                When the work is done, we close with a conversation about what you want to take forward.
               </p>
             </div>
           </ScrollReveal>
         </section>
 
+        {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-[1.25] tracking-tight md:text-4xl">
@@ -184,6 +192,7 @@ export default function BusinessCoachingPageEn() {
             </div>
           </ScrollReveal>
         </section>
+
       </div>
     </main>
   );

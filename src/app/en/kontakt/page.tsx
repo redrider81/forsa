@@ -32,9 +32,9 @@ const processFaq: ProcessFaqItem[] = [
       "CVB Base is part of how I work with my clients. There you can collect reflections, prepare what you want to bring to the next conversation and return to things we have worked on before. This helps keep the context connected between our conversations.",
   },
   {
-    question: "What if a company is paying for the coaching?",
+    question: "How do you work with companies?",
     answer:
-      "You are still my client, and our conversations are about what you want to work on. Before we begin, we agree on who is paying and what, if anything, may be shared back with the purchaser.",
+      "I work with companies through individual coaching collaborations with people in the organisation. It can start with one person and be extended to more when needed. Each collaboration is separate, and before we begin we are clear about who is paying and what, if anything, is to be shared back with the commissioning company.",
   },
   {
     question: "Do I have to decide after the first conversation?",
