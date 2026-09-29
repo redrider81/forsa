@@ -21,10 +21,12 @@ const DISPLAY_SM =
 const CHAPTER = "text-xs font-medium tabular-nums tracking-[0.32em]";
 const CHAPTER_ON_LIGHT = `${CHAPTER} text-zinc-900`;
 const CHAPTER_ON_DARK = `${CHAPTER} text-white`;
-const LABEL =
-  "text-xs font-medium uppercase tracking-[0.16em] text-[#7d6435]";
 const BODY = "text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600";
 const BODY_STACK = `space-y-7 ${BODY}`;
+/* Mörk yta: ljusare guld och zinc-300 för tillräcklig kontrast mot surface-dark. */
+const LABEL_ON_DARK =
+  "text-xs font-medium uppercase tracking-[0.16em] text-[#c2a46b]";
+const BODY_STACK_ON_DARK = "space-y-7 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300";
 const SECTION_STACK = "mt-32 md:mt-48";
 const SECTION_GRID = "grid gap-14 md:grid-cols-12 md:gap-x-8 md:gap-y-16";
 
@@ -87,44 +89,47 @@ export default function AboutPage() {
           </ScrollReveal>
         </section>
 
-        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
-          <ScrollReveal variant="splitColumn" className={`${SECTION_GRID} md:items-stretch`}>
-            <div data-col-left className="md:col-span-5">
-              <p className={LABEL}>Coach</p>
-              <h2 className={`mt-6 ${DISPLAY_SM} text-zinc-900`}>Carolina von Braun</h2>
-            </div>
-            <figure className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden rounded-[1.25rem] md:col-span-5 md:row-start-2 md:mt-12 md:aspect-auto md:h-full md:min-h-[20rem] md:rounded-[1.75rem]">
-              <Image
-                src="/carolina-om-oss.jpg"
-                alt="Carolina von Braun, coach och grundare av CVB Coaching."
-                fill
-                sizes="(min-width: 768px) 20rem, 94vw"
-                className="object-cover object-[center_22%]"
-                quality={80}
-              />
-            </figure>
-            <div
-              data-col-right
-              className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:row-start-2 md:mt-12 md:flex md:min-h-0 md:flex-col md:justify-between md:space-y-0 md:gap-8 lg:gap-10`}
-            >
-              <p>
-                Jag heter Carolina von Braun och driver CVB Coaching i Göteborg. Jag är diplomerad coach
-                vid Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och Level
-                2.
-              </p>
-              <p>
-                Min yrkesbakgrund omfattar värdepappershandel på Nordea, styrelseuppdrag inom
-                fastighetsförvaltning och investeringar samt studier i marknadsföring vid
-                Handelshögskolan vid Göteborgs universitet. Den erfarenheten tar jag med mig som
-                bakgrund och förståelse — inte som ett facit för dina beslut.
-              </p>
-              <p>
-                I coachingen är rollerna tydliga: du äger dina mål, insikter och beslut. Min
-                uppgift är att skapa skärpa i tänkandet, pröva perspektiv och föra samtalet framåt
-                utan att ta över dina slutsatser.
-              </p>
-            </div>
-          </ScrollReveal>
+        {/* Mörk yta, samma som Carolina-akten på startsidan. */}
+        <section className={`${SECTION_STACK} bg-surface-dark py-24 text-zinc-100 md:py-32 lg:py-40`}>
+          <div className="mx-auto max-w-7xl px-6 md:px-10">
+            <ScrollReveal variant="splitColumn" className={`${SECTION_GRID} md:items-stretch`}>
+              <div data-col-left className="md:col-span-5">
+                <p className={LABEL_ON_DARK}>Coach</p>
+                <h2 className={`mt-6 ${DISPLAY_SM} text-white`}>Carolina von Braun</h2>
+              </div>
+              <figure className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden rounded-[1.25rem] md:col-span-5 md:row-start-2 md:mt-12 md:aspect-auto md:h-full md:min-h-[20rem] md:rounded-[1.75rem]">
+                <Image
+                  src="/carolina-von-braun.webp"
+                  alt="Carolina von Braun, coach och grundare av CVB Coaching."
+                  fill
+                  sizes="(min-width: 768px) 20rem, 94vw"
+                  className="object-cover object-[center_22%]"
+                  quality={80}
+                />
+              </figure>
+              <div
+                data-col-right
+                className={`${BODY_STACK_ON_DARK} md:col-span-6 md:col-start-7 md:row-start-2 md:mt-12 md:flex md:min-h-0 md:flex-col md:justify-between md:space-y-0 md:gap-8 lg:gap-10`}
+              >
+                <p>
+                  Jag heter Carolina von Braun och driver CVB Coaching i Göteborg. Jag är diplomerad coach
+                  vid Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och Level
+                  2.
+                </p>
+                <p>
+                  Min yrkesbakgrund omfattar värdepappershandel på Nordea, styrelseuppdrag inom
+                  fastighetsförvaltning och investeringar samt studier i marknadsföring vid
+                  Handelshögskolan vid Göteborgs universitet. Den erfarenheten tar jag med mig som
+                  bakgrund och förståelse — inte som ett facit för dina beslut.
+                </p>
+                <p>
+                  I coachingen är rollerna tydliga: du äger dina mål, insikter och beslut. Min
+                  uppgift är att skapa skärpa i tänkandet, pröva perspektiv och föra samtalet framåt
+                  utan att ta över dina slutsatser.
+                </p>
+              </div>
+            </ScrollReveal>
+          </div>
         </section>
 
         <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
