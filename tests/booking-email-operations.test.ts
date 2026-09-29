@@ -241,7 +241,7 @@ const failedSource = readFileSync(
   "utf-8",
 );
 const pageSource = readFileSync(
-  new URL("../src/app/cvb-base/page.tsx", import.meta.url),
+  new URL("../src/app/(sv)/cvb-base/page.tsx", import.meta.url),
   "utf-8",
 );
 const librarySource = readFileSync(

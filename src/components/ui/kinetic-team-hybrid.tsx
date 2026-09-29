@@ -12,10 +12,52 @@ import {
   revealScrollTrigger,
   showTargets,
 } from "@/lib/motion";
+import type { Locale } from "@/lib/i18n/config";
 
 const CAROLINA_IMAGE = "/carolina-von-braun.webp";
 
-export default function KineticTeamHybrid() {
+const copy: Record<
+  Locale,
+  {
+    heading: string;
+    imageAlt: string;
+    intro: string;
+    background: string;
+    credentials: string;
+    linkHref: string;
+    linkLabel: string;
+  }
+> = {
+  sv: {
+    heading: "Coaching med Carolina",
+    imageAlt: "Carolina von Braun, coach och grundare av CVB Coaching",
+    intro: "Jag heter Carolina von Braun och driver CVB Coaching.",
+    background:
+      "Min yrkesbakgrund omfattar bland annat värdepappershandel på Nordea och styrelseuppdrag inom fastighetsförvaltning och investeringar. Den erfarenheten finns med som bakgrund i samtalet — inte som ett facit för dina beslut.",
+    credentials:
+      "Diplomerad coach vid Gothia Akademi · ICF-ackrediterad coachutbildning på Level 1 och Level 2 · Göteborg och digitalt",
+    linkHref: "/om-oss",
+    linkLabel: "Läs om Carolina och hennes arbetssätt",
+  },
+  en: {
+    heading: "Coaching with Carolina",
+    imageAlt: "Carolina von Braun, coach and founder of CVB Coaching",
+    intro: "I am Carolina von Braun, and I run CVB Coaching.",
+    background:
+      "My professional background includes securities trading at Nordea and board assignments in property management and investments. That experience is present in the conversation as background — not as the answer key to your decisions.",
+    credentials:
+      "Qualified coach, Gothia Akademi · ICF-accredited coach training at Level 1 and Level 2 · Gothenburg and online",
+    linkHref: "/en/om-oss",
+    linkLabel: "Read about Carolina and how she works",
+  },
+};
+
+type Props = {
+  locale?: Locale;
+};
+
+export default function KineticTeamHybrid({ locale = "sv" }: Props) {
+  const c = copy[locale];
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -123,7 +165,7 @@ export default function KineticTeamHybrid() {
             data-team-heading
             className="max-w-sm font-serif text-[clamp(2.75rem,5.6vw,5.25rem)] font-medium leading-[1.12] tracking-[-0.04em] text-white"
           >
-            Coaching med Carolina
+            {c.heading}
           </h2>
           {/* Porträttet bär akten. Det tidigare max-w-md kapade bilden långt innan
               spalten tog slut — utan taket fyller den sina fem kolumner och blir
@@ -134,7 +176,7 @@ export default function KineticTeamHybrid() {
           >
             <Image
               src={CAROLINA_IMAGE}
-              alt="Carolina von Braun, coach och grundare av CVB Coaching"
+              alt={c.imageAlt}
               fill
               sizes="(min-width: 1280px) 33rem, (min-width: 768px) 42vw, 100vw"
               className="object-cover object-[center_22%] transition-transform duration-700 motion-reduce:transition-none md:group-hover/section:scale-[1.015]"
@@ -154,26 +196,23 @@ export default function KineticTeamHybrid() {
             className="mb-9 block h-px w-full origin-left bg-zinc-500/70 md:mb-12"
           />
           <p data-col-paragraph className="max-w-xl">
-            Jag heter Carolina von Braun och driver CVB Coaching.
+            {c.intro}
           </p>
           <p data-col-paragraph className="mt-9 max-w-xl text-xl leading-[1.55] text-zinc-100 md:mt-12 md:text-2xl">
-            Min yrkesbakgrund omfattar bland annat värdepappershandel på Nordea och styrelseuppdrag
-            inom fastighetsförvaltning och investeringar. Den erfarenheten finns med som bakgrund i
-            samtalet — inte som ett facit för dina beslut.
+            {c.background}
           </p>
           <p
             data-col-paragraph
             className="mt-8 max-w-xl border-t border-white/15 pt-7 text-[0.875rem] leading-[1.65] text-zinc-400"
           >
-            Diplomerad coach vid Gothia Akademi · ICF-ackrediterad coachutbildning på Level 1 och
-            Level 2 · Göteborg och digitalt
+            {c.credentials}
           </p>
           <div data-col-paragraph className="mt-10 md:mt-12">
             <Link
-              href="/om-oss"
+              href={c.linkHref}
               className="inline-flex items-center justify-center rounded-full border border-white bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-[color,background-color,border-color] duration-200 hover:border-zinc-100 hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark"
             >
-              Läs om Carolina och hennes arbetssätt
+              {c.linkLabel}
             </Link>
           </div>
         </div>

@@ -25,6 +25,9 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Rotlayouterna (sv)/(en) sätter redan rätt <html lang> på servern. Effekten
+  // behövs för global-not-found, som alltid renderas med lang="sv" men visar
+  // menyn på det språk som adressen anger.
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);

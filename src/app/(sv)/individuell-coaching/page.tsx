@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { localeAlternates } from "@/lib/i18n/metadata";
 import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -6,6 +7,7 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
+  alternates: localeAlternates("/individuell-coaching", "sv"),
   title: "Individuell coaching i Göteborg | CVB Coaching",
   description:
     "Individuell coaching hos CVB Coaching i Göteborg. För dig som står inför ett vägval, en förändring eller ett beslut som inte låter sig skjutas upp.",

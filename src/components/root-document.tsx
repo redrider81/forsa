@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import SiteFooter from "@/components/site-footer";
 import SiteShell from "@/components/site-shell";
 import JsonLd, { professionalServiceSchema } from "@/components/json-ld";
-import "./globals.css";
+import type { Locale } from "@/lib/i18n/config";
+import "@/app/globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,20 +22,24 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
-  description:
-    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare, ledare och team.",
-};
+/** Bas för relativa URL:er i metadata, t.ex. hreflang-alternativ. */
+export const siteUrl = new URL("https://www.cvbcoaching.se");
 
-export default function RootLayout({
+/**
+ * Gemensamt dokumentskal för de två rotlayouterna, app/(sv) och app/(en).
+ * Sajten har en rotlayout per språk så att <html lang> stämmer med sidans
+ * språk redan i serverrenderingen.
+ */
+export default function RootDocument({
+  lang,
   children,
 }: Readonly<{
+  lang: Locale;
   children: React.ReactNode;
 }>) {
   return (
     <html
-      lang="sv"
+      lang={lang}
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-zinc-100 text-zinc-900">
