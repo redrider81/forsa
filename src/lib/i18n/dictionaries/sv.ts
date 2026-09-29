@@ -16,7 +16,7 @@ export const svDictionary = {
     coaching: "Coaching",
     about: "Om CVB Coaching",
     contact: "Kontakt",
-    login: "CVB Base · Logga in",
+    login: "Logga in",
     loginAriaLabel: "Logga in till CVB Base",
     leadershipLabel: "Individuell och business coaching",
     startHereLabel: "Osäker?",

@@ -27,7 +27,7 @@ const coachingPaths = [
 type CursorPosition = { left: number; width: number; opacity: number };
 
 const navCursorClass =
-  "pointer-events-none absolute top-0.5 z-0 h-[calc(100%-0.25rem)] rounded-full bg-zinc-300/95 backdrop-blur-sm motion-reduce:transition-none transition-[left,width,opacity] duration-200 ease-out";
+  "pointer-events-none absolute top-0.5 z-0 h-[calc(100%-0.25rem)] rounded-md bg-zinc-300/95 backdrop-blur-sm motion-reduce:transition-none transition-[left,width,opacity] duration-200 ease-out";
 
 function navTabClass(isActive: boolean, overlay = false) {
   const ringOffset = overlay
@@ -38,7 +38,7 @@ function navTabClass(isActive: boolean, overlay = false) {
     : overlay
       ? "text-zinc-800 hover:text-zinc-950"
       : "text-zinc-700 hover:text-zinc-900";
-  return `relative z-10 inline-flex cursor-pointer items-center rounded-full px-5 py-2.5 text-[0.9375rem] font-medium leading-snug md:px-5 md:py-3 md:text-base ${tone} ${ringOffset} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900`;
+  return `relative z-10 inline-flex cursor-pointer items-center rounded-md px-3.5 py-2 text-sm font-medium leading-snug md:px-4 md:py-2 md:text-[0.9375rem] ${tone} ${ringOffset} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900`;
 }
 
 function syncCursorFromElement(
@@ -87,7 +87,7 @@ function DesktopNavTabs({
   return (
     <ul
       ref={listRef}
-      className="relative flex w-fit items-center gap-2.5 rounded-full p-1.5 md:gap-3"
+      className="relative flex w-fit items-center gap-1 rounded-lg p-1 md:gap-1.5"
       onMouseLeave={restToActive}
     >
       {children({ listRef, setPosition })}
@@ -176,19 +176,10 @@ function NavChevron({ open }: { open?: boolean }) {
 }
 
 const mobileHeaderControlCluster =
-  "flex shrink-0 items-center gap-0 rounded-full border border-zinc-900/10 bg-white/50 p-0.5 shadow-[0_1px_3px_rgba(24,24,27,0.08)] backdrop-blur-md";
+  "flex shrink-0 items-center gap-0 rounded-lg border border-zinc-900/10 bg-white/50 p-0.5 shadow-[0_1px_3px_rgba(24,24,27,0.08)] backdrop-blur-md";
 
 const mobileHeaderIconButton =
-  "inline-flex h-11 w-11 items-center justify-center rounded-full text-zinc-800 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
-
-function ClientLoginNavLabel({ fullLabel }: { fullLabel: string }) {
-  return (
-    <>
-      <span className="min-[480px]:hidden">CVB Base</span>
-      <span className="hidden min-[480px]:inline">{fullLabel}</span>
-    </>
-  );
-}
+  "inline-flex h-11 w-11 items-center justify-center rounded-md text-zinc-800 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -212,7 +203,7 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const mobileHeaderLangTrigger =
-  "inline-flex h-11 items-center gap-1 rounded-full px-3 text-[0.6875rem] font-medium tracking-[0.18em] text-zinc-800/90 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "inline-flex h-11 items-center gap-1 rounded-md px-3 text-[0.6875rem] font-medium tracking-[0.18em] text-zinc-800/90 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 function MobileHeaderLanguageDropdown({
   locale,
@@ -376,7 +367,7 @@ function LanguageMenu({
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex items-center gap-2 rounded-full border border-zinc-700/90 bg-zinc-700/90 px-4 py-2.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 md:px-4 md:py-3 md:text-[0.9375rem]"
+        className="inline-flex items-center gap-2 rounded-md border border-zinc-700/90 bg-zinc-700/90 px-3.5 py-2 text-sm font-medium tracking-wide text-white transition-colors hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 md:px-3.5 md:py-2 md:text-[0.9375rem]"
       >
         {locale === "en" ? "EN" : "SV"}
         <NavChevron open={open} />
@@ -772,7 +763,7 @@ export default function SiteNavigation() {
                       <Link
                         href={localizedHref(coachingOverview.href)}
                         aria-current={barePathname === coachingOverview.href ? "page" : undefined}
-                        className={`${navTabClass(coachingActive, isHome)} pr-1.5`}
+                        className={`${navTabClass(coachingActive, isHome)} pr-1.5 md:pr-1.5`}
                         onFocus={() => {
                           if (coachingTabRef.current) {
                             syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
@@ -787,7 +778,7 @@ export default function SiteNavigation() {
                         aria-controls={coachingMenuId}
                         aria-label={coachingSubmenuLabel(megaOpen)}
                         onClick={() => (megaOpen ? closeMega() : openMega())}
-                        className={`${navTabClass(coachingActive, isHome)} pl-0.5 pr-3`}
+                        className={`${navTabClass(coachingActive, isHome)} pl-0.5 pr-2.5 md:pl-0.5 md:pr-3`}
                         onFocus={() => {
                           if (coachingTabRef.current) {
                             syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
@@ -859,7 +850,7 @@ export default function SiteNavigation() {
                     <p className="mt-3 text-[0.8125rem] leading-6 text-zinc-500">
                       {t.nav.unsureBody}
                     </p>
-                    <div className="mt-6">
+                    <div className="mt-6 [&>a]:rounded-md">
                       <CtaLink href={localizedHref("/kontakt")} variant="primary">
                         {t.nav.bookFirstCall}
                       </CtaLink>
@@ -899,13 +890,13 @@ export default function SiteNavigation() {
                   <Link
                     href="/klient-login"
                     aria-label={t.nav.loginAriaLabel}
-                    className={`inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-700 px-4 py-2.5 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 md:px-4 md:py-3 md:text-[0.9375rem] ${
+                    className={`inline-flex items-center gap-2 rounded-md border border-zinc-700 bg-zinc-700 px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 md:px-4 md:py-2 md:text-[0.9375rem] ${
                       isHome
                         ? "focus-visible:ring-offset-white/40"
                         : "focus-visible:ring-offset-zinc-100"
                     }`}
                   >
-                    <ClientLoginNavLabel fullLabel={t.nav.login} />
+                    {t.nav.login}
                   </Link>
                 </li>
                 <li className="list-none">
@@ -1075,7 +1066,7 @@ export default function SiteNavigation() {
           </ul>
 
           <div className="mt-10 flex flex-col gap-3 border-t border-zinc-900/6 pt-8 pb-2">
-            <span className="block [&>a]:flex [&>a]:w-full [&>a]:min-h-11">
+            <span className="block [&>a]:flex [&>a]:w-full [&>a]:min-h-11 [&>a]:rounded-md">
               <CtaLink href={localizedHref("/kontakt")} variant="primary" onClick={closeMobileMenu}>
                 {t.nav.bookFirstCall}
               </CtaLink>
@@ -1084,9 +1075,9 @@ export default function SiteNavigation() {
               href="/klient-login"
               aria-label={t.nav.loginAriaLabel}
               onClick={closeMobileMenu}
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors duration-200 hover:border-zinc-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]"
             >
-              <ClientLoginNavLabel fullLabel={t.nav.login} />
+              {t.nav.login}
             </Link>
           </div>
         </div>

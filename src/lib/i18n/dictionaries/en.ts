@@ -16,7 +16,7 @@ export const enDictionary = {
     coaching: "Coaching",
     about: "About CVB Coaching",
     contact: "Contact",
-    login: "CVB Base · Log in",
+    login: "Log in",
     loginAriaLabel: "Log in to CVB Base",
     leadershipLabel: "Individual and business coaching",
     startHereLabel: "Not sure?",
