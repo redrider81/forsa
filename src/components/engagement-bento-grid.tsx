@@ -39,22 +39,22 @@ const stepsEn: Step[] = [
   {
     index: "01",
     title: "The first conversation",
-    body: "Confidential. You tell me about your situation, and together we see whether coaching is the right support and whether we work well together.",
+    body: "Confidential. We talk about your situation and work out together whether coaching is the right support and whether we are a good fit.",
   },
   {
     index: "02",
     title: "What you want to get clearer about",
-    body: "I help you put into words what you want to get clearer about and what you want to be able to do differently.",
+    body: "We put into words what needs to be different for the conversations to make a real difference.",
   },
   {
     index: "03",
     title: "The sessions",
-    body: "You and I set the rhythm together. Every session ends with something you take forward.",
+    body: "We set the rhythm together. Every conversation ends with something you take further.",
   },
   {
     index: "04",
     title: "Closing",
-    body: "You and I check back against what you wanted to achieve and see together whether the work is finished or should continue.",
+    body: "We look back at what you set out to do, and decide whether the work is finished or continues.",
   },
 ];
 

@@ -34,10 +34,10 @@ const servicesSv: Service[] = [
   {
     index: "02",
     href: "/business-coaching",
-    title: "Företagscoaching",
+    title: "Företags coaching",
     description:
       "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
-    ctaLabel: "Läs om företagscoaching",
+    ctaLabel: "Läs om företags coaching",
   },
 ];
 
@@ -47,7 +47,7 @@ const servicesEn: Service[] = [
     href: "/en/individuell-coaching",
     title: "Individual coaching",
     description:
-      "For anyone facing a choice, a change or a decision they want to think through fully.",
+      "For you who are facing a choice, a change or a decision that needs room to be thought through.",
     ctaLabel: "Read about individual coaching",
   },
   {
@@ -55,7 +55,7 @@ const servicesEn: Service[] = [
     href: "/en/business-coaching",
     title: "Business coaching",
     description:
-      "For employees and leaders with a question in working life — new responsibility, a difficult relationship or a decision that affects others.",
+      "For employees and leaders who need clarity, direction or support in a work-related situation.",
     ctaLabel: "Read about business coaching",
   },
 ];

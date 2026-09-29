@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { localeAlternates } from "@/lib/i18n/metadata";
 import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -7,7 +6,6 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  alternates: localeAlternates("/business-coaching", "sv"),
   title: "Business coaching i Göteborg | CVB Coaching",
   description:
     "Personlig business coaching med Carolina von Braun för medarbetare och ledare som behöver tänka klart i en arbetsrelaterad fråga. Företaget kan initiera och finansiera coachingen; samtalen är individuella och konfidentiella.",

@@ -1,11 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    // Sajten har två rotlayouter (app/(sv) och app/(en)), så 404 för okända
-    // URL:er byggs i app/global-not-found.tsx.
-    globalNotFound: true,
-  },
   async redirects() {
     return [
       // Varumärkesbytet Forsa → CVB Coaching: bevara gamla länkar.

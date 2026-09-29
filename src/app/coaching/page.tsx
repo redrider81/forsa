@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { localeAlternates } from "@/lib/i18n/metadata";
 import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -8,138 +7,139 @@ import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 
 export const metadata: Metadata = {
-  alternates: localeAlternates("/coaching", "en"),
   title: "Coaching | CVB Coaching",
   description:
-    "How coaching works at CVB Coaching in Gothenburg: when it can be right, what the work involves and how a collaboration works. Individual coaching and business coaching.",
+    "Så fungerar coaching hos CVB Coaching i Göteborg: när den kan vara rätt, vad arbetet består av och hur ett samarbete går till. Individuell coaching och business coaching.",
 };
 
 /**
- * Engelsk version av /coaching. Texten är en direkt översättning av den
- * godkända svenska sidan och ska hållas i fas med den.
+ * Innehållet på den här sidan är godkänd CVB-copy som redan finns publikt på
+ * startsidan, i tjänstekomponenterna och i kontaktsidans FAQ. Strängarna är
+ * medvetet duplicerade i stället för importerade, eftersom startsidan efter
+ * e8ea957 är låst och dess listor inte exporteras.
  */
 
 const relevancePoints = [
-  "You are facing a choice and need to understand what actually matters to you.",
-  "You have taken on new responsibility or are going through a change at work.",
-  "You know something needs to change, but cannot yet see how you want to move forward.",
-  "You need to make a decision before you have all the answers.",
-  "You want to speak freely, in confidence and outside your own circle.",
+  "Du står inför ett vägval och behöver förstå vad som faktiskt är viktigt för dig.",
+  "Du har fått ett nytt ansvar eller befinner dig i en förändring i arbetslivet.",
+  "Du vet att något behöver förändras, men ser ännu inte hur du vill gå vidare.",
+  "Du behöver fatta ett beslut utan att ha alla svar ännu.",
+  "Du vill prata fritt, i förtroende och utanför din egen krets.",
 ];
 
-const rightFitWhen = [
-  "The question genuinely matters to you, not just on paper.",
-  "You want to finish the thinking yourself, not be handed an answer.",
-  "It needs to happen outside your own circle, in confidence.",
-  "Something is meant to change, not only be discussed.",
+const passarNär = [
+  "Frågan angår dig på riktigt, inte bara på pappret.",
+  "Du vill tänka färdigt själv, inte få ett färdigt svar.",
+  "Det behöver ske utanför den egna kretsen, i förtroende.",
+  "Något ska förändras, inte bara diskuteras.",
 ];
 
-const lessSuitedWhen = [
-  "You want an expert to assess the situation and tell you what to do.",
-  "The question concerns ill health or needs treatment. Therapy is the right route then, not coaching.",
-  "The direction is already set and what remains is carrying it out.",
+const mindreRelevant = [
+  "Du söker en expert som bedömer läget och talar om vad du ska göra.",
+  "Frågan handlar om ohälsa eller behöver behandlas. Då är terapi rätt väg, inte coaching.",
+  "Riktningen är redan bestämd och det som återstår är att verkställa.",
 ];
 
 const workRows = [
   {
     index: "01",
-    title: "Clarity",
-    body: "I listen and ask questions that help you sort out what the question is really about and what matters most to you.",
+    title: "Klarhet",
+    body: "Jag lyssnar och ställer frågor som hjälper dig att sortera vad frågan faktiskt handlar om och vad som är viktigast för dig.",
   },
   {
     index: "02",
-    title: "Decisions",
-    body: "I help you test your options and the assumptions they rest on, so you can see what you are choosing, what you are giving up and why.",
+    title: "Beslut",
+    body: "Jag hjälper dig att pröva dina alternativ och de antaganden de vilar på, så att du ser vad du väljer, vad du väljer bort och varför.",
   },
   {
     index: "03",
-    title: "Direction",
-    body: "You turn what you have arrived at into next steps that work in your everyday life.",
+    title: "Riktning",
+    body: "Du omsätter det du kommit fram till i nästa steg som fungerar i din vardag.",
   },
 ];
 
 const processSteps = [
   {
     index: "01",
-    title: "The first conversation",
-    body: "Confidential. You tell me about your situation, and together we see whether coaching is the right support and whether we work well together.",
+    title: "Första samtalet",
+    body: "Konfidentiellt. Du berättar om din situation, och tillsammans ser vi om coaching är rätt stöd och om vi fungerar bra ihop.",
   },
   {
     index: "02",
-    title: "What you want to get clearer about",
-    body: "I help you put into words what you want to get clearer about and what you want to be able to do differently.",
+    title: "Vad du vill bli klarare i",
+    body: "Jag hjälper dig att sätta ord på vad du vill bli klarare i och vad du vill kunna göra annorlunda.",
   },
   {
     index: "03",
-    title: "The sessions",
-    body: "You and I set the rhythm together. Every session ends with something you take forward.",
+    title: "Samtalen",
+    body: "Du och jag bestämmer rytmen tillsammans. Varje samtal avslutas med något du tar med dig vidare.",
   },
   {
     index: "04",
-    title: "Closing",
-    body: "You and I check back against what you wanted to achieve and see together whether the work is finished or should continue.",
+    title: "Avslut",
+    body: "Du och jag stämmer av mot det du ville uppnå och ser tillsammans om arbetet är klart eller ska fortsätta.",
   },
 ];
 
 const routes = [
   {
     index: "01",
-    href: "/en/individuell-coaching",
-    title: "Individual coaching",
+    href: "/individuell-coaching",
+    title: "Individuell coaching",
     description:
-      "For anyone facing a choice, a change or a decision they want to think through fully.",
-      ctaLabel: "Read about individual coaching",
+      "För dig som står inför ett vägval, en förändring eller ett beslut som du vill tänka färdigt.",
+    ctaLabel: "Läs om individuell coaching",
   },
   {
     index: "02",
-    href: "/en/business-coaching",
+    href: "/business-coaching",
     title: "Business coaching",
     description:
-      "For employees and leaders with a question in working life — new responsibility, a difficult relationship or a decision that affects others.",
-      ctaLabel: "Read about business coaching",
+      "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
+    ctaLabel: "Läs om business coaching",
   },
 ];
 
 const practical = [
   {
-    title: "In Gothenburg or online",
-    body: "CVB Coaching is based in Gothenburg. Sessions take place in person or online, depending on what suits best.",
+    title: "I Göteborg eller digitalt",
+    body: "CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt, beroende på vad som passar bäst.",
   },
   {
-    title: "Confidential",
-    body: "What is said in the session stays in the session.",
+    title: "Konfidentiellt",
+    body: "Vad som sägs i samtalet stannar i samtalet.",
   },
   {
-    title: "When a company makes the first contact",
-    body: "CVB Coaching works with individual employees and leaders in working life. The company may make the first contact and fund the coaching. The coaching then takes place in a personal, confidential relationship between Carolina and the client.",
+    title: "När företaget tar första kontakten",
+    body: "CVB Coaching arbetar med enskilda medarbetare och ledare i arbetslivet. Företaget kan ta den första kontakten och finansiera coachingen. Därefter sker coachingen i en personlig och konfidentiell relation mellan Carolina och klienten.",
   },
 ];
 
 const faqItems: ProcessFaqItem[] = [
   {
-    question: "What is the first conversation?",
+    question: "Vad är det första samtalet?",
     answer:
-      "The first conversation is a short, free phone call. You tell me a little about what you are looking for, and we get a sense of whether coaching is the right path and whether it feels right to work together. It is not a coaching session, and you are not committing to anything.",
+      "Det första samtalet är ett kort och kostnadsfritt telefonsamtal. Du berättar lite om vad du söker, och vi känner efter om coaching är rätt väg och om det känns rätt att arbeta tillsammans. Det är inte en coachingsession och du förbinder dig inte till något.",
   },
   {
-    question: "Do I have to decide after the first conversation?",
+    question: "Måste jag bestämma mig efter det första samtalet?",
     answer:
-      "No. The first conversation is there so we can both get a sense of whether this is right. We only move forward if it feels good and relevant for both of us.",
+      "Nej. Det första samtalet är till för att vi båda ska kunna känna efter om det här är rätt. Vi går bara vidare om det känns bra och relevant för oss båda.",
   },
   {
-    question: "How does the coaching collaboration start?",
+    question: "Hur börjar coachingsamarbetet?",
     answer:
-      "Once we have agreed on how we want to work together, you receive a personal confirmation from me and we plan our first coaching session. You also get access to CVB Base, where we keep together what belongs to our work together.",
+      "När vi har kommit överens om hur vi vill arbeta tillsammans får du en personlig bekräftelse från mig och vi planerar vårt första coachingsamtal. Du får också tillgång till CVB Base, där vi samlar det som hör till vårt arbete tillsammans.",
   },
   {
-    question: "What is CVB Base?",
+    question: "Vad är CVB Base?",
     answer:
-      "CVB Base is part of how I work with my clients. There you can collect reflections, prepare what you want to bring to the next session and return to things we have worked on before. This way the context stays in place between our sessions.",
+      "CVB Base är en del av hur jag arbetar med mina klienter. Där kan du samla reflektioner, förbereda sådant du vill ta med till nästa samtal och återvända till sådant vi tidigare har arbetat med. På så sätt finns sammanhanget kvar även mellan våra samtal.",
   },
   {
-    question: "How do you work with companies?",
+    question: "Hur arbetar du med företag?",
     answer:
-      "I work with companies through individual coaching collaborations with people in the organisation. It can start with one person and be extended to more when needed. Each collaboration is separate, and before we begin we are clear about who is paying and what, if anything, is to be shared back with the commissioning company.",
+      "Jag arbetar med företag genom individuella coachingsamarbeten med personer i verksamheten. Det kan börja med en person och vid behov utökas med fler. Varje samarbete är separat, och innan vi börjar är vi tydliga med vem som betalar och vad som, om något, ska återkopplas till beställaren.",
   },
 ];
 
@@ -151,7 +151,7 @@ const chapterLabelLight =
   "text-xs font-medium uppercase tracking-[0.16em] text-[#7d6435]";
 const chapterDark = chapterIndexOnDark;
 
-export default function CoachingPageEn() {
+export default function CoachingPage() {
   return (
     <main id="main-content" className="min-h-screen bg-[#f4f3ef] text-zinc-900">
       {/* ---------- 00 · Hero — gles, hög, asymmetrisk ---------- */}
@@ -169,7 +169,7 @@ export default function CoachingPageEn() {
                 data-hero-headline
                 className="mt-14 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[1.2] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
               >
-                What coaching means at CVB.
+                Vad coaching innebär hos CVB.
               </h1>
             </div>
           </HeroReveal>
@@ -184,15 +184,15 @@ export default function CoachingPageEn() {
                 data-hero-body
                 className="max-w-md text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-4 md:col-start-7"
               >
-                This page describes when coaching can be relevant, how the work is done and what you
-                can expect.
+                Den här sidan beskriver när coaching kan vara relevant, hur arbetet går till och
+                vad du kan förvänta dig.
               </p>
               <div data-hero-cta className="md:col-span-2 md:col-start-11 md:justify-self-end">
                 <Link
                   href="#vagar"
                   className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
                 >
-                  Individual or business coaching
+                  Individuell eller business coaching
                   <span
                     aria-hidden="true"
                     className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
@@ -213,7 +213,7 @@ export default function CoachingPageEn() {
             <div data-col-left className="md:col-span-5">
               <p className={chapterIndexOnLight}>01</p>
               <h2 className="mt-10 max-w-md font-serif text-[clamp(3rem,6vw,6.5rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900 md:mt-16">
-                When coaching can be right
+                När coaching kan vara rätt
               </h2>
             </div>
             <div data-col-right className="md:col-span-6 md:col-start-7 md:pt-28 lg:pt-40">
@@ -240,7 +240,7 @@ export default function CoachingPageEn() {
             data-section-heading
             className="mt-10 max-w-3xl font-serif text-[clamp(2.8rem,6vw,6rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:mt-16"
           >
-            What the work involves
+            Vad arbetet består av
           </h2>
           <div className="mt-24 border-t border-zinc-300 md:mt-40">
             {workRows.map((row) => (
@@ -290,7 +290,7 @@ export default function CoachingPageEn() {
             <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>03</p>
             <div data-col-right className="md:col-span-8 md:col-start-5">
               <h2 className="max-w-4xl font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900">
-                How it works
+                Så går det till
               </h2>
             </div>
           </ScrollReveal>
@@ -332,7 +332,7 @@ export default function CoachingPageEn() {
               ))}
             </ol>
             <p className="ml-auto mt-10 max-w-xl border-l border-zinc-300 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]">
-              The shape of the work follows the question and what you want to get out of the sessions.
+              Upplägget följer frågan och vad du vill få ut av samtalen.
             </p>
           </EditorialRowsReveal>
         </div>
@@ -347,8 +347,8 @@ export default function CoachingPageEn() {
           <div data-col-left className="md:col-span-7">
             <p className={chapterDark}>04</p>
             <h2 className="mt-12 max-w-3xl font-serif text-[clamp(3rem,4.4vw,4.75rem)] font-medium text-balance leading-[1.14] tracking-[-0.04em] text-white md:mt-16">
-              The conversation is at the centre. CVB Base helps you keep the context between
-              sessions.
+              Samtalet står i centrum. CVB Base hjälper dig att behålla sammanhanget mellan
+              samtalen.
             </h2>
           </div>
           <div
@@ -356,9 +356,9 @@ export default function CoachingPageEn() {
             className="space-y-8 border-t border-white/60 pt-10 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-8 md:mt-40 md:pt-12"
           >
             <p data-col-paragraph>
-              When it is relevant, you use CVB Base to prepare questions, gather reflections and
-              return to things you want to follow over time. It does not replace the coaching, but
-              gives you a place for what happens between sessions.
+              När det är relevant använder du CVB Base för att förbereda frågor, samla reflektioner
+              och återvända till sådant du vill följa över tid. Det ersätter inte coachingen, utan
+              ger dig en plats för det som händer mellan samtalen.
             </p>
           </div>
         </ScrollReveal>
@@ -371,14 +371,14 @@ export default function CoachingPageEn() {
             <div data-col-left className="md:col-span-5">
               <p className={chapterIndexOnLight}>05</p>
               <h2 className="mt-10 max-w-md font-serif text-[clamp(2.25rem,4vw,4rem)] font-medium leading-[1.18] tracking-[-0.035em] text-zinc-900 md:mt-16">
-                When coaching is relevant — and when it is not
+                När coaching är relevant — och när den inte är det
               </h2>
             </div>
             <div data-col-right className="grid gap-14 md:col-span-7 md:col-start-6 md:grid-cols-2 md:gap-10 md:pt-24">
               <ScrollReveal variant="staggerList">
-                <h3 className="text-lg font-medium leading-[1.35] text-zinc-900">Coaching can be relevant when</h3>
+                <h3 className="text-lg font-medium leading-[1.35] text-zinc-900">Coaching kan vara relevant när</h3>
                 <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-700">
-                  {rightFitWhen.map((item) => (
+                  {passarNär.map((item) => (
                     <li key={item} data-list-item className="border-t border-zinc-300 pt-5">
                       {item}
                     </li>
@@ -386,9 +386,9 @@ export default function CoachingPageEn() {
                 </ul>
               </ScrollReveal>
               <ScrollReveal variant="staggerList">
-                <h3 className="text-lg font-medium leading-[1.35] text-zinc-900">Coaching is not the right support when</h3>
+                <h3 className="text-lg font-medium leading-[1.35] text-zinc-900">Coaching är inte rätt stöd när</h3>
                 <ul className="mt-6 space-y-5 text-[1rem] leading-[1.7] text-zinc-600">
-                  {lessSuitedWhen.map((item) => (
+                  {mindreRelevant.map((item) => (
                     <li key={item} data-list-item className="border-t border-zinc-300 pt-5">
                       {item}
                     </li>
@@ -406,7 +406,7 @@ export default function CoachingPageEn() {
       <section className="flex min-h-[72svh] items-center bg-[#f4f3ef] pb-28 pt-12 md:min-h-[86svh] md:pb-40">
         <ScrollReveal variant="fadeUp" className="mx-auto w-full max-w-7xl px-6 md:px-10">
           <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
-            Individual coaching and business coaching share the same approach.
+            Individuell coaching och business coaching utgår från samma arbetssätt.
           </p>
         </ScrollReveal>
       </section>
@@ -418,7 +418,7 @@ export default function CoachingPageEn() {
             <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>06</p>
             <div data-col-right className="md:col-span-8 md:col-start-5">
               <h2 className="font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1.18] tracking-[-0.035em] text-zinc-900">
-                Individual coaching or business coaching
+                Individuell coaching eller business coaching
               </h2>
             </div>
           </ScrollReveal>
@@ -464,8 +464,8 @@ export default function CoachingPageEn() {
               ))}
             </ul>
             <p className="ml-auto mt-16 max-w-xl border-l border-zinc-300 pl-6 text-[0.9375rem] leading-[1.7] text-zinc-600 md:pl-8">
-              Not sure which kind of coaching is relevant to your question? We clarify that in the
-              first conversation.
+              Är du osäker på vilken form av coaching som är relevant för din fråga? Det klargör vi
+              i det första samtalet.
             </p>
           </EditorialRowsReveal>
         </div>
@@ -479,7 +479,7 @@ export default function CoachingPageEn() {
           <div className="flex items-baseline gap-6">
             <p className={chapterIndexOnLight}>07</p>
             <h2 className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.03em] text-zinc-900">
-              Practical
+              Praktiskt
             </h2>
           </div>
 
@@ -520,7 +520,7 @@ export default function CoachingPageEn() {
           <ScrollReveal variant="fadeUp" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
             <p className={`${chapterIndexOnLight} md:col-span-2`}>08</p>
             <div className="md:col-span-9 md:col-start-4">
-              <ProcessFaq heading="Frequently asked questions" items={faqItems} variant="editorial" />
+              <ProcessFaq heading="Vanliga frågor" items={faqItems} variant="editorial" />
             </div>
           </ScrollReveal>
         </div>
@@ -533,22 +533,22 @@ export default function CoachingPageEn() {
             data-cta-heading
             className="max-w-5xl font-serif text-[clamp(3rem,8vw,8rem)] font-medium leading-[1.12] tracking-[-0.05em] text-white"
           >
-            Book an introductory conversation
+            Boka ett inledande samtal
           </h2>
           <div className="mt-14 grid gap-10 border-t border-white/20 pt-10 md:mt-20 md:grid-cols-12 md:gap-x-8 md:pt-12">
             <p
               data-cta-body
               className="max-w-xl text-[1.125rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-7"
             >
-              Tell me briefly what you would like to talk about and choose a time. You do not need to
-              have everything formulated. The conversation is confidential.
+              Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
+              Samtalet är konfidentiellt.
             </p>
             <div data-cta-actions className="md:col-span-5 md:col-start-7">
-              <CtaLink href="/en/kontakt" variant="secondary" translucent>
-                Book an introductory conversation
+              <CtaLink href="/kontakt" variant="secondary" translucent>
+                Boka ett inledande samtal
               </CtaLink>
               <p className="mt-6 text-[0.875rem] leading-[1.6] text-zinc-400">
-                A short, free first phone call.
+                Kort och kostnadsfritt första telefonsamtal.
               </p>
             </div>
           </div>
