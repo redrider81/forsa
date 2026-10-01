@@ -147,6 +147,59 @@ så att felet syns i stället för att kvaliteten tyst degraderas.
 Saknas `OPENAI_API_KEY` fungerar portalen som vanligt; AI-anropen svarar då med
 ett tydligt svenskt meddelande i stället för att krascha.
 
+## Legal routes
+
+Publika, statiskt renderade juridiska sidor (svenska och engelska):
+
+| Svenska | Engelska | Innehåll |
+| --- | --- | --- |
+| `/integritet` | `/en/integritet` | Integritetspolicy |
+| `/villkor` | `/en/villkor` | Allmänna villkor för coaching, inkl. ångerrätt och standardformulär |
+| `/cvb-base-villkor` | `/en/cvb-base-villkor` | Användarvillkor för CVB Base |
+| `/cookies` | `/en/cookies` | Cookiepolicy (endast nödvändig inloggningscookie — ingen banner) |
+
+Texterna ligger i `src/lib/legal/content/`, identitetsuppgifterna i
+`src/lib/legal/company.ts`. CVB Coaching drivs i dag av Carolina von Braun som
+privatperson, som därför är personuppgiftsansvarig och avtalspart. När
+verksamheten registreras fylls `registration` i där — företagsform,
+registrerat namn och organisationsnummer visas då automatiskt.
+Länkar finns i sidfoten, vid bokningsformulärets skicka-knapp, på
+inloggningssidorna och under Profil i klientportalen.
+
+### Privacy / Terms
+
+Texterna beskriver den faktiska implementationen (dataflöden, AI-underlag,
+leverantörer, cookies). Ändras koden ska texten ändras — se
+`docs/legal-compliance.md`. AI-anropen görs med `store: false`.
+
+### Consumer withdrawal flow
+
+Varje avtal klassas uttryckligen som `consumer` eller `business`
+(`contracts.counterparty_type`) innan det kan skickas — aldrig härlett från
+organisation. För konsumentavtal:
+
+- avtalet ingås när coachen kontrasignerar; ångerfristen (14 dagar, förlängd
+  över helg/helgdag) räknas server-side från `coach_signed_at`,
+- klienten kan ångra via **Ångra avtalet här** på avtalet i CVB Base
+  (`POST /api/portal/avtal/[id]/angra` → RPC `exercise_contract_withdrawal`),
+  redan från sin egen signatur och till och med fristens sista dag,
+- ångringen är idempotent, lagras i `contract_withdrawals` (append-only) och
+  rör aldrig status eller signaturer,
+- mottagningsbevis till klienten och notis till Carolina går via samma
+  outbox-mönster som bokningsmejlen; misslyckade utskick syns under
+  *Mejl som behöver skickas om* och kan skickas om,
+- en begäran om tidig start är ett separat, frivilligt val vid signering,
+- vid kontrasignering köas en avtalsbekräftelse (hela avtalet + villkor) till
+  klienten i samma transaktion och skickas efter commit; den kan skickas om.
+
+Samtycke till behandling av känsliga personuppgifter (art. 9) lämnas och
+återkallas av klienten under Profil. Utan aktivt samtycke ingår inget
+samtalsinnehåll i AI-underlaget; efter återkallelse begränsas tidigare innehåll
+och klienten kan begära radering. Varje avtal låser den villkorsversion som
+gällde när det skickades — se `docs/legal-compliance.md`.
+
+Företagsavtal har ingen ångerfunktion.
+
 ## Environment variables
 
 Se `.env.example`. Kopiera till `.env.local` lokalt.

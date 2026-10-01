@@ -42,12 +42,18 @@ export default async function AvtalOverviewPage() {
                 <RowLink
                   href={`/cvb-base/avtal/${contract.id}`}
                   title={contract.title}
-                  subtitle={`${contract.clientName ?? "Okänd klient"} · ${formatDate(contract.createdAt)}${
+                  subtitle={`${contract.clientName ?? "Okänd klient"} · ${formatDate(contract.createdAt.slice(0, 10))}${
                     formatAmount(contract.priceAmount, contract.currency)
                       ? ` · ${formatAmount(contract.priceAmount, contract.currency)}`
                       : ""
                   }`}
-                  trailing={<Tag tone={contractStatusTagTone[contract.status]}>{contractStatusLabel[contract.status]}</Tag>}
+                  trailing={
+                    contract.withdrawal ? (
+                      <Tag tone="private">Ångrat</Tag>
+                    ) : (
+                      <Tag tone={contractStatusTagTone[contract.status]}>{contractStatusLabel[contract.status]}</Tag>
+                    )
+                  }
                 />
               </div>
             ))

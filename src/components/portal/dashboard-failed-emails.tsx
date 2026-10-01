@@ -25,6 +25,13 @@ export type FailedEmailItem = {
   requestedStartAt: string;
   requestedEndAt: string;
   canRetry: boolean;
+  /**
+   * Set for non-booking mail (a registered consumer withdrawal). Replaces
+   * the booking window line, and routes the retry to that flow's own
+   * coach-authorised endpoint.
+   */
+  detail?: string;
+  retryPath?: string;
 };
 
 // timestamptz must be converted, never string-sliced — slicing shows UTC and
@@ -69,7 +76,7 @@ export default function DashboardFailedEmails({ items }: { items: FailedEmailIte
     setError("");
     try {
       const response = await fetch(
-        `/api/portal/tillganglighet/forfragningar/${item.requestId}/skicka-om`,
+        item.retryPath ?? `/api/portal/tillganglighet/forfragningar/${item.requestId}/skicka-om`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -95,10 +102,19 @@ export default function DashboardFailedEmails({ items }: { items: FailedEmailIte
       <PanelHeading label="Kräver åtgärd" title="Mejl som behöver skickas om" />
 
       <p className="mt-3 text-[0.8125rem] leading-relaxed text-zinc-600">
-        {visible.length === 1
-          ? "1 bokningsmejl kunde inte skickas."
-          : `${visible.length} bokningsmejl kunde inte skickas.`}{" "}
-        Bokningen och tidsfönstret påverkas inte.
+        {visible.every((item) => !item.retryPath) ? (
+          <>
+            {visible.length === 1
+              ? "1 bokningsmejl kunde inte skickas."
+              : `${visible.length} bokningsmejl kunde inte skickas.`}{" "}
+            Bokningen och tidsfönstret påverkas inte.
+          </>
+        ) : (
+          <>
+            {visible.length === 1 ? "1 mejl kunde inte skickas." : `${visible.length} mejl kunde inte skickas.`}{" "}
+            Bokningar, signerade avtal och registrerade ångerbegäranden påverkas inte.
+          </>
+        )}
       </p>
 
       <div className="mt-4">
@@ -113,9 +129,11 @@ export default function DashboardFailedEmails({ items }: { items: FailedEmailIte
                   <p className="text-[0.9375rem] font-medium text-zinc-900">{item.label}</p>
                   <p className="mt-0.5 text-[0.8125rem] text-zinc-500">
                     {item.visitorName} ·{" "}
-                    <span className="tabular-nums">
-                      {formatWindow(item.requestedStartAt, item.requestedEndAt)}
-                    </span>
+                    {item.detail ?? (
+                      <span className="tabular-nums">
+                        {formatWindow(item.requestedStartAt, item.requestedEndAt)}
+                      </span>
+                    )}
                   </p>
                   <p className="mt-0.5 text-[0.8125rem] text-zinc-500">Kunde inte skickas</p>
                 </div>

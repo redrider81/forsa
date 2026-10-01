@@ -270,6 +270,8 @@ export type CoachProfile = {
 export type ContractStatus = "utkast" | "skickat" | "kund_signerad" | "signerat" | "arkiverat";
 export type ContractFieldType = "text" | "belopp" | "datum" | "antal" | "procent" | "val";
 export type ContractSignerRole = "coach" | "klient";
+/** Explicit per-contract classification. Never derived from the client's organisation. */
+export type ContractCounterpartyType = "consumer" | "business";
 
 export type ContractSection = { id: string; heading: string; body: string };
 export type ContractCustomField = {

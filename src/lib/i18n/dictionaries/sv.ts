@@ -56,6 +56,12 @@ export const svDictionary = {
     continue: "Fortsätt",
     submitAnyway: "Skicka ändå",
     confidentialityNote: "All kontakt hanteras konfidentiellt.",
+    privacyNotice: {
+      before:
+        "När du skickar förfrågan behandlar CVB Coaching dina uppgifter för att hantera din bokning och kontakt med dig. Läs mer i ",
+      link: "integritetspolicyn",
+      after: ".",
+    },
     sections: {
       contact: "Kontaktuppgifter",
       scheduling: "Boka ett inledande telefonsamtal",

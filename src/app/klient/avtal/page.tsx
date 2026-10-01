@@ -3,6 +3,11 @@ import { readClientSession } from "@/lib/portal/session";
 import { listOwnClientContracts } from "@/lib/portal/contracts";
 import { contractStatusLabel } from "@/lib/portal/status-tones";
 import { formatDate } from "@/lib/portal/format";
+import {
+  canShowWithdrawalFunction,
+  formatStockholmDateTime,
+  formatWithdrawalLastDay,
+} from "@/lib/portal/contract-withdrawal-rules";
 import { Card, CardTitle, Empty, Label } from "@/components/klient/klient-ui";
 
 function formatAmount(amount: number | null, currency: string): string | null {
@@ -33,11 +38,24 @@ export default async function ClientAvtalPage() {
                 <Label>{contractStatusLabel[contract.status]}</Label>
                 <CardTitle>{contract.title}</CardTitle>
                 <p className="mt-2 text-[0.875rem] text-zinc-500">
-                  CVB Coaching · {formatDate(contract.createdAt)}
+                  CVB Coaching · {formatDate(contract.createdAt.slice(0, 10))}
                   {formatAmount(contract.priceAmount, contract.currency)
                     ? ` · ${formatAmount(contract.priceAmount, contract.currency)}`
                     : ""}
                 </p>
+                {contract.withdrawal ? (
+                  <p className="mt-1.5 text-[0.8125rem] text-zinc-500">
+                    Ångrat {formatStockholmDateTime(contract.withdrawal.requestedAt)}
+                  </p>
+                ) : canShowWithdrawalFunction(contract) ? (
+                  <p className="mt-1.5 text-[0.8125rem] text-zinc-600">
+                    Ångra avtal:{" "}
+                    {contract.withdrawalDeadline
+                      ? `möjligt till och med ${formatWithdrawalLastDay(contract.withdrawalDeadline)}`
+                      : "möjligt nu"}{" "}
+                    — öppna avtalet
+                  </p>
+                ) : null}
               </Card>
             </Link>
           ))}

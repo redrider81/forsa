@@ -10,24 +10,25 @@ const PRIVATE_PHRASE = "Hon undvek styrelsefrågan tre gånger";
 
 describe("coachprivata anteckningar", () => {
   it("ingår när Carolina arbetar med sin egen klient", () => {
-    const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true });
+    const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true, specialCategoryConsent: true });
     expect(context).not.toBeNull();
     expect(context!.text).toContain("COACH PRIVAT");
     expect(context!.text).toContain(PRIVATE_PHRASE);
   });
 
   it("redovisas som eget underlag för coachen", () => {
-    const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true });
+    const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true, specialCategoryConsent: true });
     expect(context!.sources.join(" ")).toContain("Egna arbetsanteckningar");
   });
 
   it("instruerar modellen att aldrig dela dem vidare", () => {
-    const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true });
+    const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true, specialCategoryConsent: true });
     expect(context!.text).toContain("aldrig formuleras som något som kan delas");
   });
 
   it("utelämnas som standard", () => {
-    const context = buildClientContext(coachId, emma);
+    // Consent present, coach mode off: the notes are still left out.
+    const context = buildClientContext(coachId, emma, undefined, { specialCategoryConsent: true });
     expect(context!.text).not.toContain(PRIVATE_PHRASE);
     expect(context!.text).toContain("ingår inte i detta underlag");
   });
@@ -51,6 +52,7 @@ describe("coachprivata anteckningar", () => {
   it("läcker aldrig till en annan klients kontext", () => {
     const other = buildClientContext(coachId, "klient-johan-bergstrom", undefined, {
       includeCoachNotes: true,
+      specialCategoryConsent: true,
     });
     expect(other!.text).not.toContain(PRIVATE_PHRASE);
     expect(other!.text).not.toContain("Emma");
@@ -58,7 +60,7 @@ describe("coachprivata anteckningar", () => {
 });
 
 describe("Emmas testhistorik", () => {
-  const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true })!;
+  const context = buildClientContext(coachId, emma, undefined, { includeCoachNotes: true, specialCategoryConsent: true })!;
 
   it("visar den förändrade problemformuleringen över tid", () => {
     expect(context.text).toContain("Jag behöver bli bättre på att delegera");

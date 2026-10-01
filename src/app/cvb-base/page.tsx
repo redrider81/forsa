@@ -14,6 +14,8 @@ import {
   bookingEmailIsSimulated,
   listFailedBookingNotifications,
 } from "@/lib/portal/booking-notifications";
+import { listFailedWithdrawalNotifications } from "@/lib/portal/contract-withdrawal";
+import { listFailedContractConfirmations } from "@/lib/portal/contract-confirmation";
 import {
   RecentActivitySection,
   TodayAgendaSection,
@@ -39,7 +41,9 @@ export default async function PortalOverviewPage() {
     repositoryData,
     bookingRequests,
     websiteRequests,
-    failedEmails,
+    failedBookingEmails,
+    failedWithdrawalEmails,
+    failedConfirmationEmails,
   ] =
     await Promise.all([
       getOperationsOverview(session.coachId, today),
@@ -51,7 +55,37 @@ export default async function PortalOverviewPage() {
       // coach session, so no other role can reach this data.
       listPendingPublicBookingRequests(),
       listFailedBookingNotifications(),
+      listFailedWithdrawalNotifications(),
+      listFailedContractConfirmations(),
     ]);
+
+  // Same operational panel for both flows. Withdrawal items carry their own
+  // retry route and a description instead of a booking window.
+  const failedEmails = [
+    ...failedBookingEmails,
+    ...failedWithdrawalEmails.map((item) => ({
+      requestId: item.contractId,
+      eventType: item.eventType,
+      label: item.label,
+      visitorName: item.clientName,
+      requestedStartAt: item.requestedAt,
+      requestedEndAt: item.requestedAt,
+      canRetry: true,
+      detail: item.contractTitle,
+      retryPath: `/api/portal/avtal/${item.contractId}/angra/skicka-om`,
+    })),
+    ...failedConfirmationEmails.map((item) => ({
+      requestId: item.contractId,
+      eventType: "contract_confirmation",
+      label: item.label,
+      visitorName: item.clientName,
+      requestedStartAt: item.queuedAt,
+      requestedEndAt: item.queuedAt,
+      canRetry: true,
+      detail: item.contractTitle,
+      retryPath: `/api/portal/avtal/${item.contractId}/bekraftelse/skicka-om`,
+    })),
+  ];
 
   const { week } = operations;
 

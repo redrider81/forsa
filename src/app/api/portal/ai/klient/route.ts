@@ -2,6 +2,7 @@ import { readCoachSession } from "@/lib/portal/session";
 import { fetchPortalRepositoryData } from "@/lib/portal/repository";
 import { EMPTY_DEMO_STATE } from "@/lib/portal/store/demo-state";
 import { buildClientContext } from "@/lib/ai/context";
+import { hasActiveSpecialCategoryConsent } from "@/lib/portal/special-category-consent";
 import { AiError, generate, hasApiKey } from "@/lib/ai/openai";
 import { clientQuestionSystemPrompt, prepareSessionSystemPrompt } from "@/lib/ai/prompts";
 import { OUT_OF_SCOPE_REPLY, isOutOfScope, validateQuestion } from "@/lib/ai/scope";
@@ -45,8 +46,10 @@ export async function POST(request: Request) {
     {
       // Coachens eget arbetsläge med sin egen klient.
       includeCoachNotes: true,
+      // Art. 9-spärr: samtalsinnehåll och anteckningar bara med klientens aktiva samtycke.
+      specialCategoryConsent: await hasActiveSpecialCategoryConsent(clientId),
     },
-    await fetchPortalRepositoryData(),
+    await fetchPortalRepositoryData({ purpose: "ai" }),
   );
   if (!context) {
     return Response.json({ ok: false, error: "Klienten kunde inte hittas." }, { status: 404 });

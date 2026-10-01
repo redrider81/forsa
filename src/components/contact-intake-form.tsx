@@ -2,6 +2,7 @@
 
 import { type FormEvent, type ReactNode, useState } from "react";
 import ContactSchedulingPicker from "@/components/contact-scheduling-picker";
+import BookingPrivacyNotice from "@/components/booking-privacy-notice";
 import { localeFromPathname, type Locale } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
 import { PUBLIC_BOOKING_SLUG, type ContactIntakePayload } from "@/lib/contact/intake-types";
@@ -530,7 +531,10 @@ export default function ContactIntakeForm() {
       <div className="border-t border-zinc-300/45 pt-10">
         <div className="max-w-md space-y-5">
           {step === 2 && (
-            <p className="text-sm leading-[1.7] text-zinc-600">{t.form.confidentialityNote}</p>
+            <>
+              <p className="text-sm leading-[1.7] text-zinc-600">{t.form.confidentialityNote}</p>
+              <BookingPrivacyNotice locale={locale} t={t} />
+            </>
           )}
           {summaryError ? <p className={errorTextClass} role="alert" aria-live="polite">{summaryError}</p> : null}
           {step === 2 ? (

@@ -124,6 +124,9 @@ async function callModel(
           { role: "user", content: user },
         ],
         max_output_tokens: maxOutputTokens,
+        // Coaching data: ask OpenAI not to keep the response for later
+        // retrieval. The privacy policy (/integritet) describes this.
+        store: false,
       };
       if (supportsReasoning(model)) {
         body.reasoning = { effort };

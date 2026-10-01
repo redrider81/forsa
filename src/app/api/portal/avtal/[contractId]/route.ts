@@ -1,7 +1,18 @@
 import { readCoachSession } from "@/lib/portal/session";
-import { updateContractDraft, type ContractContent } from "@/lib/portal/contracts";
+import {
+  getContract,
+  parseCounterpartyType,
+  setContractCounterpartyType,
+  updateContractDraft,
+  type ContractContent,
+} from "@/lib/portal/contracts";
 
-/** Carolina edits a draft contract. RLS blocks writes once status leaves UTKAST. */
+/**
+ * Carolina edits a draft contract. RLS blocks writes once status leaves
+ * UTKAST. The consumer/business classification goes through its own RPC,
+ * which also allows classifying a contract that was sent before
+ * classification existed, as long as the client has not signed it.
+ */
 export async function PATCH(request: Request, { params }: { params: Promise<{ contractId: string }> }) {
   const session = await readCoachSession();
   if (!session) {
@@ -36,6 +47,25 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ co
 
   if (priceAmount !== undefined && priceAmount !== null && Number.isNaN(priceAmount)) {
     return Response.json({ ok: false, error: "Ogiltigt pris." }, { status: 400 });
+  }
+
+  if ("counterpartyType" in raw) {
+    const counterpartyType = parseCounterpartyType(raw.counterpartyType);
+    if (!counterpartyType) {
+      return Response.json({ ok: false, error: "Välj konsumentavtal eller företagsavtal." }, { status: 400 });
+    }
+    const classified = await setContractCounterpartyType(contractId, counterpartyType);
+    if (!classified.ok) {
+      return Response.json(
+        { ok: false, error: "Avtalstypen kan inte ändras efter att klienten har signerat." },
+        { status: 409 },
+      );
+    }
+    const onlyClassification = Object.keys(raw).every((key) => key === "counterpartyType");
+    if (onlyClassification) {
+      const contract = await getContract(contractId);
+      return Response.json({ ok: true, contract });
+    }
   }
 
   const contract = await updateContractDraft(contractId, { title, content, engagementId, priceAmount, currency, paymentTerms });

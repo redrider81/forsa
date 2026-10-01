@@ -4,6 +4,7 @@ import "@/components/klient/klient-tokens.css";
 import { LogoMark } from "@/components/brand/logo";
 import { redirect } from "next/navigation";
 import LoginForm from "@/components/portal/login-form";
+import PortalLegalLinks from "@/components/portal/portal-legal-links";
 import { portalOutlineButtonClass } from "@/components/portal/ui";
 import { readSession } from "@/lib/portal/session";
 import { demoHint } from "@/lib/portal/users";
@@ -51,6 +52,8 @@ export default async function CarolinaLoginPage() {
           <Link href="/" className={`mt-8 w-full ${portalOutlineButtonClass}`}>
             Tillbaka
           </Link>
+
+          <PortalLegalLinks keys={["privacy"]} className="mt-6" />
         </div>
       </div>
     </main>

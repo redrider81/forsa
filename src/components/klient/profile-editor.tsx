@@ -15,7 +15,8 @@ type ProfileValues = {
   role: string;
   email: string;
   phone: string;
-  organisation: string;
+  /** null för en privat klient. */
+  organisation: string | null;
 };
 
 const fieldClass =
@@ -89,7 +90,7 @@ export default function ProfileEditor({ initial }: { initial: ProfileValues }) {
         <Label>Profil</Label>
         <CardTitle>{initial.name}</CardTitle>
         <p className="mt-2 text-[0.875rem] leading-relaxed text-zinc-500">
-          {initial.role} · {initial.organisation}
+          {initial.organisation ? `${initial.role} · ${initial.organisation}` : initial.role}
         </p>
 
         <dl className="mt-5 divide-y divide-[#ece7dc]">
@@ -181,13 +182,15 @@ export default function ProfileEditor({ initial }: { initial: ProfileValues }) {
           />
         </ProfileField>
 
-        <div className="py-3.5">
-          <p className={labelClass}>Organisation</p>
-          <p className="mt-1 text-[0.9375rem] leading-relaxed text-zinc-700">{initial.organisation}</p>
-          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-zinc-500">
-            Organisationen kan inte ändras här. Kontakta Carolina om något behöver uppdateras.
-          </p>
-        </div>
+        {initial.organisation ? (
+          <div className="py-3.5">
+            <p className={labelClass}>Organisation</p>
+            <p className="mt-1 text-[0.9375rem] leading-relaxed text-zinc-700">{initial.organisation}</p>
+            <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-zinc-500">
+              Organisationen kan inte ändras här. Kontakta Carolina om något behöver uppdateras.
+            </p>
+          </div>
+        ) : null}
       </div>
 
       {error ? (

@@ -29,7 +29,9 @@ describe("accesskontroll", () => {
 });
 
 describe("AI-kontext för klient", () => {
-  const context = buildClientContext(coachId, "klient-emma-lind");
+  // The client has consented to special-category processing, so the
+  // conversation content is included; isolation must hold regardless.
+  const context = buildClientContext(coachId, "klient-emma-lind", undefined, { specialCategoryConsent: true });
 
   it("innehåller endast den valda klienten", () => {
     expect(context).not.toBeNull();

@@ -37,18 +37,29 @@ function block(title: string, lines: Array<string | null | undefined>): string {
  * Coachens privata anteckningar får ingå — men endast här, i coachens arbete
  * med den aktuella klienten. De når aldrig klientvyn, organisationsnivån eller
  * någon annan klients kontext.
+ *
+ * Artikel 9-spärr (deterministisk, per datakälla — ingen textklassificering):
+ * samtalsinnehåll kan innehålla känsliga personuppgifter som klienten själv
+ * valt att dela. Det ingår därför endast när klienten har ett aktivt samtycke
+ * (special_category_consents). Utan samtycke — eller efter återkallelse —
+ * innehåller underlaget bara ramen: klient, uppdrag, överenskommelse,
+ * målrubrik och kriterier, sessionsdatum och dokumenttitlar. Standard är
+ * utan samtycke; anroparen måste uttryckligen ange klientens samtyckesläge.
  */
 export function buildClientContext(
   coachId: string,
   clientId: string,
   state: DemoState = EMPTY_DEMO_STATE,
-  options: { includeCoachNotes?: boolean } = {},
+  options: { includeCoachNotes?: boolean; specialCategoryConsent?: boolean } = {},
   data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): BuiltContext | null {
   const dossier = buildClientDossier(coachId, clientId, state, undefined, data);
   if (!dossier) return null;
 
   const { client, engagement, organisation } = dossier;
+  /** Sources that may carry article 9 data the client chose to share. */
+  const conversationContent = options.specialCategoryConsent === true;
+  const coachNotesIncluded = conversationContent && options.includeCoachNotes === true;
 
   const sections: string[] = [];
 
@@ -78,14 +89,14 @@ export function buildClientContext(
   sections.push(
     block("UTVECKLINGSMÅL", [
       `Mål: ${client.goal.headline}`,
-      `Klientens egna ord: "${client.goal.clientWording}"`,
-      `Utgångsläge: ${client.goal.baseline}`,
+      conversationContent && client.goal.clientWording ? `Klientens egna ord: "${client.goal.clientWording}"` : null,
+      conversationContent && client.goal.baseline ? `Utgångsläge: ${client.goal.baseline}` : null,
       `Framgångskriterier: ${client.goal.successCriteria.join("; ")}`,
       `Tidshorisont: ${client.goal.horizon}`,
     ]),
   );
 
-  if (client.recurringThemes.length > 0) {
+  if (conversationContent && client.recurringThemes.length > 0) {
     sections.push(
       block(
         "ÅTERKOMMANDE TEMAN I KLIENTENS EGNA FORMULERINGAR",
@@ -96,11 +107,13 @@ export function buildClientContext(
 
   const sessionLines: string[] = [];
   for (const session of dossier.completedSessions) {
-    sessionLines.push(
-      `Session ${session.number} — ${formatDate(session.date)} (${session.location})`,
-      `  Klientens fokus: ${session.clientFocus}`,
-      `  Klientens önskade resultat: ${session.desiredOutcome}`,
-    );
+    sessionLines.push(`Session ${session.number} — ${formatDate(session.date)} (${session.location})`);
+    if (!conversationContent) {
+      sessionLines.push("");
+      continue;
+    }
+    if (session.clientFocus) sessionLines.push(`  Klientens fokus: ${session.clientFocus}`);
+    if (session.desiredOutcome) sessionLines.push(`  Klientens önskade resultat: ${session.desiredOutcome}`);
     if (session.summary) {
       const s = session.summary;
       sessionLines.push(`  Fokus enligt godkänd sammanfattning: ${s.focus}`);
@@ -116,7 +129,7 @@ export function buildClientContext(
     } else {
       sessionLines.push("  Ingen godkänd sammanfattning finns för denna session.");
     }
-    if (options.includeCoachNotes && session.coachNotes) {
+    if (coachNotesIncluded && session.coachNotes) {
       sessionLines.push(`  COACH PRIVAT — coachens egna arbetsanteckningar: ${session.coachNotes}`);
     }
     sessionLines.push("");
@@ -128,13 +141,13 @@ export function buildClientContext(
     sections.push(
       block("NÄSTA SESSION", [
         `Session ${next.number} — ${formatDate(next.date)} kl. ${next.time} (${next.location})`,
-        `Klientens fokus: ${next.clientFocus}`,
-        `Klientens önskade resultat: ${next.desiredOutcome}`,
+        conversationContent && next.clientFocus ? `Klientens fokus: ${next.clientFocus}` : null,
+        conversationContent && next.desiredOutcome ? `Klientens önskade resultat: ${next.desiredOutcome}` : null,
       ]),
     );
   }
 
-  if (dossier.prep) {
+  if (conversationContent && dossier.prep) {
     // Det klienten själv har lämnat inför nästa samtal. Väger tyngst eftersom
     // det är hennes senaste egna formuleringar.
     sections.push(
@@ -151,7 +164,7 @@ export function buildClientContext(
     );
   }
 
-  sections.push(
+  if (conversationContent) sections.push(
     block(
       "KLIENTENS EGNA REFLEKTIONER",
       dossier.reflections.map(
@@ -160,14 +173,14 @@ export function buildClientContext(
     ),
   );
 
-  sections.push(
+  if (conversationContent) sections.push(
     block(
       "INSIKTER (KLIENTENS EGNA FORMULERINGAR)",
       dossier.insights.map((item) => `${formatDate(item.date)}: "${item.text}"`),
     ),
   );
 
-  sections.push(
+  if (conversationContent) sections.push(
     block(
       "KLIENTENS ÅTAGANDEN",
       dossier.commitments.map(
@@ -191,7 +204,13 @@ export function buildClientContext(
   sections.push(
     block(
       "SEKRETESS",
-      options.includeCoachNotes
+      !conversationContent
+        ? [
+            "Klienten har inget aktivt samtycke till behandling av känsliga personuppgifter. Samtalsinnehåll — sessionernas innehåll, sammanfattningar, reflektioner, förberedelser, insikter, åtaganden och coachens egna anteckningar — ingår därför inte i detta underlag.",
+            "Dra inga slutsatser om sådant innehåll och fyll inte i det som saknas.",
+            "Underlaget rör endast denna klient. Ingen annan klient, organisation eller uppdrag finns tillgängligt.",
+          ]
+        : coachNotesIncluded
         ? [
             "Detta underlag är coachens eget arbetsmaterial och innehåller rader märkta COACH PRIVAT.",
             "Sådant material får användas för att hjälpa coachen tänka, men får aldrig formuleras som något som kan delas med klienten eller uppdragsgivaren. Citera det aldrig ordagrant tillbaka som om klienten hade sagt det.",
@@ -208,6 +227,12 @@ export function buildClientContext(
   const text = `UNDERLAG\n\n${sections.filter(Boolean).join("\n")}`;
 
   const sources: string[] = [];
+  if (!conversationContent) {
+    sources.push("Utvecklingsmål och coachningsöverenskommelse");
+    sources.push("Sessionsdatum");
+    sources.push("Samtalsinnehåll ingår inte — klienten har inget aktivt samtycke för känsliga uppgifter");
+    return { text, sources, subject: client.name };
+  }
   for (const session of dossier.completedSessions.slice(-3)) {
     sources.push(`Session ${session.number}`);
   }
@@ -221,7 +246,7 @@ export function buildClientContext(
     sources.push("Förberedelse inför nästa session");
   }
   sources.push("Utvecklingsmål och coachningsöverenskommelse");
-  if (options.includeCoachNotes) {
+  if (coachNotesIncluded) {
     const noteCount = dossier.completedSessions.filter((item) => item.coachNotes).length;
     if (noteCount > 0) {
       sources.push(`Egna arbetsanteckningar (${noteCount} sessioner)`);

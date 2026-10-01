@@ -2,6 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PrepForm from "@/components/klient/prep-form";
 import { Card, CardTitle, Label, Muted, klientLinkButtonClass } from "@/components/klient/klient-ui";
+import SensitiveDataNotice from "@/components/klient/sensitive-data-notice";
+import { listSpecialCategoryConsents } from "@/lib/portal/special-category-consent";
+import { consentState } from "@/lib/portal/special-category-consent-rules";
 import { readClientSession } from "@/lib/portal/session";
 import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
 import { formatWeekdayDate } from "@/lib/portal/format";
@@ -10,7 +13,10 @@ export default async function PrepPage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const data = await fetchPortalRepositoryData();
+  const [data, consentHistory] = await Promise.all([
+    fetchPortalRepositoryData({ viewer: "klient" }),
+    listSpecialCategoryConsents(session.clientId),
+  ]);
   const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 
@@ -33,6 +39,8 @@ export default async function PrepPage() {
           </div>
         </Card>
       ) : null}
+
+      <SensitiveDataNotice state={consentState(consentHistory)} />
 
       <PrepForm
         initial={{

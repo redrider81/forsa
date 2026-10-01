@@ -33,6 +33,12 @@ import {
 } from "@/lib/portal/store/demo-state";
 import { EMPTY_DEMO_MATERIALS_STATE, type DemoMaterialsState } from "@/lib/portal/store/demo-materials-state";
 import {
+  isAtOrBefore,
+  isInsideConsentWindow,
+  restrictionCutoff,
+  type ConsentWindow,
+} from "@/lib/portal/special-category-consent-rules";
+import {
   countMaterialsLinkedToNextSession,
   listClientMaterials,
 } from "@/lib/portal/materials-repository";
@@ -478,7 +484,8 @@ export async function getEngagementOverview(
 export type ClientPerspective = {
   client: Client;
   engagement: Engagement;
-  organisation: Organisation;
+  /** null för en privat klient — det finns ingen organisation att visa. */
+  organisation: Organisation | null;
   goal: Client["goal"];
   sessions: Array<Omit<CoachingSession, "coachNotes">>;
   completedSessions: Array<Omit<CoachingSession, "coachNotes">>;
@@ -506,7 +513,9 @@ export function buildClientPerspective(
   const organisation = client.organisationId
     ? getOrganisation(coachId, client.organisationId, data)
     : null;
-  if (!engagement || !organisation) return null;
+  // A private client has no organisation. That is a valid client, not a
+  // missing record — only a missing engagement makes the view unresolvable.
+  if (!engagement) return null;
 
   const stripped = listSessions(coachId, clientId, state, data).map((session) => {
     const shared: Omit<CoachingSession, "coachNotes"> = {
@@ -988,7 +997,24 @@ function groupBy<T, K>(items: T[], keyOf: (item: T) => K): Map<K, T[]> {
  * ingen policy alls finns för klienter på den tabellen. Kontextisoleringen
  * upprätthålls därmed på databasnivå, inte bara i applikationskoden.
  */
-async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
+async function fetchPortalRepositoryData(
+  options: {
+    /**
+     * Who reads. Only the client's own portal passes "klient": a client
+     * keeps access to their own content (right of access) even when it is
+     * restricted after a withdrawn article 9 consent. Every other caller —
+     * coach views, AI, reports — gets the restricted view by default.
+     */
+    viewer?: "coach" | "klient";
+    /**
+     * "ai": building input for the AI provider. On top of the coach view,
+     * every consent-scoped source — also the ones Carolina writes — must
+     * have been written inside a consent window, and fields without a stable
+     * timestamp are left out entirely.
+     */
+    purpose?: "ai";
+  } = {},
+): Promise<PortalRepositoryData> {
   const supabase = await createSupabaseServerClient();
 
   const [
@@ -996,18 +1022,20 @@ async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
     { data: organisationRows },
     { data: engagementRows },
     { data: milestoneRows },
-    { data: clientRows },
+    { data: rawClientRows },
     { data: agreementRows },
-    { data: goalRows },
-    { data: sessionRows },
-    { data: summaryRows },
-    { data: coachNoteRows },
-    { data: prepRows },
-    { data: reflectionRows },
-    { data: insightRows },
-    { data: commitmentRows },
+    { data: rawGoalRows },
+    { data: rawSessionRows },
+    { data: rawSummaryRows },
+    { data: rawCoachNoteRows },
+    { data: rawPrepRows },
+    { data: rawReflectionRows },
+    { data: rawInsightRows },
+    { data: rawCommitmentRows },
     { data: documentRows },
     { data: materialRows },
+    { data: consentRows },
+    { data: commitmentNoteRows },
   ] = await Promise.all([
     supabase.from("coaches").select("*"),
     supabase.from("organisations").select("*"),
@@ -1019,13 +1047,123 @@ async function fetchPortalRepositoryData(): Promise<PortalRepositoryData> {
     supabase.from("sessions").select("*"),
     supabase.from("session_summaries").select("*"),
     supabase.from("session_coach_notes").select("*"),
-    supabase.from("session_preparations").select("*"),
+    // Text columns of preparations and commitment notes are not readable
+    // from the tables directly; the database returns them through read RPCs
+    // that apply the consent boundary (20261001110000).
+    supabase.rpc("read_session_preparations"),
     supabase.from("reflections").select("*"),
     supabase.from("insights").select("*"),
-    supabase.from("commitments").select("*"),
+    supabase
+      .from("commitments")
+      .select("id, client_id, session_id, date, text, due_label, status, completed_at, created_at, updated_at"),
     supabase.from("documents").select("*"),
     supabase.from("materials").select("*"),
+    supabase.from("special_category_consents").select("client_id, granted_at, withdrawn_at"),
+    supabase.rpc("read_commitment_client_notes"),
   ]);
+
+  // ---- Article 9 restriction after withdrawn consent -------------------
+  //
+  // Per client: WITHDRAWN (no active consent) -> cutoff T = latest
+  // withdrawal. Consent-scoped rows written at or before T are removed from
+  // this snapshot, and consent-scoped fields are cleared, using exactly the
+  // predicates of erase_special_category_content() in
+  // 20261001100000_cvb_base_special_category_post_withdrawal.sql. Source
+  // level only — no text is inspected.
+  const consentsByClient = groupBy(consentRows ?? [], (row) => row.client_id);
+  const cutoffByClient = new Map<string, string>();
+  if (options.viewer !== "klient") {
+    for (const [clientId, rows] of consentsByClient) {
+      const cutoff = restrictionCutoff(rows.map((row) => ({ withdrawnAt: row.withdrawn_at })));
+      if (cutoff) cutoffByClient.set(clientId, cutoff);
+    }
+  }
+  const restricted = (clientId: string, ts: string | null | undefined) => {
+    const cutoff = cutoffByClient.get(clientId);
+    return cutoff !== undefined && isAtOrBefore(ts, cutoff);
+  };
+  const clientOfSession = new Map((rawSessionRows ?? []).map((row) => [row.id, row.client_id]));
+
+  // ---- Consent windows (non-retroactive) --------------------------------
+  //
+  // Client-authored sources reach Carolina only if written inside a consent
+  // window [granted_at, withdrawn_at). Without one — never consented, or
+  // between a withdrawal and a new consent — they stay private to the
+  // client, and a later consent does not open them. For AI input the same
+  // window applies to every consent-scoped source.
+  const coachView = options.viewer !== "klient";
+  const forAi = options.purpose === "ai";
+  const windowsByClient = new Map<string, ConsentWindow[]>();
+  for (const [clientId, rows] of consentsByClient) {
+    windowsByClient.set(clientId, rows.map((row) => ({ grantedAt: row.granted_at, withdrawnAt: row.withdrawn_at })));
+  }
+  const insideWindow = (clientId: string, ts: string | null | undefined) =>
+    isInsideConsentWindow(ts, windowsByClient.get(clientId) ?? []);
+  /** Client-authored: needs a window for Carolina and AI. */
+  const clientShared = (clientId: string, ts: string | null | undefined) => !coachView || insideWindow(clientId, ts);
+  /** Carolina-authored: needs a window only for AI. */
+  const aiAllowed = (clientId: string, ts: string | null | undefined) => !forAi || insideWindow(clientId, ts);
+
+  const reflectionRows = (rawReflectionRows ?? []).filter(
+    (row) => !restricted(row.client_id, row.created_at) && clientShared(row.client_id, row.created_at),
+  );
+  const insightRows = (rawInsightRows ?? []).filter(
+    (row) => !restricted(row.client_id, row.created_at) && aiAllowed(row.client_id, row.created_at),
+  );
+  const noteByCommitment = new Map((commitmentNoteRows ?? []).map((row) => [row.commitment_id, row.client_note]));
+  const commitmentRows = (rawCommitmentRows ?? [])
+    .map((row) => ({ ...row, client_note: noteByCommitment.get(row.id) ?? null }))
+    .filter((row) => !restricted(row.client_id, row.created_at) && aiAllowed(row.client_id, row.created_at))
+    // The client's note is client-authored; updated_at is set only by the
+    // client's own save (update_own_commitment_status).
+    .map((row) =>
+      row.client_note && !clientShared(row.client_id, row.updated_at) ? { ...row, client_note: null } : row,
+    );
+  // Preparation fields by author. focus/desired_outcome/changed are the
+  // client's (client_saved_at moves only on the client's own save).
+  // follow_up is written by either party; a coach-authored follow_up is
+  // Carolina's own text and always hers to read (AI still needs a window).
+  const prepRows = (rawPrepRows ?? [])
+    .map((row) => {
+      const clientFieldsOk =
+        !restricted(row.client_id, row.client_saved_at) && clientShared(row.client_id, row.client_saved_at);
+      const followUpOk =
+        coachView && row.follow_up_author === "coach"
+          ? aiAllowed(row.client_id, row.follow_up_saved_at)
+          : !restricted(row.client_id, row.follow_up_saved_at) && clientShared(row.client_id, row.follow_up_saved_at);
+      return {
+        ...row,
+        focus: clientFieldsOk ? row.focus : "",
+        desired_outcome: clientFieldsOk ? row.desired_outcome : "",
+        changed: clientFieldsOk ? row.changed : "",
+        follow_up: followUpOk ? row.follow_up : "",
+      };
+    })
+    .filter((row) => row.focus || row.desired_outcome || row.changed || row.follow_up);
+  const coachNoteRows = (rawCoachNoteRows ?? []).filter((row) => {
+    const clientId = clientOfSession.get(row.session_id) ?? "";
+    return !restricted(clientId, row.created_at) && aiAllowed(clientId, row.created_at);
+  });
+  const summaryRows = (rawSummaryRows ?? []).filter((row) => {
+    const clientId = clientOfSession.get(row.session_id) ?? "";
+    return !restricted(clientId, row.approved_at) && aiAllowed(clientId, row.approved_at);
+  });
+  // AI eligibility of the focus text uses when the text was actually
+  // written (focus_written_at), never when the session was booked. Legacy
+  // rows without it are excluded from AI.
+  const sessionRows = (rawSessionRows ?? []).map((row) =>
+    restricted(row.client_id, row.created_at) || !aiAllowed(row.client_id, row.focus_written_at)
+      ? { ...row, client_focus: "", desired_outcome: "" }
+      : row,
+  );
+  // No stable timestamp exists for these fields, so a window cannot be
+  // proven: never part of AI input; hidden from Carolina while WITHDRAWN.
+  const goalRows = (rawGoalRows ?? []).map((row) =>
+    forAi || cutoffByClient.has(row.client_id) ? { ...row, client_wording: "", baseline: "" } : row,
+  );
+  const clientRows = (rawClientRows ?? []).map((row) =>
+    forAi || cutoffByClient.has(row.id) ? { ...row, recurring_themes: [] } : row,
+  );
 
   const coachRow = coachRows?.[0];
   const coach: CoachProfile = coachRow

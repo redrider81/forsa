@@ -57,6 +57,11 @@ export type Dictionary = {
     continue: string;
     submitAnyway: string;
     confidentialityNote: string;
+    privacyNotice: {
+      before: string;
+      link: string;
+      after: string;
+    };
     schedulingHint: string;
     timeSlotAria: string;
     timeWindows: {

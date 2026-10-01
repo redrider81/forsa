@@ -1,5 +1,5 @@
 import { readCoachSession } from "@/lib/portal/session";
-import { createContract, type ContractContent } from "@/lib/portal/contracts";
+import { createContract, parseCounterpartyType, type ContractContent } from "@/lib/portal/contracts";
 
 /** Carolina creates a new draft contract, blank or copied from a template. */
 export async function POST(request: Request) {
@@ -29,6 +29,8 @@ export async function POST(request: Request) {
         : null;
   const currency = typeof raw.currency === "string" && raw.currency.trim() !== "" ? raw.currency.trim() : "SEK";
   const paymentTerms = typeof raw.paymentTerms === "string" && raw.paymentTerms.trim() !== "" ? raw.paymentTerms.trim() : null;
+  // Optional at draft stage; required (server-side) before the contract can be sent.
+  const counterpartyType = parseCounterpartyType(raw.counterpartyType);
 
   if (!clientId || !title) {
     return Response.json({ ok: false, error: "Klient och titel krävs." }, { status: 400 });
@@ -47,6 +49,7 @@ export async function POST(request: Request) {
     priceAmount,
     currency,
     paymentTerms,
+    counterpartyType,
   });
 
   if (!contract) {

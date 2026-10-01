@@ -2,10 +2,17 @@ import "server-only";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { TablesUpdate } from "@/lib/supabase/database.types";
-import type { ContractContent, ContractSignerRole, ContractStatus } from "@/lib/portal/types";
+import { CURRENT_GENERAL_TERMS_VERSION } from "@/lib/legal/terms-versions";
+import type {
+  ContractContent,
+  ContractCounterpartyType,
+  ContractSignerRole,
+  ContractStatus,
+} from "@/lib/portal/types";
 
 export type {
   ContractContent,
+  ContractCounterpartyType,
   ContractCustomField,
   ContractFieldType,
   ContractSection,
@@ -25,11 +32,21 @@ export type ContractTemplate = {
   updatedAt: string;
 };
 
+/** The append-only record of an exercised consumer withdrawal. */
+export type ContractWithdrawal = {
+  id: string;
+  requestedAt: string;
+  withdrawalDeadline: string | null;
+  requesterName: string;
+  receiptEmail: string;
+};
+
 export type Contract = {
   id: string;
   coachId: string;
   clientId: string;
   clientName?: string;
+  clientEmail?: string;
   engagementId: string | null;
   templateId: string | null;
   title: string;
@@ -43,6 +60,15 @@ export type Contract = {
   clientSignedAt: string | null;
   coachSignedAt: string | null;
   lockedAt: string | null;
+  /** NULL = not yet classified (contracts created before classification existed). */
+  counterpartyType: ContractCounterpartyType | null;
+  /** Consumer contracts: exclusive end of the withdrawal period, set when concluded. */
+  withdrawalDeadline: string | null;
+  /** Consumer contracts: separate, explicit request to start during the withdrawal period. */
+  earlyPerformanceRequestedAt: string | null;
+  /** The general terms version pinned when sent (NULL = legacy, unproven). Immutable once set. */
+  generalTermsVersion: string | null;
+  withdrawal: ContractWithdrawal | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -78,12 +104,26 @@ function toTemplate(row: Record<string, unknown>): ContractTemplate {
   };
 }
 
+function toWithdrawal(raw: unknown): ContractWithdrawal | null {
+  // One-to-one embed: PostgREST returns an object, but tolerate an array.
+  const row = (Array.isArray(raw) ? raw[0] : raw) as Record<string, unknown> | null | undefined;
+  if (!row || typeof row !== "object") return null;
+  return {
+    id: row.id as string,
+    requestedAt: row.requested_at as string,
+    withdrawalDeadline: (row.withdrawal_deadline as string | null) ?? null,
+    requesterName: row.requester_name as string,
+    receiptEmail: row.receipt_email as string,
+  };
+}
+
 function toContract(row: Record<string, unknown>): Contract {
   return {
     id: row.id as string,
     coachId: row.coach_id as string,
     clientId: row.client_id as string,
     clientName: (row.clients as { name?: string } | null)?.name,
+    clientEmail: (row.clients as { email?: string } | null)?.email,
     engagementId: (row.engagement_id as string | null) ?? null,
     templateId: (row.template_id as string | null) ?? null,
     title: row.title as string,
@@ -97,6 +137,11 @@ function toContract(row: Record<string, unknown>): Contract {
     clientSignedAt: (row.client_signed_at as string | null) ?? null,
     coachSignedAt: (row.coach_signed_at as string | null) ?? null,
     lockedAt: (row.locked_at as string | null) ?? null,
+    counterpartyType: (row.counterparty_type as ContractCounterpartyType | null) ?? null,
+    withdrawalDeadline: (row.withdrawal_deadline as string | null) ?? null,
+    earlyPerformanceRequestedAt: (row.early_performance_requested_at as string | null) ?? null,
+    generalTermsVersion: (row.general_terms_version as string | null) ?? null,
+    withdrawal: toWithdrawal(row.contract_withdrawals),
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
   };
@@ -161,11 +206,15 @@ export async function deleteContractTemplate(id: string): Promise<boolean> {
 
 // -------------------------------------------------------------- contracts
 
+/** Every contract read carries its client and — if exercised — its withdrawal. */
+const CONTRACT_SELECT =
+  "*, clients(name, email), contract_withdrawals(id, requested_at, withdrawal_deadline, requester_name, receipt_email)";
+
 export async function listCoachContracts(): Promise<Contract[]> {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from("contracts")
-    .select("*, clients(name)")
+    .select(CONTRACT_SELECT)
     .order("created_at", { ascending: false });
   return (data ?? []).map(toContract);
 }
@@ -174,7 +223,7 @@ export async function listClientContractsForCoach(clientId: string): Promise<Con
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from("contracts")
-    .select("*, clients(name)")
+    .select(CONTRACT_SELECT)
     .eq("client_id", clientId)
     .order("created_at", { ascending: false });
   return (data ?? []).map(toContract);
@@ -182,13 +231,13 @@ export async function listClientContractsForCoach(clientId: string): Promise<Con
 
 export async function listOwnClientContracts(): Promise<Contract[]> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.from("contracts").select("*").order("created_at", { ascending: false });
+  const { data } = await supabase.from("contracts").select(CONTRACT_SELECT).order("created_at", { ascending: false });
   return (data ?? []).map(toContract);
 }
 
 export async function getContract(id: string): Promise<Contract | null> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.from("contracts").select("*, clients(name)").eq("id", id).maybeSingle();
+  const { data, error } = await supabase.from("contracts").select(CONTRACT_SELECT).eq("id", id).maybeSingle();
   if (error || !data) return null;
   return toContract(data);
 }
@@ -213,6 +262,7 @@ export async function createContract(input: {
   priceAmount: number | null;
   currency: string;
   paymentTerms: string | null;
+  counterpartyType: ContractCounterpartyType | null;
 }): Promise<Contract | null> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
@@ -227,8 +277,9 @@ export async function createContract(input: {
       price_amount: input.priceAmount,
       currency: input.currency,
       payment_terms: input.paymentTerms,
+      counterparty_type: input.counterpartyType,
     })
-    .select("*, clients(name)")
+    .select(CONTRACT_SELECT)
     .single();
   if (error || !data) return null;
   return toContract(data);
@@ -258,17 +309,42 @@ export async function updateContractDraft(
     .from("contracts")
     .update(patch)
     .eq("id", id)
-    .select("*, clients(name)")
+    .select(CONTRACT_SELECT)
     .single();
   if (error || !data) return null;
   return toContract(data);
+}
+
+/**
+ * Consumer or business. Only through the RPC, which allows it for drafts
+ * and for sent-but-unclassified contracts the client has not signed yet.
+ */
+export async function setContractCounterpartyType(
+  contractId: string,
+  counterpartyType: ContractCounterpartyType,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc("set_contract_counterparty_type", {
+    p_contract_id: contractId,
+    p_counterparty_type: counterpartyType,
+  });
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
+export function parseCounterpartyType(value: unknown): ContractCounterpartyType | null {
+  return value === "consumer" || value === "business" ? value : null;
 }
 
 // -------------------------------------------------------------- signing
 
 export async function sendContractForSignature(contractId: string): Promise<{ ok: true } | { ok: false; error: string }> {
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.rpc("send_contract_for_signature", { p_contract_id: contractId });
+  // Pins the general terms version that is current right now to the contract.
+  const { error } = await supabase.rpc("send_contract_for_signature", {
+    p_contract_id: contractId,
+    p_general_terms_version: CURRENT_GENERAL_TERMS_VERSION,
+  });
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
@@ -276,11 +352,16 @@ export async function sendContractForSignature(contractId: string): Promise<{ ok
 export async function signContractAsClient(
   contractId: string,
   versionId: string,
+  requestEarlyPerformance: boolean,
+  generalTermsVersion: string,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   const supabase = await createSupabaseServerClient();
+  // The database refuses anything but the version pinned to the contract.
   const { error } = await supabase.rpc("sign_contract_as_client", {
     p_contract_id: contractId,
     p_version_id: versionId,
+    p_request_early_performance: requestEarlyPerformance,
+    p_general_terms_version: generalTermsVersion,
   });
   if (error) return { ok: false, error: error.message };
   return { ok: true };

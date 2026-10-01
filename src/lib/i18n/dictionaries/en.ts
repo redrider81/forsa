@@ -55,6 +55,12 @@ export const enDictionary = {
     continue: "Continue",
     submitAnyway: "Send anyway",
     confidentialityNote: "All contact is handled confidentially.",
+    privacyNotice: {
+      before:
+        "When you send the request, CVB Coaching processes your details to handle your booking and to be in contact with you. Read more in the ",
+      link: "privacy policy",
+      after: ".",
+    },
     sections: {
       contact: "Contact details",
       scheduling: "Book an initial phone call",

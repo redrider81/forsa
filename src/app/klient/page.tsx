@@ -16,6 +16,9 @@ import {
   BentoTitle,
 } from "@/components/klient/bento";
 import { SharingBadge } from "@/components/klient/klient-ui";
+import SensitiveDataNotice from "@/components/klient/sensitive-data-notice";
+import { listSpecialCategoryConsents } from "@/lib/portal/special-category-consent";
+import { consentState } from "@/lib/portal/special-category-consent-rules";
 import { readClientSession } from "@/lib/portal/session";
 import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
 import { materialCategoryLabel } from "@/lib/portal/material-labels";
@@ -25,7 +28,10 @@ export default async function ClientOverviewPage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const data = await fetchPortalRepositoryData();
+  const [data, consentHistory] = await Promise.all([
+    fetchPortalRepositoryData({ viewer: "klient" }),
+    listSpecialCategoryConsents(session.clientId),
+  ]);
   const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 
@@ -101,14 +107,20 @@ export default async function ClientOverviewPage() {
           <span className="text-[1rem] font-medium tracking-[-0.01em] text-stone-900 md:text-[1.0625rem]">
             {view.client.name}
           </span>
-          <span aria-hidden="true" className="text-stone-300">
-            ·
-          </span>
-          <span className="text-[0.8125rem] leading-relaxed text-stone-600 md:text-[0.875rem]">
-            {view.organisation.name}
-          </span>
+          {view.organisation ? (
+            <>
+              <span aria-hidden="true" className="text-stone-300">
+                ·
+              </span>
+              <span className="text-[0.8125rem] leading-relaxed text-stone-600 md:text-[0.875rem]">
+                {view.organisation.name}
+              </span>
+            </>
+          ) : null}
         </p>
       </header>
+
+      <SensitiveDataNotice state={consentState(consentHistory)} />
 
       {view.upcomingSession ? (
         <BentoCard

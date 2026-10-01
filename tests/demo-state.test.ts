@@ -125,7 +125,7 @@ describe("klientinput syns för coachen", () => {
 });
 
 describe("AI-underlaget använder klientens nya information", () => {
-  const context = buildClientContext(coachId, emma, stateWithInput);
+  const context = buildClientContext(coachId, emma, stateWithInput, { specialCategoryConsent: true });
 
   it("innehåller klientens förberedelse", () => {
     expect(context).not.toBeNull();

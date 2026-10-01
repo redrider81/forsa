@@ -2,6 +2,7 @@ import { readCoachSession } from "@/lib/portal/session";
 import { fetchPortalRepositoryData, getSession } from "@/lib/portal/repository";
 import { EMPTY_DEMO_STATE } from "@/lib/portal/store/demo-state";
 import { buildClientContext } from "@/lib/ai/context";
+import { hasActiveSpecialCategoryConsent } from "@/lib/portal/special-category-consent";
 import { AiError, generate, hasApiKey } from "@/lib/ai/openai";
 import { sessionSummarySystemPrompt } from "@/lib/ai/prompts";
 
@@ -42,13 +43,27 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Anteckningarna är för långa." }, { status: 400 });
   }
 
-  const data = await fetchPortalRepositoryData();
+  // The draft is built from Carolina's notes of the conversation — pure
+  // conversation content. Without the client's active article 9 consent it
+  // is not sent to the AI provider at all. Nothing here classifies text.
+  if (!(await hasActiveSpecialCategoryConsent(clientId))) {
+    return Response.json(
+      {
+        ok: false,
+        error:
+          "Klienten har inte lämnat samtycke till behandling av känsliga uppgifter, så samtalsanteckningar skickas inte till sammanställningsstödet. Skriv sammanfattningen själv.",
+      },
+      { status: 409 },
+    );
+  }
+
+  const data = await fetchPortalRepositoryData({ purpose: "ai" });
   const coachingSession = getSession(session.coachId, clientId, sessionId, EMPTY_DEMO_STATE, data);
   const context = buildClientContext(
     session.coachId,
     clientId,
     EMPTY_DEMO_STATE,
-    { includeCoachNotes: true },
+    { includeCoachNotes: true, specialCategoryConsent: true },
     data,
   );
   if (!coachingSession || !context) {

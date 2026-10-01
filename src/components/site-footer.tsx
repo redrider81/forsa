@@ -4,6 +4,7 @@ import { Mail } from "lucide-react";
 import { Footer } from "@/components/ui/footer-section";
 import { localeFromPathname, toLocalePath } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
+import { legalLinks } from "@/lib/legal/links";
 import { usePathname } from "next/navigation";
 
 /** Publik kontakt — samma adress som i strukturerad data (json-ld). */
@@ -25,6 +26,10 @@ export default function SiteFooter() {
 
   if (isPortal) return null;
 
+  // Integritet, Villkor, CVB Base-villkor, Cookies — in the short "Om"
+  // column rather than a fifth column, so the grid stays as it is.
+  const legal = legalLinks(locale).map(({ title, href }) => ({ title, href }));
+
   const columns =
     locale === "sv"
       ? [
@@ -38,7 +43,7 @@ export default function SiteFooter() {
           },
           {
             label: "Om",
-            links: [{ title: "Om CVB Coaching", href: href("/om-oss") }],
+            links: [{ title: "Om CVB Coaching", href: href("/om-oss") }, ...legal],
           },
           {
             label: "Praktiskt",
@@ -71,7 +76,7 @@ export default function SiteFooter() {
           },
           {
             label: "About",
-            links: [{ title: "About Carolina", href: href("/om-oss") }],
+            links: [{ title: "About Carolina", href: href("/om-oss") }, ...legal],
           },
           {
             label: "Practical",

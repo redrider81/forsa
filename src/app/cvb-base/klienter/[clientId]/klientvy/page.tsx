@@ -61,7 +61,7 @@ export default async function ClientViewPage({
         <header className="max-w-prose">
           <h1 className="sr-only">{client.name}</h1>
           <span className="inline-flex items-center rounded-full border border-[var(--klient-border-muted)] bg-white px-5 py-2.5 text-[1rem] font-medium leading-relaxed text-zinc-700 shadow-[0_1px_3px_rgba(24,24,27,0.06)] md:px-6 md:py-3 md:text-[1.0625rem]">
-            {client.name} · {organisation.name}
+            {organisation ? `${client.name} · ${organisation.name}` : client.name}
           </span>
         </header>
 

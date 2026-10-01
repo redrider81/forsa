@@ -371,6 +371,77 @@ export type Database = {
           },
         ]
       }
+      contract_confirmation_notifications: {
+        Row: {
+          attempt_count: number
+          contract_id: string
+          contract_version_id: string
+          created_at: string
+          id: string
+          idempotency_key: string
+          last_attempt_at: string | null
+          last_error_code: string | null
+          last_error_message: string | null
+          provider_accepted_at: string | null
+          provider_message_id: string | null
+          recipient_email: string | null
+          rendered_at: string | null
+          rendered_body: string | null
+          rendered_subject: string | null
+          status: string
+          terms_version: string | null
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          contract_id: string
+          contract_version_id: string
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string | null
+          rendered_at?: string | null
+          rendered_body?: string | null
+          rendered_subject?: string | null
+          status?: string
+          terms_version?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          contract_id?: string
+          contract_version_id?: string
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string | null
+          rendered_at?: string | null
+          rendered_body?: string | null
+          rendered_subject?: string | null
+          status?: string
+          terms_version?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_confirmation_notifications_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: true
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contract_signatures: {
         Row: {
           contract_id: string
@@ -450,16 +521,137 @@ export type Database = {
           },
         ]
       }
+      contract_withdrawal_notifications: {
+        Row: {
+          attempt_count: number
+          created_at: string
+          event_type: string
+          id: string
+          idempotency_key: string
+          last_attempt_at: string | null
+          last_error_code: string | null
+          last_error_message: string | null
+          provider_accepted_at: string | null
+          provider_message_id: string | null
+          recipient_email: string | null
+          recipient_type: string
+          status: string
+          updated_at: string
+          withdrawal_id: string
+        }
+        Insert: {
+          attempt_count?: number
+          created_at?: string
+          event_type: string
+          id?: string
+          idempotency_key: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string | null
+          recipient_type: string
+          status?: string
+          updated_at?: string
+          withdrawal_id: string
+        }
+        Update: {
+          attempt_count?: number
+          created_at?: string
+          event_type?: string
+          id?: string
+          idempotency_key?: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string | null
+          recipient_type?: string
+          status?: string
+          updated_at?: string
+          withdrawal_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_withdrawal_notifications_withdrawal_id_fkey"
+            columns: ["withdrawal_id"]
+            isOneToOne: false
+            referencedRelation: "contract_withdrawals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contract_withdrawals: {
+        Row: {
+          client_id: string
+          contract_id: string
+          contract_title: string
+          contract_version_id: string
+          id: string
+          receipt_email: string
+          requested_at: string
+          requested_by_auth_user_id: string
+          requester_name: string
+          withdrawal_deadline: string | null
+        }
+        Insert: {
+          client_id: string
+          contract_id: string
+          contract_title: string
+          contract_version_id: string
+          id?: string
+          receipt_email: string
+          requested_at?: string
+          requested_by_auth_user_id: string
+          requester_name: string
+          withdrawal_deadline?: string | null
+        }
+        Update: {
+          client_id?: string
+          contract_id?: string
+          contract_title?: string
+          contract_version_id?: string
+          id?: string
+          receipt_email?: string
+          requested_at?: string
+          requested_by_auth_user_id?: string
+          requester_name?: string
+          withdrawal_deadline?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_withdrawals_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contract_withdrawals_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: true
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contracts: {
         Row: {
           client_id: string
           client_signed_at: string | null
           coach_id: string
           coach_signed_at: string | null
+          counterparty_type:
+            | Database["public"]["Enums"]["contract_counterparty_type"]
+            | null
           content: Json
           created_at: string
           currency: string
+          early_performance_requested_at: string | null
           engagement_id: string | null
+          general_terms_version: string | null
           id: string
           locked_at: string | null
           payment_terms: string | null
@@ -470,16 +662,22 @@ export type Database = {
           title: string
           updated_at: string
           version_id: string
+          withdrawal_deadline: string | null
         }
         Insert: {
           client_id: string
           client_signed_at?: string | null
           coach_id: string
           coach_signed_at?: string | null
+          counterparty_type?:
+            | Database["public"]["Enums"]["contract_counterparty_type"]
+            | null
           content?: Json
           created_at?: string
           currency?: string
+          early_performance_requested_at?: string | null
           engagement_id?: string | null
+          general_terms_version?: string | null
           id?: string
           locked_at?: string | null
           payment_terms?: string | null
@@ -490,16 +688,22 @@ export type Database = {
           title: string
           updated_at?: string
           version_id?: string
+          withdrawal_deadline?: string | null
         }
         Update: {
           client_id?: string
           client_signed_at?: string | null
           coach_id?: string
           coach_signed_at?: string | null
+          counterparty_type?:
+            | Database["public"]["Enums"]["contract_counterparty_type"]
+            | null
           content?: Json
           created_at?: string
           currency?: string
+          early_performance_requested_at?: string | null
           engagement_id?: string | null
+          general_terms_version?: string | null
           id?: string
           locked_at?: string | null
           payment_terms?: string | null
@@ -510,6 +714,7 @@ export type Database = {
           title?: string
           updated_at?: string
           version_id?: string
+          withdrawal_deadline?: string | null
         }
         Relationships: [
           {
@@ -1271,9 +1476,12 @@ export type Database = {
         Row: {
           changed: string
           client_id: string
+          client_saved_at: string | null
           desired_outcome: string
           focus: string
           follow_up: string
+          follow_up_author: string | null
+          follow_up_saved_at: string | null
           id: string
           session_id: string | null
           updated_at: string
@@ -1281,9 +1489,12 @@ export type Database = {
         Insert: {
           changed?: string
           client_id: string
+          client_saved_at?: string | null
           desired_outcome?: string
           focus?: string
           follow_up?: string
+          follow_up_author?: string | null
+          follow_up_saved_at?: string | null
           id?: string
           session_id?: string | null
           updated_at?: string
@@ -1291,9 +1502,12 @@ export type Database = {
         Update: {
           changed?: string
           client_id?: string
+          client_saved_at?: string | null
           desired_outcome?: string
           focus?: string
           follow_up?: string
+          follow_up_author?: string | null
+          follow_up_saved_at?: string | null
           id?: string
           session_id?: string | null
           updated_at?: string
@@ -1362,6 +1576,95 @@ export type Database = {
           },
         ]
       }
+      special_category_erasure_requests: {
+        Row: {
+          client_id: string
+          completed_at: string | null
+          completed_by_auth_user_id: string | null
+          consent_id: string
+          cutoff: string
+          id: string
+          requested_at: string
+          requested_by_auth_user_id: string
+        }
+        Insert: {
+          client_id: string
+          completed_at?: string | null
+          completed_by_auth_user_id?: string | null
+          consent_id: string
+          cutoff: string
+          id?: string
+          requested_at?: string
+          requested_by_auth_user_id: string
+        }
+        Update: {
+          client_id?: string
+          completed_at?: string | null
+          completed_by_auth_user_id?: string | null
+          consent_id?: string
+          cutoff?: string
+          id?: string
+          requested_at?: string
+          requested_by_auth_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "special_category_erasure_requests_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "special_category_erasure_requests_consent_id_fkey"
+            columns: ["consent_id"]
+            isOneToOne: false
+            referencedRelation: "special_category_consents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      special_category_consents: {
+        Row: {
+          client_id: string
+          consent_version: string
+          granted_at: string
+          granted_by_auth_user_id: string
+          id: string
+          scope: string
+          withdrawn_at: string | null
+          withdrawn_by_auth_user_id: string | null
+        }
+        Insert: {
+          client_id: string
+          consent_version: string
+          granted_at?: string
+          granted_by_auth_user_id: string
+          id?: string
+          scope?: string
+          withdrawn_at?: string | null
+          withdrawn_by_auth_user_id?: string | null
+        }
+        Update: {
+          client_id?: string
+          consent_version?: string
+          granted_at?: string
+          granted_by_auth_user_id?: string
+          id?: string
+          scope?: string
+          withdrawn_at?: string | null
+          withdrawn_by_auth_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "special_category_consents_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sessions: {
         Row: {
           client_focus: string
@@ -1370,6 +1673,7 @@ export type Database = {
           date: string
           desired_outcome: string
           duration_minutes: number
+          focus_written_at: string | null
           id: string
           location: string
           number: number
@@ -1384,6 +1688,7 @@ export type Database = {
           date: string
           desired_outcome?: string
           duration_minutes?: number
+          focus_written_at?: string | null
           id?: string
           location?: string
           number: number
@@ -1398,6 +1703,7 @@ export type Database = {
           date?: string
           desired_outcome?: string
           duration_minutes?: number
+          focus_written_at?: string | null
           id?: string
           location?: string
           number?: number
@@ -1457,6 +1763,10 @@ export type Database = {
         }
         Returns: string
       }
+      count_client_private_content: {
+        Args: { p_client_id: string }
+        Returns: number
+      }
       create_client_bundle: {
         Args: {
           p_agreement: Json
@@ -1489,6 +1799,26 @@ export type Database = {
       }
       delete_coach_client: { Args: { p_client_id: string }; Returns: undefined }
       end_coach_client: { Args: { p_client_id: string }; Returns: undefined }
+      erase_special_category_content: {
+        Args: { p_client_id: string }
+        Returns: undefined
+      }
+      exercise_contract_withdrawal: {
+        Args: { p_contract_id: string }
+        Returns: {
+          already_withdrawn: boolean
+          requested_at: string
+          withdrawal_id: string
+        }[]
+      }
+      grant_special_category_consent: {
+        Args: { p_version: string }
+        Returns: {
+          already_granted: boolean
+          consent_id: string
+          granted_at: string
+        }[]
+      }
       get_public_booking_slots: {
         Args: { p_end_date: string; p_slug: string; p_start_date: string }
         Returns: {
@@ -1519,6 +1849,54 @@ export type Database = {
           start_time: string
         }[]
       }
+      read_commitment_client_notes: {
+        Args: never
+        Returns: {
+          client_note: string
+          commitment_id: string
+        }[]
+      }
+      read_session_preparations: {
+        Args: never
+        Returns: {
+          changed: string
+          client_id: string
+          client_saved_at: string
+          desired_outcome: string
+          focus: string
+          follow_up: string
+          follow_up_author: string
+          follow_up_saved_at: string
+          id: string
+          session_id: string
+          updated_at: string
+        }[]
+      }
+      record_contract_confirmation_result: {
+        Args: {
+          p_contract_id: string
+          p_error_code?: string | null
+          p_error_message?: string | null
+          p_provider_message_id?: string | null
+          p_rendered_body?: string | null
+          p_rendered_subject?: string | null
+          p_status: string
+          p_terms_version?: string | null
+        }
+        Returns: undefined
+      }
+      record_contract_withdrawal_notification_result: {
+        Args: {
+          p_error_code?: string | null
+          p_error_message?: string | null
+          p_event_type: string
+          p_provider_message_id?: string | null
+          p_recipient_email?: string | null
+          p_status: string
+          p_withdrawal_id: string
+        }
+        Returns: undefined
+      }
       record_public_booking_notification_result: {
         Args: {
           p_dispatch_token?: string | null
@@ -1532,25 +1910,58 @@ export type Database = {
         }
         Returns: undefined
       }
+      request_special_category_erasure: {
+        Args: never
+        Returns: {
+          already_requested: boolean
+          request_id: string
+          requested_at: string
+        }[]
+      }
       respond_public_booking_request: {
         Args: { p_action: string; p_request_id: string }
         Returns: undefined
       }
+      save_own_session_preparation: {
+        Args: {
+          p_changed: string
+          p_desired_outcome: string
+          p_focus: string
+          p_follow_up: string
+        }
+        Returns: undefined
+      }
       send_contract_for_signature: {
-        Args: { p_contract_id: string }
+        Args: { p_contract_id: string; p_general_terms_version: string }
         Returns: string
+      }
+      set_contract_counterparty_type: {
+        Args: {
+          p_contract_id: string
+          p_counterparty_type: Database["public"]["Enums"]["contract_counterparty_type"]
+        }
+        Returns: undefined
       }
       session_owned_by_current_coach: {
         Args: { p_session_id: string }
         Returns: boolean
       }
       sign_contract_as_client: {
-        Args: { p_contract_id: string; p_version_id: string }
+        Args: {
+          p_contract_id: string
+          p_general_terms_version?: string
+          p_request_early_performance?: boolean
+          p_version_id: string
+        }
         Returns: undefined
       }
       sign_contract_as_coach: {
         Args: { p_contract_id: string; p_version_id: string }
         Returns: undefined
+      }
+      special_category_coach_may_read: {
+        Args: { p_client_id: string; p_ts: string }
+        Returns: boolean
       }
       update_own_client_profile: {
         Args: {
@@ -1570,6 +1981,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      withdraw_special_category_consent: {
+        Args: never
+        Returns: {
+          consent_id: string
+          was_active: boolean
+          withdrawn_at: string
+        }[]
+      }
       upsert_coach_meeting_exploration: {
         Args: { p_follow_up: string; p_session_id: string }
         Returns: undefined
@@ -1582,6 +2001,7 @@ export type Database = {
       client_lifecycle_status: "aktiv" | "avslutad"
       commitment_status: "oppet" | "pagar" | "genomfort"
       confidentiality_level: "coach" | "coach_klient" | "organisation"
+      contract_counterparty_type: "consumer" | "business"
       contract_signer_role: "coach" | "klient"
       contract_status:
         | "utkast"
@@ -1747,6 +2167,7 @@ export const Constants = {
       client_lifecycle_status: ["aktiv", "avslutad"],
       commitment_status: ["oppet", "pagar", "genomfort"],
       confidentiality_level: ["coach", "coach_klient", "organisation"],
+      contract_counterparty_type: ["consumer", "business"],
       contract_signer_role: ["coach", "klient"],
       contract_status: [
         "utkast",

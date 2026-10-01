@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     session.coachId,
     engagementId,
     EMPTY_DEMO_STATE,
-    await fetchPortalRepositoryData(),
+    await fetchPortalRepositoryData({ purpose: "ai" }),
   );
   if (!context) {
     return Response.json({ ok: false, error: "Uppdraget kunde inte hittas." }, { status: 404 });

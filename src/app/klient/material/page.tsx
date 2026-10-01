@@ -7,7 +7,7 @@ export default async function ClientMaterialPage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const data = await fetchPortalRepositoryData();
+  const data = await fetchPortalRepositoryData({ viewer: "klient" });
   const view = buildClientPerspective(data.coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
 

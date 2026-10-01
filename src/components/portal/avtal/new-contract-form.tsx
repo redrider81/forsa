@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { ContractContent } from "@/lib/portal/types";
+import type { ContractContent, ContractCounterpartyType } from "@/lib/portal/types";
 import type { Contract, ContractTemplate } from "@/lib/portal/contracts";
 import SectionsFieldsEditor from "@/components/portal/avtal/sections-fields-editor";
+import { CounterpartyTypeControl } from "@/components/portal/avtal/consumer-contract-panels";
 import { Panel, SectionLabel, portalButtonClass, portalFieldClass } from "@/components/portal/ui";
 
 const BLANK_CONTENT: ContractContent = { sections: [], fields: [] };
@@ -27,6 +28,8 @@ export default function NewContractForm({
   const [priceAmount, setPriceAmount] = useState("");
   const [currency, setCurrency] = useState("SEK");
   const [paymentTerms, setPaymentTerms] = useState("");
+  // Deliberately no default: the coach states consumer or business per contract.
+  const [counterpartyType, setCounterpartyType] = useState<ContractCounterpartyType | null>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "error">("idle");
 
   const selectedClient = clients.find((c) => c.id === clientId) ?? null;
@@ -62,6 +65,7 @@ export default function NewContractForm({
           priceAmount: priceAmount.trim() === "" ? null : Number(priceAmount),
           currency,
           paymentTerms: paymentTerms.trim() === "" ? null : paymentTerms,
+          counterpartyType,
         }),
       });
       if (!response.ok) throw new Error("failed");
@@ -100,6 +104,8 @@ export default function NewContractForm({
             ))}
           </select>
         </label>
+
+        <CounterpartyTypeControl value={counterpartyType} onChange={setCounterpartyType} />
 
         {selectedClient?.engagementTitle && (
           <label className="flex items-start gap-2.5 text-[0.875rem] text-zinc-700">

@@ -2,10 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { ContractContent } from "@/lib/portal/types";
+import type { ContractContent, ContractCounterpartyType } from "@/lib/portal/types";
 import type { Contract, ContractSignature } from "@/lib/portal/contracts";
 import { contractStatusLabel, contractStatusTagTone } from "@/lib/portal/status-tones";
+import {
+  canShowWithdrawalFunction,
+  COUNTERPARTY_UNCLASSIFIED_LABEL,
+  counterpartyTypeLabel,
+} from "@/lib/portal/contract-withdrawal-rules";
 import SectionsFieldsEditor from "@/components/portal/avtal/sections-fields-editor";
+import {
+  ClientWithdrawalPanel,
+  ConsumerContractFacts,
+  ConsumerSigningInformation,
+  ContractConfirmationStatus,
+  type ContractConfirmationView,
+  CounterpartyTypeControl,
+  TermsLink,
+  WithdrawalRecordPanel,
+} from "@/components/portal/avtal/consumer-contract-panels";
+import { CURRENT_GENERAL_TERMS_VERSION } from "@/lib/legal/terms-versions";
 import { Panel, PanelHeading, SectionLabel, Tag, portalButtonClass, portalFieldClass, portalGhostButtonClass } from "@/components/portal/ui";
 
 function formatDateTime(iso: string): string {
@@ -24,10 +40,13 @@ export default function ContractWorkspace({
   initialContract,
   initialSignatures,
   viewerRole,
+  confirmation = null,
 }: {
   initialContract: Contract;
   initialSignatures: ContractSignature[];
   viewerRole: "coach" | "klient";
+  /** Coach view only: state of the durable confirmation sent to a consumer. */
+  confirmation?: ContractConfirmationView | null;
 }) {
   const router = useRouter();
   const [contract, setContract] = useState(initialContract);
@@ -43,7 +62,9 @@ export default function ContractWorkspace({
   const [sendState, setSendState] = useState<"idle" | "sending" | "error">("idle");
   const [signState, setSignState] = useState<"idle" | "signing" | "error">("idle");
   const [consent, setConsent] = useState(false);
+  const [earlyStart, setEarlyStart] = useState(false);
   const [previewing, setPreviewing] = useState(false);
+  const [classifyState, setClassifyState] = useState<"idle" | "saving" | "error">("idle");
 
   const clientSignature = signatures.find((s) => s.signerRole === "klient");
   const coachSignature = signatures.find((s) => s.signerRole === "coach");
@@ -74,6 +95,23 @@ export default function ContractWorkspace({
     }
   }
 
+  async function classify(counterpartyType: ContractCounterpartyType) {
+    setClassifyState("saving");
+    try {
+      const response = await fetch(`/api/portal/avtal/${contract.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ counterpartyType }),
+      });
+      if (!response.ok) throw new Error("failed");
+      const { contract: updated } = (await response.json()) as { contract: Contract | null };
+      if (updated) setContract(updated);
+      setClassifyState("idle");
+    } catch {
+      setClassifyState("error");
+    }
+  }
+
   async function sendForSignature() {
     setSendState("sending");
     try {
@@ -91,7 +129,16 @@ export default function ContractWorkspace({
   async function sign() {
     setSignState("signing");
     try {
-      const response = await fetch(`/api/portal/avtal/${contract.id}/signera`, { method: "POST" });
+      const response = await fetch(`/api/portal/avtal/${contract.id}/signera`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // A separate, explicit choice — never implied by accepting the contract.
+        body: JSON.stringify({
+          requestEarlyPerformance: viewerRole === "klient" && earlyStart,
+          // The version shown in the consent line below; the database checks it.
+          generalTermsVersion: termsVersion,
+        }),
+      });
       if (!response.ok) throw new Error("failed");
       const { contract: updated, signatures: updatedSignatures } = (await response.json()) as {
         contract: Contract | null;
@@ -106,17 +153,37 @@ export default function ContractWorkspace({
   }
 
   const showEditor = isEditableByViewer && !previewing;
+  /** Pinned at send; a legacy contract without one is signed against the current version. */
+  const termsVersion = contract.generalTermsVersion ?? CURRENT_GENERAL_TERMS_VERSION;
+  const counterpartyLabel = contract.counterpartyType
+    ? counterpartyTypeLabel[contract.counterpartyType]
+    : COUNTERPARTY_UNCLASSIFIED_LABEL;
+  const classifyError =
+    classifyState === "error" ? (
+      <p className="mt-2 text-[0.8125rem] text-red-600">Avtalstypen kunde inte sparas.</p>
+    ) : null;
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <PanelHeading label={contract.clientName ?? undefined} title={contract.title} />
-        <Tag tone={contractStatusTagTone[contract.status]}>{contractStatusLabel[contract.status]}</Tag>
+        <div className="flex flex-wrap gap-2">
+          <Tag tone={contractStatusTagTone[contract.status]}>{contractStatusLabel[contract.status]}</Tag>
+          {contract.withdrawal ? <Tag tone="private">Ångrat</Tag> : null}
+        </div>
       </div>
 
       {showEditor ? (
         <Panel>
           <div className="flex flex-col gap-4">
+            <div>
+              <CounterpartyTypeControl
+                value={contract.counterpartyType}
+                disabled={classifyState === "saving"}
+                onChange={classify}
+              />
+              {classifyError}
+            </div>
             <label>
               <SectionLabel>Avtalstitel</SectionLabel>
               <input
@@ -175,7 +242,7 @@ export default function ContractWorkspace({
       ) : (
         <>
           <Panel>
-            <div className="grid grid-cols-1 gap-4 text-[0.8125rem] text-zinc-600 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 text-[0.8125rem] text-zinc-600 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <SectionLabel>Pris</SectionLabel>
                 <p className="mt-1.5 text-[0.9375rem] text-zinc-900">{formatAmount(contract.priceAmount, contract.currency)}</p>
@@ -187,6 +254,10 @@ export default function ContractWorkspace({
               <div>
                 <SectionLabel>Klient</SectionLabel>
                 <p className="mt-1.5 text-[0.9375rem] text-zinc-900">{contract.clientName ?? "—"}</p>
+              </div>
+              <div>
+                <SectionLabel>Avtalstyp</SectionLabel>
+                <p className="mt-1.5 text-[0.9375rem] text-zinc-900">{counterpartyLabel}</p>
               </div>
             </div>
 
@@ -223,22 +294,59 @@ export default function ContractWorkspace({
                 <button type="button" onClick={() => setPreviewing(false)} className={portalGhostButtonClass}>
                   Tillbaka till redigering
                 </button>
-                <button type="button" onClick={sendForSignature} disabled={sendState === "sending"} className={portalButtonClass}>
+                <button
+                  type="button"
+                  onClick={sendForSignature}
+                  disabled={sendState === "sending" || !contract.counterpartyType}
+                  className={portalButtonClass}
+                >
                   {sendState === "sending" ? "Skickar…" : "Skicka för signering"}
                 </button>
                 {sendState === "error" && <span className="text-[0.8125rem] text-red-600">Kunde inte skicka avtalet.</span>}
               </div>
+              {!contract.counterpartyType ? (
+                <p className="mt-3 text-[0.8125rem] text-zinc-600">
+                  Välj konsumentavtal eller företagsavtal innan avtalet skickas.
+                </p>
+              ) : null}
             </Panel>
           )}
 
           {!previewing && contract.status === "skickat" && viewerRole === "coach" && (
             <Panel>
               <p className="text-[0.9375rem] text-zinc-700">Väntar på kundens signering.</p>
+              {!contract.counterpartyType ? (
+                // Contracts sent before classification existed: the client
+                // cannot sign until the coach has stated the type.
+                <div className="mt-5 border-t border-zinc-200/80 pt-5">
+                  <CounterpartyTypeControl
+                    value={contract.counterpartyType}
+                    disabled={classifyState === "saving"}
+                    onChange={classify}
+                  />
+                  {classifyError}
+                </div>
+              ) : null}
             </Panel>
           )}
 
-          {!previewing && contract.status === "skickat" && viewerRole === "klient" && (
+          {!previewing && contract.status === "skickat" && viewerRole === "klient" && !contract.counterpartyType && (
             <Panel>
+              <p className="text-[0.9375rem] text-zinc-700">
+                Avtalet kan signeras när Carolina har bekräftat avtalstypen.
+              </p>
+            </Panel>
+          )}
+
+          {!previewing && contract.status === "skickat" && viewerRole === "klient" && contract.counterpartyType && (
+            <Panel>
+              {contract.counterpartyType === "consumer" ? (
+                <ConsumerSigningInformation
+                  earlyStart={earlyStart}
+                  onEarlyStartChange={setEarlyStart}
+                  termsVersion={termsVersion}
+                />
+              ) : null}
               <label className="flex items-start gap-2.5 text-[0.9375rem] text-zinc-800">
                 <input
                   type="checkbox"
@@ -246,7 +354,11 @@ export default function ContractWorkspace({
                   onChange={(event) => setConsent(event.target.checked)}
                   className="mt-0.5 h-4 w-4 rounded border-zinc-300"
                 />
-                <span>Jag har läst och godkänner avtalet.</span>
+                <span>
+                  Jag har läst och godkänner avtalet samt tillämpliga{" "}
+                  <TermsLink version={termsVersion}>allmänna villkor för CVB Coaching</TermsLink> (version{" "}
+                  {termsVersion}).
+                </span>
               </label>
               <div className="mt-5 flex items-center gap-3">
                 <button
@@ -271,7 +383,7 @@ export default function ContractWorkspace({
                   <span className="text-[0.8125rem] text-zinc-500">{formatDateTime(clientSignature.signedAt)}</span>
                 </p>
               )}
-              {viewerRole === "coach" && (
+              {viewerRole === "coach" && !contract.withdrawal && (
                 <div className="mt-5 flex items-center gap-3">
                   <button type="button" onClick={sign} disabled={signState === "signing"} className={portalButtonClass}>
                     {signState === "signing" ? "Signerar…" : "Signera avtal"}
@@ -279,7 +391,10 @@ export default function ContractWorkspace({
                   {signState === "error" && <span className="text-[0.8125rem] text-red-600">Kunde inte signera avtalet.</span>}
                 </div>
               )}
-              {viewerRole === "klient" && <p className="mt-3 text-[0.8125rem] text-zinc-500">Väntar på Carolinas signering.</p>}
+              {viewerRole === "klient" && !contract.withdrawal && (
+                <p className="mt-3 text-[0.8125rem] text-zinc-500">Väntar på Carolinas signering.</p>
+              )}
+              <ConsumerContractFacts contract={contract} />
             </Panel>
           )}
 
@@ -305,7 +420,32 @@ export default function ContractWorkspace({
               <p className="mt-5 text-[0.8125rem] text-zinc-500">
                 Signerat via CVB Base med autentiserat konto. Dokumentet är permanent låst.
               </p>
+              <ConsumerContractFacts contract={contract} />
+              {viewerRole === "coach" && confirmation ? (
+                <ContractConfirmationStatus confirmation={confirmation} />
+              ) : null}
             </Panel>
+          )}
+
+          {!previewing && <WithdrawalRecordPanel contract={contract} viewerRole={viewerRole} />}
+
+          {!previewing && viewerRole === "klient" && canShowWithdrawalFunction(contract) && (
+            <ClientWithdrawalPanel
+              contract={contract}
+              onWithdrawn={(requestedAt) => {
+                setContract((current) => ({
+                  ...current,
+                  withdrawal: {
+                    id: current.withdrawal?.id ?? "",
+                    requestedAt,
+                    withdrawalDeadline: current.withdrawalDeadline,
+                    requesterName: current.clientName ?? "",
+                    receiptEmail: current.clientEmail ?? "",
+                  },
+                }));
+                router.refresh();
+              }}
+            />
           )}
         </>
       )}

@@ -50,7 +50,7 @@ export function bookingIdempotencyKey(requestId: string, event: BookingNotificat
  * Raw provider payloads, credentials and stack traces never reach the
  * ledger, the browser, or a log line a visitor could see.
  */
-function sanitizeError(error: unknown): { code: string; message: string } {
+export function sanitizeError(error: unknown): { code: string; message: string } {
   const code =
     typeof error === "object" && error !== null && "code" in error && typeof error.code === "string"
       ? error.code

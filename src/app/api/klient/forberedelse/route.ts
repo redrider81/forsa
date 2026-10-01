@@ -32,19 +32,14 @@ export async function POST(request: Request) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase
-    .from("session_preparations")
-    .upsert(
-      {
-        client_id: session.clientId,
-        focus: prep.focus,
-        desired_outcome: prep.desiredOutcome,
-        changed: prep.changed,
-        follow_up: prep.followUp,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "client_id" },
-    );
+  // The client's own save, via the database function that owns the write
+  // (the text columns are not directly readable, which an upsert needs).
+  const { error } = await supabase.rpc("save_own_session_preparation", {
+    p_focus: prep.focus,
+    p_desired_outcome: prep.desiredOutcome,
+    p_changed: prep.changed,
+    p_follow_up: prep.followUp,
+  });
 
   if (error) {
     return Response.json({ ok: false, error: "Det gick inte att spara." }, { status: 502 });

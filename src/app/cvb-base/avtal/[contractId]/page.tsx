@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readCoachSession } from "@/lib/portal/session";
 import { getContract, listContractSignatures } from "@/lib/portal/contracts";
+import { getContractConfirmationState } from "@/lib/portal/contract-confirmation";
 import ContractWorkspace from "@/components/portal/avtal/contract-workspace";
 import { portalQuietLinkClass, portalPageStackClass } from "@/components/portal/ui";
 
@@ -13,7 +14,10 @@ export default async function AvtalDetailPage({ params }: { params: Promise<{ co
   const contract = await getContract(contractId);
   if (!contract || contract.coachId !== session.coachId) notFound();
 
-  const signatures = await listContractSignatures(contractId);
+  const [signatures, confirmation] = await Promise.all([
+    listContractSignatures(contractId),
+    getContractConfirmationState(contractId),
+  ]);
 
   return (
     <div className={portalPageStackClass}>
@@ -23,7 +27,12 @@ export default async function AvtalDetailPage({ params }: { params: Promise<{ co
         </Link>
       </div>
 
-      <ContractWorkspace initialContract={contract} initialSignatures={signatures} viewerRole="coach" />
+      <ContractWorkspace
+        initialContract={contract}
+        initialSignatures={signatures}
+        viewerRole="coach"
+        confirmation={confirmation}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import * as React from "react";
 import { enGB, sv } from "react-day-picker/locale";
 
 import { Button } from "@/components/ui/button";
+import BookingPrivacyNotice from "@/components/booking-privacy-notice";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { PUBLIC_BOOKING_SLUG } from "@/lib/contact/intake-types";
@@ -581,6 +582,7 @@ export default function ContactSchedulingPicker({
                 <p className="mt-4 text-center text-[0.8125rem] leading-relaxed text-zinc-500">
                   {t.form.confidentialityNote}
                 </p>
+                <BookingPrivacyNotice locale={locale} t={t} className="mt-2 text-center" />
               </div>
             </div>
           </CardContent>

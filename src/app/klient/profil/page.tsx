@@ -1,6 +1,12 @@
 import { notFound } from "next/navigation";
 import { KlientLogoutButton } from "@/components/klient/klient-nav";
 import ProfileEditor from "@/components/klient/profile-editor";
+import PortalLegalLinks from "@/components/portal/portal-legal-links";
+import SpecialCategoryConsentCard from "@/components/klient/special-category-consent-card";
+import {
+  listSpecialCategoryConsents,
+  listSpecialCategoryErasureRequests,
+} from "@/lib/portal/special-category-consent";
 import { Body, Card, CardTitle, Label, Muted } from "@/components/klient/klient-ui";
 import { readClientSession } from "@/lib/portal/session";
 import { buildClientPerspective, fetchPortalRepositoryData } from "@/lib/portal/repository";
@@ -10,7 +16,11 @@ export default async function ClientProfilePage() {
   const session = await readClientSession();
   if (!session) return null;
 
-  const data = await fetchPortalRepositoryData();
+  const [data, consentHistory, erasureRequests] = await Promise.all([
+    fetchPortalRepositoryData({ viewer: "klient" }),
+    listSpecialCategoryConsents(session.clientId),
+    listSpecialCategoryErasureRequests(session.clientId),
+  ]);
   const coach = data.coach;
   const view = buildClientPerspective(coach.id, session.clientId, undefined, undefined, data);
   if (!view) notFound();
@@ -25,7 +35,7 @@ export default async function ClientProfilePage() {
           role: client.role,
           email: client.email,
           phone: client.phone,
-          organisation: view.organisation.name,
+          organisation: view.organisation?.name ?? null,
         }}
       />
 
@@ -94,12 +104,15 @@ export default async function ClientProfilePage() {
           </dl>
           <div className="rounded-xl bg-[var(--klient-text-block-bg)] p-4">
             <Muted>
-              Reflektioner, förberedelser och noteringar delas endast med Carolina. Hennes egna
+              Reflektioner, förberedelser och noteringar som du skriver med ett aktivt samtycke delas endast med
+              Carolina — utan samtycke är de privata för dig. Hennes egna
               arbetsanteckningar visas inte här.
             </Muted>
           </div>
         </div>
       </Card>
+
+      <SpecialCategoryConsentCard initialHistory={consentHistory} initialErasureRequests={erasureRequests} />
 
       <Card>
         <Label>Material</Label>
@@ -123,6 +136,7 @@ export default async function ClientProfilePage() {
 
       <div className="pb-2">
         <KlientLogoutButton />
+        <PortalLegalLinks keys={["privacy", "baseTerms", "terms"]} className="mt-5" />
       </div>
     </div>
   );

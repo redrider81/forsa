@@ -73,7 +73,7 @@ export default function ReflectionComposer({
         <div>
           <BentoSerif>Vad har hänt sedan sist?</BentoSerif>
           <p className="mt-4 max-w-prose text-[0.875rem] leading-[1.7] text-stone-600">
-            En kort reflektion mellan sessionerna. Delas endast med Carolina.
+            En kort reflektion mellan sessionerna. Delas med Carolina när du har ett aktivt samtycke, annars privat för dig.
           </p>
           <button
             type="button"
@@ -106,7 +106,7 @@ export default function ReflectionComposer({
         <Label>Reflektion</Label>
         <SectionTitle>Ny reflektion</SectionTitle>
         <p className="mt-2 text-[0.8125rem] leading-relaxed text-stone-500">
-          Dokumentera en reflektion mellan sessionerna. Delas endast med Carolina.
+          Dokumentera en reflektion mellan sessionerna. Delas med Carolina när du har ett aktivt samtycke, annars privat för dig.
         </p>
         <button
           type="button"

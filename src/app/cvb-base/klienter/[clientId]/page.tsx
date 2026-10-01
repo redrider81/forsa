@@ -7,6 +7,13 @@ import ClientLifecycleActions from "@/components/portal/client-lifecycle-actions
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { listClientContractsForCoach } from "@/lib/portal/contracts";
+import {
+  countClientPrivateContent,
+  listSpecialCategoryConsents,
+  listSpecialCategoryErasureRequests,
+} from "@/lib/portal/special-category-consent";
+import { consentState, restrictionCutoff } from "@/lib/portal/special-category-consent-rules";
+import SpecialCategoryErasurePanel from "@/components/portal/special-category-erasure-panel";
 import { contractStatusLabel, contractStatusTagTone } from "@/lib/portal/status-tones";
 import {
   commitmentStatusLabel,
@@ -32,6 +39,13 @@ import {
   Tag,
 } from "@/components/portal/ui";
 
+const stockholmDate = new Intl.DateTimeFormat("sv-SE", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "Europe/Stockholm",
+});
+
 export default async function ClientPage({ params }: { params: Promise<{ clientId: string }> }) {
   const { clientId } = await params;
   const session = await readCoachSession();
@@ -40,7 +54,15 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
   const dossier = await getClientDossier(session.coachId, clientId);
   if (!dossier) notFound();
 
-  const contracts = await listClientContractsForCoach(clientId);
+  const [contracts, consentHistory, erasureRequests, privateContentCount] = await Promise.all([
+    listClientContractsForCoach(clientId),
+    listSpecialCategoryConsents(clientId),
+    listSpecialCategoryErasureRequests(clientId),
+    countClientPrivateContent(clientId),
+  ]);
+  const specialCategoryState = consentState(consentHistory);
+  const restrictedUntil = restrictionCutoff(consentHistory);
+  const openErasureRequest = erasureRequests.find((request) => request.completedAt === null) ?? null;
 
   const { client, engagement, organisation, completedSessions, upcomingSession } = dossier;
   const firstName = client.name.split(" ")[0];
@@ -82,8 +104,36 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
           <Tag tone={dossier.openCommitments.length > 0 ? "action" : "completed"}>
             {dossier.openCommitments.length} åtaganden att följa upp
           </Tag>
+          {/* Art. 9: whether conversation content may enter the AI support. */}
+          <Tag tone={specialCategoryState === "active" ? "completed" : "neutral"}>
+            {specialCategoryState === "active"
+              ? "Samtycke känsliga uppgifter: lämnat"
+              : specialCategoryState === "withdrawn"
+                ? "Samtycke känsliga uppgifter: återkallat"
+                : "Samtycke känsliga uppgifter: saknas"}
+          </Tag>
         </div>
+        {specialCategoryState !== "active" ? (
+          <p className="mt-2 max-w-prose text-[0.8125rem] leading-relaxed text-zinc-500">
+            {specialCategoryState === "withdrawn" && restrictedUntil
+              ? `Innehåll fram till ${stockholmDate.format(new Date(restrictedUntil))} är begränsat och visas inte. AI-stödet används utan samtalsinnehåll. Dokumentera inte känsliga uppgifter.`
+              : "AI-stödet används utan samtalsinnehåll. Dokumentera inte känsliga uppgifter."}
+          </p>
+        ) : null}
+        {privateContentCount > 0 ? (
+          <p className="mt-1 max-w-prose text-[0.8125rem] leading-relaxed text-zinc-500">
+            Klienten har privat innehåll som inte delas eftersom aktivt samtycke saknades när det skapades.
+          </p>
+        ) : null}
       </div>
+
+      {openErasureRequest ? (
+        <SpecialCategoryErasurePanel
+          clientId={client.id}
+          requestedAt={openErasureRequest.requestedAt}
+          cutoff={openErasureRequest.cutoff}
+        />
+      ) : null}
 
       {upcomingSession ? (
         <Panel>
@@ -249,7 +299,7 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
                 <RowLink
                   href={`/cvb-base/avtal/${contract.id}`}
                   title={contract.title}
-                  subtitle={formatDate(contract.createdAt)}
+                  subtitle={formatDate(contract.createdAt.slice(0, 10))}
                   trailing={<Tag tone={contractStatusTagTone[contract.status]}>{contractStatusLabel[contract.status]}</Tag>}
                 />
               </div>
