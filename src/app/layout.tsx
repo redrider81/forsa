@@ -22,10 +22,34 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const homeScreenGray = "#71717a";
+
 export const metadata: Metadata = {
   title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
   description:
     "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare, ledare och team.",
+  appleWebApp: {
+    capable: true,
+    title: "CVB Coaching",
+    statusBarStyle: "default",
+  },
+  icons: {
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+  },
+};
+
+export const viewport = {
+  themeColor: homeScreenGray,
 };
 
 export default function RootLayout({
