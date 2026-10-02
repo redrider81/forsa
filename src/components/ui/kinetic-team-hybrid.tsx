@@ -213,7 +213,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
           >
             {c.credentials}
           </p>
-          <div data-col-paragraph className="mt-10 md:mt-12">
+          <div data-col-paragraph className="mt-10 flex justify-center md:mt-12 md:justify-start">
             <Link
               href={c.linkHref}
               className="inline-flex items-center justify-center rounded-full border border-white bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-[color,background-color,border-color] duration-200 hover:border-zinc-100 hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark"
