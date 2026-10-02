@@ -24,8 +24,10 @@
   --line-progress: #d4d4d8;
   /** Mörka akter (Carolina, CVB Base, avslut) — matchar referens #1c1c1c */
   --surface-dark: #1c1c1c;
-  /** Logotyp / aktiv nav-flik — matchar aktiv pill i header */
-  --brand-gold: #ac8e5c;
+  /** Logotyp / aktiv nav-flik — sampel från cvb-monogram.png */
+  --brand-gold: #a9905f;
+  /** Hero-nav på glas: något ljusare så pillen inte känns mörkare än monogrammet */
+  --brand-gold-nav-overlay: color-mix(in srgb, var(--brand-gold) 82%, #ffffff 18%);
   /** Hero-CTA på video — ljus neutral pill (referens #f2f1ed) */
   --cta-hero-pill: #f2f1ed;
   --cta-hero-pill-hover: #e8e7e2;

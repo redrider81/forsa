@@ -637,15 +637,10 @@ export default function SiteNavigation() {
     };
   }, [mobileOpen]);
 
-  const homeMegaGlassSurface =
-    "border-white/30 bg-white/38 backdrop-blur-xl backdrop-saturate-150";
-
   const headerSurface = isHome
     ? mobileOpen
       ? "border-zinc-200/80 bg-white"
-      : megaOpen
-        ? homeMegaGlassSurface
-        : "border-transparent bg-transparent"
+      : "border-transparent bg-transparent"
     : "border-zinc-200/80 bg-white";
 
   const mobileHeaderSurface = isHome
@@ -1021,7 +1016,7 @@ export default function SiteNavigation() {
             <div
               className={
                 isHome
-                  ? `border-t shadow-[0_16px_48px_-24px_rgba(0,0,0,0.35)] ${homeMegaGlassSurface}`
+                  ? "border-t border-white/15 bg-transparent shadow-none"
                   : "border-t border-zinc-200/80 bg-white shadow-[0_12px_40px_-28px_rgba(24,24,27,0.12)]"
               }
             >
@@ -1036,16 +1031,32 @@ export default function SiteNavigation() {
                     <Link
                       href={localizedHref(coachingOverview.href)}
                       aria-current={barePathname === coachingOverview.href ? "page" : undefined}
-                      className={megaBlockLink}
+                      className={`${megaBlockLink} ${
+                        isHome
+                          ? "focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/35"
+                          : ""
+                      }`}
                     >
                       <span
-                        className={`block font-serif text-[1.5rem] font-medium leading-[1.15] tracking-[-0.02em] text-zinc-900 transition-colors duration-200 group-hover:text-[#92753a] ${
-                          barePathname === coachingOverview.href ? "text-[#92753a]" : ""
+                        className={`block font-serif text-[1.5rem] font-medium leading-[1.15] tracking-[-0.02em] transition-colors duration-200 ${
+                          isHome
+                            ? `text-white group-hover:text-[var(--brand-gold)] ${
+                                barePathname === coachingOverview.href ? "text-[var(--brand-gold)]" : ""
+                              }`
+                            : `text-zinc-900 group-hover:text-[#92753a] ${
+                                barePathname === coachingOverview.href ? "text-[#92753a]" : ""
+                              }`
                         }`}
                       >
                         {coachingOverview.label}
                       </span>
-                      <span className={`${megaBlockDesc} max-w-xl lg:max-w-2xl`}>
+                      <span
+                        className={`mt-1 block max-w-xl text-sm leading-6 transition-colors duration-200 lg:max-w-2xl ${
+                          isHome
+                            ? "text-white/78 group-hover:text-white/90"
+                            : `${megaBlockDesc} group-hover:text-zinc-700`
+                        }`}
+                      >
                         {coachingOverview.text}
                       </span>
                     </Link>
@@ -1057,16 +1068,36 @@ export default function SiteNavigation() {
                         <Link
                           href={localizedHref(item.href)}
                           aria-current={barePathname === item.href ? "page" : undefined}
-                          className={megaBlockLink}
+                          className={`${megaBlockLink} ${
+                            isHome
+                              ? "focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/35"
+                              : ""
+                          }`}
                         >
                           <span
-                            className={`${megaBlockTitle} ${
-                              barePathname === item.href ? "text-[#92753a]" : ""
-                            }`}
+                            className={
+                              isHome
+                                ? `block text-sm font-medium transition-colors duration-200 group-hover:text-[var(--brand-gold)] ${
+                                    barePathname === item.href
+                                      ? "text-[var(--brand-gold)]"
+                                      : "text-white"
+                                  }`
+                                : `${megaBlockTitle} ${
+                                    barePathname === item.href ? "text-[#92753a]" : ""
+                                  }`
+                            }
                           >
                             {item.label}
                           </span>
-                          <span className={megaBlockDesc}>{item.text}</span>
+                          <span
+                            className={
+                              isHome
+                                ? "mt-1 block text-sm leading-6 text-white/75 transition-colors duration-200 group-hover:text-white/88"
+                                : megaBlockDesc
+                            }
+                          >
+                            {item.text}
+                          </span>
                         </Link>
                       </li>
                     ))}
@@ -1075,10 +1106,18 @@ export default function SiteNavigation() {
 
                 <div className="flex min-w-0 flex-col md:col-span-5 md:pl-10 lg:col-span-5 lg:pl-14">
                   <p className={`${sectionLabelClass()} opacity-70`}>{t.nav.startHereLabel}</p>
-                  <p className="mt-4 text-[0.9375rem] font-medium leading-snug tracking-tight text-zinc-900">
+                  <p
+                    className={`mt-4 text-[0.9375rem] font-medium leading-snug tracking-tight ${
+                      isHome ? "text-white" : "text-zinc-900"
+                    }`}
+                  >
                     {t.nav.unsureTitle}
                   </p>
-                  <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-zinc-600 lg:max-w-lg">
+                  <p
+                    className={`mt-3 max-w-md text-[0.9375rem] leading-relaxed lg:max-w-lg ${
+                      isHome ? "text-zinc-300" : "text-zinc-600"
+                    }`}
+                  >
                     {t.nav.unsureBody}
                   </p>
                   <div className="mt-6 [&>a]:rounded-full">

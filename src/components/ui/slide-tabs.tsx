@@ -42,9 +42,12 @@ const listVariantClass: Record<SlideTabsVariant, string> = {
     "rounded-full border-0 bg-white p-1 shadow-[0_1px_2px_rgba(24,24,27,0.04)]",
 };
 
-/** Explicit var() — säkerställer att theme-token inte faller bort i build. */
-const slideTabCursorClass =
-  "bg-[var(--brand-gold)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)]";
+const slideTabCursorClass: Record<SlideTabsVariant, string> = {
+  overlay:
+    "bg-[var(--brand-gold-nav-overlay)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26)]",
+  solid:
+    "bg-[var(--brand-gold)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)]",
+};
 
 type SlideTabsProps = {
   variant?: SlideTabsVariant;
@@ -123,13 +126,13 @@ type SlideTabsCursorProps = {
   instant?: boolean | null;
 };
 
-function SlideTabsCursor({ position, variant: _variant, instant }: SlideTabsCursorProps) {
+function SlideTabsCursor({ position, variant, instant }: SlideTabsCursorProps) {
   return (
     <motion.li
       aria-hidden="true"
       className={cn(
         "pointer-events-none absolute inset-y-1 z-[1] rounded-full",
-        slideTabCursorClass,
+        slideTabCursorClass[variant],
       )}
       initial={false}
       animate={{
