@@ -13,6 +13,7 @@ import {
   showTargets,
 } from "@/lib/motion";
 import type { Locale } from "@/lib/i18n/config";
+import { HOME_DISPLAY } from "@/lib/homepage-typography";
 
 const CAROLINA_IMAGE = "/carolina-von-braun.webp";
 
@@ -92,7 +93,12 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
       }
 
       if (portrait) {
-        gsap.set(portrait, { autoAlpha: 0, y: motion.reveal.y, scale: 1.04, force3D: true });
+        gsap.set(portrait, {
+          autoAlpha: 0,
+          y: motion.reveal.y,
+          scale: motion.reveal.scaleFrom,
+          force3D: true,
+        });
         tl.to(
           portrait,
           {
@@ -103,7 +109,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
             ease: motion.ease.reveal,
             force3D: true,
           },
-          heading ? "-=0.52" : 0,
+          heading ? "-=0.55" : 0,
         );
       }
 
@@ -163,7 +169,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
           </p>
           <h2
             data-team-heading
-            className="max-w-sm font-serif text-[clamp(2.75rem,5.6vw,5.25rem)] font-medium leading-[1.12] tracking-[-0.04em] text-white"
+            className={`max-w-sm ${HOME_DISPLAY} text-white`}
           >
             {c.heading}
           </h2>
@@ -172,7 +178,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
               scenens tyngdpunkt i stället för en illustration bredvid rubriken. */}
           <div
             data-team-portrait
-            className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden bg-zinc-900 md:mt-14 md:aspect-[3/4] md:max-w-none"
+            className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden rounded-[1.25rem] bg-zinc-900 md:mt-14 md:aspect-[3/4] md:max-w-none md:rounded-[1.75rem] lg:rounded-[2rem]"
           >
             <Image
               src={CAROLINA_IMAGE}

@@ -19,12 +19,16 @@ export type FooterColumn = {
 type FooterProps = {
   columns: FooterColumn[];
   copyright: string;
-  wordmark?: string;
 };
 
-export function Footer({ columns, copyright, wordmark = "CVB Coaching" }: FooterProps) {
+export function Footer({ columns, copyright }: FooterProps) {
   return (
-    <div className="mt-auto w-full bg-surface-dark pt-16 text-zinc-100 md:pt-20 lg:pt-24">
+    <div className="mt-auto w-full">
+      <div
+        aria-hidden="true"
+        className="h-10 w-full bg-[#f4f4f1] sm:h-11 md:h-12"
+      />
+      <div className="w-full bg-surface-dark pt-10 text-zinc-100 md:pt-20 lg:pt-24">
       <footer className="mx-auto flex w-full max-w-6xl flex-col px-6 pb-10 pt-4 md:px-10 md:pb-12 md:pt-6">
         <div className="grid w-full grid-cols-2 gap-8 md:grid-cols-4 md:gap-x-8">
             {columns.map((section, index) => (
@@ -64,16 +68,11 @@ export function Footer({ columns, copyright, wordmark = "CVB Coaching" }: Footer
 
       <AnimatedContainer
         delay={0.45}
-        className="w-full border-t border-white/10 px-6 pb-10 pt-24 md:px-10 md:pb-12 md:pt-32 lg:pt-40"
+        className="w-full border-t border-white/10 px-6 pb-10 pt-8 md:px-10 md:pb-12 md:pt-10"
       >
-        <p
-          aria-hidden="true"
-          className="mx-auto w-full max-w-7xl text-balance text-center font-serif text-[clamp(2.5rem,6.2vw,5.75rem)] font-medium leading-[1.1] tracking-[0.06em] text-white"
-        >
-          {wordmark}
-        </p>
-        <p className="mx-auto mt-8 max-w-6xl text-xs text-zinc-600">{copyright}</p>
+        <p className="mx-auto max-w-6xl text-xs text-zinc-600">{copyright}</p>
       </AnimatedContainer>
+      </div>
     </div>
   );
 }

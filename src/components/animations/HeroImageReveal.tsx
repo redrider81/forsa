@@ -33,7 +33,7 @@ export default function HeroImageReveal({ children, className }: Props) {
           opacity: 1,
           scale: 1,
           duration: motion.duration.hero,
-          ease: motion.ease.revealSoft,
+          ease: motion.ease.hero,
           force3D: true,
           clearProps: "transform",
         },

@@ -45,10 +45,16 @@ export default function ScrollReveal({
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       if (variant === "fadeUp") {
-        gsap.set(el, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
+        gsap.set(el, {
+          autoAlpha: 0,
+          y: motion.reveal.y,
+          scale: motion.reveal.scaleFrom,
+          force3D: true,
+        });
         gsap.to(el, {
           autoAlpha: 1,
           y: 0,
+          scale: 1,
           duration: motion.duration.long,
           ease: motion.ease.reveal,
           force3D: true,
@@ -66,10 +72,16 @@ export default function ScrollReveal({
         const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(el) });
 
         if (left) {
-          gsap.set(left, { autoAlpha: 0, x: -motion.reveal.x, force3D: true });
+          gsap.set(left, {
+            autoAlpha: 0,
+            x: -motion.reveal.x,
+            y: motion.reveal.ySoft * 0.5,
+            force3D: true,
+          });
           tl.to(left, {
             autoAlpha: 1,
             x: 0,
+            y: 0,
             duration: motion.duration.long,
             ease: motion.ease.reveal,
             force3D: true,
@@ -78,31 +90,43 @@ export default function ScrollReveal({
 
         if (right && !rightHasCards && !rightHasListItems) {
           if (paragraphs?.length) {
-            gsap.set(paragraphs, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+            gsap.set(paragraphs, {
+              autoAlpha: 0,
+              y: motion.reveal.ySoft,
+              scale: motion.reveal.scaleFrom,
+              force3D: true,
+            });
             tl.to(
               paragraphs,
               {
                 autoAlpha: 1,
                 y: 0,
+                scale: 1,
                 duration: motion.duration.medium,
                 ease: motion.ease.reveal,
-                stagger: 0.1,
+                stagger: 0.12,
                 force3D: true,
               },
-              left ? "-=0.45" : 0,
+              left ? "-=0.52" : 0,
             );
           } else {
-            gsap.set(right, { autoAlpha: 0, y: motion.reveal.ySoft + 2, force3D: true });
+            gsap.set(right, {
+              autoAlpha: 0,
+              y: motion.reveal.ySoft + 2,
+              scale: motion.reveal.scaleFrom,
+              force3D: true,
+            });
             tl.to(
               right,
               {
                 autoAlpha: 1,
                 y: 0,
+                scale: 1,
                 duration: motion.duration.medium,
                 ease: motion.ease.reveal,
                 force3D: true,
               },
-              left ? "-=0.45" : 0,
+              left ? "-=0.52" : 0,
             );
           }
         }
@@ -111,13 +135,19 @@ export default function ScrollReveal({
       if (variant === "staggerList") {
         const items = el.querySelectorAll<HTMLElement>("[data-list-item]");
         if (items.length) {
-          gsap.set(items, { autoAlpha: 0, x: -12, force3D: true });
+          gsap.set(items, {
+            autoAlpha: 0,
+            y: motion.reveal.ySoft,
+            scale: motion.reveal.scaleFrom,
+            force3D: true,
+          });
           gsap.to(items, {
             autoAlpha: 1,
-            x: 0,
+            y: 0,
+            scale: 1,
             duration: motion.duration.medium,
             ease: motion.ease.reveal,
-            stagger: 0.08,
+            stagger: 0.07,
             force3D: true,
             scrollTrigger: revealScrollTrigger(el),
           });
@@ -132,10 +162,16 @@ export default function ScrollReveal({
         const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(el) });
 
         if (heading) {
-          gsap.set(heading, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
+          gsap.set(heading, {
+            autoAlpha: 0,
+            y: motion.reveal.y,
+            scale: motion.reveal.scaleFrom,
+            force3D: true,
+          });
           tl.to(heading, {
             autoAlpha: 1,
             y: 0,
+            scale: 1,
             duration: motion.duration.long,
             ease: motion.ease.reveal,
             force3D: true,
@@ -152,21 +188,22 @@ export default function ScrollReveal({
               ease: motion.ease.reveal,
               force3D: true,
             },
-            "-=0.48",
+            "-=0.5",
           );
         }
         if (actions) {
-          gsap.set(actions, { autoAlpha: 0, y: 10, force3D: true });
+          gsap.set(actions, { autoAlpha: 0, y: 8, scale: motion.reveal.scaleFrom, force3D: true });
           tl.to(
             actions,
             {
               autoAlpha: 1,
               y: 0,
+              scale: 1,
               duration: motion.duration.short,
               ease: motion.ease.revealSoft,
               force3D: true,
             },
-            "-=0.35",
+            "-=0.38",
           );
         }
       }

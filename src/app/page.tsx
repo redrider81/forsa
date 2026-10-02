@@ -11,7 +11,16 @@ import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import CoachingServicesGrid from "@/components/coaching-services-grid";
 import EngagementSection from "@/components/engagement-section";
 import KineticTeamHybrid from "@/components/ui/kinetic-team-hybrid";
+import CvbBaseBenefitsAccordion from "@/components/cvb-base-benefits-accordion";
+import HeroCoachingPathLinks, {
+  heroPathLinksPlacementClass,
+} from "@/components/hero-coaching-path-links";
 import { svDictionary } from "@/lib/i18n/dictionaries/sv";
+import {
+  HOME_DISPLAY,
+  HOME_DISPLAY_BASE,
+  HOME_DISPLAY_SM,
+} from "@/lib/homepage-typography";
 
 export const metadata: Metadata = {
   title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
@@ -41,13 +50,10 @@ const t = svDictionary;
    akt, SUB är en post. Alla aktrubriker börjar dessutom i samma vänsterkant.
 --------------------------------------------------------------------------- */
 
-const DISPLAY =
-  "font-serif text-[clamp(2.75rem,5.6vw,5.25rem)] font-medium leading-[1.12] tracking-[-0.04em]";
+const DISPLAY = HOME_DISPLAY;
 /** Base-akt: något mer auktoritet än standard DISPLAY, tak ~72px på stor desktop. */
-const DISPLAY_BASE =
-  "font-serif text-[clamp(2.75rem,6vw,4.5rem)] font-medium leading-[1.12] tracking-[-0.04em]";
-const DISPLAY_SM =
-  "font-serif text-[clamp(2.125rem,4.2vw,3.5rem)] font-medium leading-[1.18] tracking-[-0.035em]";
+const DISPLAY_BASE = HOME_DISPLAY_BASE;
+const DISPLAY_SM = HOME_DISPLAY_SM;
 const SUB =
   "font-serif text-[clamp(2.375rem,4.6vw,4.5rem)] font-medium leading-[1.14] tracking-[-0.035em]";
 const CHAPTER = "text-xs font-medium tabular-nums tracking-[0.32em]";
@@ -140,7 +146,7 @@ export default function HomePage() {
           className="relative z-0 h-[100svh] min-h-[100svh] w-full overflow-hidden md:sticky md:top-0"
         >
           <HeroVideoBackground />
-          <div className="pointer-events-none absolute inset-0 z-[1] bg-black/20" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-0 z-[1] bg-black/45" aria-hidden="true" />
           <SiteNavigation />
           <div className="pointer-events-none absolute inset-0 z-[2]">
             <div className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[max(clamp(2.5rem,8svh,4.5rem),env(safe-area-inset-bottom,0px))] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
@@ -161,23 +167,19 @@ export default function HomePage() {
                   data-hero-body
                   className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg"
                 >
-                  Professionell coaching med Carolina von Braun för dig som står inför ett vägval,
+                  Professionell coaching för dig som står inför ett vägval,
                   en förändring eller en fråga där nästa steg ännu inte är självklart.
                 </p>
-                <div className="mt-9 flex w-full flex-row flex-wrap items-center justify-center gap-3 sm:gap-3.5 md:mt-10 md:relative md:left-1/2 md:w-screen md:max-w-[100vw] md:-translate-x-1/2">
-                  <span data-hero-cta className="inline-flex justify-center">
+                <div className="mt-9 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-10 md:items-start">
+                  <span data-hero-cta className="inline-flex justify-center md:justify-start">
                     <CtaLink href="/kontakt" variant="primary" translucent>
                       Boka ett inledande samtal
-                    </CtaLink>
-                  </span>
-                  <span data-hero-cta className="inline-flex justify-center">
-                    <CtaLink href="/#coaching" variant="secondary" translucent>
-                      {t.cta.secondary}
                     </CtaLink>
                   </span>
                 </div>
               </HeroReveal>
             </div>
+            <HeroCoachingPathLinks locale="sv" className={heroPathLinksPlacementClass} />
           </div>
         </section>
 
@@ -214,7 +216,7 @@ export default function HomePage() {
                 className="mt-32 grid gap-10 md:mt-48 md:grid-cols-12 md:items-start md:gap-x-8"
               >
                 <div data-col-left className="md:col-span-5">
-                  <h2 className={`max-w-[11ch] ${DISPLAY} text-zinc-900`}>
+                  <h2 className={`max-w-[12ch] md:max-w-[11ch] ${DISPLAY} text-zinc-900`}>
                     När coaching kan vara rätt
                   </h2>
                   <figure className="relative mt-10 aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[1.25rem] sm:max-w-md md:mt-12 md:max-w-lg md:rounded-[1.75rem] lg:max-w-xl lg:rounded-[2rem]">
@@ -298,7 +300,7 @@ export default function HomePage() {
                 <p className={CHAPTER_ON_LIGHT}>03</p>
                 <h2
                   data-section-heading
-                  className={`mt-10 max-w-3xl ${DISPLAY} text-zinc-900 md:mt-14`}
+                  className={`mt-10 max-w-3xl max-md:max-w-[16.5ch] ${DISPLAY} text-zinc-900 md:mt-14`}
                 >
                   Vad arbetet består av
                 </h2>
@@ -420,7 +422,7 @@ export default function HomePage() {
                   frågan helt. Det klarnar i det första samtalet.
                 </p>
                 <div data-col-paragraph className="mt-10">
-                  <CtaLink href="/kontakt" variant="primary">Boka ett inledande samtal</CtaLink>
+                  <CtaLink href="/kontakt" variant="tertiary">Boka ett inledande samtal</CtaLink>
                 </div>
               </div>
             </ScrollReveal>
@@ -433,7 +435,7 @@ export default function HomePage() {
               mellan dem är skala och luft, inte en ny bakgrund. */}
           <div
             data-parallax-section
-            className="relative overflow-hidden bg-surface-dark pt-28 pb-24 text-zinc-100 md:pt-44 md:pb-32"
+            className="relative overflow-hidden bg-surface-dark pt-28 pb-0 text-zinc-100 md:pt-44 md:pb-32"
           >
             {/* -------------------- AKT 05 · KONTINUITET -------------------- */}
             <section className="mx-auto max-w-7xl px-6 md:px-10">
@@ -466,48 +468,12 @@ export default function HomePage() {
 
                 <div className="md:col-span-12">
                   <div className="mt-12 border-t border-white/20 md:mt-16">
-                    <div className="grid md:grid-cols-12 md:gap-x-8 lg:gap-x-10">
-                      {cvbBaseBenefits.map((row, index) => {
-                        const isPrivacyRow = index === 2;
-                        const columnClass =
-                          index === 0
-                            ? "md:col-span-5"
-                            : index === 1
-                              ? "md:col-span-5 md:col-start-8"
-                              : index === 2
-                                ? "md:col-span-5 md:border-t md:border-white/20"
-                                : "md:col-span-5 md:col-start-8 md:border-t md:border-white/20";
-
-                        return (
-                          <article
-                            key={row.title}
-                            className={`border-b border-white/20 ${columnClass} ${
-                              isPrivacyRow ? "py-10 md:py-12" : "py-7 md:py-9"
-                            }`}
-                          >
-                            <h3
-                              className={`font-serif font-medium leading-[1.3] tracking-[-0.02em] text-white ${
-                                isPrivacyRow
-                                  ? "text-xl md:text-[1.4375rem]"
-                                  : "text-lg md:text-[1.3125rem]"
-                              }`}
-                            >
-                              {row.title}
-                            </h3>
-                            <p
-                              className={`mt-2.5 max-w-md text-[1rem] font-[450] leading-[1.72] md:mt-3 md:text-[1.0625rem] md:leading-[1.75] lg:max-w-lg ${
-                                isPrivacyRow ? "text-zinc-300" : "text-zinc-400"
-                              }`}
-                            >
-                              {row.body}
-                            </p>
-                          </article>
-                        );
-                      })}
-                    </div>
+                    <CvbBaseBenefitsAccordion items={cvbBaseBenefits} />
                   </div>
-                  <p className="mt-12 max-w-2xl border-t border-white/20 pt-10 font-serif text-lg font-medium italic leading-[1.45] tracking-[-0.02em] text-zinc-400 md:mt-14 md:max-w-3xl md:pt-12 md:text-xl lg:max-w-4xl">
-                    Personlig coaching med Carolina. CVB Base som stöd före, mellan och efter samtalen.
+                  <p className="mt-12 max-w-2xl border-t border-white/20 pt-10 font-serif text-lg font-medium italic leading-[1.45] tracking-[-0.02em] text-balance text-zinc-400 md:mt-14 md:max-w-3xl md:pt-12 md:text-xl lg:max-w-4xl">
+                    <span className="max-sm:whitespace-nowrap">CVB Base som stöd</span> före, mellan
+                    <br className="sm:hidden" aria-hidden="true" />
+                    {" "}och efter samtalen.
                   </p>
                 </div>
 
@@ -586,16 +552,19 @@ export default function HomePage() {
                 <h2 data-cta-heading className={`mt-10 max-w-3xl ${DISPLAY} text-white md:mt-14`}>
                   Boka ett inledande samtal
                 </h2>
-                <div className="mt-14 grid gap-10 border-t border-white/20 pt-10 md:mt-20 md:grid-cols-12 md:gap-x-8 md:pt-12">
-                  <p data-cta-body className="max-w-xl text-[1.125rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-7">
+                <div className="mt-14 border-t border-white/20 pt-10 max-md:flex max-md:flex-col max-md:gap-8 md:mt-20 md:grid md:grid-cols-12 md:gap-x-8 md:gap-y-10 md:pt-12">
+                  <p
+                    data-cta-body
+                    className="max-w-xl text-[1.125rem] font-[450] leading-[1.75] text-zinc-300 max-md:mt-6 md:col-span-5 md:col-start-7 md:mt-0"
+                  >
                     Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
                     Samtalet är konfidentiellt.
                   </p>
-                  <div data-cta-actions className="md:col-span-5 md:col-start-7">
+                  <div
+                    data-cta-actions
+                    className="flex flex-col items-center pb-6 text-center md:col-span-5 md:col-start-7 md:items-start md:pb-0 md:text-left"
+                  >
                     <CtaLink href="/kontakt" variant="secondary" translucent>Boka ett inledande samtal</CtaLink>
-                    <p className="mt-6 text-[0.875rem] leading-[1.6] text-zinc-400">
-                      Personlig coaching · Konfidentiella samtal · Göteborg eller digitalt
-                    </p>
                   </div>
                 </div>
               </ScrollReveal>

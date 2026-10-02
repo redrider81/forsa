@@ -34,7 +34,7 @@ export default function HeroVideoBackground({
         loop
         playsInline
         preload="auto"
-        className="absolute inset-0 h-full w-full object-cover object-center"
+        className="absolute inset-0 h-full w-full object-cover object-center grayscale brightness-[0.72]"
         aria-hidden="true"
       >
         <source src={HERO_VIDEO_SRC} type="video/mp4" />

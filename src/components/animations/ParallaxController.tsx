@@ -29,6 +29,23 @@ export default function ParallaxController({ children }: Props) {
 
     const ctx = gsap.context(() => {
       const mobile = isMobile();
+
+      const hero = root.querySelector<HTMLElement>("[data-hero-sticky]");
+      const heroContent = hero?.querySelector<HTMLElement>("[data-hero-scroll-content]");
+      if (hero && heroContent && !mobile) {
+        gsap.to(heroContent, {
+          y: 40,
+          autoAlpha: 0.22,
+          ease: motion.ease.drift,
+          force3D: true,
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: motion.parallax.heroContentScrub,
+          },
+        });
+      }
       const shift = mobile
         ? motion.parallax.imageYPercent.mobile
         : motion.parallax.imageYPercent.desktop;

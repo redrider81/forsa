@@ -68,17 +68,23 @@ export default function EditorialRowsReveal({ children, className, ...rest }: Pr
           });
         }
         if (title) {
-          gsap.set(title, { autoAlpha: 0, y: 10, force3D: true });
+          gsap.set(title, {
+            autoAlpha: 0,
+            y: motion.reveal.ySoft,
+            scale: motion.reveal.scaleFrom,
+            force3D: true,
+          });
           tl.to(
             title,
             {
               autoAlpha: 1,
               y: 0,
+              scale: 1,
               duration: motion.duration.medium,
               ease: motion.ease.reveal,
               force3D: true,
             },
-            "-=0.3",
+            "-=0.32",
           );
         }
         if (body) {
@@ -89,10 +95,10 @@ export default function EditorialRowsReveal({ children, className, ...rest }: Pr
               autoAlpha: 1,
               y: 0,
               duration: motion.duration.medium,
-              ease: motion.ease.reveal,
+              ease: motion.ease.revealSoft,
               force3D: true,
             },
-            "-=0.26",
+            "-=0.28",
           );
         }
       });

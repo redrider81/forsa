@@ -15,6 +15,7 @@ export function LogoMark({
   withCoaching = true,
   descriptor,
   align = "center",
+  onDarkBackground = false,
 }: {
   className?: string;
   priority?: boolean;
@@ -22,6 +23,8 @@ export function LogoMark({
   withCoaching?: boolean;
   descriptor?: "coaching" | "base";
   align?: "center" | "start";
+  /** Hero / mörk bakgrund: något tätare ordmärke, samma guld som monogrammet. */
+  onDarkBackground?: boolean;
 }) {
   const wordmark = descriptor ?? (withCoaching !== false ? "coaching" : undefined);
   const alt = wordmark === "base" ? "CVB Base" : "CVB Coaching";
@@ -30,7 +33,7 @@ export function LogoMark({
     <span
       className={`inline-flex flex-col leading-none ${
         align === "start" ? "items-start" : "items-center"
-      } gap-3.5`}
+      } gap-5`}
     >
       <Image
         src="/cvb-monogram.png"
@@ -42,8 +45,12 @@ export function LogoMark({
       />
       {wordmark ? (
         <span
-          className={`font-serif text-[0.8125rem] font-normal uppercase tracking-[0.24em] sm:text-[0.875rem] md:text-[0.9375rem] lg:text-[1rem] ${
-            wordmark === "base" ? "text-white" : "text-[#92753a]"
+          className={`font-serif uppercase ${
+            wordmark === "base"
+              ? "text-[0.8125rem] font-normal tracking-[0.24em] text-white sm:text-[0.875rem] md:text-[0.9375rem] lg:text-[1rem]"
+              : onDarkBackground
+                ? "mt-0.5 text-[0.6875rem] font-medium tracking-[0.38em] text-[var(--brand-gold)] [text-shadow:0_1px_1px_rgba(0,0,0,0.35)] sm:text-[0.75rem] sm:tracking-[0.4em]"
+                : "mt-0.5 text-[0.75rem] font-normal tracking-[0.34em] text-[var(--brand-gold)] sm:text-[0.8125rem] sm:tracking-[0.36em] md:text-[0.875rem] lg:text-[0.9375rem] lg:tracking-[0.38em]"
           }`}
           aria-hidden="true"
         >

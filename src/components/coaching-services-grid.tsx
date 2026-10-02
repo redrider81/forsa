@@ -89,7 +89,7 @@ function buildEditorialReveal(
       y: 0,
       duration: motion.duration.long,
       ease: motion.ease.reveal,
-      stagger: 0.1,
+      stagger: 0.085,
       force3D: true,
     },
     0,
@@ -101,7 +101,7 @@ function buildEditorialReveal(
       x: 0,
       duration: motion.duration.short,
       ease: motion.ease.revealSoft,
-      stagger: 0.08,
+      stagger: 0.07,
       force3D: true,
     },
     0.12,
@@ -182,7 +182,7 @@ export default function CoachingServicesGrid({
                   <p className="mt-4 max-w-md flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
                     {service.description}
                   </p>
-                  <div className="group mt-8 md:mt-10">
+                  <div className="group mt-8 flex justify-center md:mt-10 md:justify-start">
                     <CtaLink href={service.href} variant="tertiary">
                       <span className="inline-flex items-center gap-2">
                         {service.ctaLabel}

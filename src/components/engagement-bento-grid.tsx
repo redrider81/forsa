@@ -94,7 +94,7 @@ function buildStepsReveal(
       y: 0,
       duration: motion.duration.long,
       ease: motion.ease.reveal,
-      stagger: 0.1,
+      stagger: 0.085,
       force3D: true,
     },
     0,

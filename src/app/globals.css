@@ -24,6 +24,12 @@
   --line-progress: #d4d4d8;
   /** Mörka akter (Carolina, CVB Base, avslut) — matchar referens #1c1c1c */
   --surface-dark: #1c1c1c;
+  /** Logotyp / aktiv nav-flik — matchar aktiv pill i header */
+  --brand-gold: #ac8e5c;
+  /** Hero-CTA på video — ljus neutral pill (referens #f2f1ed) */
+  --cta-hero-pill: #f2f1ed;
+  --cta-hero-pill-hover: #e8e7e2;
+  --cta-hero-pill-active: #deddd8;
 }
 
 @theme inline {
@@ -47,6 +53,7 @@
   --color-line-accent: var(--line-accent);
   --color-line-track: var(--line-track);
   --color-surface-dark: var(--surface-dark);
+  --color-brand-gold: var(--brand-gold);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
@@ -150,6 +157,15 @@ button:focus-visible {
   -webkit-backface-visibility: hidden;
 }
 
+/* Hero-pill: ljus bakgrund + mörk text (syns mot video även om utility-klasser missar) */
+[data-hero-sticky] span[data-hero-cta] > a {
+  background-color: var(--cta-hero-pill) !important;
+  color: #18181b !important;
+  -webkit-text-fill-color: #18181b;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  box-shadow: 0 2px 14px rgb(0 0 0 / 0.35);
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-editorial-image-transition] [data-editorial-image] {
     transform: none !important;
@@ -231,9 +247,8 @@ button:focus-visible {
 
   /* CTA-raden: matchar bara behållaren vars barn är knapparna (span),
      inte HeroReveal-wrappern vars data-hero-cta-barn är mikrotexten (p). */
-  [data-hero-sticky] div:has(> span[data-hero-cta]) {
-    flex-direction: row;
-    flex-wrap: wrap;
+  [data-hero-sticky] div:has(> [data-hero-cta]) {
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;

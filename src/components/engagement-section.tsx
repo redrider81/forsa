@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import EngagementBentoGrid from "@/components/engagement-bento-grid";
 import type { Locale } from "@/lib/i18n/config";
+import { HOME_DISPLAY } from "@/lib/homepage-typography";
 import {
   motion,
   prefersReducedMotion,
@@ -76,7 +77,7 @@ export default function EngagementSection({ locale, variant = "standalone" }: Pr
         {field ? (
           <>
             <p className="text-xs font-medium tabular-nums tracking-[0.32em] text-zinc-900">05</p>
-            <h2 className="mt-10 max-w-3xl font-serif text-[clamp(2.75rem,5.6vw,5.25rem)] font-medium leading-[1.12] tracking-[-0.04em] text-zinc-900 md:mt-14">
+            <h2 className={`mt-10 max-w-3xl ${HOME_DISPLAY} text-zinc-900 md:mt-14`}>
               {titles[locale]}
             </h2>
           </>

@@ -192,7 +192,7 @@ export default function CoachingPage() {
                   href="#vagar"
                   className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
                 >
-                  Individuell eller business coaching
+                  Individuell eller Företags coaching
                   <span
                     aria-hidden="true"
                     className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"

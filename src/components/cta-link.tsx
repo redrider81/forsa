@@ -23,13 +23,13 @@ const variants = {
   primary:
     "bg-zinc-700 !text-zinc-50 hover:bg-zinc-600 active:bg-zinc-800",
   primaryTranslucent:
-    "border border-white bg-white !text-zinc-900 shadow-[0_6px_28px_-10px_rgba(0,0,0,0.35)] hover:border-zinc-100 hover:bg-zinc-100 active:bg-zinc-200 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/30",
+    "border border-black/12 bg-[#f2f1ed] !text-[#18181b] shadow-[0_2px_14px_rgba(0,0,0,0.35)] hover:bg-[#e8e7e2] active:bg-[#deddd8] focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40",
   secondary:
     "border border-zinc-400 !text-zinc-700 hover:border-zinc-600 hover:bg-zinc-100 active:border-zinc-700",
   secondaryTranslucent:
-    "border border-white bg-white !text-zinc-900 shadow-[0_4px_22px_-12px_rgba(0,0,0,0.32)] hover:border-zinc-100 hover:bg-zinc-100 active:bg-zinc-200 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
+    "border border-black/12 bg-[#f2f1ed] !text-[#18181b] shadow-[0_2px_14px_rgba(0,0,0,0.35)] hover:bg-[#e8e7e2] active:bg-[#deddd8] focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40",
   tertiary:
-    "border border-zinc-300 !text-zinc-700 hover:border-zinc-500 hover:bg-zinc-50 active:border-zinc-600",
+    "border border-[#dcdcdc] bg-[#f0f0f0] !text-zinc-800 hover:border-zinc-400 hover:bg-[#e8e8e8] active:border-zinc-500 active:bg-[#e0e0e0]",
   tertiaryTranslucent:
     "border border-white/35 bg-white/10 !text-white backdrop-blur-[6px] hover:border-white/50 hover:bg-white/15 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
   gold:

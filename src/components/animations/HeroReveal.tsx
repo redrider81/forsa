@@ -37,13 +37,20 @@ export default function HeroReveal({ children, className }: Props) {
       if (label) gsap.set(label, { clipPath: "inset(100% 0 0 0)", autoAlpha: 0 });
       if (headline) {
         if (mobile) {
-          gsap.set(headline, { autoAlpha: 0, y: 18, force3D: true });
+          gsap.set(headline, {
+            autoAlpha: 0,
+            y: 16,
+            scale: motion.reveal.scaleFrom,
+            force3D: true,
+          });
         } else {
           gsap.set(headline, { clipPath: "inset(0 100% 0 0)", autoAlpha: 1 });
         }
       }
       if (body) gsap.set(body, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
-      if (ctas.length) gsap.set(ctas, { autoAlpha: 0, y: 12, force3D: true });
+      if (ctas.length) {
+        gsap.set(ctas, { autoAlpha: 0, y: 10, scale: motion.reveal.scaleFrom, force3D: true });
+      }
 
       const tl = gsap.timeline({ defaults: { ease: motion.ease.reveal } });
 
@@ -66,8 +73,14 @@ export default function HeroReveal({ children, className }: Props) {
         if (mobile) {
           tl.to(
             headline,
-            { autoAlpha: 1, y: 0, duration: motion.duration.long, ease: motion.ease.reveal },
-            0.2,
+            {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: motion.duration.long,
+              ease: motion.ease.hero,
+            },
+            0.16,
           );
         } else {
           tl.to(
@@ -75,17 +88,17 @@ export default function HeroReveal({ children, className }: Props) {
             {
               clipPath: "inset(0 0% 0 0)",
               duration: motion.duration.hero,
-              ease: motion.ease.editorial,
+              ease: motion.ease.hero,
             },
-            0.26,
+            0.22,
           );
         }
       }
       if (body) {
         tl.to(
           body,
-          { autoAlpha: 1, y: 0, duration: motion.duration.medium, ease: motion.ease.reveal },
-          mobile ? 0.48 : 0.85,
+          { autoAlpha: 1, y: 0, duration: motion.duration.medium, ease: motion.ease.revealSoft },
+          mobile ? 0.42 : 0.78,
         );
       }
       if (ctas.length) {
@@ -94,11 +107,12 @@ export default function HeroReveal({ children, className }: Props) {
           {
             autoAlpha: 1,
             y: 0,
+            scale: 1,
             duration: motion.duration.short,
-            ease: motion.ease.reveal,
-            stagger: 0.09,
+            ease: motion.ease.revealSoft,
+            stagger: 0.1,
           },
-          mobile ? 0.62 : 1,
+          mobile ? 0.56 : 0.92,
         );
       }
     }, ref);
@@ -110,7 +124,7 @@ export default function HeroReveal({ children, className }: Props) {
   }, []);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} data-hero-scroll-content className={className}>
       {children}
     </div>
   );

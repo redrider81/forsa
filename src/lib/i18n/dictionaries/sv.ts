@@ -38,7 +38,7 @@ export const svDictionary = {
   },
   cta: {
     primary: "Boka ett inledande samtal",
-    secondary: "Individuell eller business coaching",
+    secondary: "Individuell eller Företags coaching",
     tertiary: "Omfattning och investering",
     engagementLink: "Så går det till →",
   },

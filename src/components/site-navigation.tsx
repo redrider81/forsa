@@ -12,97 +12,25 @@ import {
   type FocusEvent,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import { motion, prefersReducedMotion, showTargets } from "@/lib/motion";
 import { localeFromPathname, stripLocaleFromPath, toLocalePath, type Locale } from "@/lib/i18n/config";
 import { getDictionaryForOptionalLocale } from "@/lib/i18n";
+import {
+  navHeroPillSurfaceClass,
+  SlideTabs,
+  slideTabTriggerClass,
+  syncSlideTabsCursor,
+  type SlideTabsPosition,
+} from "@/components/ui/slide-tabs";
 
 const coachingPaths = [
   "/coaching",
   "/individuell-coaching",
   "/business-coaching",
 ] as const;
-
-type CursorPosition = { left: number; width: number; opacity: number };
-
-const navCursorClass =
-  "pointer-events-none absolute top-0.5 z-0 h-[calc(100%-0.25rem)] rounded-md bg-zinc-300/95 backdrop-blur-sm motion-reduce:transition-none transition-[left,width,opacity] duration-200 ease-out";
-
-function navTabClass(isActive: boolean, overlay = false) {
-  const ringOffset = overlay
-    ? "focus-visible:ring-offset-2 focus-visible:ring-offset-white/40"
-    : "focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100";
-  const tone = isActive
-    ? "text-zinc-950"
-    : overlay
-      ? "text-zinc-800 hover:text-zinc-950"
-      : "text-zinc-700 hover:text-zinc-900";
-  return `relative z-10 inline-flex cursor-pointer items-center rounded-md px-3.5 py-2 text-sm font-medium leading-snug md:px-4 md:py-2 md:text-[0.9375rem] ${tone} ${ringOffset} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900`;
-}
-
-function syncCursorFromElement(
-  el: HTMLElement | null,
-  listEl: HTMLUListElement | null,
-  setPosition: (position: CursorPosition) => void
-) {
-  if (!el || !listEl) return;
-  setPosition({
-    left: el.offsetLeft,
-    width: el.offsetWidth,
-    opacity: 1,
-  });
-}
-
-function DesktopNavTabs({
-  pathname,
-  coachingActive,
-  children,
-}: {
-  pathname: string;
-  coachingActive: boolean;
-  children: (api: {
-    listRef: React.RefObject<HTMLUListElement | null>;
-    setPosition: (position: CursorPosition) => void;
-  }) => ReactNode;
-}) {
-  const listRef = useRef<HTMLUListElement>(null);
-  const [position, setPosition] = useState<CursorPosition>({ left: 0, width: 0, opacity: 0 });
-
-  const restToActive = useCallback(() => {
-    const listEl = listRef.current;
-    if (!listEl) return;
-    const active = listEl.querySelector<HTMLElement>('[data-nav-active="true"]');
-    if (active) {
-      syncCursorFromElement(active, listEl, setPosition);
-      return;
-    }
-    setPosition((prev) => ({ ...prev, opacity: 0 }));
-  }, []);
-
-  useEffect(() => {
-    restToActive();
-  }, [pathname, coachingActive, restToActive]);
-
-  return (
-    <ul
-      ref={listRef}
-      className="relative flex w-fit items-center gap-1 rounded-lg p-1 md:gap-1.5"
-      onMouseLeave={restToActive}
-    >
-      {children({ listRef, setPosition })}
-      <li
-        aria-hidden="true"
-        className={navCursorClass}
-        style={{
-          left: position.left,
-          width: position.width,
-          opacity: position.opacity,
-        }}
-      />
-    </ul>
-  );
-}
 
 function NavHoverTarget({
   listRef,
@@ -113,7 +41,7 @@ function NavHoverTarget({
   ...props
 }: {
   listRef: React.RefObject<HTMLUListElement | null>;
-  setPosition: (position: CursorPosition) => void;
+  setPosition: (position: SlideTabsPosition) => void;
   className: string;
   dataNavActive?: boolean;
   children: ReactNode;
@@ -125,7 +53,7 @@ function NavHoverTarget({
 
   const handleEnter = () => {
     if (!itemRef.current) return;
-    syncCursorFromElement(itemRef.current, listRef.current, setPosition);
+    syncSlideTabsCursor(itemRef.current, setPosition);
   };
 
   return (
@@ -175,18 +103,26 @@ function NavChevron({ open }: { open?: boolean }) {
   );
 }
 
-const mobileHeaderControlCluster =
-  "flex shrink-0 items-center gap-0 rounded-lg border border-zinc-900/10 bg-white/50 p-0.5 shadow-[0_1px_3px_rgba(24,24,27,0.08)] backdrop-blur-md";
+const mobileHeaderControlClusterSolid =
+  "flex shrink-0 items-center gap-0 rounded-full border border-zinc-200/75 bg-white/92 p-0 shadow-[0_1px_2px_rgba(24,24,27,0.05)] backdrop-blur-sm";
+
+const mobileHeaderControlClusterHero =
+  `flex shrink-0 items-center gap-0 rounded-full p-0 ${navHeroPillSurfaceClass}`;
+
+const mobileHeaderControlCluster = mobileHeaderControlClusterSolid;
 
 const mobileHeaderIconButton =
-  "inline-flex h-11 w-11 items-center justify-center rounded-md text-zinc-800 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "inline-flex h-9 w-9 items-center justify-center rounded-md text-zinc-800 transition-[color,background-color] duration-200 hover:bg-zinc-100/90 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+const mobileHeaderIconButtonHero =
+  "inline-flex h-9 w-9 items-center justify-center rounded-md text-white/95 transition-[color,background-color] duration-200 hover:bg-white/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
     <svg
       aria-hidden="true"
       viewBox="0 0 24 24"
-      className="h-[1.125rem] w-[1.125rem] text-current"
+      className="h-4 w-4 text-current"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.35"
@@ -203,14 +139,19 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const mobileHeaderLangTrigger =
-  "inline-flex h-11 items-center gap-1 rounded-md px-3 text-[0.6875rem] font-medium tracking-[0.18em] text-zinc-800/90 transition-[color,background-color] duration-200 hover:bg-white/70 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "inline-flex h-9 items-center gap-0.5 rounded-md px-2.5 text-[0.625rem] font-medium tracking-[0.18em] text-zinc-800/90 transition-[color,background-color] duration-200 hover:bg-zinc-100/90 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+const mobileHeaderLangTriggerHero =
+  "inline-flex h-9 items-center gap-0.5 rounded-md px-2.5 text-[0.625rem] font-medium tracking-[0.18em] text-white/95 transition-[color,background-color] duration-200 hover:bg-white/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
 function MobileHeaderLanguageDropdown({
   locale,
   pathname,
+  onHero = false,
 }: {
   locale: Locale;
   pathname: string;
+  onHero?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -255,7 +196,7 @@ function MobileHeaderLanguageDropdown({
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((prev) => !prev)}
-        className={mobileHeaderLangTrigger}
+        className={onHero ? mobileHeaderLangTriggerHero : mobileHeaderLangTrigger}
       >
         {locale === "sv" ? "SV" : "EN"}
         <NavChevron open={open} />
@@ -317,16 +258,29 @@ const mobileAudienceTitleClass =
 
 const mobileAudienceDescClass = "mt-1 block text-sm leading-6 text-zinc-600";
 
+const desktopHeaderActionBase =
+  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 md:px-4 md:py-2 md:text-[0.9375rem]";
+
+const desktopHeaderActionSolidClass = `${desktopHeaderActionBase} border border-zinc-700 bg-zinc-700 hover:border-zinc-600 hover:bg-zinc-600 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100`;
+
+const desktopHeaderActionHeroClass = `${desktopHeaderActionBase} ${navHeroPillSurfaceClass} hover:bg-white/28 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white/40`;
+
+function desktopHeaderActionClass(onHero: boolean) {
+  return onHero ? desktopHeaderActionHeroClass : desktopHeaderActionSolidClass;
+}
+
 function LanguageMenu({
   locale,
   onSelect,
   ariaLabel,
   align = "right",
+  onHero = false,
 }: {
   locale: Locale;
   onSelect: (nextLocale: Locale) => void;
   ariaLabel: string;
   align?: "left" | "right";
+  onHero?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -367,7 +321,7 @@ function LanguageMenu({
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex items-center gap-2 rounded-md border border-zinc-700/90 bg-zinc-700/90 px-3.5 py-2 text-sm font-medium tracking-wide text-white transition-colors hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 md:px-3.5 md:py-2 md:text-[0.9375rem]"
+        className={desktopHeaderActionClass(onHero)}
       >
         {locale === "en" ? "EN" : "SV"}
         <NavChevron open={open} />
@@ -424,7 +378,7 @@ function sectionLabelClass() {
 const megaItemFocus =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50";
 
-const megaBlockLink = `group -mx-2 block rounded-sm px-2 py-1.5 transition-[color,transform] duration-200 ease-out ${megaItemFocus}`;
+const megaBlockLink = `group -mx-2 block rounded-sm px-2 py-1.5 transition-colors duration-200 ease-out ${megaItemFocus}`;
 
 const megaBlockTitle =
   "block text-sm font-medium text-zinc-900 transition-colors duration-200 group-hover:text-[#92753a]";
@@ -494,6 +448,7 @@ export default function SiteNavigation() {
   const coachingMenuId = useId();
   const [megaOpen, setMegaOpen] = useState(false);
   const [panelTop, setPanelTop] = useState(0);
+  const [portalReady, setPortalReady] = useState(false);
   const coachingActive = isCoachingActive(barePathname);
   const isHome = barePathname === "/";
 
@@ -504,11 +459,16 @@ export default function SiteNavigation() {
   }, []);
 
   useEffect(() => {
+    setPortalReady(true);
+  }, []);
+
+  useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
 
     if (prefersReducedMotion()) {
       showTargets(el);
+      gsap.set(el, { clearProps: "transform" });
       return;
     }
 
@@ -522,6 +482,9 @@ export default function SiteNavigation() {
           duration: motion.duration.medium,
           ease: motion.ease.reveal,
           force3D: true,
+          onComplete: () => {
+            gsap.set(el, { clearProps: "transform" });
+          },
         },
       );
     });
@@ -529,20 +492,22 @@ export default function SiteNavigation() {
     return () => {
       ctx?.revert();
       showTargets(el);
+      gsap.set(el, { clearProps: "transform" });
     };
   }, []);
 
   useEffect(() => {
-    if (!megaOpen) return;
-
     updatePanelTop();
     window.addEventListener("resize", updatePanelTop);
-    window.addEventListener("scroll", updatePanelTop, true);
+    return () => window.removeEventListener("resize", updatePanelTop);
+  }, [updatePanelTop]);
 
-    return () => {
-      window.removeEventListener("resize", updatePanelTop);
-      window.removeEventListener("scroll", updatePanelTop, true);
-    };
+  useEffect(() => {
+    if (!megaOpen) return;
+    const raf = requestAnimationFrame(() => {
+      updatePanelTop();
+    });
+    return () => cancelAnimationFrame(raf);
   }, [megaOpen, updatePanelTop]);
 
   useEffect(
@@ -551,63 +516,8 @@ export default function SiteNavigation() {
         clearTimeout(closeTimerRef.current);
       }
     },
-    []
+    [],
   );
-
-  useEffect(() => {
-    const panel = megaPanelRef.current;
-    if (!panel) return;
-
-    let ctx: gsap.Context | undefined;
-
-    if (megaOpen) {
-      ctx = gsap.context(() => {
-        gsap.killTweensOf(panel);
-        gsap.set(panel, { visibility: "visible", pointerEvents: "auto" });
-
-        if (prefersReducedMotion()) {
-          gsap.set(panel, { opacity: 1, y: 0 });
-          return;
-        }
-
-        gsap.fromTo(
-          panel,
-          { opacity: 0, y: -8 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: motion.duration.short,
-            ease: motion.ease.revealSoft,
-            overwrite: "auto",
-          },
-        );
-      });
-    } else {
-      ctx = gsap.context(() => {
-        gsap.killTweensOf(panel);
-
-        if (prefersReducedMotion()) {
-          gsap.set(panel, { opacity: 0, y: 0, visibility: "hidden", pointerEvents: "none" });
-          return;
-        }
-
-        gsap.to(panel, {
-          opacity: 0,
-          y: -6,
-          duration: 0.26,
-          ease: motion.ease.exit,
-          overwrite: "auto",
-          onComplete: () => {
-            gsap.set(panel, { visibility: "hidden", pointerEvents: "none" });
-          },
-        });
-      });
-    }
-
-    return () => {
-      ctx?.revert();
-    };
-  }, [megaOpen]);
 
   const openMega = () => {
     if (closeTimerRef.current) {
@@ -625,21 +535,63 @@ export default function SiteNavigation() {
     setMegaOpen(false);
   };
 
-  const scheduleCloseMega = () => {
+  const isPointerInMegaZone = (x: number, y: number) => {
+    const under = document.elementFromPoint(x, y);
+    if (!(under instanceof Node)) return false;
+    return (
+      megaMenuRef.current?.contains(under) === true ||
+      megaPanelRef.current?.contains(under) === true
+    );
+  };
+
+  const scheduleCloseMega = (pointer?: { x: number; y: number }) => {
     if (closeTimerRef.current) {
       clearTimeout(closeTimerRef.current);
     }
     closeTimerRef.current = setTimeout(() => {
+      if (pointer && isPointerInMegaZone(pointer.x, pointer.y)) {
+        closeTimerRef.current = null;
+        return;
+      }
       setMegaOpen(false);
       closeTimerRef.current = null;
-    }, 120);
+    }, 300);
+  };
+
+  const leaveMegaHoverZone = (event: React.MouseEvent) => {
+    const related = event.relatedTarget;
+    if (
+      related instanceof Node &&
+      (megaMenuRef.current?.contains(related) || megaPanelRef.current?.contains(related))
+    ) {
+      return;
+    }
+    scheduleCloseMega({ x: event.clientX, y: event.clientY });
   };
 
   const handleMegaBlur = (event: FocusEvent<HTMLDivElement>) => {
     const next = event.relatedTarget;
     if (next instanceof Node && megaMenuRef.current?.contains(next)) return;
-    closeMega();
+    if (next instanceof Node && megaPanelRef.current?.contains(next)) return;
+    scheduleCloseMega();
   };
+
+  useEffect(() => {
+    setMegaOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!megaOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeMega();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [megaOpen]);
 
   const handleLanguageChange = (nextLocale: Locale) => {
     if (nextLocale === locale) return;
@@ -685,40 +637,65 @@ export default function SiteNavigation() {
     };
   }, [mobileOpen]);
 
+  const homeMegaGlassSurface =
+    "border-white/30 bg-white/38 backdrop-blur-xl backdrop-saturate-150";
+
   const headerSurface = isHome
-    ? megaOpen || mobileOpen
-      ? "border-zinc-900/10 bg-white/40"
-      : "border-transparent bg-transparent"
-    : "border-zinc-200/80 bg-zinc-50/90";
+    ? mobileOpen
+      ? "border-zinc-200/80 bg-white"
+      : megaOpen
+        ? homeMegaGlassSurface
+        : "border-transparent bg-transparent"
+    : "border-zinc-200/80 bg-white";
 
   const mobileHeaderSurface = isHome
     ? mobileOpen
-      ? "border-zinc-900/10 bg-white/90 backdrop-blur-md"
+      ? "border-zinc-200/80 bg-white"
       : "border-transparent bg-transparent"
-    : "border-b border-zinc-200/80 bg-zinc-50/95 backdrop-blur-sm";
+    : "border-b border-zinc-200/80 bg-white";
 
   const logoRingOffset = isHome
     ? "focus-visible:ring-offset-white/40"
     : "focus-visible:ring-offset-zinc-100";
 
+  const heroLogoOnDark = isHome && !mobileOpen;
+  /** Megameny får inte ändra headerhöjd — det gav synligt «wobble» vid hover. */
+  const homeHeaderLayout = isHome && !mobileOpen;
+
   return (
     <>
     <header
       ref={headerRef}
-      className={`isolate z-[100] w-full backdrop-blur-[2px] transition-[background-color,border-color] duration-150 ${
-        isHome ? `absolute left-0 right-0 top-0 ${headerSurface}` : `sticky top-0 border-b ${headerSurface}`
-      }`}
+      className={`isolate z-[100] w-full border-b transition-[background-color,border-color] duration-150 ${
+        isHome && !mobileOpen ? "backdrop-blur-[2px]" : ""
+      } ${isHome ? `absolute left-0 right-0 top-0 ${headerSurface}` : `sticky top-0 ${headerSurface}`}`}
     >
-      <div className="hidden w-full items-center justify-between px-6 py-6 md:flex md:px-10 lg:px-14 lg:py-7">
+      <div
+        className={`hidden w-full items-center justify-between px-6 md:flex md:px-10 lg:px-14 ${
+          homeHeaderLayout ? "pb-6 pt-11 lg:pb-7 lg:pt-14" : "py-6 lg:py-7"
+        }`}
+      >
         <Link
           href={localizedHref("/")}
-          className={`shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
+          className={`shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset} ${
+            heroLogoOnDark ? "translate-x-1" : ""
+          }`}
         >
-          <LogoMark className="block h-24 w-auto translate-y-0.5 lg:h-[7rem]" priority />
+          <LogoMark
+            className="block h-24 w-auto translate-y-0.5 lg:h-[7rem]"
+            onDarkBackground={heroLogoOnDark}
+            priority
+          />
         </Link>
 
-        <nav aria-label={t.nav.mainAria} className="ml-auto">
-          <DesktopNavTabs pathname={pathname} coachingActive={coachingActive}>
+        <nav
+          aria-label={t.nav.mainAria}
+          className="ml-auto flex items-center gap-2.5 md:gap-3"
+        >
+          <SlideTabs
+            variant={isHome ? "overlay" : "solid"}
+            activeKey={`${pathname}:${coachingActive}`}
+          >
             {({ listRef, setPosition }) => (
               <>
                 <NavHoverTarget
@@ -728,7 +705,7 @@ export default function SiteNavigation() {
                   listRef={listRef}
                   setPosition={setPosition}
                   dataNavActive={barePathname === "/"}
-                  className={navTabClass(barePathname === "/", isHome)}
+                  className={slideTabTriggerClass(barePathname === "/", isHome)}
                 >
                   {t.nav.home}
                 </NavHoverTarget>
@@ -738,21 +715,16 @@ export default function SiteNavigation() {
                   data-nav-active={coachingActive ? "true" : undefined}
                   className="relative list-none"
                   onMouseEnter={() => {
+                    openMega();
                     if (coachingTabRef.current) {
-                      syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
+                      syncSlideTabsCursor(coachingTabRef.current, setPosition);
                     }
                   }}
+                  onMouseLeave={leaveMegaHoverZone}
                 >
                   <div
                     ref={megaMenuRef}
                     className="relative"
-                    onMouseEnter={() => {
-                      openMega();
-                      if (coachingTabRef.current) {
-                        syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
-                      }
-                    }}
-                    onMouseLeave={scheduleCloseMega}
                     onFocus={openMega}
                     onBlur={handleMegaBlur}
                   >
@@ -763,10 +735,10 @@ export default function SiteNavigation() {
                       <Link
                         href={localizedHref(coachingOverview.href)}
                         aria-current={barePathname === coachingOverview.href ? "page" : undefined}
-                        className={`${navTabClass(coachingActive, isHome)} pr-1.5 md:pr-1.5`}
+                        className={`${slideTabTriggerClass(coachingActive, isHome, isHome && megaOpen)} pr-1.5 md:pr-1.5`}
                         onFocus={() => {
                           if (coachingTabRef.current) {
-                            syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
+                            syncSlideTabsCursor(coachingTabRef.current, setPosition);
                           }
                         }}
                       >
@@ -778,88 +750,16 @@ export default function SiteNavigation() {
                         aria-controls={coachingMenuId}
                         aria-label={coachingSubmenuLabel(megaOpen)}
                         onClick={() => (megaOpen ? closeMega() : openMega())}
-                        className={`${navTabClass(coachingActive, isHome)} pl-0.5 pr-2.5 md:pl-0.5 md:pr-3`}
+                        className={`${slideTabTriggerClass(coachingActive, isHome, isHome && megaOpen)} pl-0.5 pr-2.5 md:pl-0.5 md:pr-3`}
                         onFocus={() => {
                           if (coachingTabRef.current) {
-                            syncCursorFromElement(coachingTabRef.current, listRef.current, setPosition);
+                            syncSlideTabsCursor(coachingTabRef.current, setPosition);
                           }
                         }}
                       >
                         <NavChevron open={megaOpen} />
                       </button>
                     </span>
-
-                    <div
-                      ref={megaPanelRef}
-                      id={coachingMenuId}
-                      role="region"
-                      aria-label="Coaching"
-                      aria-hidden={!megaOpen}
-                      style={{ top: Math.max(0, panelTop - 10) }}
-                      className="pointer-events-none fixed inset-x-0 z-[100] hidden pt-2.5 opacity-0 md:block"
-                    >
-              <div className="border-t border-zinc-900/10 bg-zinc-50/95 shadow-[0_12px_40px_-28px_rgba(24,24,27,0.28)] backdrop-blur-md">
-              <div className="mx-auto max-w-6xl px-6 py-8 md:px-10 md:py-9">
-                <div className="grid gap-8 md:grid-cols-[1fr_0.42fr] md:gap-16">
-                  <div>
-                    <div className="mb-9 max-w-xl">
-                      <Link
-                        href={localizedHref(coachingOverview.href)}
-                        aria-current={barePathname === coachingOverview.href ? "page" : undefined}
-                        className={megaBlockLink}
-                      >
-                        <span
-                          className={`block font-serif text-[1.5rem] font-medium leading-[1.15] tracking-[-0.02em] text-zinc-900 transition-colors duration-200 group-hover:text-[#92753a] ${
-                            barePathname === coachingOverview.href ? "text-[#92753a]" : ""
-                          }`}
-                        >
-                          {coachingOverview.label}
-                        </span>
-                        <span className={`${megaBlockDesc} max-w-md`}>{coachingOverview.text}</span>
-                      </Link>
-                    </div>
-                    <p className={sectionLabelClass()}>{t.nav.leadershipLabel}</p>
-                    <ul className="mt-5 space-y-5">
-                      {coachingAudiences.map((item) => (
-                        <li key={item.href}>
-                          <Link
-                            href={localizedHref(item.href)}
-                            aria-current={barePathname === item.href ? "page" : undefined}
-                            className={megaBlockLink}
-                          >
-                            <span
-                              className={`${megaBlockTitle} ${
-                                barePathname === item.href ? "text-[#92753a]" : ""
-                              }`}
-                            >
-                              {item.label}
-                            </span>
-                            <span className={megaBlockDesc}>{item.text}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Sekundär kolumn: tydligt underordnad sidhierarkin till vänster. */}
-                  <div className="flex max-w-[16rem] flex-col border-zinc-900/10 md:max-w-none md:border-l md:pl-12">
-                    <p className={`${sectionLabelClass()} opacity-70`}>{t.nav.startHereLabel}</p>
-                    <p className="mt-4 text-[0.9375rem] font-medium leading-snug tracking-tight text-zinc-700">
-                      {t.nav.unsureTitle}
-                    </p>
-                    <p className="mt-3 text-[0.8125rem] leading-6 text-zinc-500">
-                      {t.nav.unsureBody}
-                    </p>
-                    <div className="mt-6 [&>a]:rounded-md">
-                      <CtaLink href={localizedHref("/kontakt")} variant="primary">
-                        {t.nav.bookFirstCall}
-                      </CtaLink>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </div>
-                    </div>
                   </div>
                 </li>
 
@@ -870,7 +770,7 @@ export default function SiteNavigation() {
                   listRef={listRef}
                   setPosition={setPosition}
                   dataNavActive={barePathname === "/om-oss"}
-                  className={navTabClass(barePathname === "/om-oss", isHome)}
+                  className={slideTabTriggerClass(barePathname === "/om-oss", isHome)}
                 >
                   {t.nav.about}
                 </NavHoverTarget>
@@ -882,56 +782,70 @@ export default function SiteNavigation() {
                   listRef={listRef}
                   setPosition={setPosition}
                   dataNavActive={barePathname === "/kontakt"}
-                  className={navTabClass(barePathname === "/kontakt", isHome)}
+                  className={slideTabTriggerClass(barePathname === "/kontakt", isHome)}
                 >
                   {t.nav.contact}
                 </NavHoverTarget>
-                <li className="list-none">
-                  <Link
-                    href="/klient-login"
-                    aria-label={t.nav.loginAriaLabel}
-                    className={`inline-flex items-center gap-2 rounded-md border border-zinc-700 bg-zinc-700 px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-zinc-600 hover:border-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2 md:px-4 md:py-2 md:text-[0.9375rem] ${
-                      isHome
-                        ? "focus-visible:ring-offset-white/40"
-                        : "focus-visible:ring-offset-zinc-100"
-                    }`}
-                  >
-                    {t.nav.login}
-                  </Link>
-                </li>
-                <li className="list-none">
-                  <LanguageMenu
-                    locale={locale}
-                    onSelect={handleLanguageChange}
-                    ariaLabel={t.languageSwitcher.ariaLabel}
-                    align="right"
-                  />
-                </li>
               </>
             )}
-          </DesktopNavTabs>
+          </SlideTabs>
+          <Link
+            href="/klient-login"
+            aria-label={t.nav.loginAriaLabel}
+            className={desktopHeaderActionClass(isHome)}
+          >
+            {t.nav.login}
+          </Link>
+          <LanguageMenu
+            locale={locale}
+            onSelect={handleLanguageChange}
+            ariaLabel={t.languageSwitcher.ariaLabel}
+            align="right"
+            onHero={isHome}
+          />
         </nav>
       </div>
 
       <div
-        className={`relative z-[120] flex w-full items-center gap-3 px-5 py-4 md:hidden md:px-10 ${mobileHeaderSurface}`}
+        className={`relative z-[120] flex w-full items-center gap-3 px-5 md:hidden md:px-10 ${
+          heroLogoOnDark ? "pb-4 pt-16" : "py-4"
+        } ${mobileHeaderSurface}`}
       >
         <Link
           href={localizedHref("/")}
-          className={`min-w-0 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset}`}
+          className={`min-w-0 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${logoRingOffset} ${
+            heroLogoOnDark ? "translate-x-1" : ""
+          }`}
         >
-          <LogoMark className="mt-0.5 block h-[4.25rem] w-auto" priority />
+          <LogoMark
+            className="block h-[4.25rem] w-auto"
+            onDarkBackground={heroLogoOnDark}
+            priority
+          />
         </Link>
-        <div className={mobileHeaderControlCluster + " ml-auto"}>
-          <MobileHeaderLanguageDropdown locale={locale} pathname={pathname} />
-          <span aria-hidden="true" className="mx-0.5 h-4 w-px bg-zinc-900/12" />
+        <div
+          className={`${
+            heroLogoOnDark ? mobileHeaderControlClusterHero : mobileHeaderControlCluster
+          } ml-auto`}
+        >
+          <MobileHeaderLanguageDropdown
+            locale={locale}
+            pathname={pathname}
+            onHero={heroLogoOnDark}
+          />
+          <span
+            aria-hidden="true"
+            className={`mx-0.5 w-px ${
+              heroLogoOnDark ? "h-3.5 bg-white/25" : "h-3.5 bg-zinc-900/12"
+            }`}
+          />
           <button
             type="button"
             aria-label={mobileOpen ? t.nav.menuClose : t.nav.menuOpen}
             aria-expanded={mobileOpen}
             aria-controls={mobileMenuId}
             onClick={toggleMobileMenu}
-            className={mobileHeaderIconButton}
+            className={heroLogoOnDark ? mobileHeaderIconButtonHero : mobileHeaderIconButton}
           >
             <MenuIcon open={mobileOpen} />
           </button>
@@ -957,11 +871,11 @@ export default function SiteNavigation() {
         aria-label={t.nav.mobileAria}
         role="dialog"
         aria-modal="true"
-        className={`absolute inset-y-0 right-0 flex w-full max-w-[min(100%,22.5rem)] flex-col border-l border-zinc-900/8 bg-[#f7f6f3]/98 shadow-[-16px_0_48px_-28px_rgba(24,24,27,0.28)] motion-reduce:transition-none transition-transform duration-300 ease-out ${
+        className={`absolute inset-y-0 right-0 flex w-full max-w-[min(100%,22.5rem)] flex-col border-l border-zinc-900/8 bg-[#f7f6f3]/98 pt-[env(safe-area-inset-top,0px)] shadow-[-16px_0_48px_-28px_rgba(24,24,27,0.28)] motion-reduce:transition-none transition-transform duration-300 ease-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-zinc-900/6 px-6 py-5">
+        <div className="flex items-center justify-between border-b border-zinc-900/6 px-6 pb-5 pt-[clamp(2.25rem,9svh,4.75rem)]">
           <LogoMark className="h-11 w-auto" />
           <button
             type="button"
@@ -973,7 +887,7 @@ export default function SiteNavigation() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-7">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-6 pb-8 pt-6">
           <ul className="divide-y divide-zinc-900/6">
             <li>
               <Link
@@ -1083,6 +997,103 @@ export default function SiteNavigation() {
         </div>
       </nav>
     </div>
+
+    {portalReady
+      ? createPortal(
+          <div
+            ref={megaPanelRef}
+            id={coachingMenuId}
+            role="region"
+            aria-label="Coaching"
+            aria-hidden={!megaOpen}
+            inert={megaOpen ? undefined : true}
+            style={{ top: Math.max(0, panelTop) }}
+            onMouseEnter={openMega}
+            onMouseLeave={leaveMegaHoverZone}
+            className={`fixed inset-x-0 z-[90] max-md:hidden ${
+              megaOpen ? "" : "pointer-events-none hidden"
+            }`}
+          >
+            <div
+              aria-hidden="true"
+              className="h-2 w-full"
+            />
+            <div
+              className={
+                isHome
+                  ? `border-t shadow-[0_16px_48px_-24px_rgba(0,0,0,0.35)] ${homeMegaGlassSurface}`
+                  : "border-t border-zinc-200/80 bg-white shadow-[0_12px_40px_-28px_rgba(24,24,27,0.12)]"
+              }
+            >
+            <div
+              className={`mx-auto w-full max-w-7xl px-6 py-8 md:px-10 md:py-10 lg:px-14 lg:py-11 ${
+                isHome ? "bg-transparent" : "bg-white"
+              }`}
+            >
+              <div className="grid gap-10 md:grid-cols-12 md:gap-x-10 lg:gap-x-14">
+                <div className="md:col-span-7 lg:col-span-7">
+                  <div className="mb-9 max-w-2xl lg:max-w-3xl">
+                    <Link
+                      href={localizedHref(coachingOverview.href)}
+                      aria-current={barePathname === coachingOverview.href ? "page" : undefined}
+                      className={megaBlockLink}
+                    >
+                      <span
+                        className={`block font-serif text-[1.5rem] font-medium leading-[1.15] tracking-[-0.02em] text-zinc-900 transition-colors duration-200 group-hover:text-[#92753a] ${
+                          barePathname === coachingOverview.href ? "text-[#92753a]" : ""
+                        }`}
+                      >
+                        {coachingOverview.label}
+                      </span>
+                      <span className={`${megaBlockDesc} max-w-xl lg:max-w-2xl`}>
+                        {coachingOverview.text}
+                      </span>
+                    </Link>
+                  </div>
+                  <p className={sectionLabelClass()}>{t.nav.leadershipLabel}</p>
+                  <ul className="mt-5 space-y-5">
+                    {coachingAudiences.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={localizedHref(item.href)}
+                          aria-current={barePathname === item.href ? "page" : undefined}
+                          className={megaBlockLink}
+                        >
+                          <span
+                            className={`${megaBlockTitle} ${
+                              barePathname === item.href ? "text-[#92753a]" : ""
+                            }`}
+                          >
+                            {item.label}
+                          </span>
+                          <span className={megaBlockDesc}>{item.text}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex min-w-0 flex-col md:col-span-5 md:pl-10 lg:col-span-5 lg:pl-14">
+                  <p className={`${sectionLabelClass()} opacity-70`}>{t.nav.startHereLabel}</p>
+                  <p className="mt-4 text-[0.9375rem] font-medium leading-snug tracking-tight text-zinc-900">
+                    {t.nav.unsureTitle}
+                  </p>
+                  <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-zinc-600 lg:max-w-lg">
+                    {t.nav.unsureBody}
+                  </p>
+                  <div className="mt-6 [&>a]:rounded-full">
+                    <CtaLink href={localizedHref("/kontakt")} variant="primary">
+                      {t.nav.bookFirstCall}
+                    </CtaLink>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>,
+          document.body,
+        )
+      : null}
     </>
   );
 }
