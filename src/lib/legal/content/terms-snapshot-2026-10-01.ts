@@ -2,8 +2,6 @@ import type { Locale } from "@/lib/i18n/config";
 import { formattedPostalAddress, LEGAL_ENTITY, LEGAL_UPDATED_AT, legalPartyName } from "@/lib/legal/company";
 import { companyFacts, formatUpdated, link, list, p, type LegalDocument } from "@/lib/legal/document";
 import { legalHref } from "@/lib/legal/links";
-import { generalTerms20261001Document } from "@/lib/legal/content/terms-snapshot-2026-10-01";
-import { isGeneralTermsVersion, type GeneralTermsVersion } from "@/lib/legal/terms-versions";
 
 /**
  * Allmänna villkor för CVB Coaching. They complement the individual
@@ -193,12 +191,12 @@ function sv(): LegalDocument {
       },
       {
         id: "personuppgifter",
-        heading: "Personuppgifter",
+        heading: "Personuppgifter och AI-stöd",
         blocks: [
           p(
             "Hur personuppgifter behandlas beskrivs i ",
             link("integritetspolicyn", L("privacy")),
-            ".",
+            ". Carolina kan använda AI-stödet i CVB Base för att förbereda och strukturera sitt arbete, enligt vad som beskrivs där. AI-stödet fattar inga beslut; coachingen genomförs av Carolina.",
           ),
         ],
       },
@@ -423,12 +421,12 @@ function en(): LegalDocument {
       },
       {
         id: "personal-data",
-        heading: "Personal data",
+        heading: "Personal data and AI support",
         blocks: [
           p(
             "How personal data is processed is described in the ",
             link("privacy policy", L("privacy")),
-            ".",
+            ". Carolina may use the AI support in CVB Base to prepare and structure her work, as described there. The AI support makes no decisions; the coaching is carried out by Carolina.",
           ),
         ],
       },
@@ -475,21 +473,7 @@ function en(): LegalDocument {
   };
 }
 
-export function termsDocument(locale: Locale): LegalDocument {
+/** Frozen general terms version 2026-10-01 — do not edit. */
+export function generalTerms20261001Document(locale: Locale): LegalDocument {
   return locale === "en" ? en() : sv();
-}
-
-/**
- * Every version of the general terms that a contract can be pinned to.
- * Only the current version exists so far and is backed by the current
- * text. Before changing the text above, copy it here under its version so
- * contracts pinned to it keep rendering exactly what the client accepted.
- */
-const GENERAL_TERMS: Record<GeneralTermsVersion, (locale: Locale) => LegalDocument> = {
-  "2026-10-01": generalTerms20261001Document,
-  "2026-10-03": termsDocument,
-};
-
-export function generalTermsDocument(version: string | null | undefined, locale: Locale): LegalDocument | null {
-  return isGeneralTermsVersion(version) ? GENERAL_TERMS[version](locale) : null;
 }

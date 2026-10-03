@@ -4,10 +4,9 @@ import { companyFacts, formatUpdated, link, list, p, type LegalDocument } from "
 import { legalHref } from "@/lib/legal/links";
 
 /**
- * Integritetspolicy. Describes the implementation as audited on 2026-09-30:
- * what the booking form stores, the CVB Base access model (RLS), exactly
- * what the AI functions send to OpenAI, the email outbox, cookies and the
- * existing end/delete lifecycle. Change the text when the code changes.
+ * Integritetspolicy — public transparency for clients and website visitors.
+ * Describes purposes, legal bases and rights at a level appropriate for legal
+ * disclosure, not internal product or system documentation.
  */
 
 const mail = link(LEGAL_ENTITY.legalEmail, `mailto:${LEGAL_ENTITY.legalEmail}`);
@@ -43,9 +42,7 @@ function sv(): LegalDocument {
           list(
             "Vi samlar bara in det som behövs för att boka ett första samtal och för att genomföra ett coachingsamarbete.",
             "Webbplatsen använder inga cookies för statistik eller marknadsföring.",
-            "I CVB Base ser du bara din egen miljö. Carolina har bara åtkomst till sina egna klienter.",
-            "Material som du markerar som privat i CVB Base syns bara för dig.",
-            "CVB Base innehåller AI-stöd som Carolina använder i sitt arbete. AI-stödet fattar inga beslut om dig.",
+            "I CVB Base ser du din egen coachingmiljö. Åtkomst till uppgifter styrs av ditt konto och dina val i tjänsten.",
             "Vi säljer inte personuppgifter och lämnar inte ut dem för andras marknadsföring.",
           ),
         ],
@@ -97,21 +94,15 @@ function sv(): LegalDocument {
       },
       {
         id: "cvb-base",
-        heading: "Hur åtkomsten är uppdelad i CVB Base",
+        heading: "CVB Base",
         blocks: [
           p(
-            "CVB Base har ingen öppen registrering. Konton skapas av CVB Coaching och du loggar in med ditt personliga konto. Åtkomsten styrs i databasen, med behörighetsregler på radnivå, och inte bara i gränssnittet:",
-          ),
-          list(
-            "Som klient ser du bara din egen coachingmiljö — aldrig andra klienters.",
-            "Carolina har bara åtkomst till de klienter hon själv arbetar med.",
-            "Material du markerar som privat syns bara för dig. Det når inte Carolina och ingår inte i något AI-underlag.",
-            "Material du delar med Carolina syns för Carolina. Det du skriver som förberedelse, reflektion eller notering syns för Carolina om du skrev det medan du hade ett aktivt samtycke till behandling av känsliga personuppgifter. Utan aktivt samtycke hålls det privat för dig — även om du lämnar samtycke senare.",
-            "Carolinas arbetsanteckningar lagras separat och visas aldrig för dig eller för en uppdragsgivare.",
-            "Uppdragsgivare har inget konto i CVB Base. Det som kan återrapporteras till en uppdragsgivare är begränsat till det ni kommit överens om i förväg, till exempel deltagande, antal genomförda sessioner och övergripande status — inte innehållet i samtalen.",
+            "CVB Base har ingen öppen registrering. Konton skapas av CVB Coaching och du loggar in med ditt personliga konto. Som klient ser du din egen coachingmiljö. Carolina har åtkomst till det som behövs för att genomföra coachingen med sina klienter.",
           ),
           p(
-            "Inget system kan vara helt säkert, men åtkomststyrningen, rollseparationen och att AI-anrop bara görs från servern är konkreta skydd som finns i tjänsten.",
+            "Information och material hanteras enligt de delnings- och åtkomstval som finns i tjänsten och enligt vad som följer av avtalet och ",
+            link("användarvillkoren för CVB Base", L("baseTerms")),
+            ". Uppdragsgivare har inget konto i CVB Base. Det som kan återrapporteras till en uppdragsgivare är begränsat till det ni kommit överens om i förväg — inte innehållet i samtalen.",
           ),
         ],
       },
@@ -126,40 +117,7 @@ function sv(): LegalDocument {
             "Sådana uppgifter behandlas med stöd av ditt uttryckliga samtycke (artikel 9.2 a). Samtycket lämnar du separat under Profil i CVB Base. Det är frivilligt, är skilt från avtalet och villkoren, och coachingen kan genomföras utan det — då ber vi dig att inte dela sådana uppgifter. Samtycket omfattar det du själv skriver i CVB Base eller berättar i samtalen och som Carolina dokumenterar. Tidpunkten för när du lämnar och återkallar samtycket registreras och historiken sparas.",
           ),
           p(
-            "Du kan när som helst återkalla samtycket under Profil. Från och med återkallelsen behandlar vi inte känsliga personuppgifter med stöd av samtycket: inget samtalsinnehåll ingår i AI-stödet, och det innehåll du har lämnat fram till återkallelsen — reflektioner, förberedelser, noteringar, åtaganden, insikter, sessionernas innehåll, sammanfattningar och Carolinas anteckningar — begränsas och används inte längre i coachingen. Du kan fortfarande se ditt eget innehåll och under Profil begära att det raderas. Behandling som skett före återkallelsen påverkas inte. Avtal, bokningar och samtyckeshistoriken bygger inte på samtycket och sparas enligt avsnittet om lagring.",
-          ),
-        ],
-      },
-      {
-        id: "ai",
-        heading: "AI-stöd i CVB Base",
-        blocks: [
-          p(
-            "CVB Base innehåller AI-funktioner. De används bara av Carolina, som stöd i hennes eget arbete, och du som klient använder dem inte. Funktionerna kan:",
-          ),
-          list(
-            "sammanställa ett underlag inför nästa session med en klient,",
-            "besvara Carolinas frågor om en viss klient,",
-            "strukturera Carolinas anteckningar från ett samtal till ett utkast till sessionssammanfattning,",
-            "besvara frågor om ett uppdrag på organisationsnivå.",
-          ),
-          p(
-            "När en funktion om en klient används skickas ett underlag som bara gäller den klienten: namn, roll, organisation och uppdrag, coachingöverenskommelse, utvecklingsmål, sessionernas fokus och önskade resultat, godkända sessionssammanfattningar, klientens förberedelse, reflektioner, insikter, åtaganden och noteringar, titlar på delade dokument samt Carolinas egna arbetsanteckningar. Vid utkast till sessionssammanfattning skickas också de anteckningar Carolina skriver från samtalet.",
-          ),
-          p(
-            "Samtalsinnehållet — sessionernas fokus och innehåll, sammanfattningar, förberedelser, reflektioner, insikter, åtaganden, noteringar och Carolinas arbetsanteckningar — ingår bara om klienten har ett aktivt samtycke till behandling av känsliga personuppgifter. Utan samtycke, eller efter att samtycket återkallats, skickas bara ramen: namn, roll, organisation och uppdrag, coachingöverenskommelse, utvecklingsmålets rubrik och kriterier, sessionsdatum och dokumenttitlar, och funktionen för utkast till sessionssammanfattning används inte. Spärren gäller hela datakällor; ingen text klassificeras automatiskt.",
-          ),
-          p(
-            "Material och filer — varken privata eller delade — ingår inte i underlaget. Funktionen på organisationsnivå får deltagarnas namn och roller, antal genomförda och bokade sessioner, milstolpar och dokument på uppdragsnivå, men inga reflektioner, sammanfattningar eller anteckningar.",
-          ),
-          p(
-            "Underlaget byggs på servern, avgränsat till den klient eller det uppdrag som är öppet, och skickas till OpenAI. Anropen görs med inställningen att OpenAI inte ska spara svaren för senare hämtning. Enligt OpenAI:s villkor för API-tjänsten används data från sådana anrop inte för att träna OpenAI:s modeller som standard, men OpenAI kan spara data under en begränsad tid för att upptäcka och förhindra missbruk.",
-          ),
-          p(
-            "AI-resultat visas bara för Carolina och publiceras aldrig automatiskt för dig eller för någon annan. Ett utkast till sessionssammanfattning delas med dig först när Carolina har granskat, redigerat och godkänt det. Carolina kan välja att skicka en sammanställning till sin egen e-post. AI-stödet används inte för automatiserade beslut som har rättsliga följder för dig eller påverkar dig på liknande sätt.",
-          ),
-          p(
-            "Rättslig grund: vårt berättigade intresse av att Carolina ska kunna förbereda och strukturera coachingen effektivt (artikel 6.1 f). Du kan invända mot behandlingen — då använder Carolina inte AI-funktionerna för ditt coachingsamarbete.",
+            "Du kan när som helst återkalla samtycket under Profil. Från och med återkallelsen behandlar vi inte känsliga personuppgifter med stöd av samtycket: innehåll som omfattas av samtycket begränsas och används inte längre i coachingen. Du kan fortfarande se ditt eget innehåll och under Profil begära att det raderas. Behandling som skett före återkallelsen påverkas inte. Avtal, bokningar och samtyckeshistoriken bygger inte på samtycket och sparas enligt avsnittet om lagring.",
           ),
         ],
       },
@@ -168,7 +126,7 @@ function sv(): LegalDocument {
         heading: "E-post från tjänsten",
         blocks: [
           p(
-            "Tjänsten skickar e-post via en e-postleverantör: bekräftelse och besked om ditt inledande samtal, notiser till Carolina, en avtalsbekräftelse med hela avtalet och villkoren när ett konsumentavtal har ingåtts och, om du ångrar ett konsumentavtal, ett mottagningsbevis. Tjänsten sparar en logg över om varje utskick lyckades, så att misslyckade utskick kan skickas om.",
+            "Tjänsten skickar e-post till dig och till Carolina, till exempel bekräftelse och besked om ditt inledande samtal, avtalsbekräftelse med avtal och villkor när ett konsumentavtal har ingåtts, och mottagningsbevis om du ångrar ett konsumentavtal.",
           ),
         ],
       },
@@ -176,18 +134,17 @@ function sv(): LegalDocument {
         id: "leverantorer",
         heading: "Leverantörer och överföringar",
         blocks: [
-          p("Vi använder följande leverantörer, som behandlar personuppgifter för vår räkning:"),
+          p("Vi använder personuppgiftsbiträden som behandlar uppgifter för vår räkning, till exempel för:"),
           list(
-            "Supabase — databas, inloggning och fillagring för CVB Base och bokningar. Databasen och filerna lagras inom EU (Frankfurt, Tyskland).",
-            "Vercel — drift av webbplatsen och serverfunktionerna. Behandlar till exempel IP-adresser och tekniska loggar när du använder webbplatsen.",
-            "OpenAI — AI-funktionerna i CVB Base, enligt avsnittet om AI-stöd.",
-            "Resend — utskick av e-post från tjänsten.",
+            "lagring av data, inloggning och fillagring i samband med CVB Base och bokningar — i regel inom EU/EES,",
+            "drift av webbplatsen och tekniska serverfunktioner,",
+            "utskick av e-post från tjänsten.",
           ),
           p(
             "E-post som skickas till Carolina hanteras också av den e-posttjänst hon använder för sin brevlåda.",
           ),
           p(
-            "Supabase, Vercel, OpenAI och Resend är amerikanska företag. Personuppgifter kan därför behandlas i, eller vara åtkomliga från, USA eller andra länder utanför EU/EES, även när lagringen sker inom EU. En sådan överföring får bara ske med stöd av EU-kommissionens beslut om adekvat skyddsnivå för företag som är certifierade enligt EU–US Data Privacy Framework, eller med EU-kommissionens standardavtalsklausuler. Kontakta oss om du vill veta mer om skyddsåtgärderna.",
+            "Vissa leverantörer är etablerade utanför EU/EES, bland annat i USA. Personuppgifter kan därför behandlas i, eller vara åtkomliga från, länder utanför EU/EES, även när lagring sker inom EU. En sådan överföring får bara ske med stöd av EU-kommissionens beslut om adekvat skyddsnivå för certifierade företag enligt EU–US Data Privacy Framework, eller med EU-kommissionens standardavtalsklausuler. Kontakta oss om du vill veta mer om skyddsåtgärderna.",
           ),
         ],
       },
@@ -197,11 +154,11 @@ function sv(): LegalDocument {
         blocks: [
           list(
             "Förfrågningar om ett första samtal sparas så länge de behövs för att hantera förfrågan och eventuell fortsatt kontakt om ett samarbete.",
-            "Innehåll i ett coachingsamarbete sparas under samarbetet. När samarbetet avslutas markeras du som avslutad klient och historiken finns kvar, så att samarbetet kan återupptas. Carolina kan radera en avslutad klient permanent, och du kan när som helst begära radering.",
-            "Material som du själv har laddat upp eller skrivit tas bort när du raderar det.",
-            "Samtyckeshistoriken (när samtycke lämnats och återkallats) och begäranden om radering sparas så länge klientuppgifterna finns kvar, även efter att innehåll raderats, så att det går att visa vad som gällde.",
-            "Skickade och signerade avtal, signaturer och uppgifter om utövad ångerrätt sparas så länge det behövs för att kunna fastställa, göra gällande eller försvara rättsliga anspråk, och i den mån de utgör räkenskapsinformation i sju år enligt bokföringslagen. CVB Base hindrar därför permanent radering av en klient som har sådana avtal.",
-            "Inloggningskontot (e-postadress och inloggningsuppgifter) tas bort separat. Kontakta oss om du vill att ditt konto raderas.",
+            "Innehåll i ett coachingsamarbete sparas under samarbetet. När samarbetet avslutas finns historiken kvar så att samarbetet kan återupptas, om inte du eller vi avslutar kontot eller begär radering enligt nedan.",
+            "Material som du själv har laddat upp eller skrivit kan du ta bort i tjänsten när funktionen finns tillgänglig.",
+            "Samtyckeshistoriken (när samtycke lämnats och återkallats) och begäranden om radering sparas så länge klientuppgifterna finns kvar, så att det går att visa vad som gällde.",
+            "Skickade och signerade avtal, signaturer och uppgifter om utövad ångerrätt sparas så länge det behövs för att kunna fastställa, göra gällande eller försvara rättsliga anspråk, och i den mån de utgör räkenskapsinformation i sju år enligt bokföringslagen.",
+            "Inloggningskontot tas bort separat. Kontakta oss om du vill att ditt konto raderas.",
           ),
         ],
       },
@@ -215,7 +172,7 @@ function sv(): LegalDocument {
             "få felaktiga uppgifter rättade — kontaktuppgifter kan du också ändra själv under Profil i CVB Base,",
             "få uppgifter raderade, om de inte måste sparas enligt lag eller behövs för rättsliga anspråk,",
             "begära att behandlingen begränsas,",
-            "invända mot behandling som grundar sig på berättigat intresse, till exempel AI-stödet,",
+            "invända mot behandling som grundar sig på berättigat intresse,",
             "få ut de uppgifter du själv har lämnat i ett strukturerat, maskinläsbart format (dataportabilitet), när behandlingen grundar sig på avtal.",
           ),
           p(
@@ -288,9 +245,7 @@ function en(): LegalDocument {
           list(
             "We only collect what is needed to book a first conversation and to carry out a coaching engagement.",
             "The website uses no cookies for statistics or marketing.",
-            "In CVB Base you only see your own environment. Carolina only has access to her own clients.",
-            "Material you mark as private in CVB Base is visible only to you.",
-            "CVB Base contains AI support that Carolina uses in her work. The AI support does not make decisions about you.",
+            "In CVB Base you see your own coaching environment. Access to data is governed by your account and your choices in the service.",
             "We do not sell personal data or disclose it for others' marketing.",
           ),
         ],
@@ -342,21 +297,15 @@ function en(): LegalDocument {
       },
       {
         id: "cvb-base",
-        heading: "How access is divided in CVB Base",
+        heading: "CVB Base",
         blocks: [
           p(
-            "CVB Base has no open registration. Accounts are created by CVB Coaching and you log in with your personal account. Access is enforced in the database, with row-level access rules, and not only in the interface:",
-          ),
-          list(
-            "As a client you only see your own coaching environment — never other clients'.",
-            "Carolina only has access to the clients she works with herself.",
-            "Material you mark as private is visible only to you. It does not reach Carolina and is not part of any AI input.",
-            "Material you share with Carolina is visible to Carolina. What you write as preparation, reflection or note is visible to Carolina if you wrote it while you had active consent to the processing of sensitive personal data. Without active consent it is kept private to you — even if you give consent later.",
-            "Carolina's working notes are stored separately and are never shown to you or to a commissioning client.",
-            "Commissioning clients have no account in CVB Base. What may be reported to a commissioning client is limited to what has been agreed in advance, for example participation, number of completed sessions and overall status — not the content of the conversations.",
+            "CVB Base has no open registration. Accounts are created by CVB Coaching and you log in with your personal account. As a client you see your own coaching environment. Carolina has access to what she needs to deliver coaching to her clients.",
           ),
           p(
-            "No system can be completely secure, but the access control, the role separation and the fact that AI calls are only made from the server are concrete safeguards in the service.",
+            "Information and material are handled according to the sharing and access choices available in the service and as follows from the contract and the ",
+            link("CVB Base terms of use", L("baseTerms")),
+            ". Commissioning clients have no account in CVB Base. What may be reported to a commissioning client is limited to what has been agreed in advance — not the content of the conversations.",
           ),
         ],
       },
@@ -371,40 +320,7 @@ function en(): LegalDocument {
             "Such data is processed on the basis of your explicit consent (Article 9(2)(a)). You give this consent separately under Profile in CVB Base. It is voluntary, separate from the contract and the terms, and the coaching can be carried out without it — in that case we ask you not to share such data. The consent covers what you write yourself in CVB Base or say in the conversations and Carolina documents. The times you give and withdraw consent are recorded and the history is kept.",
           ),
           p(
-            "You can withdraw the consent at any time under Profile. From the withdrawal onwards, we do not process sensitive personal data on the basis of the consent: no conversation content is included in the AI support, and the content you have provided up to the withdrawal — reflections, preparations, notes, commitments, insights, session content, summaries and Carolina's notes — is restricted and no longer used in the coaching. You can still see your own content and request its erasure under Profile. Processing that took place before the withdrawal is not affected. Contracts, bookings and the consent history are not based on the consent and are kept as described in the section on retention.",
-          ),
-        ],
-      },
-      {
-        id: "ai",
-        heading: "AI support in CVB Base",
-        blocks: [
-          p(
-            "CVB Base contains AI functions. They are used only by Carolina, as support in her own work; as a client you do not use them. The functions can:",
-          ),
-          list(
-            "compile preparation material ahead of the next session with a client,",
-            "answer Carolina's questions about a specific client,",
-            "structure Carolina's notes from a conversation into a draft session summary,",
-            "answer questions about an engagement at organisation level.",
-          ),
-          p(
-            "When a client function is used, input concerning only that client is sent: name, role, organisation and engagement, coaching agreement, development goals, the sessions' focus and desired outcomes, approved session summaries, the client's preparation, reflections, insights, commitments and notes, titles of shared documents and Carolina's own working notes. For a draft session summary, the notes Carolina writes from the conversation are also sent.",
-          ),
-          p(
-            "The conversation content — the sessions' focus and content, summaries, preparations, reflections, insights, commitments, notes and Carolina's working notes — is included only if the client has active consent to the processing of sensitive personal data. Without consent, or after the consent has been withdrawn, only the framework is sent: name, role, organisation and engagement, coaching agreement, the development goal's heading and criteria, session dates and document titles, and the draft session summary function is not used. The gate applies to whole data sources; no text is classified automatically.",
-          ),
-          p(
-            "Material and files — neither private nor shared — are not part of the input. The organisation-level function receives participants' names and roles, the number of completed and booked sessions, milestones and engagement-level documents, but no reflections, summaries or notes.",
-          ),
-          p(
-            "The input is built on the server, limited to the client or engagement that is open, and sent to OpenAI. The calls are made with the setting that OpenAI should not store the responses for later retrieval. Under OpenAI's terms for the API service, data from such calls is not used to train OpenAI's models by default, but OpenAI may retain data for a limited time to detect and prevent abuse.",
-          ),
-          p(
-            "AI results are shown only to Carolina and are never published automatically to you or anyone else. A draft session summary is shared with you only after Carolina has reviewed, edited and approved it. Carolina may choose to send a compilation to her own email. The AI support is not used for automated decisions that produce legal effects concerning you or similarly affect you.",
-          ),
-          p(
-            "Legal basis: our legitimate interest in Carolina being able to prepare and structure the coaching effectively (Article 6(1)(f)). You can object to the processing — Carolina will then not use the AI functions for your coaching engagement.",
+            "You can withdraw the consent at any time under Profile. From the withdrawal onwards, we do not process sensitive personal data on the basis of the consent: content covered by the consent is restricted and no longer used in the coaching. You can still see your own content and request its erasure under Profile. Processing that took place before the withdrawal is not affected. Contracts, bookings and the consent history are not based on the consent and are kept as described in the section on retention.",
           ),
         ],
       },
@@ -413,7 +329,7 @@ function en(): LegalDocument {
         heading: "Email from the service",
         blocks: [
           p(
-            "The service sends email through an email provider: confirmation of and reply to your introductory conversation, notifications to Carolina, a contract confirmation containing the full contract and terms when a consumer contract has been concluded and, if you withdraw from a consumer contract, an acknowledgement of receipt. The service keeps a log of whether each message was sent, so that failed messages can be resent.",
+            "The service sends email to you and to Carolina, for example confirmation of and reply to your introductory conversation, a contract confirmation with the contract and terms when a consumer contract has been concluded, and an acknowledgement of receipt if you withdraw from a consumer contract.",
           ),
         ],
       },
@@ -421,16 +337,15 @@ function en(): LegalDocument {
         id: "processors",
         heading: "Providers and transfers",
         blocks: [
-          p("We use the following providers, which process personal data on our behalf:"),
+          p("We use processors that process personal data on our behalf, for example for:"),
           list(
-            "Supabase — database, login and file storage for CVB Base and bookings. The database and files are stored within the EU (Frankfurt, Germany).",
-            "Vercel — hosting of the website and the server functions. Processes, for example, IP addresses and technical logs when you use the website.",
-            "OpenAI — the AI functions in CVB Base, as described in the section on AI support.",
-            "Resend — sending email from the service.",
+            "storage of data, login and file storage in connection with CVB Base and bookings — generally within the EU/EEA,",
+            "hosting of the website and technical server functions,",
+            "sending email from the service.",
           ),
           p("Email sent to Carolina is also handled by the email service she uses for her mailbox."),
           p(
-            "Supabase, Vercel, OpenAI and Resend are US companies. Personal data may therefore be processed in, or be accessible from, the United States or other countries outside the EU/EEA, even when it is stored within the EU. Such a transfer may only take place on the basis of the European Commission's adequacy decision for companies certified under the EU–US Data Privacy Framework, or with the European Commission's standard contractual clauses. Contact us if you would like to know more about the safeguards.",
+            "Some providers are established outside the EU/EEA, including in the United States. Personal data may therefore be processed in, or be accessible from, countries outside the EU/EEA, even when storage is within the EU. Such a transfer may only take place on the basis of the European Commission's adequacy decision for companies certified under the EU–US Data Privacy Framework, or with the European Commission's standard contractual clauses. Contact us if you would like to know more about the safeguards.",
           ),
         ],
       },
@@ -440,11 +355,11 @@ function en(): LegalDocument {
         blocks: [
           list(
             "Requests for a first conversation are kept for as long as they are needed to handle the request and any further contact about an engagement.",
-            "Content in a coaching engagement is kept during the engagement. When it ends, you are marked as a former client and the history remains, so that the engagement can be resumed. Carolina can permanently delete a former client, and you can request erasure at any time.",
-            "Material you have uploaded or written yourself is removed when you delete it.",
-            "The consent history (when consent was given and withdrawn) and erasure requests are kept for as long as the client record exists, even after content has been erased, so that it can be shown what applied.",
-            "Sent and signed contracts, signatures and records of exercised withdrawal rights are kept for as long as needed to establish, exercise or defend legal claims, and to the extent they are accounting records for seven years under the Swedish Bookkeeping Act. CVB Base therefore prevents permanent deletion of a client who has such contracts.",
-            "The login account (email address and login credentials) is removed separately. Contact us if you want your account deleted.",
+            "Content in a coaching engagement is kept during the engagement. When it ends, the history remains so that the engagement can be resumed, unless you or we close the account or request erasure as described below.",
+            "Material you have uploaded or written yourself can be removed in the service where the function is available.",
+            "The consent history (when consent was given and withdrawn) and erasure requests are kept for as long as the client record exists, so that it can be shown what applied.",
+            "Sent and signed contracts, signatures and records of exercised withdrawal rights are kept for as long as needed to establish, exercise or defend legal claims, and to the extent they are accounting records for seven years under the Swedish Bookkeeping Act.",
+            "The login account is removed separately. Contact us if you want your account deleted.",
           ),
         ],
       },
@@ -458,7 +373,7 @@ function en(): LegalDocument {
             "have inaccurate data rectified — you can also change your contact details yourself under Profile in CVB Base,",
             "have data erased, unless it must be kept by law or is needed for legal claims,",
             "request restriction of processing,",
-            "object to processing based on legitimate interest, for example the AI support,",
+            "object to processing based on legitimate interest,",
             "receive the data you have provided in a structured, machine-readable format (data portability), where the processing is based on a contract.",
           ),
           p(

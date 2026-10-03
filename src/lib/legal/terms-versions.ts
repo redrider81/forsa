@@ -8,11 +8,11 @@
  * version here and to the accepted list in the database RPCs
  * (send_contract_for_signature, sign_contract_as_client).
  */
-export const GENERAL_TERMS_VERSIONS = ["2026-10-01"] as const;
+export const GENERAL_TERMS_VERSIONS = ["2026-10-01", "2026-10-03"] as const;
 
 export type GeneralTermsVersion = (typeof GENERAL_TERMS_VERSIONS)[number];
 
-export const CURRENT_GENERAL_TERMS_VERSION: GeneralTermsVersion = "2026-10-01";
+export const CURRENT_GENERAL_TERMS_VERSION: GeneralTermsVersion = "2026-10-03";
 
 export function isGeneralTermsVersion(value: unknown): value is GeneralTermsVersion {
   return typeof value === "string" && (GENERAL_TERMS_VERSIONS as readonly string[]).includes(value);

@@ -36,7 +36,7 @@ vi.mock("@/components/animations/HeroReveal", () => ({
 }));
 
 // "Current" terms move to a newer version in some tests; the registry itself is real.
-const termsState = { current: "2026-10-01" };
+const termsState = { current: "2026-10-03" };
 vi.mock("@/lib/legal/terms-versions", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/legal/terms-versions")>();
   return {
@@ -64,6 +64,7 @@ function query(table: string) {
       return builder;
     },
     order: () => builder,
+    limit: () => builder,
     maybeSingle: async () => ({ data: result()[0] ?? null, error: null }),
     single: async () => ({ data: result()[0] ?? null, error: null }),
     then(resolve: (value: { data: Row[]; error: null }) => unknown) {
@@ -115,6 +116,7 @@ import SpecialCategoryConsentCard from "@/components/klient/special-category-con
 import { POST as consentPost } from "@/app/api/klient/samtycke/route";
 import { POST as erasePost } from "@/app/api/portal/klienter/[clientId]/kansliga-uppgifter/radera/route";
 import { generalTermsDocument, termsDocument } from "@/lib/legal/content/terms";
+import { generalTerms20261001Document } from "@/lib/legal/content/terms-snapshot-2026-10-01";
 import { GENERAL_TERMS_VERSIONS } from "@/lib/legal/terms-versions";
 import { sendContractForSignature } from "@/lib/portal/contracts";
 import { dispatchContractConfirmation } from "@/lib/portal/contract-confirmation";
@@ -130,6 +132,10 @@ const postWithdrawalSql = readFileSync(
 );
 const termsSql = readFileSync(
   new URL("../supabase/migrations/20261001100100_cvb_base_contract_terms_version.sql", import.meta.url),
+  "utf-8",
+);
+const termsVersionSql = readFileSync(
+  new URL("../supabase/migrations/20261003100000_general_terms_version_2026_10_03.sql", import.meta.url),
   "utf-8",
 );
 const repositorySource = readFileSync(new URL("../src/lib/portal/repository.ts", import.meta.url), "utf-8");
@@ -220,7 +226,7 @@ const RESTRICTED_SOURCES = [
 beforeEach(() => {
   db.tables = {};
   db.rpc = [];
-  termsState.current = "2026-10-01";
+  termsState.current = "2026-10-03";
   vi.mocked(readClientSession).mockReset();
   vi.mocked(readCoachSession).mockReset();
   vi.mocked(readSession).mockReset();
@@ -403,9 +409,11 @@ describe("samtyckeskortet efter återkallelse", () => {
 // ================================================================== B. TERMS VERSION
 
 describe("villkorsversioner", () => {
-  it("nuvarande version backas av den nuvarande texten; okänd version finns inte", () => {
+  it("nuvarande version backas av den nuvarande texten; 2026-10-01 är fryst; okänd version finns inte", () => {
     expect(GENERAL_TERMS_VERSIONS).toContain("2026-10-01");
-    expect(generalTermsDocument("2026-10-01", "sv")).toEqual(termsDocument("sv"));
+    expect(GENERAL_TERMS_VERSIONS).toContain("2026-10-03");
+    expect(generalTermsDocument("2026-10-01", "sv")).toEqual(generalTerms20261001Document("sv"));
+    expect(generalTermsDocument("2026-10-03", "sv")).toEqual(termsDocument("sv"));
     expect(generalTermsDocument("2099-01-01", "sv")).toBeNull();
     expect(generalTermsDocument(null, "sv")).toBeNull();
   });
@@ -414,7 +422,7 @@ describe("villkorsversioner", () => {
     await sendContractForSignature("contract-1");
     expect(db.rpc.at(-1)).toEqual({
       name: "send_contract_for_signature",
-      args: { p_contract_id: "contract-1", p_general_terms_version: "2026-10-01" },
+      args: { p_contract_id: "contract-1", p_general_terms_version: "2026-10-03" },
     });
   });
 
@@ -477,13 +485,37 @@ describe("villkorsversioner", () => {
   });
 
   it("versionssidan visar exakt den versionen, ej indexerad, endast kända versioner", async () => {
-    expect(versionedTermsParams()).toEqual([{ version: "2026-10-01" }]);
-    const meta = await versionedTermsMetadata({ params: Promise.resolve({ version: "2026-10-01" }) });
-    expect(meta.robots).toEqual({ index: false, follow: true });
+    expect(versionedTermsParams()).toEqual([{ version: "2026-10-03" }]);
+    const meta = await versionedTermsMetadata({ params: Promise.resolve({ version: "2026-10-03" }) });
+    expect(meta.robots).toEqual({ index: false, follow: false });
+
+    vi.mocked(readClientSession).mockResolvedValue(null);
+    vi.mocked(readCoachSession).mockResolvedValue(null);
+    await expect(VersionedTermsPage({ params: Promise.resolve({ version: "2026-10-01" }) })).rejects.toThrow(
+      "NEXT_NOT_FOUND",
+    );
+
+    db.tables.contracts = [
+      {
+        id: "contract-hist",
+        client_id: CLIENT,
+        coach_id: COACH,
+        general_terms_version: "2026-10-01",
+      },
+    ];
+    vi.mocked(readClientSession).mockResolvedValue({ userId: "u", name: "Klara", clientId: CLIENT });
     const html = renderToStaticMarkup(await VersionedTermsPage({ params: Promise.resolve({ version: "2026-10-01" }) }));
     expect(html).toContain("Allmänna villkor för coaching");
     expect(html).toContain("Version 2026-10-01");
-    await expect(VersionedTermsPage({ params: Promise.resolve({ version: "2099-01-01" }) })).rejects.toThrow("NEXT_NOT_FOUND");
+
+    const currentHtml = renderToStaticMarkup(
+      await VersionedTermsPage({ params: Promise.resolve({ version: "2026-10-03" }) }),
+    );
+    expect(currentHtml).toContain("Personuppgifter</h2>");
+
+    await expect(VersionedTermsPage({ params: Promise.resolve({ version: "2099-01-01" }) })).rejects.toThrow(
+      "NEXT_NOT_FOUND",
+    );
   });
 
   it("SQL: låses vid sändning, oföränderlig efter, ingen backfill av äldre avtal", () => {
@@ -492,6 +524,7 @@ describe("villkorsversioner", () => {
     expect(termsSql).toContain("raise exception 'TERMS_VERSION_MISMATCH'");
     expect(termsSql).toContain("general_terms_version = coalesce(v_row.general_terms_version, p_general_terms_version)");
     expect(termsSql).not.toMatch(/update public\.contracts\s+set general_terms_version/);
-    expect(termsSql).toContain(`not in ('${GENERAL_TERMS_VERSIONS.join("', '")}')`);
+    expect(termsSql).toContain("not in ('2026-10-01')");
+    expect(termsVersionSql).toContain(`not in ('${GENERAL_TERMS_VERSIONS.join("', '")}')`);
   });
 });

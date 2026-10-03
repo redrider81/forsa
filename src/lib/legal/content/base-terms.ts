@@ -46,15 +46,13 @@ function sv(): LegalDocument {
         id: "material",
         heading: "Ditt material — privat och delat",
         blocks: [
-          list(
-            "Material och anteckningar som du markerar som privata syns bara för dig.",
-            "Material som du delar med Carolina syns i hennes vy av ditt coachingsamarbete och kan användas i ert arbete.",
-            "Förberedelser, reflektioner och noteringar som du skriver syns för Carolina om du skrev dem medan du hade ett aktivt samtycke till behandling av känsliga personuppgifter. Utan aktivt samtycke hålls de privata för dig, även om du lämnar samtycke senare.",
-            "Material som Carolina delar med dig visas under Material.",
-            "Carolinas egna arbetsanteckningar visas inte för dig.",
+          p(
+            "Information och material hanteras enligt de delnings- och åtkomstval som finns i tjänsten och som beskrivs i ",
+            link("integritetspolicyn", L("privacy")),
+            ".",
           ),
           p(
-            "Du ansvarar för det du laddar upp och skriver. Ladda bara upp sådant du har rätt att dela, och dela bara känsliga personuppgifter, till exempel om hälsa, om du har lämnat det separata samtycket under Profil. Det du själv laddar upp kan du ta bort.",
+            "Du ansvarar för det du laddar upp och skriver. Ladda bara upp sådant du har rätt att dela, och dela bara känsliga personuppgifter, till exempel om hälsa, om du har lämnat det separata samtycket under Profil. Det du själv laddar upp kan du ta bort när funktionen finns tillgänglig.",
           ),
         ],
       },
@@ -70,20 +68,6 @@ function sv(): LegalDocument {
             "använda tjänsten för något annat än ditt coachingsamarbete.",
           ),
           p("Vid allvarlig eller upprepad överträdelse kan CVB Coaching stänga av kontot."),
-        ],
-      },
-      {
-        id: "ai",
-        heading: "AI-funktioner",
-        blocks: [
-          p(
-            "CVB Base innehåller AI-funktioner som Carolina använder som stöd i sitt arbete, till exempel för att sammanställa underlag inför en session eller strukturera anteckningar till ett utkast. AI-resultat är ett stöd och kan innehålla fel eller brister. Carolina ansvarar för att granska det hon använder, och ett utkast till sessionssammanfattning delas med dig först när hon har granskat och godkänt det. Samtalsinnehåll ingår i AI-underlaget bara om du har lämnat samtycke till behandling av känsliga personuppgifter.",
-          ),
-          p(
-            "Vilka uppgifter som används och hur beskrivs i ",
-            link("integritetspolicyn", L("privacy")),
-            ".",
-          ),
         ],
       },
       {
@@ -185,15 +169,13 @@ function en(): LegalDocument {
         id: "material",
         heading: "Your material — private and shared",
         blocks: [
-          list(
-            "Material and notes you mark as private are visible only to you.",
-            "Material you share with Carolina is visible in her view of your engagement and may be used in your work together.",
-            "Preparations, reflections and notes you write are visible to Carolina if you wrote them while you had active consent to the processing of sensitive personal data. Without active consent they are kept private to you, even if you give consent later.",
-            "Material Carolina shares with you is shown under Material.",
-            "Carolina's own working notes are not shown to you.",
+          p(
+            "Information and material are handled according to the sharing and access choices available in the service and as described in the ",
+            link("privacy policy", L("privacy")),
+            ".",
           ),
           p(
-            "You are responsible for what you upload and write. Only upload what you have the right to share, and only share sensitive personal data, such as health information, if you have given the separate consent under Profile. You can delete what you have uploaded yourself.",
+            "You are responsible for what you upload and write. Only upload what you have the right to share, and only share sensitive personal data, such as health information, if you have given the separate consent under Profile. You can remove what you have uploaded yourself where the function is available.",
           ),
         ],
       },
@@ -209,16 +191,6 @@ function en(): LegalDocument {
             "use the service for anything other than your coaching engagement.",
           ),
           p("In the event of a serious or repeated breach, CVB Coaching may suspend the account."),
-        ],
-      },
-      {
-        id: "ai",
-        heading: "AI functions",
-        blocks: [
-          p(
-            "CVB Base contains AI functions that Carolina uses to support her work, for example to compile preparation material ahead of a session or structure notes into a draft. AI output is support and may contain errors or omissions. Carolina is responsible for reviewing what she uses, and a draft session summary is shared with you only after she has reviewed and approved it. Conversation content is part of the AI input only if you have consented to the processing of sensitive personal data.",
-          ),
-          p("Which data is used, and how, is described in the ", link("privacy policy", L("privacy")), "."),
         ],
       },
       {

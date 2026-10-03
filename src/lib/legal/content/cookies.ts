@@ -56,7 +56,7 @@ function sv(): LegalDocument {
           facts(
             ["Namn", "sb-…-auth-token (kan delas upp i flera delar, …-auth-token.0, .1)"],
             ["Ändamål", "Håller dig inloggad och gör att tjänsten kan kontrollera vem du är och vad du har behörighet till."],
-            ["Typ", "Tekniskt nödvändig, förstapartscookie. Sätts via vår inloggningsleverantör Supabase."],
+            ["Typ", "Tekniskt nödvändig, förstapartscookie. Sätts i samband med inloggning i CVB Base."],
             ["Lagringstid", "Tas bort när du loggar ut. Annars finns den kvar i webbläsaren i som längst cirka 400 dagar."],
           ),
           p(
@@ -133,7 +133,7 @@ function en(): LegalDocument {
           facts(
             ["Name", "sb-…-auth-token (may be split into several parts, …-auth-token.0, .1)"],
             ["Purpose", "Keeps you logged in and lets the service check who you are and what you have access to."],
-            ["Type", "Strictly necessary, first-party cookie. Set via our login provider Supabase."],
+            ["Type", "Strictly necessary, first-party cookie. Set when logging in to CVB Base."],
             ["Retention", "Removed when you log out. Otherwise it remains in the browser for at most about 400 days."],
           ),
           p(

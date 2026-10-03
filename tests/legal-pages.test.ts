@@ -238,11 +238,8 @@ describe("legal content", () => {
       "Rättslig grund",
       "artikel 6.1 b",
       "artikel 6.1 f",
-      "Supabase",
-      "Vercel",
-      "OpenAI",
-      "Resend",
-      "USA",
+      "personuppgiftsbiträden",
+      "utanför EU/EES",
       "Hur länge uppgifterna sparas",
       "rättade",
       "raderade",
@@ -250,20 +247,45 @@ describe("legal content", () => {
       "invända",
       "dataportabilitet",
       "Integritetsskyddsmyndigheten",
-      "inte ska spara svaren",
-      "automatiserade beslut",
-      "privat",
     ]) {
       expect(sv, needle).toContain(needle);
     }
   });
 
-  it("privacy policy states what the AI does not receive", () => {
-    const sv = allText(privacyDocument("sv"));
-    expect(sv).toContain("Material och filer — varken privata eller delade — ingår inte i underlaget.");
-    expect(sv).toContain("Carolinas egna arbetsanteckningar");
-    const en = allText(privacyDocument("en"));
-    expect(en).toContain("Material and files — neither private nor shared — are not part of the input.");
+  it("public legal documents do not name infrastructure vendors unnecessarily", () => {
+    const vendorDocs = [
+      allText(privacyDocument("sv")),
+      allText(privacyDocument("en")),
+      allText(cookiesDocument("sv")),
+      allText(cookiesDocument("en")),
+    ].join("\n");
+    for (const vendor of ["Supabase", "Vercel", "Resend", "OpenAI"]) {
+      expect(vendorDocs, vendor).not.toContain(vendor);
+    }
+  });
+
+  it("public legal documents do not disclose AI or OpenAI product implementation", () => {
+    const publicDocs = [
+      allText(privacyDocument("sv")),
+      allText(privacyDocument("en")),
+      allText(termsDocument("sv")),
+      allText(termsDocument("en")),
+      allText(baseTermsDocument("sv")),
+      allText(baseTermsDocument("en")),
+    ].join("\n");
+    for (const pattern of [
+      /\bOpenAI\b/i,
+      /\bAI-stöd\b/i,
+      /\bAI-funktion/i,
+      /\bartificiell intelligens\b/i,
+      /\bAI support\b/i,
+      /\bAI functions\b/i,
+      /\bartificial intelligence\b/i,
+      /\bspråkmodell\b/i,
+      /\blanguage model\b/i,
+    ]) {
+      expect(publicDocs, String(pattern)).not.toMatch(pattern);
+    }
   });
 
   it("terms cover the statutory consumer points without contracting out of them", () => {
