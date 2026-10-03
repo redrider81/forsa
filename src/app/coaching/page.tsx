@@ -9,7 +9,7 @@ import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 export const metadata: Metadata = {
   title: "Coaching | CVB Coaching",
   description:
-    "Så fungerar coaching hos CVB Coaching i Göteborg: när den kan vara rätt, vad arbetet består av och hur ett samarbete går till. Individuell coaching och business coaching.",
+    "Så fungerar coaching hos CVB Coaching i Göteborg: när den kan vara rätt, vad arbetet består av och hur ett samarbete går till. Individuell coaching och företagscoaching.",
 };
 
 /**
@@ -36,7 +36,7 @@ const passarNär = [
 
 const mindreRelevant = [
   "Du söker en expert som bedömer läget och talar om vad du ska göra.",
-  "Frågan handlar om ohälsa eller behöver behandlas. Då är terapi rätt väg, inte coaching.",
+  "Om frågan främst handlar om ohälsa eller behandling är coaching inte rätt stöd. Då kan vård, terapi eller annan relevant professionell hjälp vara mer lämplig.",
   "Riktningen är redan bestämd och det som återstår är att verkställa.",
 ];
 
@@ -93,10 +93,10 @@ const routes = [
   {
     index: "02",
     href: "/business-coaching",
-    title: "Business coaching",
+    title: "Företagscoaching",
     description:
       "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
-    ctaLabel: "Läs om business coaching",
+    ctaLabel: "Läs om företagscoaching",
   },
 ];
 
@@ -107,7 +107,7 @@ const practical = [
   },
   {
     title: "Konfidentiellt",
-    body: "Vad som sägs i samtalet stannar i samtalet.",
+    body: "Vad som sägs i samtalet behandlas konfidentiellt.",
   },
   {
     title: "När företaget tar första kontakten",
@@ -192,7 +192,7 @@ export default function CoachingPage() {
                   href="#vagar"
                   className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
                 >
-                  Individuell eller Företags coaching
+                  Individuell coaching eller företagscoaching
                   <span
                     aria-hidden="true"
                     className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
@@ -406,7 +406,7 @@ export default function CoachingPage() {
       <section className="flex min-h-[72svh] items-center bg-[#f4f3ef] pb-28 pt-12 md:min-h-[86svh] md:pb-40">
         <ScrollReveal variant="fadeUp" className="mx-auto w-full max-w-7xl px-6 md:px-10">
           <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
-            Individuell coaching och business coaching utgår från samma arbetssätt.
+            Individuell coaching och företagscoaching utgår från samma arbetssätt.
           </p>
         </ScrollReveal>
       </section>
@@ -418,7 +418,7 @@ export default function CoachingPage() {
             <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>06</p>
             <div data-col-right className="md:col-span-8 md:col-start-5">
               <h2 className="font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1.18] tracking-[-0.035em] text-zinc-900">
-                Individuell coaching eller business coaching
+                Individuell coaching eller företagscoaching
               </h2>
             </div>
           </ScrollReveal>

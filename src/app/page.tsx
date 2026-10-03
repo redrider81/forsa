@@ -23,9 +23,9 @@ import {
 } from "@/lib/homepage-typography";
 
 export const metadata: Metadata = {
-  title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
+  title: "CVB Coaching – individuell coaching och företagscoaching i Göteborg",
   description:
-    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare och ledare i arbetslivet.",
+    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och företagscoaching för medarbetare och ledare i arbetslivet.",
 };
 
 const t = svDictionary;
@@ -77,7 +77,7 @@ const passarNär = [
 
 const mindreRelevant = [
   "Du söker en expert som bedömer läget och talar om vad du ska göra.",
-  "Frågan handlar om ohälsa eller behöver behandlas. Då är terapi rätt väg, inte coaching.",
+  "Om frågan främst handlar om ohälsa eller behandling är coaching inte rätt stöd. Då kan vård, terapi eller annan relevant professionell hjälp vara mer lämplig.",
   "Riktningen är redan bestämd och det som återstår är att verkställa.",
 ];
 
@@ -523,7 +523,7 @@ export default function HomePage() {
                           vad som passar bäst.
                         </p>
                         <p data-col-paragraph className="max-w-xl">
-                          Vad som sägs i samtalet stannar i samtalet.
+                          Vad som sägs i samtalet behandlas konfidentiellt.
                         </p>
                       </div>
                     </div>

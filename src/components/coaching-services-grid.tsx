@@ -34,10 +34,10 @@ const servicesSv: Service[] = [
   {
     index: "02",
     href: "/business-coaching",
-    title: "Företags coaching",
+    title: "Företagscoaching",
     description:
       "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
-    ctaLabel: "Läs om företags coaching",
+    ctaLabel: "Läs om företagscoaching",
   },
 ];
 

@@ -25,9 +25,9 @@ const playfair = Playfair_Display({
 const homeScreenGray = "#71717a";
 
 export const metadata: Metadata = {
-  title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
+  title: "CVB Coaching – individuell coaching och företagscoaching i Göteborg",
   description:
-    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare, ledare och team.",
+    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och företagscoaching för medarbetare, ledare och team.",
   appleWebApp: {
     capable: true,
     title: "CVB Coaching",

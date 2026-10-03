@@ -6,9 +6,9 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  title: "Business coaching i Göteborg | CVB Coaching",
+  title: "Företagscoaching i Göteborg | CVB Coaching",
   description:
-    "Personlig business coaching med Carolina von Braun för medarbetare och ledare som behöver tänka klart i en arbetsrelaterad fråga. Företaget kan initiera och finansiera coachingen; samtalen är individuella och konfidentiella.",
+    "Personlig företagscoaching med Carolina von Braun för medarbetare och ledare som behöver tänka klart i en arbetsrelaterad fråga. Företaget kan initiera och finansiera coachingen; samtalen är individuella och konfidentiella.",
 };
 
 const relevanceList = [
@@ -21,7 +21,7 @@ const relevanceList = [
 
 const nonGoals = [
   "Inte rådgivning med färdiga rekommendationer. Du äger dina beslut.",
-  "Inte terapi eller behandling. Om frågan handlar om ohälsa är terapi rätt väg.",
+  "Om frågan främst handlar om ohälsa eller behandling är coaching inte rätt stöd. Då kan vård, terapi eller annan relevant professionell hjälp vara mer lämplig.",
   "Inte ett standardiserat program. Upplägget följer frågan och det du vill bli klarare i.",
 ];
 
@@ -48,13 +48,13 @@ export default function BusinessCoachingPage() {
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
-              Business coaching
+              Företagscoaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
               En fråga i arbetslivet behöver ibland ett eget rum.
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Business coaching är personlig coaching i arbetslivet. Den passar medarbetare och
+              Företagscoaching är personlig coaching i arbetslivet. Den passar medarbetare och
               ledare som behöver tänka klart i en arbetsrelaterad fråga.
             </p>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">

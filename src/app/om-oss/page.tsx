@@ -114,7 +114,9 @@ export default function AboutPage() {
                 <p>
                   Jag heter Carolina von Braun och driver CVB Coaching i Göteborg. Jag är diplomerad coach
                   vid Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och Level
-                  2.
+                  2. ICF (International Coaching Federation) är en global organisation för professionell
+                  coaching. ICF-ackrediterade utbildningar granskas mot organisationens kärnkompetenser och
+                  etiska riktlinjer.
                 </p>
                 <p>
                   Min yrkesbakgrund omfattar värdepappershandel på Nordea, styrelseuppdrag inom

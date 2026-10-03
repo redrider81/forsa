@@ -29,7 +29,7 @@ const focusList = [
 ];
 
 const nonGoals = [
-  "Inte terapi eller behandling. Handlar frågan om ohälsa är terapi rätt väg, och det säger jag då.",
+  "Om frågan främst handlar om ohälsa eller behandling är coaching inte rätt stöd. Då kan vård, terapi eller annan relevant professionell hjälp vara mer lämplig.",
   "Inte rådgivning. Jag tar inte över dina beslut och ger dig inte min uppfattning som facit.",
   "Inte peppning. Du får motstånd när det behövs, inte tillrop.",
 ];
@@ -64,7 +64,7 @@ export default function IndividuellCoachingPage() {
               Betalas coachingen av en arbetsgivare, eller gäller frågan din roll i arbetslivet,
               se{" "}
               <Link href="/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
-                Business coaching
+                Företagscoaching
               </Link>
               .
             </p>
