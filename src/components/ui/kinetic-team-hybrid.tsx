@@ -6,6 +6,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import {
+  homeMediaReveal,
+  homeTravel,
   motion,
   prefersReducedMotion,
   refreshScrollTriggers,
@@ -65,82 +67,82 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
     const section = sectionRef.current;
     if (!section) return;
 
+    const label = section.querySelector<HTMLElement>("[data-team-label]");
     const heading = section.querySelector<HTMLElement>("[data-team-heading]");
     const portrait = section.querySelector<HTMLElement>("[data-team-portrait]");
+    const textCol = section.querySelector<HTMLElement>("[data-col-right]");
     const divider = section.querySelector<HTMLElement>("[data-team-divider]");
     const paragraphs = section.querySelectorAll<HTMLElement>("[data-col-paragraph]");
 
-    const targets = [heading, portrait, divider, ...paragraphs].filter(Boolean) as HTMLElement[];
+    const targets = [label, heading, portrait, divider, ...paragraphs].filter(Boolean) as HTMLElement[];
 
     if (prefersReducedMotion()) {
       showTargets(targets);
       return;
     }
 
+    /*
+     * Sektionen är hög: rubrik och porträtt står överst i vänsterspalten och
+     * texten är nedtill förankrad i högerspalten (staplad under porträttet på
+     * mobil). En enda trigger på sektionens överkant spelade därför porträttet
+     * och texten utanför vyn. Nu har rubriken, porträttet och textspalten var
+     * sin trigger och spelar när de faktiskt når vyn.
+     */
     gsap.registerPlugin(ScrollTrigger);
+    const travel = homeTravel();
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(section) });
-
-      if (heading) {
-        gsap.set(heading, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
-        tl.to(heading, {
+      const lead = [label, heading].filter(Boolean) as HTMLElement[];
+      if (lead.length) {
+        gsap.set(lead, { autoAlpha: 0, y: travel.y, force3D: true });
+        gsap.to(lead, {
           autoAlpha: 1,
           y: 0,
-          duration: motion.duration.medium,
-          ease: motion.ease.reveal,
+          duration: motion.home.duration.heading,
+          ease: motion.home.ease.heading,
+          stagger: motion.home.stagger.text,
           force3D: true,
+          scrollTrigger: revealScrollTrigger(heading ?? lead[0]),
         });
       }
 
       if (portrait) {
-        gsap.set(portrait, {
-          autoAlpha: 0,
-          y: motion.reveal.y,
-          scale: motion.reveal.scaleFrom,
-          force3D: true,
-        });
-        tl.to(
-          portrait,
-          {
-            autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            duration: motion.duration.long,
-            ease: motion.ease.reveal,
-            force3D: true,
-          },
-          heading ? "-=0.55" : 0,
-        );
+        // Bilden har en egen hover-transition på transform; därför avtäcks
+        // ramen, inte själva bilden. Beskärningen är oförändrad i slutläget.
+        gsap.set(portrait, { clipPath: "inset(100% 0% 0% 0%)" });
+        const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(portrait) });
+        tl.add(homeMediaReveal(portrait, false), heading ? 0.15 : 0);
       }
 
-      if (divider) {
-        gsap.set(divider, { scaleX: 0, transformOrigin: "left center", force3D: true });
-        tl.to(
-          divider,
-          {
-            scaleX: 1,
-            duration: motion.duration.medium,
-            ease: motion.ease.editorial,
-            force3D: true,
-          },
-          portrait ? "-=0.62" : 0,
-        );
-      }
-
-      if (paragraphs.length) {
-        gsap.set(paragraphs, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
-        tl.to(
-          paragraphs,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: motion.duration.medium,
-            ease: motion.ease.reveal,
-            stagger: 0.14,
-            force3D: true,
-          },
-          divider || portrait ? "-=0.42" : 0,
-        );
+      if (textCol && (divider || paragraphs.length)) {
+        const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(textCol) });
+        if (divider) {
+          gsap.set(divider, { scaleX: 0, transformOrigin: "left center", force3D: true });
+          tl.to(
+            divider,
+            {
+              scaleX: 1,
+              duration: motion.home.duration.media,
+              ease: motion.ease.editorial,
+              force3D: true,
+            },
+            0,
+          );
+        }
+        if (paragraphs.length) {
+          gsap.set(paragraphs, { autoAlpha: 0, y: travel.yText, force3D: true });
+          tl.to(
+            paragraphs,
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: motion.home.duration.text,
+              ease: motion.home.ease.text,
+              stagger: 0.16,
+              force3D: true,
+            },
+            divider ? 0.3 : 0,
+          );
+        }
       }
 
       refreshScrollTriggers();
@@ -149,6 +151,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
     return () => {
       ctx.revert();
       showTargets(targets);
+      if (portrait) gsap.set(portrait, { clearProps: "clipPath" });
     };
   }, []);
 
@@ -164,7 +167,10 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
           interna 01/02/03 — och är borttagen för att hålla de två nivåerna åtskilda. */}
       <div className="mx-auto grid max-w-7xl gap-y-10 px-6 py-24 md:grid-cols-12 md:gap-x-8 md:px-10 md:py-32 lg:py-40">
         <div data-col-left className="relative md:col-span-5 md:row-span-2">
-          <p className="mb-10 text-xs font-medium tabular-nums tracking-[0.32em] text-white md:mb-14">
+          <p
+            data-team-label
+            className="mb-10 text-xs font-medium tabular-nums tracking-[0.32em] text-white md:mb-14"
+          >
             04
           </p>
           <h2

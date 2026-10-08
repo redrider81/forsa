@@ -4,7 +4,14 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Locale } from "@/lib/i18n/config";
-import { motion, prefersReducedMotion, refreshScrollTriggers, revealScrollTrigger, showTargets } from "@/lib/motion";
+import {
+  homeTravel,
+  motion,
+  prefersReducedMotion,
+  refreshScrollTriggers,
+  revealScrollTrigger,
+  showTargets,
+} from "@/lib/motion";
 
 /**
  * En sammanhängande beskrivning av hur arbetet går till, i stället för
@@ -31,8 +38,11 @@ function buildStepsReveal(
   lines: NodeListOf<HTMLElement>,
   footnote: HTMLElement | null,
 ) {
+  // Processtexten är ett enda block och avtäcks som ett. På desktop står den
+  // i högra delen av rutnätet och glider in från höger efter rubriken.
+  const travel = homeTravel();
   gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
-  gsap.set(cards, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
+  gsap.set(cards, { autoAlpha: 0, x: travel.x, y: travel.x ? travel.yText * 0.5 : travel.y, force3D: true });
   if (footnote) {
     gsap.set(footnote, { autoAlpha: 0, y: 10, force3D: true });
   }
@@ -43,13 +53,14 @@ function buildStepsReveal(
     cards,
     {
       autoAlpha: 1,
+      x: 0,
       y: 0,
-      duration: motion.duration.long,
-      ease: motion.ease.reveal,
+      duration: motion.home.duration.heading,
+      ease: motion.home.ease.heading,
       stagger: 0.085,
       force3D: true,
     },
-    0,
+    0.1,
   );
   tl.to(
     lines,

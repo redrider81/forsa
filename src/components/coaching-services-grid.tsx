@@ -7,10 +7,10 @@ import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import type { Locale } from "@/lib/i18n/config";
 import {
+  homeTravel,
   motion,
   prefersReducedMotion,
   refreshScrollTriggers,
-  revealScrollTrigger,
   showTargets,
 } from "@/lib/motion";
 
@@ -81,40 +81,61 @@ type Props = {
   variant?: "cards" | "editorial";
 };
 
-function buildEditorialReveal(
-  panel: HTMLElement,
-  cards: NodeListOf<HTMLElement>,
-  arrows: NodeListOf<HTMLElement>,
-) {
-  gsap.set(cards, { autoAlpha: 0, y: motion.reveal.y, force3D: true });
-  gsap.set(arrows, { autoAlpha: 0, x: -6, force3D: true });
+/**
+ * Rutnätets linjer står kvar som struktur; innehållet i varje erbjudande stiger
+ * fram i läsordning. Korten avtäcks när de själva når vyn: bredvid varandra
+ * (desktop) i en förskjuten sekvens, staplade (mobil) ett i taget.
+ */
+function buildEditorialReveal(cards: NodeListOf<HTMLElement>) {
+  const travel = homeTravel();
+  const cardList = gsap.utils.toArray<HTMLElement>(cards);
+  // Kortvarianten saknar delar och avtäcks då som helhet.
+  const partsOf = (card: HTMLElement) => {
+    const parts = gsap.utils.toArray<HTMLElement>(card.querySelectorAll("[data-card-part]"));
+    return parts.length ? parts : [card];
+  };
 
-  const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(panel) });
+  cardList.forEach((card) => {
+    gsap.set(partsOf(card), { autoAlpha: 0, y: travel.yText, force3D: true });
+    gsap.set(card.querySelectorAll("[data-card-arrow]"), { autoAlpha: 0, x: -8, force3D: true });
+  });
 
-  tl.to(
-    cards,
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: motion.duration.long,
-      ease: motion.ease.reveal,
-      stagger: 0.085,
-      force3D: true,
+  ScrollTrigger.batch(cardList, {
+    start: motion.reveal.start,
+    once: true,
+    interval: 0.1,
+    onEnter: (batch) => {
+      const tl = gsap.timeline();
+      (batch as HTMLElement[])
+        .sort((a, b) => cardList.indexOf(a) - cardList.indexOf(b))
+        .forEach((card, i) => {
+          const at = i * motion.home.stagger.card;
+          tl.to(
+            partsOf(card),
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: motion.home.duration.text,
+              ease: motion.home.ease.text,
+              stagger: 0.09,
+              force3D: true,
+            },
+            at,
+          );
+          tl.to(
+            card.querySelectorAll("[data-card-arrow]"),
+            {
+              autoAlpha: 1,
+              x: 0,
+              duration: motion.duration.short,
+              ease: motion.ease.revealSoft,
+              force3D: true,
+            },
+            at + 0.55,
+          );
+        });
     },
-    0,
-  );
-  tl.to(
-    arrows,
-    {
-      autoAlpha: 1,
-      x: 0,
-      duration: motion.duration.short,
-      ease: motion.ease.revealSoft,
-      stagger: 0.07,
-      force3D: true,
-    },
-    0.12,
-  );
+  });
 }
 
 export default function CoachingServicesGrid({
@@ -135,8 +156,9 @@ export default function CoachingServicesGrid({
 
     const cards = panel.querySelectorAll<HTMLElement>("[data-card]");
     const arrows = panel.querySelectorAll<HTMLElement>("[data-card-arrow]");
+    const parts = panel.querySelectorAll<HTMLElement>("[data-card-part]");
 
-    const targets = [...cards, ...arrows].filter(Boolean) as HTMLElement[];
+    const targets = [...cards, ...arrows, ...parts].filter(Boolean) as HTMLElement[];
 
     if (prefersReducedMotion()) {
       showTargets(targets);
@@ -148,7 +170,7 @@ export default function CoachingServicesGrid({
 
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      buildEditorialReveal(panel, cards, arrows);
+      buildEditorialReveal(cards);
       refreshScrollTriggers();
     }, root);
 
@@ -178,10 +200,14 @@ export default function CoachingServicesGrid({
                       : "px-7 md:pl-14 md:pr-9 lg:pl-16 lg:pr-11"
                   }`}
                 >
-                  <span className="text-xs font-medium tabular-nums tracking-[0.32em] text-zinc-900">
+                  <span
+                    data-card-part
+                    className="text-xs font-medium tabular-nums tracking-[0.32em] text-zinc-900"
+                  >
                     {service.index}
                   </span>
                   <span
+                    data-card-part
                     role="heading"
                     aria-level={3}
                     className="mt-5 block font-serif text-[clamp(1.5rem,2.2vw,1.75rem)] font-medium leading-[1.15] tracking-[-0.02em] text-zinc-900 md:mt-6"
@@ -189,14 +215,23 @@ export default function CoachingServicesGrid({
                     {service.title}
                   </span>
                   {service.intro ? (
-                    <p className="mt-4 max-w-md text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
+                    <p
+                      data-card-part
+                      className="mt-4 max-w-md text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]"
+                    >
                       {service.intro}
                     </p>
                   ) : null}
-                  <p className="mt-4 max-w-md flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
+                  <p
+                    data-card-part
+                    className="mt-4 max-w-md flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]"
+                  >
                     {service.description}
                   </p>
-                  <div className="group mt-8 flex justify-center md:mt-10 md:justify-start">
+                  <div
+                    data-card-part
+                    className="group mt-8 flex justify-center md:mt-10 md:justify-start"
+                  >
                     <CtaLink href={service.href} variant="tertiary">
                       <span className="inline-flex items-center gap-2">
                         {service.ctaLabel}

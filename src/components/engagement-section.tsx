@@ -7,6 +7,7 @@ import EngagementBentoGrid from "@/components/engagement-bento-grid";
 import type { Locale } from "@/lib/i18n/config";
 import { HOME_DISPLAY } from "@/lib/homepage-typography";
 import {
+  homeTravel,
   motion,
   prefersReducedMotion,
   refreshScrollTriggers,
@@ -37,28 +38,47 @@ export default function EngagementSection({ locale, variant = "standalone" }: Pr
     const el = ref.current;
     if (!el) return;
 
+    // Fältvarianten (startsidan) avtäcker etikett och rubrik; processtexten
+    // har en egen entré i EngagementBentoGrid. Fristående variant: hela blocket.
+    const headingParts = el.querySelectorAll<HTMLElement>("[data-engagement-heading]");
+    const targets = headingParts.length ? [...headingParts] : [el];
+
     if (prefersReducedMotion()) {
-      showTargets(el);
+      showTargets(targets);
       return;
     }
 
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      gsap.set(el, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
-      gsap.to(el, {
-        autoAlpha: 1,
-        y: 0,
-        duration: motion.duration.long,
-        ease: motion.ease.reveal,
-        force3D: true,
-        scrollTrigger: revealScrollTrigger(el, { start: "top 84%" }),
-      });
+      if (headingParts.length) {
+        const travel = homeTravel();
+        gsap.set(headingParts, { autoAlpha: 0, y: travel.y, force3D: true });
+        gsap.to(headingParts, {
+          autoAlpha: 1,
+          y: 0,
+          duration: motion.home.duration.heading,
+          ease: motion.home.ease.heading,
+          stagger: motion.home.stagger.text,
+          force3D: true,
+          scrollTrigger: revealScrollTrigger(headingParts[headingParts.length - 1]),
+        });
+      } else {
+        gsap.set(el, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
+        gsap.to(el, {
+          autoAlpha: 1,
+          y: 0,
+          duration: motion.duration.long,
+          ease: motion.ease.reveal,
+          force3D: true,
+          scrollTrigger: revealScrollTrigger(el, { start: "top 84%" }),
+        });
+      }
       refreshScrollTriggers();
     }, ref);
 
     return () => {
       ctx.revert();
-      showTargets(el);
+      showTargets(targets);
     };
   }, []);
 
@@ -76,8 +96,16 @@ export default function EngagementSection({ locale, variant = "standalone" }: Pr
       >
         {field ? (
           <>
-            <p className="text-xs font-medium tabular-nums tracking-[0.32em] text-zinc-900">05</p>
-            <h2 className={`mt-10 max-w-3xl ${HOME_DISPLAY} text-zinc-900 md:mt-14`}>
+            <p
+              data-engagement-heading
+              className="text-xs font-medium tabular-nums tracking-[0.32em] text-zinc-900"
+            >
+              05
+            </p>
+            <h2
+              data-engagement-heading
+              className={`mt-10 max-w-3xl ${HOME_DISPLAY} text-zinc-900 md:mt-14`}
+            >
               {titles[locale]}
             </h2>
           </>

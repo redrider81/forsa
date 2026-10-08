@@ -197,7 +197,7 @@ export default function HomePage() {
               id="coaching"
               className="mx-auto max-w-7xl scroll-mt-24 px-6 md:px-10 md:scroll-mt-32"
             >
-              <ScrollReveal variant="splitColumn" className="max-w-3xl">
+              <ScrollReveal variant="splitColumn" emphasis className="max-w-3xl">
                 <div data-col-left>
                   <h2 className={`${DISPLAY} text-zinc-900`}>
                     Individuell coaching eller business coaching
@@ -215,10 +215,10 @@ export default function HomePage() {
 
               {/* Rörelse 2 — när coaching kan vara rätt · dokumentär bild + lista */}
               <ScrollReveal
-                variant="splitColumn"
+                variant="mediaSplit"
                 className="mt-32 grid gap-10 md:mt-48 md:grid-cols-12 md:items-start md:gap-x-8"
               >
-                <div data-col-left className="md:col-span-5">
+                <div data-col-left data-reveal-group className="md:col-span-5">
                   <h2 className={`max-w-[12ch] md:max-w-[11ch] ${DISPLAY} text-zinc-900`}>
                     Vad kan coaching handla om?
                   </h2>
@@ -237,7 +237,7 @@ export default function HomePage() {
                   data-col-right
                   className="flex md:col-span-6 md:col-start-7 md:h-full md:flex-col md:pt-2 lg:pt-6"
                 >
-                  <ScrollReveal variant="staggerList" className="flex min-h-0 flex-1 flex-col">
+                  <div className="flex min-h-0 flex-1 flex-col">
                     <ul className="flex w-full flex-col divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700 md:min-h-full md:flex-1">
                       {relevancePoints.map((point) => (
                         <li
@@ -253,7 +253,7 @@ export default function HomePage() {
                         </li>
                       ))}
                     </ul>
-                  </ScrollReveal>
+                  </div>
                 </div>
               </ScrollReveal>
             </section>
@@ -301,8 +301,8 @@ export default function HomePage() {
                 med titlarna; med index, titel och brödtext i samma radgrammatik
                 som resten av sajten blir den uppskalade titeln det som syns. */}
             <section className="mt-40 md:mt-56">
-              <EditorialRowsReveal className="mx-auto max-w-7xl px-6 md:px-10">
-                <p className={CHAPTER_ON_LIGHT}>03</p>
+              <EditorialRowsReveal emphasis className="mx-auto max-w-7xl px-6 md:px-10">
+                <p data-section-label className={CHAPTER_ON_LIGHT}>03</p>
                 <h2
                   data-section-heading
                   className={`mt-10 max-w-3xl max-md:max-w-[16.5ch] ${DISPLAY} text-zinc-900 md:mt-14`}
@@ -362,15 +362,15 @@ export default function HomePage() {
             <EngagementSection locale="sv" variant="field" />
 
             <section className="mt-24 md:mt-32">
-              <EditorialRowsReveal className="mx-auto max-w-7xl px-6 md:px-10">
-                <p className={CHAPTER_ON_LIGHT}>DET FÖRSTA SAMTALET</p>
+              <EditorialRowsReveal emphasis className="mx-auto max-w-7xl px-6 md:px-10">
+                <p data-section-label className={CHAPTER_ON_LIGHT}>DET FÖRSTA SAMTALET</p>
                 <h2
                   data-section-heading
                   className={`mt-8 max-w-3xl ${DISPLAY} text-zinc-900 md:mt-10`}
                 >
                   Det första samtalet ska ge dig något
                 </h2>
-                <p className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
+                <p data-section-intro className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
                   Du behöver inte ha bestämt dig för coaching. Det första samtalet är ett tillfälle att
                   förstå frågan bättre, pröva om coaching är rätt stöd och känna efter om vi fungerar bra
                   tillsammans.
@@ -413,6 +413,7 @@ export default function HomePage() {
 
             <ScrollReveal
               variant="splitColumn"
+              emphasis
               className="mx-auto mt-32 grid max-w-7xl gap-10 px-6 md:mt-44 md:grid-cols-12 md:gap-x-8 md:px-10"
             >
               <h2 data-col-left className={`max-w-xl ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
@@ -445,10 +446,10 @@ export default function HomePage() {
             {/* -------------------- AKT 05 · KONTINUITET -------------------- */}
             <section className="mx-auto max-w-7xl px-6 md:px-10">
               <ScrollReveal
-                variant="splitColumn"
+                variant="mediaSplit"
                 className="grid gap-12 md:grid-cols-12 md:items-start md:gap-x-8 lg:gap-x-10"
               >
-                <div data-col-left className="md:col-span-7">
+                <div data-col-left data-reveal-group className="md:col-span-7">
                   <LogoMark
                     descriptor="base"
                     withCoaching={false}
@@ -457,7 +458,7 @@ export default function HomePage() {
                   <h2 className={`mt-6 max-w-3xl ${DISPLAY_BASE} text-white md:mt-8 lg:max-w-4xl`}>
                     Utvecklat för professionell coaching i svensk kontext.
                   </h2>
-                  <div className="mt-8 space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:mt-10">
+                  <div data-reveal-group className="mt-8 space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:mt-10">
                     <p data-col-paragraph className="max-w-2xl">
                       CVB Coaching utvecklar CVB Base för individuell coaching och business coaching i svenska
                       sammanhang. Det är ett svenskspråkigt digitalt stöd som utvecklas för att hålla ihop det som
@@ -471,7 +472,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="md:col-span-12">
+                <div data-reveal-group className="md:col-span-12">
                   <div className="mt-12 border-t border-white/20 md:mt-16">
                     <CvbBaseBenefitsAccordion items={cvbBaseBenefits} />
                   </div>
@@ -500,9 +501,9 @@ export default function HomePage() {
 
             <div className="relative left-1/2 mt-16 w-screen max-w-[100vw] -translate-x-1/2 bg-[#f2f1ed] py-16 text-zinc-900 md:mt-20 md:py-20 lg:py-24">
               <div className="mx-auto max-w-7xl px-6 md:px-10">
-                <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:items-stretch md:gap-x-8 lg:gap-x-10">
-                  <div data-col-left className="md:col-span-6 lg:col-span-5">
-                    <div className="space-y-8 md:space-y-10">
+                <ScrollReveal variant="mediaSplit" className="grid gap-12 md:grid-cols-12 md:items-stretch md:gap-x-8 lg:gap-x-10">
+                  <div data-col-left data-reveal-group className="md:col-span-6 lg:col-span-5">
+                    <div data-reveal-group className="space-y-8 md:space-y-10">
                       <h2 className={`max-w-md ${DISPLAY_SM} text-zinc-900`}>
                         När företaget tar första kontakten
                       </h2>
@@ -510,8 +511,8 @@ export default function HomePage() {
                         I Göteborg eller digitalt
                       </h2>
                     </div>
-                    <div className="mt-10 space-y-8 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-12 md:space-y-7">
-                      <div className="space-y-6">
+                    <div data-reveal-group className="mt-10 space-y-8 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-12 md:space-y-7">
+                      <div data-reveal-group className="space-y-6">
                         <p data-col-paragraph className="max-w-xl">
                           CVB Coaching arbetar med enskilda medarbetare och ledare i arbetslivet. Företaget
                           kan ta den första kontakten och finansiera coachingen.
@@ -522,7 +523,7 @@ export default function HomePage() {
                           för samarbetet och hur kontakten fungerar.
                         </p>
                       </div>
-                      <div className="space-y-6 border-t border-zinc-300 pt-8 md:pt-7">
+                      <div data-reveal-group className="space-y-6 border-t border-zinc-300 pt-8 md:pt-7">
                         <p data-col-paragraph className="max-w-xl">
                           CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt, beroende på
                           vad som passar bäst.
@@ -552,8 +553,8 @@ export default function HomePage() {
 
             {/* -------------------- AKT 07 · AVSLUT -------------------- */}
             <section id="kontakt" className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-36 md:px-10 md:scroll-mt-32">
-              <ScrollReveal variant="ctaStack">
-                <p className={CHAPTER_ON_DARK}>07</p>
+              <ScrollReveal variant="ctaStack" emphasis>
+                <p data-cta-label className={CHAPTER_ON_DARK}>07</p>
                 <h2 data-cta-heading className={`mt-10 max-w-3xl ${DISPLAY} text-white md:mt-14`}>
                   Boka ett inledande samtal
                 </h2>
