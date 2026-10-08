@@ -11,6 +11,7 @@ import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import CoachingServicesGrid from "@/components/coaching-services-grid";
 import EngagementSection from "@/components/engagement-section";
 import KineticTeamHybrid from "@/components/ui/kinetic-team-hybrid";
+import ClientTestimonial from "@/components/client-testimonial";
 import CvbBaseBenefitsAccordion from "@/components/cvb-base-benefits-accordion";
 import HeroCoachingPathLinks, {
   heroPathLinksPlacementClass,
@@ -353,6 +354,9 @@ export default function HomePageEn() {
 
           {/* ============ YTA 3 · mörk · akt 03 · Carolina ============ */}
           <KineticTeamHybrid locale="en" />
+
+          {/* Samma mörka yta · en klients röst efter Carolinas presentation */}
+          <ClientTestimonial locale="en" />
 
           {/* ============ YTA 4 · ljus · akt 04 · processen ============
               Stegen och det som släpper kravet på att veta allt i förväg är
