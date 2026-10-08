@@ -6,12 +6,18 @@ import type { SpecialCategoryConsentState } from "@/lib/portal/special-category-
  * commitment notes) whenever there is no active article 9 consent. Without
  * consent, sensitive personal data should not be entered at all.
  */
-export default function SensitiveDataNotice({ state }: { state: SpecialCategoryConsentState }) {
+export default function SensitiveDataNotice({
+  state,
+  className = "",
+}: {
+  state: SpecialCategoryConsentState;
+  className?: string;
+}) {
   if (state === "active") return null;
   return (
     <p
       role="note"
-      className="rounded-xl border border-[#ece7dc] bg-[var(--klient-text-block-bg)] px-4 py-3 text-[0.8125rem] leading-relaxed text-zinc-600"
+      className={`rounded-xl border border-[#ece7dc] bg-[var(--klient-text-block-bg)] px-4 py-3 text-[0.8125rem] leading-relaxed text-zinc-600 ${className}`.trim()}
     >
       {state === "withdrawn"
         ? "Du har återkallat ditt samtycke till behandling av känsliga personuppgifter. "

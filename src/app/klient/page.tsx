@@ -120,7 +120,8 @@ export default async function ClientOverviewPage() {
         </p>
       </header>
 
-      <SensitiveDataNotice state={consentState(consentHistory)} />
+      {/* Egen rad i rastret — utan spann hamnar notisen i en enda av tolv kolumner. */}
+      <SensitiveDataNotice state={consentState(consentHistory)} className="lg:col-span-12" />
 
       {view.upcomingSession ? (
         <BentoCard

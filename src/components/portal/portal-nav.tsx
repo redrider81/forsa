@@ -2,10 +2,12 @@
 
 import { LogoMark } from "@/components/brand/logo";
 import { portalPrimaryButtonClass } from "@/components/portal/ui";
+import { useLogout } from "@/components/portal/use-logout";
 import { cn } from "@/lib/utils";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useId, useState, useTransition } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 
 const items = [
@@ -190,33 +192,48 @@ export function PortalDesktopNav() {
             </li>
           );
         })}
+        <li className="flex-none">
+          <DesktopLogoutItem />
+        </li>
       </ul>
     </nav>
   );
 }
 
-export function LogoutButton({ className = "" }: { className?: string }) {
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
-  const [busy, setBusy] = useState(false);
+/**
+ * Sista posten i desktopraden. Raden delar bredden lika mellan åtta mål och
+ * har inte plats för ytterligare en etikett under xl, så där visas ikonen
+ * ensam — etiketten finns kvar som tillgängligt namn och tooltip.
+ */
+function DesktopLogoutItem() {
+  const { logout, working, label } = useLogout("/coach-login");
+  return (
+    <button
+      type="button"
+      onClick={logout}
+      disabled={working}
+      title={label}
+      className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-[0.8125rem] font-semibold text-zinc-600 transition-all duration-200 hover:bg-white/60 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)] disabled:opacity-60"
+    >
+      <LogOut aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+      <span aria-live="polite" className="sr-only whitespace-nowrap xl:not-sr-only">
+        {label}
+      </span>
+    </button>
+  );
+}
 
-  async function logout() {
-    setBusy(true);
-    await fetch("/api/portal/auth/logout", { method: "POST" });
-    startTransition(() => {
-      router.replace("/coach-login");
-      router.refresh();
-    });
-  }
+export function LogoutButton({ className = "" }: { className?: string }) {
+  const { logout, working, label } = useLogout("/coach-login");
 
   return (
     <button
       type="button"
       onClick={logout}
-      disabled={busy || pending}
+      disabled={working}
       className={cn(portalPrimaryButtonClass, "disabled:opacity-60", className)}
     >
-      {busy || pending ? "Loggar ut…" : "Logga ut"}
+      <span aria-live="polite">{label}</span>
     </button>
   );
 }

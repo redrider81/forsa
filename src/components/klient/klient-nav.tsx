@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { LogOut } from "lucide-react";
 import { klientButtonClass } from "@/components/klient/klient-ui";
+import { useLogout } from "@/components/portal/use-logout";
 
 const items = [
   { href: "/klient", label: "Översikt", exact: true },
@@ -87,6 +88,31 @@ export function KlientFaqShortcut() {
   );
 }
 
+/**
+ * Utloggning på mobil: textpiller i samma form som FAQ, utan ikon.
+ * Bottenraden är full, så den ligger i toppraden. Den synliga texten hålls
+ * kort; hela statusen är knappens tillgängliga namn.
+ */
+export function KlientMobileLogout() {
+  const { logout, working, failed, label } = useLogout("/klient-login");
+  return (
+    <button
+      type="button"
+      onClick={logout}
+      disabled={working}
+      title={label}
+      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[var(--klient-border-hairline)] bg-white/55 px-4 text-[0.75rem] font-semibold tracking-[0.04em] text-stone-600 transition-[background-color,border-color,color,box-shadow] duration-200 hover:bg-white/90 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)] disabled:opacity-60 motion-reduce:transition-none"
+    >
+      <span aria-hidden="true" className="whitespace-nowrap">
+        {working ? "Loggar ut…" : failed ? "Försök igen" : "Logga ut"}
+      </span>
+      <span aria-live="polite" className="sr-only">
+        {label}
+      </span>
+    </button>
+  );
+}
+
 export function KlientDesktopNav() {
   const pathname = usePathname();
   return (
@@ -113,28 +139,45 @@ export function KlientDesktopNav() {
             </li>
           );
         })}
+        {/* Sista posten. Etiketten syns från xl; under det räcker raden bara
+            till ikonen och etiketten blir knappens tillgängliga namn. */}
+        <li className="min-w-0 flex-none">
+          <KlientDesktopLogout />
+        </li>
       </ul>
     </nav>
   );
 }
 
+function KlientDesktopLogout() {
+  const { logout, working, label } = useLogout("/klient-login");
+  return (
+    <button
+      type="button"
+      onClick={logout}
+      disabled={working}
+      title={label}
+      className="flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-transparent px-3.5 py-2.5 text-[0.8125rem] font-medium tracking-[-0.005em] text-stone-600 transition-[background-color,color,box-shadow,border-color] duration-200 hover:bg-white/60 hover:text-stone-900 xl:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--klient-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--klient-page-bg)] disabled:opacity-60 motion-reduce:transition-none"
+    >
+      <LogOut aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+      <span aria-live="polite" className="sr-only whitespace-nowrap xl:not-sr-only">
+        {label}
+      </span>
+    </button>
+  );
+}
+
 export function KlientLogoutButton() {
-  const router = useRouter();
-  const [busy, setBusy] = useState(false);
+  const { logout, working, label } = useLogout("/klient-login");
 
   return (
     <button
       type="button"
-      disabled={busy}
-      onClick={async () => {
-        setBusy(true);
-        await fetch("/api/portal/auth/logout", { method: "POST" });
-        router.replace("/klient-login");
-        router.refresh();
-      }}
+      disabled={working}
+      onClick={logout}
       className={`w-full ${klientButtonClass}`}
     >
-      {busy ? "Loggar ut…" : "Logga ut"}
+      <span aria-live="polite">{label}</span>
     </button>
   );
 }
