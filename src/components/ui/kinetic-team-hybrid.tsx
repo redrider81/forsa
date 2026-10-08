@@ -24,9 +24,7 @@ const copy: Record<
   {
     heading: string;
     imageAlt: string;
-    intro: string;
-    background: string;
-    credentials: string;
+    paragraphs: string[];
     linkHref: string;
     linkLabel: string;
   }
@@ -34,22 +32,26 @@ const copy: Record<
   sv: {
     heading: "Coaching med Carolina",
     imageAlt: "Carolina von Braun, coach och grundare av CVB Coaching",
-    intro: "Jag heter Carolina von Braun och driver CVB Coaching.",
-    background:
-      "Min yrkesbakgrund omfattar bland annat värdepappershandel på Nordea och styrelseuppdrag inom fastighetsförvaltning och investeringar. Den erfarenheten finns med som bakgrund i samtalet — inte som ett facit för dina beslut.",
-    credentials:
-      "Diplomerad coach vid Gothia Akademi · ICF-ackrediterad coachutbildning på Level 1 och Level 2 · Göteborg och digitalt",
+    // Samma fyra stycken som Carolina-avsnittet på /om-oss.
+    paragraphs: [
+      "Diplomerad Professionell Coach med lång erfarenhet av arbetsliv, ledarskap och företagande.",
+      "Jag driver CVB Coaching i Göteborg och har närmare 20 års erfarenhet från säljande och ledande roller inom bank, samt erfarenhet av eget företagande inom finans och fastighet.",
+      "Idag arbetar jag som coach och möter både privatpersoner och människor i arbetslivet. Med min erfarenhet och utbildning som grund skapar jag ett tryggt och professionellt samtal.",
+      "För mig handlar coaching om att skapa ett tryggt och förtroendefullt utrymme där du kan tänka högt, reflektera och se på din situation ur olika perspektiv. Min uppgift är att hjälpa dig att undersöka dina egna tankar och idéer, utmana det som behöver utmanas och hitta det som känns relevant för dig. Det är också viktigt för mig att våra samtal har ett mål. Du ska känna att tiden vi lägger tillsammans är värdefull och att du får med dig något som du kan använda efter samtalet.",
+    ],
     linkHref: "/om-oss",
     linkLabel: "Läs om Carolina och hennes arbetssätt",
   },
   en: {
     heading: "Coaching with Carolina",
     imageAlt: "Carolina von Braun, coach and founder of CVB Coaching",
-    intro: "I am Carolina von Braun, and I run CVB Coaching.",
-    background:
-      "My professional background includes securities trading at Nordea and board assignments in property management and investments. That experience is present in the conversation as background — not as the answer key to your decisions.",
-    credentials:
-      "Qualified coach, Gothia Akademi · ICF-accredited coach training at Level 1 and Level 2 · Gothenburg and online",
+    // Same four paragraphs as the Carolina section on /en/om-oss.
+    paragraphs: [
+      "Qualified Professional Coach with long experience of working life, leadership and running a business.",
+      "I run CVB Coaching in Gothenburg and have nearly 20 years of experience in sales and leadership roles in banking, as well as experience of running my own business in finance and property.",
+      "Today I work as a coach and meet both private individuals and people in working life. With my experience and training as a foundation, I create a safe and professional conversation.",
+      "For me, coaching is about creating a safe and trusting space where you can think out loud, reflect and look at your situation from different perspectives. My role is to help you explore your own thoughts and ideas, challenge what needs to be challenged and find what feels relevant to you. It is also important to me that our conversations have a goal. You should feel that the time we spend together is valuable and that you take away something you can use after the conversation.",
+    ],
     linkHref: "/en/om-oss",
     linkLabel: "Read about Carolina and how she works",
   },
@@ -207,18 +209,15 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
             aria-hidden="true"
             className="mb-9 block h-px w-full origin-left bg-zinc-500/70 md:mb-12"
           />
-          <p data-col-paragraph className="max-w-xl">
-            {c.intro}
-          </p>
-          <p data-col-paragraph className="mt-9 max-w-xl text-xl leading-[1.55] text-zinc-100 md:mt-12 md:text-2xl">
-            {c.background}
-          </p>
-          <p
-            data-col-paragraph
-            className="mt-8 max-w-xl border-t border-white/15 pt-7 text-[0.875rem] leading-[1.65] text-zinc-400"
-          >
-            {c.credentials}
-          </p>
+          {c.paragraphs.map((paragraph, index) => (
+            <p
+              key={paragraph}
+              data-col-paragraph
+              className={`max-w-xl${index > 0 ? " mt-7" : ""}`}
+            >
+              {paragraph}
+            </p>
+          ))}
           <div data-col-paragraph className="mt-10 flex justify-center md:mt-12 md:justify-start">
             <Link
               href={c.linkHref}
