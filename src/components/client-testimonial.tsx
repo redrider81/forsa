@@ -17,23 +17,19 @@ import { HOME_DISPLAY_SM } from "@/lib/homepage-typography";
 const copy: Record<
   Locale,
   {
-    label: string;
     quote: string;
     quoteOpen: string;
     quoteClose: string;
-    attribution: string;
     expand: string;
     collapse: string;
     story: string[];
   }
 > = {
   sv: {
-    label: "En klients upplevelse",
     quote:
       "Det som stannade kvar mest är modet jag fick med mig – modet att stanna upp, tänka efter, och göra annorlunda i praktiken",
     quoteOpen: "”",
     quoteClose: "”",
-    attribution: "Klient hos CVB Coaching",
     expand: "Läs hela berättelsen",
     collapse: "Stäng berättelsen",
     story: [
@@ -43,12 +39,10 @@ const copy: Record<
     ],
   },
   en: {
-    label: "A client's experience",
     quote:
       "What has stayed with me most is the courage I took away with me – the courage to pause, to think things through, and to do things differently in practice",
     quoteOpen: "“",
     quoteClose: "”",
-    attribution: "Client of CVB Coaching",
     expand: "Read the full story",
     collapse: "Close the story",
     story: [
@@ -69,13 +63,12 @@ type Props = {
 /**
  * En klients röst efter Carolinas presentation. Ligger kvar på samma mörka yta
  * som akten om Carolina — citatet är en rörelse i den akten, inte en ny akt —
- * och följer dess kolumner: citatet från vänsterkanten, attribution och hela
- * berättelsen i samma högerspalt som Carolinas text.
+ * och följer dess kolumner: citatet från vänsterkanten, hela berättelsen i
+ * samma högerspalt som Carolinas text.
  */
 export default function ClientTestimonial({ locale = "sv" }: Props) {
   const c = copy[locale];
   const baseId = useId().replace(/:/g, "");
-  const labelId = `${baseId}-testimonial-label`;
   const triggerId = `${baseId}-testimonial-trigger`;
   const panelId = `${baseId}-testimonial-panel`;
   const [open, setOpen] = useState(false);
@@ -97,8 +90,8 @@ export default function ClientTestimonial({ locale = "sv" }: Props) {
       return;
     }
 
-    // Samma grammatik som Carolinas akt: linjen dras ut, etikett och citat
-    // kommer som rubrik, attribution och kontroll följer som brödtext.
+    // Samma grammatik som Carolinas akt: linjen dras ut, citatet kommer som
+    // rubrik och kontrollen följer som brödtext.
     // Accordionens öppning ligger helt utanför denna entré.
     gsap.registerPlugin(ScrollTrigger);
     const travel = homeTravel();
@@ -163,7 +156,7 @@ export default function ClientTestimonial({ locale = "sv" }: Props) {
   return (
     <section
       ref={sectionRef}
-      aria-labelledby={labelId}
+      data-testimonial
       data-parallax-section
       className="relative bg-surface-dark text-zinc-100"
     >
@@ -174,14 +167,6 @@ export default function ClientTestimonial({ locale = "sv" }: Props) {
           className="block h-px w-full origin-left bg-zinc-500/70"
         />
 
-        <h2
-          id={labelId}
-          data-testimonial-lead
-          className="mt-10 text-xs font-medium uppercase tracking-[0.32em] text-white md:mt-14"
-        >
-          {c.label}
-        </h2>
-
         <figure className="mt-10 md:mt-14">
           <blockquote data-testimonial-quote className="max-w-4xl">
             <p data-testimonial-lead className={`${HOME_DISPLAY_SM} text-white`}>
@@ -190,30 +175,22 @@ export default function ClientTestimonial({ locale = "sv" }: Props) {
               <span aria-hidden="true">{c.quoteClose}</span>
             </p>
           </blockquote>
-          <figcaption className="mt-10 md:mt-14 md:grid md:grid-cols-12 md:gap-x-8">
-            <span
-              data-testimonial-follow
-              className="block border-t border-white/15 pt-7 text-[0.875rem] leading-[1.65] text-zinc-400 md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8"
-            >
-              {c.attribution}
-            </span>
-          </figcaption>
         </figure>
 
         <div className="md:grid md:grid-cols-12 md:gap-x-8">
           <div className="md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8">
-            <div data-testimonial-follow className="mt-4">
+            <div data-testimonial-follow className="mt-10 md:mt-14">
               <button
                 type="button"
                 id={triggerId}
                 aria-expanded={open}
                 aria-controls={panelId}
                 onClick={() => setOpen((current) => !current)}
-                className={`-mx-1 inline-flex min-h-11 items-center gap-3 px-1 py-2 text-left text-sm font-medium text-white transition-colors duration-200 hover:text-zinc-300 ${triggerFocusClass}`}
+                className={`-mx-1 inline-flex min-h-11 items-center gap-3 px-1 py-2 text-left text-[1.0625rem] font-medium text-white md:text-lg transition-colors duration-200 hover:text-zinc-300 ${triggerFocusClass}`}
               >
                 <span>{open ? c.collapse : c.expand}</span>
                 <span
-                  className="font-sans text-[1.125rem] font-light leading-none tabular-nums text-zinc-400"
+                  className="font-sans text-[1.25rem] font-light leading-none tabular-nums text-zinc-400 md:text-[1.375rem]"
                   aria-hidden="true"
                 >
                   {open ? "−" : "+"}
