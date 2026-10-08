@@ -13,7 +13,7 @@ const copy: Record<
   sv: {
     ariaLabel: "Välj coachingväg",
     individual: { label: "Individuell coaching", href: "/individuell-coaching" },
-    business: { label: "Business coaching", href: "/business-coaching" },
+    business: { label: "Coaching i arbetslivet", href: "/business-coaching" },
   },
   en: {
     ariaLabel: "Choose a coaching path",

@@ -421,7 +421,7 @@ export default function SiteNavigation() {
           },
           {
             href: "/business-coaching",
-            label: "Business coaching",
+            label: "Coaching i arbetslivet",
             text: "För medarbetare och ledare i arbetslivet.",
           },
         ]
