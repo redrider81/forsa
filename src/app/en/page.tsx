@@ -60,6 +60,9 @@ const CHAPTER = "text-xs font-medium tabular-nums tracking-[0.32em]";
 const CHAPTER_ON_LIGHT = `${CHAPTER} text-zinc-900`;
 const CHAPTER_ON_DARK = `${CHAPTER} text-white`;
 
+/** "When coaching is relevant — and when it is not" är dolt tills vidare på kundens begäran. */
+const SHOW_COACHING_FIT = false;
+
 const relevancePoints = [
   "You are facing a choice and need to understand what actually matters to you.",
   "You have taken on new responsibility or are going through a change at work.",
@@ -85,17 +88,17 @@ const workRows = [
   {
     index: "01",
     title: "Clarity",
-    body: "I listen and ask questions that help you sort out what the question is really about and what matters most to you.",
+    body: "Sort your thoughts, see new perspectives and discover what matters to you.",
   },
   {
     index: "02",
     title: "Decisions",
-    body: "I help you test your options and the assumptions they rest on, so you can see what you are choosing, what you are giving up and why.",
+    body: "Explore different options and arrive at what feels right for you.",
   },
   {
     index: "03",
     title: "Direction",
-    body: "You turn what you have arrived at into next steps that work in your everyday life.",
+    body: "Clarify what you want and find the next step based on your goals.",
   },
 ];
 
@@ -160,15 +163,15 @@ export default function HomePageEn() {
                     data-hero-headline
                     className="relative mx-auto max-w-[18ch] font-serif text-4xl font-bold leading-[1.22] tracking-tight text-balance text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-5xl md:mx-0 md:max-w-none md:text-6xl md:leading-[1.2] lg:text-7xl"
                   >
-                    Some questions are not meant to be thought through alone.
+                    Time to think. Room to grow
                   </h1>
                 </div>
                 <p
                   data-hero-body
                   className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg"
                 >
-                  Professional coaching for you when you face a choice, a
-                  change or a question where the next step is not yet obvious.
+                  Professional coaching for anyone who wants to develop, make decisions or find new
+                  perspectives, in life or at work.
                 </p>
                 <div className="mt-9 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-10 md:items-start">
                   <span data-hero-cta className="inline-flex justify-center md:justify-start">
@@ -217,7 +220,7 @@ export default function HomePageEn() {
               >
                 <div data-col-left className="md:col-span-5">
                   <h2 className={`max-w-[12ch] md:max-w-[11ch] ${DISPLAY} text-zinc-900`}>
-                    When coaching can be right
+                    What can coaching be about?
                   </h2>
                   <figure className="relative mt-10 aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[1.25rem] sm:max-w-md md:mt-12 md:max-w-lg md:rounded-[1.75rem] lg:max-w-xl lg:rounded-[2rem]">
                     <Image
@@ -257,6 +260,7 @@ export default function HomePageEn() {
 
             {/* Rörelse 3 — avgränsningen, en kvalificerande rörelse och därför
                 ett steg ned i display-skalan, inte en egen akt. */}
+            {SHOW_COACHING_FIT && (
             <div className="mx-auto max-w-7xl px-6 md:px-10">
               <ScrollReveal
                 variant="splitColumn"
@@ -289,6 +293,7 @@ export default function HomePageEn() {
                 </div>
               </ScrollReveal>
             </div>
+            )}
 
             {/* -------------------- AKT 02 · ARBETET --------------------
                 Aktens signaturmoment ligger i posttiteln, inte i siffran.
@@ -302,7 +307,7 @@ export default function HomePageEn() {
                   data-section-heading
                   className={`mt-10 max-w-3xl max-md:max-w-[16.5ch] ${DISPLAY} text-zinc-900 md:mt-14`}
                 >
-                  What the work involves
+                  What we focus on
                 </h2>
                 <div className="mt-20 border-t border-zinc-300 md:mt-28">
                   {workRows.map((row) => (

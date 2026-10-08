@@ -112,20 +112,26 @@ export default function AboutPageEn() {
                 className={`${BODY_STACK_ON_DARK} md:col-span-6 md:col-start-7 md:row-start-2 md:mt-12 md:flex md:min-h-0 md:flex-col md:justify-between md:space-y-0 md:gap-8 lg:gap-10`}
               >
                 <p>
-                  My name is Carolina von Braun and I run CVB Coaching in Gothenburg. I am a qualified coach
-                  from Gothia Akademi and have completed ICF-accredited coach training at Level 1 and Level
-                  2.
+                  Qualified Professional Coach with long experience of working life, leadership and
+                  running a business.
                 </p>
                 <p>
-                  My professional background includes securities trading at Nordea, board assignments in
-                  property management and investments, and studies in marketing at the School of
-                  Business, Economics and Law at the University of Gothenburg. I bring that experience
-                  with me as background and understanding — not as the answer key to your decisions.
+                  I run CVB Coaching in Gothenburg and have nearly 20 years of experience in sales and
+                  leadership roles in banking, as well as experience of running my own business in finance
+                  and property.
                 </p>
                 <p>
-                  In coaching the roles are clear: you own your goals, insights and decisions. My
-                  task is to bring sharpness to the thinking, test perspectives and move the conversation
-                  forward without taking over your conclusions.
+                  Today I work as a coach and meet both private individuals and people in working life.
+                  With my experience and training as a foundation, I create a safe and professional
+                  conversation.
+                </p>
+                <p>
+                  For me, coaching is about creating a safe and trusting space where you can think out
+                  loud, reflect and look at your situation from different perspectives. My role is to help
+                  you explore your own thoughts and ideas, challenge what needs to be challenged and find
+                  what feels relevant to you. It is also important to me that our conversations have a
+                  goal. You should feel that the time we spend together is valuable and that you take away
+                  something you can use after the conversation.
                 </p>
               </div>
             </ScrollReveal>

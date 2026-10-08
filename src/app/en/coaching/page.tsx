@@ -42,42 +42,25 @@ const workRows = [
   {
     index: "01",
     title: "Clarity",
-    body: "I listen and ask questions that help you sort out what the question is really about and what matters most to you.",
+    body: "Sort your thoughts, see new perspectives and discover what matters to you.",
   },
   {
     index: "02",
     title: "Decisions",
-    body: "I help you test your options and the assumptions they rest on, so you can see what you are choosing, what you are giving up and why.",
+    body: "Explore different options and arrive at what feels right for you.",
   },
   {
     index: "03",
     title: "Direction",
-    body: "You turn what you have arrived at into next steps that work in your everyday life.",
+    body: "Clarify what you want and find the next step based on your goals.",
   },
 ];
 
-const processSteps = [
-  {
-    index: "01",
-    title: "The first conversation",
-    body: "Confidential. You tell me about your situation, and together we see whether coaching is the right support and whether we work well together.",
-  },
-  {
-    index: "02",
-    title: "What you want to get clearer about",
-    body: "I help you put into words what you want to get clearer about and what you want to be able to do differently.",
-  },
-  {
-    index: "03",
-    title: "The sessions",
-    body: "You and I set the rhythm together. Every session ends with something you take forward.",
-  },
-  {
-    index: "04",
-    title: "Closing",
-    body: "You and I check back against what you wanted to achieve and see together whether the work is finished or should continue.",
-  },
-];
+const processExplanation =
+  "We start by clarifying what you want to get out of the coaching and which overall goals we will work towards. This gives our work a shared direction. Before each session, we narrow down what you want to focus on and what you want to take away. We explore the question together, look at different perspectives and examine what could help you move forward. Between sessions, there may be something you want to try, reflect on further or notice in your everyday life. At the next session, we follow up on what you have discovered and what you want to take forward.";
+
+/** "When coaching is relevant — and when it is not" är dolt tills vidare på kundens begäran. */
+const SHOW_COACHING_FIT = false;
 
 const routes = [
   {
@@ -211,7 +194,7 @@ export default function CoachingPageEn() {
             <div data-col-left className="md:col-span-5">
               <p className={chapterIndexOnLight}>01</p>
               <h2 className="mt-10 max-w-md font-serif text-[clamp(3rem,6vw,6.5rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900 md:mt-16">
-                When coaching can be right
+                What can coaching be about?
               </h2>
             </div>
             <div data-col-right className="md:col-span-6 md:col-start-7 md:pt-28 lg:pt-40">
@@ -238,7 +221,7 @@ export default function CoachingPageEn() {
             data-section-heading
             className="mt-10 max-w-3xl font-serif text-[clamp(2.8rem,6vw,6rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:mt-16"
           >
-            What the work involves
+            What we focus on
           </h2>
           <div className="mt-24 border-t border-zinc-300 md:mt-40">
             {workRows.map((row) => (
@@ -294,44 +277,17 @@ export default function CoachingPageEn() {
           </ScrollReveal>
 
           <EditorialRowsReveal className="mt-20 md:mt-28">
-            <ol className="border-t border-zinc-300">
-              {processSteps.map((step) => (
-                <li
-                  key={step.index}
-                  data-editorial-row
-                  className="relative border-b border-zinc-300 py-10 md:py-14"
-                >
-                  {/* Samma rutnätsdisciplin som scen 02, men tätare index —
-                      processen är operativ, inte signaturscen. */}
-                  <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-8">
-                    <div className="flex items-baseline gap-4 md:contents">
-                      <span
-                        data-row-index
-                        aria-hidden="true"
-                        className="min-w-[1.6rem] shrink-0 font-serif tabular-nums text-[1.25rem] leading-tight tracking-[-0.02em] text-zinc-400 md:col-span-1 md:min-w-0 md:text-[clamp(1.25rem,1.4vw,1.375rem)]"
-                      >
-                        {step.index}
-                      </span>
-                      <h3
-                        data-row-title
-                        className="text-xl font-medium leading-[1.3] tracking-tight text-zinc-900 md:col-span-4 md:col-start-2 md:text-2xl"
-                      >
-                        {step.title}
-                      </h3>
-                    </div>
-                    <p
-                      data-row-body
-                      className="max-w-xl text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:col-span-5 md:col-start-8 md:text-[1.0625rem]"
-                    >
-                      {step.body}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <p className="ml-auto mt-10 max-w-xl border-l border-zinc-300 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]">
-              The shape of the work follows the question and what you want to get out of the sessions.
-            </p>
+            <div
+              data-editorial-row
+              className="border-t border-zinc-300 pt-10 md:grid md:grid-cols-12 md:gap-x-8 md:pt-14"
+            >
+              <p
+                data-row-body
+                className="max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-7 md:col-start-6"
+              >
+                {processExplanation}
+              </p>
+            </div>
           </EditorialRowsReveal>
         </div>
       </section>
@@ -363,6 +319,7 @@ export default function CoachingPageEn() {
       </section>
 
       {/* ---------- 05 · När coaching är relevant — tätast ---------- */}
+      {SHOW_COACHING_FIT && (
       <section className="bg-[#f4f3ef] pb-16 pt-20 md:pb-20 md:pt-24">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
@@ -397,6 +354,7 @@ export default function CoachingPageEn() {
           </ScrollReveal>
         </div>
       </section>
+      )}
 
       {/* ---------- Paus · Statement ----------
           Frasen stod tidigare två gånger på sidan (hero och rubriken nedan).
@@ -413,7 +371,7 @@ export default function CoachingPageEn() {
       <section id="vagar" className="scroll-mt-28 bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
-            <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>06</p>
+            <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>05</p>
             <div data-col-right className="md:col-span-8 md:col-start-5">
               <h2 className="font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1.18] tracking-[-0.035em] text-zinc-900">
                 Individual coaching or business coaching
@@ -475,7 +433,7 @@ export default function CoachingPageEn() {
           {/* Rubriken hålls på metadata-skala: raderna nedan bär scenen visuellt,
               men sektionen behöver fortfarande sin plats i rubrikträdet. */}
           <div className="flex items-baseline gap-6">
-            <p className={chapterIndexOnLight}>07</p>
+            <p className={chapterIndexOnLight}>06</p>
             <h2 className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.03em] text-zinc-900">
               Practical
             </h2>
@@ -516,7 +474,7 @@ export default function CoachingPageEn() {
       <section className="bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <ScrollReveal variant="fadeUp" className="grid gap-12 md:grid-cols-12 md:gap-x-8">
-            <p className={`${chapterIndexOnLight} md:col-span-2`}>08</p>
+            <p className={`${chapterIndexOnLight} md:col-span-2`}>07</p>
             <div className="md:col-span-9 md:col-start-4">
               <ProcessFaq heading="Frequently asked questions" items={faqItems} variant="editorial" />
             </div>

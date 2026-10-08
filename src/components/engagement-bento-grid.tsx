@@ -6,61 +6,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Locale } from "@/lib/i18n/config";
 import { motion, prefersReducedMotion, refreshScrollTriggers, revealScrollTrigger, showTargets } from "@/lib/motion";
 
-type Step = {
-  index: string;
-  title: string;
-  body: string;
-};
-
-const stepsSv: Step[] = [
-  {
-    index: "01",
-    title: "Första samtalet",
-    body: "Konfidentiellt. Du berättar om din situation, och tillsammans ser vi om coaching är rätt stöd och om vi fungerar bra ihop.",
-  },
-  {
-    index: "02",
-    title: "Vad du vill bli klarare i",
-    body: "Jag hjälper dig att sätta ord på vad du vill bli klarare i och vad du vill kunna göra annorlunda.",
-  },
-  {
-    index: "03",
-    title: "Samtalen",
-    body: "Du och jag bestämmer rytmen tillsammans. Varje samtal avslutas med något du tar med dig vidare.",
-  },
-  {
-    index: "04",
-    title: "Avslut",
-    body: "Du och jag stämmer av mot det du ville uppnå och ser tillsammans om arbetet är klart eller ska fortsätta.",
-  },
-];
-
-const stepsEn: Step[] = [
-  {
-    index: "01",
-    title: "The first conversation",
-    body: "Confidential. You tell me about your situation, and together we see whether coaching is the right support and whether we work well together.",
-  },
-  {
-    index: "02",
-    title: "What you want to get clearer about",
-    body: "I help you put into words what you want to get clearer about and what you want to be able to do differently.",
-  },
-  {
-    index: "03",
-    title: "The sessions",
-    body: "You and I set the rhythm together. Every session ends with something you take forward.",
-  },
-  {
-    index: "04",
-    title: "Closing",
-    body: "You and I check back against what you wanted to achieve and see together whether the work is finished or should continue.",
-  },
-];
-
-const footnotes: Record<Locale, string> = {
-  sv: "Upplägget följer frågan och vad du vill få ut av samtalen.",
-  en: "The shape of the work follows the question and what you want to get out of the sessions.",
+/**
+ * En sammanhängande beskrivning av hur arbetet går till, i stället för
+ * numrerade steg.
+ */
+const explanations: Record<Locale, string> = {
+  sv: "Vi börjar med att tydliggöra vad du vill ha ut av coachingen och vilka övergripande mål vi ska arbeta mot. Det ger en gemensam riktning för vårt arbete. Inför varje samtal ringar vi in vad du vill fokusera på och vad du vill få med dig. Vi utforskar frågan tillsammans, ser på olika perspektiv och undersöker vad som kan hjälpa dig vidare. Mellan samtalen kan det finnas något du vill prova, fundera vidare på eller lägga märke till i din vardag. Vid nästa samtal följer vi upp vad du har upptäckt och vad du vill ta med dig vidare.",
+  en: "We start by clarifying what you want to get out of the coaching and which overall goals we will work towards. This gives our work a shared direction. Before each session, we narrow down what you want to focus on and what you want to take away. We explore the question together, look at different perspectives and examine what could help you move forward. Between sessions, there may be something you want to try, reflect on further or notice in your everyday life. At the next session, we follow up on what you have discovered and what you want to take forward.",
 };
 
 type Props = {
@@ -116,7 +68,6 @@ function buildStepsReveal(
 export default function EngagementBentoGrid({ locale }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const steps = locale === "en" ? stepsEn : stepsSv;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -149,45 +100,14 @@ export default function EngagementBentoGrid({ locale }: Props) {
   return (
     <div ref={rootRef}>
       <div ref={panelRef}>
-        <ol className="border-t border-zinc-300">
-            {steps.map((step) => (
-              <li
-                key={step.index}
-                data-bento-card
-                className="relative border-b border-zinc-300 py-10 md:py-14"
-              >
-                <span
-                  data-progress-line
-                  aria-hidden="true"
-                  className="absolute left-0 top-[-1px] h-px w-full origin-left bg-zinc-400/70"
-                />
-                <div className="grid gap-6 md:grid-cols-12 md:items-center md:gap-x-8">
-                  <span
-                    data-progress-step
-                    aria-hidden="true"
-                    className="whitespace-nowrap font-serif tabular-nums text-[clamp(3.25rem,6vw,5.75rem)] leading-[0.88] tracking-[-0.06em] text-zinc-500 md:col-span-2"
-                  >
-                    {step.index}
-                  </span>
-                  <h3 className="text-xl font-medium leading-[1.3] tracking-tight text-zinc-900 md:col-span-4 md:col-start-3 md:text-2xl">
-                    {step.title}
-                  </h3>
-                  <div className="md:col-span-5 md:col-start-8">
-                    <p className="max-w-xl text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
-                      {step.body}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            ))}
-        </ol>
-
-            <p
-              data-bento-footnote
-              className="ml-auto mt-10 max-w-xl border-l border-zinc-300 pl-6 text-[0.98rem] font-[450] leading-[1.7] text-zinc-600 md:mt-14 md:pl-8 md:text-[1.02rem]"
-            >
-              {footnotes[locale]}
-            </p>
+        <div className="border-t border-zinc-300 pt-10 md:grid md:grid-cols-12 md:gap-x-8 md:pt-14">
+          <p
+            data-bento-card
+            className="max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-7 md:col-start-6"
+          >
+            {explanations[locale]}
+          </p>
+        </div>
       </div>
     </div>
   );

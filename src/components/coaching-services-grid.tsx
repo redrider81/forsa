@@ -18,6 +18,7 @@ type Service = {
   index: string;
   href: string;
   title: string;
+  intro?: string;
   description: string;
   ctaLabel: string;
 };
@@ -27,16 +28,20 @@ const servicesSv: Service[] = [
     index: "01",
     href: "/individuell-coaching",
     title: "Individuell coaching",
+    intro:
+      "För dig som vill utvecklas, hitta klarhet eller ta nästa steg i livet eller karriären.",
     description:
-      "För dig som står inför ett vägval, en förändring eller ett beslut som du vill tänka färdigt.",
+      "Coaching kan ge dig möjlighet att stanna upp, sortera dina tankar och se nya perspektiv. Det kan handla om en förändring eller ett beslut, men också om att utveckla dina styrkor, hitta nya möjligheter eller komma fram till vad som är viktigt för dig.",
     ctaLabel: "Läs om individuell coaching",
   },
   {
     index: "02",
     href: "/business-coaching",
-    title: "Företagscoaching",
+    title: "Business Coaching",
+    intro:
+      "För medarbetare, ledare och team som vill utvecklas och hitta nya perspektiv.",
     description:
-      "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
+      "Coaching kan ge utrymme för reflektion kring det som är aktuellt i arbetslivet. Det kan handla om arbetsuppgifter, ledarskap, kommunikation, samarbete eller förändringar – men också om att utvecklas i sin roll och ta vara på sina styrkor.",
     ctaLabel: "Läs om företagscoaching",
   },
 ];
@@ -46,16 +51,20 @@ const servicesEn: Service[] = [
     index: "01",
     href: "/en/individuell-coaching",
     title: "Individual coaching",
+    intro:
+      "For anyone who wants to develop, find clarity or take the next step in life or their career.",
     description:
-      "For anyone facing a choice, a change or a decision they want to think through fully.",
+      "Coaching can give you the opportunity to pause, sort your thoughts and see new perspectives. It may be about a change or a decision, but also about developing your strengths, finding new opportunities or working out what matters to you.",
     ctaLabel: "Read about individual coaching",
   },
   {
     index: "02",
     href: "/en/business-coaching",
-    title: "Business coaching",
+    title: "Business Coaching",
+    intro:
+      "For employees, leaders and teams who want to develop and find new perspectives.",
     description:
-      "For employees and leaders with a question in working life — new responsibility, a difficult relationship or a decision that affects others.",
+      "Coaching can create space for reflection on whatever is current in your working life. It may involve work tasks, leadership, communication, collaboration or change – but also developing in your role and making the most of your strengths.",
     ctaLabel: "Read about business coaching",
   },
 ];
@@ -179,6 +188,11 @@ export default function CoachingServicesGrid({
                   >
                     {service.title}
                   </span>
+                  {service.intro ? (
+                    <p className="mt-4 max-w-md text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
+                      {service.intro}
+                    </p>
+                  ) : null}
                   <p className="mt-4 max-w-md flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
                     {service.description}
                   </p>

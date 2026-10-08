@@ -112,22 +112,25 @@ export default function AboutPage() {
                 className={`${BODY_STACK_ON_DARK} md:col-span-6 md:col-start-7 md:row-start-2 md:mt-12 md:flex md:min-h-0 md:flex-col md:justify-between md:space-y-0 md:gap-8 lg:gap-10`}
               >
                 <p>
-                  Jag heter Carolina von Braun och driver CVB Coaching i Göteborg. Jag är diplomerad coach
-                  vid Gothia Akademi och har genomgått ICF-ackrediterad coachutbildning på Level 1 och Level
-                  2. ICF (International Coaching Federation) är en global organisation för professionell
-                  coaching. ICF-ackrediterade utbildningar granskas mot organisationens kärnkompetenser och
-                  etiska riktlinjer.
+                  Diplomerad Professionell Coach med lång erfarenhet av arbetsliv, ledarskap och
+                  företagande.
                 </p>
                 <p>
-                  Min yrkesbakgrund omfattar värdepappershandel på Nordea, styrelseuppdrag inom
-                  fastighetsförvaltning och investeringar samt studier i marknadsföring vid
-                  Handelshögskolan vid Göteborgs universitet. Den erfarenheten tar jag med mig som
-                  bakgrund och förståelse — inte som ett facit för dina beslut.
+                  Jag driver CVB Coaching i Göteborg och har närmare 20 års erfarenhet från säljande och
+                  ledande roller inom bank, samt erfarenhet av eget företagande inom finans och fastighet.
                 </p>
                 <p>
-                  I coachingen är rollerna tydliga: du äger dina mål, insikter och beslut. Min
-                  uppgift är att skapa skärpa i tänkandet, pröva perspektiv och föra samtalet framåt
-                  utan att ta över dina slutsatser.
+                  Idag arbetar jag som coach och möter både privatpersoner och människor i arbetslivet.
+                  Med min erfarenhet och utbildning som grund skapar jag ett tryggt och professionellt
+                  samtal.
+                </p>
+                <p>
+                  För mig handlar coaching om att skapa ett tryggt och förtroendefullt utrymme där du kan
+                  tänka högt, reflektera och se på din situation ur olika perspektiv. Min uppgift är att
+                  hjälpa dig att undersöka dina egna tankar och idéer, utmana det som behöver utmanas och
+                  hitta det som känns relevant för dig. Det är också viktigt för mig att våra samtal har
+                  ett mål. Du ska känna att tiden vi lägger tillsammans är värdefull och att du får med
+                  dig något som du kan använda efter samtalet.
                 </p>
               </div>
             </ScrollReveal>

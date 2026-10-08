@@ -12,11 +12,10 @@ export const metadata: Metadata = {
 };
 
 const relevanceList = [
-  "Du står inför ett vägval eller beslut och behöver tänka klart innan du går vidare.",
-  "Du har fått ett större ansvar eller befinner dig i en förändring.",
-  "Prioriteringarna skiftar och du behöver sortera vad som är viktigast.",
-  "Ett beslut har fattats, men behöver få fäste i vardagen.",
-  "Du behöver prata fritt och konfidentiellt utanför den egna arbetsplatsen.",
+  "Medarbetarskap och arbetsuppgifter",
+  "Ledarskap",
+  "Kommunikation och samarbete",
+  "Förändring och utveckling",
 ];
 
 const nonGoals = [
@@ -48,14 +47,16 @@ export default function BusinessCoachingPage() {
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
             <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
-              Företagscoaching
+              Business coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              En fråga i arbetslivet behöver ibland ett eget rum.
+              Coaching i arbetslivet
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Företagscoaching är personlig coaching i arbetslivet. Den passar medarbetare och
-              ledare som behöver tänka klart i en arbetsrelaterad fråga.
+              Coaching kan vara ett stöd när du vill utvecklas i din yrkesroll, hantera en aktuell
+              situation eller hitta nya sätt att se på en fråga i arbetslivet. Det kan handla om
+              arbetsuppgifter, ledarskap, kommunikation eller samarbete – men också om förändringar och
+              nya utmaningar.
             </p>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
               Företaget kan ta den första kontakten och finansiera coachingen, medan samtalen är
@@ -93,7 +94,7 @@ export default function BusinessCoachingPage() {
         {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
-            När coaching i arbetslivet kan vara rätt
+            Det kan handla om
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -105,6 +106,10 @@ export default function BusinessCoachingPage() {
               ))}
             </ul>
           </ScrollReveal>
+          <p className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
+            Utgångspunkten är alltid den situation och de behov som är aktuella för dig, ditt team
+            eller din organisation.
+          </p>
         </section>
 
         {/* List: process */}
@@ -179,7 +184,7 @@ export default function BusinessCoachingPage() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-[1.25] tracking-tight md:text-4xl">
-              Boka ett inledande samtal
+              Nyfiken på om coaching är rätt för dig?
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
               Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.

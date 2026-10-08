@@ -3,7 +3,6 @@ import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
-import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
   title: "Individual coaching in Gothenburg | CVB Coaching",
@@ -12,32 +11,10 @@ export const metadata: Metadata = {
 };
 
 const relevanceList = [
-  "You are facing a choice and cannot get to the end of it on your own.",
-  "Something has ended and the next thing has not taken shape.",
-  "You are doing everything you normally do and still are not moving.",
-  "The role, or life, has grown faster than the way you are handling it.",
-  "You know what you should do, and you are not doing it.",
-];
-
-const focusList = [
-  "Choices and decisions that will shape the next stretch.",
-  "Transitions: a new role, a new phase, a new setting.",
-  "Direction when several options all look reasonable.",
-  "Habits and patterns that cost more than they give.",
-  "Work, career and the edges of a role.",
-  "A different angle on something you have already turned over many times.",
-];
-
-const nonGoals = [
-  "Not therapy or treatment. If the question is about ill health, therapy is the right route, and I will say so.",
-  "Not advice. I will not take over your decisions or hand you my view as the answer.",
-  "Not encouragement. You get resistance when it is needed, not cheering.",
-];
-
-const valueList = [
-  "You know what the question is actually about, not only how it feels.",
-  "You make the decision instead of carrying it.",
-  "You have a way of thinking that holds up the next time too.",
+  "Life questions and changes",
+  "Career and working life",
+  "Decisions and choices",
+  "Development and self-leadership",
 ];
 
 export default function IndividualCoachingPageEn() {
@@ -49,16 +26,22 @@ export default function IndividualCoachingPageEn() {
         <section className="relative overflow-hidden border-b border-zinc-300 pb-16 md:pb-20">
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
-            <p data-hero-label className="text-sm font-medium tracking-[0.12em] text-zinc-600">
-              Individual coaching
-            </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              The question is yours. The structure is mine.
+              Individual Coaching
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Individual coaching is a conversation you book for yourself. You bring whatever is
-              actually taking up room — a choice, a change, a question that will not let go — and
-              get further with it than you do alone.
+              For anyone who wants to develop, make decisions or take the next step in life or their
+              career.
+            </p>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
+              Coaching can be a way to get time and space to think about what matters to you. It may
+              be about a change, a decision or a situation you want to understand better. It can also
+              be about making the most of your strengths, developing or exploring new opportunities.
+            </p>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
+              You do not need to have all the answers from the start. We begin with what is relevant
+              to you right now and work together on what you want to change, develop or move forward
+              with.
             </p>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-600">
               If your employer is funding the coaching, or the question concerns your role at work,
@@ -94,7 +77,7 @@ export default function IndividualCoachingPageEn() {
         {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
-            Where things tend to get stuck
+            It can be about
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -105,22 +88,6 @@ export default function IndividualCoachingPageEn() {
                 </li>
               ))}
             </ul>
-          </ScrollReveal>
-        </section>
-
-        {/* Cards: focus */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <ScrollReveal variant="splitColumn" className="grid gap-10 md:grid-cols-12">
-            <h2 data-col-left className="text-3xl font-medium leading-[1.25] tracking-tight md:col-span-5">
-              What the questions can be about
-            </h2>
-            <StaggerCards data-col-right className="grid gap-4 md:col-span-7 md:grid-cols-2">
-              {focusList.map((item) => (
-                <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                  {item}
-                </div>
-              ))}
-            </StaggerCards>
           </ScrollReveal>
         </section>
 
@@ -145,34 +112,6 @@ export default function IndividualCoachingPageEn() {
               </p>
             </div>
           </ScrollReveal>
-        </section>
-
-        {/* List: non-goals */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What it is not</h2>
-          <ScrollReveal variant="staggerList" className="mt-8">
-            <ul className="space-y-3 text-zinc-700">
-              {nonGoals.map((item) => (
-                <li key={item} data-list-item className="flex items-start gap-3 leading-relaxed">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-600" aria-hidden />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </ScrollReveal>
-        </section>
-
-        {/* Cards: value */}
-        <section className="border-b border-zinc-300 py-16 md:py-20">
-          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">What you take away</h2>
-          <StaggerCards className="mt-8 grid gap-4 md:grid-cols-3">
-            {valueList.map((item, index) => (
-              <div data-card key={item} className="rounded-2xl border border-zinc-300 bg-white p-6 text-zinc-700 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                <p className="text-xs tracking-[0.18em] text-zinc-500">{`0${index + 1}`}</p>
-                {item}
-              </div>
-            ))}
-          </StaggerCards>
         </section>
 
         {/* Two-col: engagement */}
@@ -205,7 +144,7 @@ export default function IndividualCoachingPageEn() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-[1.25] tracking-tight md:text-4xl">
-              Next step
+              Curious whether coaching is for you?
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
               Tell me briefly what you would like to talk about and choose a time. You do not need

@@ -60,6 +60,9 @@ const CHAPTER = "text-xs font-medium tabular-nums tracking-[0.32em]";
 const CHAPTER_ON_LIGHT = `${CHAPTER} text-zinc-900`;
 const CHAPTER_ON_DARK = `${CHAPTER} text-white`;
 
+/** "När coaching är relevant — och när den inte är det" är dolt tills vidare på kundens begäran. */
+const SHOW_COACHING_FIT = false;
+
 const relevancePoints = [
   "Du står inför ett vägval och behöver förstå vad som faktiskt är viktigt för dig.",
   "Du har fått ett nytt ansvar eller befinner dig i en förändring i arbetslivet.",
@@ -85,17 +88,17 @@ const workRows = [
   {
     index: "01",
     title: "Klarhet",
-    body: "Jag lyssnar och ställer frågor som hjälper dig att sortera vad frågan faktiskt handlar om och vad som är viktigast för dig.",
+    body: "Sortera tankar, se nya perspektiv och få syn på vad som är viktigt för dig.",
   },
   {
     index: "02",
     title: "Beslut",
-    body: "Jag hjälper dig att pröva dina alternativ och de antaganden de vilar på, så att du ser vad du väljer, vad du väljer bort och varför.",
+    body: "Utforska olika alternativ och komma fram till vad som känns rätt för dig.",
   },
   {
     index: "03",
     title: "Riktning",
-    body: "Du omsätter det du kommit fram till i nästa steg som fungerar i din vardag.",
+    body: "Tydliggöra vad du vill och hitta nästa steg utifrån dina mål.",
   },
 ];
 
@@ -160,15 +163,15 @@ export default function HomePage() {
                     data-hero-headline
                     className="relative mx-auto max-w-[18ch] font-serif text-4xl font-bold leading-[1.22] tracking-tight text-balance text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-5xl md:mx-0 md:max-w-none md:text-6xl md:leading-[1.2] lg:text-7xl"
                   >
-                    Det finns frågor man inte tänker färdigt ensam.
+                    Tid att tänka. Utrymme att utvecklas
                   </h1>
                 </div>
                 <p
                   data-hero-body
                   className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg"
                 >
-                  Professionell coaching för dig som står inför ett vägval,
-                  en förändring eller en fråga där nästa steg ännu inte är självklart.
+                  Professionell coaching för dig som vill utvecklas, fatta beslut eller hitta nya
+                  perspektiv, i livet eller arbetslivet.
                 </p>
                 <div className="mt-9 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-10 md:items-start">
                   <span data-hero-cta className="inline-flex justify-center md:justify-start">
@@ -217,7 +220,7 @@ export default function HomePage() {
               >
                 <div data-col-left className="md:col-span-5">
                   <h2 className={`max-w-[12ch] md:max-w-[11ch] ${DISPLAY} text-zinc-900`}>
-                    När coaching kan vara rätt
+                    Vad kan coaching handla om?
                   </h2>
                   <figure className="relative mt-10 aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[1.25rem] sm:max-w-md md:mt-12 md:max-w-lg md:rounded-[1.75rem] lg:max-w-xl lg:rounded-[2rem]">
                     <Image
@@ -257,6 +260,7 @@ export default function HomePage() {
 
             {/* Rörelse 3 — avgränsningen, en kvalificerande rörelse och därför
                 ett steg ned i display-skalan, inte en egen akt. */}
+            {SHOW_COACHING_FIT && (
             <div className="mx-auto max-w-7xl px-6 md:px-10">
               <ScrollReveal
                 variant="splitColumn"
@@ -289,6 +293,7 @@ export default function HomePage() {
                 </div>
               </ScrollReveal>
             </div>
+            )}
 
             {/* -------------------- AKT 02 · ARBETET --------------------
                 Aktens signaturmoment ligger i posttiteln, inte i siffran.
@@ -302,7 +307,7 @@ export default function HomePage() {
                   data-section-heading
                   className={`mt-10 max-w-3xl max-md:max-w-[16.5ch] ${DISPLAY} text-zinc-900 md:mt-14`}
                 >
-                  Vad arbetet består av
+                  Vad vi fokuserar på
                 </h2>
                 <div className="mt-20 border-t border-zinc-300 md:mt-28">
                   {workRows.map((row) => (

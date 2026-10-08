@@ -12,16 +12,15 @@ export const metadata: Metadata = {
 };
 
 const relevanceList = [
-  "You are facing a choice or decision and need to think clearly before moving forward.",
-  "You have taken on greater responsibility or are going through a change.",
-  "Priorities are shifting and you need to sort out what matters most.",
-  "A decision has been made but needs to take root in everyday work.",
-  "You need to speak freely and confidentially outside your own workplace.",
+  "Your role as an employee and your work tasks",
+  "Leadership",
+  "Communication and collaboration",
+  "Change and development",
 ];
 
 const nonGoals = [
   "Not advice with ready-made recommendations. You own your decisions.",
-  "Not therapy or treatment. If the question is about ill health, therapy is the right route.",
+  "If the question is mainly about ill health or treatment, coaching is not the right support. In that case, care, therapy or other relevant professional help may be more appropriate.",
   "Not a standardised programme. The shape follows the question and what you want to get clearer about.",
 ];
 
@@ -51,11 +50,13 @@ export default function BusinessCoachingPageEn() {
               Business coaching
             </p>
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              A question at work sometimes needs a space of its own.
+              Coaching in working life
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Business coaching is personal coaching in working life. It suits employees and
-              leaders who need to think clearly about a work-related question.
+              Coaching can be a support when you want to develop in your professional role, handle a
+              current situation or find new ways of looking at a question in your working life. It may
+              involve work tasks, leadership, communication or collaboration – but also change and new
+              challenges.
             </p>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
               The company may make the first contact and fund the coaching, while the conversations
@@ -93,7 +94,7 @@ export default function BusinessCoachingPageEn() {
         {/* List: relevance */}
         <section className="border-b border-zinc-300 py-16 md:py-20">
           <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
-            When coaching at work can be right
+            It can be about
           </h2>
           <ScrollReveal variant="staggerList" className="mt-8">
             <ul className="space-y-3 text-zinc-700">
@@ -105,6 +106,10 @@ export default function BusinessCoachingPageEn() {
               ))}
             </ul>
           </ScrollReveal>
+          <p className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
+            The starting point is always the situation and the needs that are relevant to you, your
+            team or your organisation.
+          </p>
         </section>
 
         {/* List: process */}
@@ -179,7 +184,7 @@ export default function BusinessCoachingPageEn() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-[1.25] tracking-tight md:text-4xl">
-              Book an introductory conversation
+              Curious whether coaching is right for you?
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
               Tell me briefly what you would like to talk about and choose a time. You do not need to
