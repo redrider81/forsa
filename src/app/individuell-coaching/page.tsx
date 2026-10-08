@@ -46,7 +46,7 @@ export default function IndividuellCoachingPage() {
               Betalas coachingen av en arbetsgivare, eller gäller frågan din roll i arbetslivet,
               se{" "}
               <Link href="/business-coaching" className="underline underline-offset-2 hover:text-zinc-900">
-                Företagscoaching
+                Business coaching
               </Link>
               .
             </p>

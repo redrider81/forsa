@@ -42,7 +42,7 @@ const servicesSv: Service[] = [
       "För medarbetare, ledare och team som vill utvecklas och hitta nya perspektiv.",
     description:
       "Coaching kan ge utrymme för reflektion kring det som är aktuellt i arbetslivet. Det kan handla om arbetsuppgifter, ledarskap, kommunikation, samarbete eller förändringar – men också om att utvecklas i sin roll och ta vara på sina styrkor.",
-    ctaLabel: "Läs om företagscoaching",
+    ctaLabel: "Läs om business coaching",
   },
 ];
 

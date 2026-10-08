@@ -447,7 +447,7 @@ export default function ContactSchedulingPicker({
                       {(locale === "sv"
                         ? [
                             "Individuell coaching",
-                            "Företagscoaching",
+                            "Business coaching",
                             "Jag är osäker – vill börja med ett samtal",
                           ]
                         : [

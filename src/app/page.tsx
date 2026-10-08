@@ -23,9 +23,9 @@ import {
 } from "@/lib/homepage-typography";
 
 export const metadata: Metadata = {
-  title: "CVB Coaching – individuell coaching och företagscoaching i Göteborg",
+  title: "CVB Coaching – individuell coaching och business coaching i Göteborg",
   description:
-    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och företagscoaching för medarbetare och ledare i arbetslivet.",
+    "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och business coaching för medarbetare och ledare i arbetslivet.",
 };
 
 const t = svDictionary;
@@ -200,7 +200,7 @@ export default function HomePage() {
               <ScrollReveal variant="splitColumn" className="max-w-3xl">
                 <div data-col-left>
                   <h2 className={`${DISPLAY} text-zinc-900`}>
-                    Individuell coaching eller företagscoaching
+                    Individuell coaching eller business coaching
                   </h2>
                 </div>
               </ScrollReveal>
@@ -459,7 +459,7 @@ export default function HomePage() {
                   </h2>
                   <div className="mt-8 space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:mt-10">
                     <p data-col-paragraph className="max-w-2xl">
-                      CVB Coaching utvecklar CVB Base för individuell coaching och företagscoaching i svenska
+                      CVB Coaching utvecklar CVB Base för individuell coaching och business coaching i svenska
                       sammanhang. Det är ett svenskspråkigt digitalt stöd som utvecklas för att hålla ihop det som
                       är viktigt före, mellan och efter samtalen — i situationer där en klient, en uppdragsgivare och
                       en coach behöver tydliga ramar.

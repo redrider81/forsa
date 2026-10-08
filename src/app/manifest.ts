@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "CVB Coaching",
     short_name: "CVB Coaching",
     description:
-      "Individuell coaching och företagscoaching i Göteborg — CVB Coaching.",
+      "Individuell coaching och business coaching i Göteborg — CVB Coaching.",
     start_url: "/",
     display: "browser",
     background_color: themeGray,

@@ -6,9 +6,9 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerCards from "@/components/animations/StaggerCards";
 
 export const metadata: Metadata = {
-  title: "Företagscoaching i Göteborg | CVB Coaching",
+  title: "Business coaching i Göteborg | CVB Coaching",
   description:
-    "Personlig företagscoaching med Carolina von Braun för medarbetare och ledare som behöver tänka klart i en arbetsrelaterad fråga. Företaget kan initiera och finansiera coachingen; samtalen är individuella och konfidentiella.",
+    "Personlig business coaching med Carolina von Braun för medarbetare och ledare som behöver tänka klart i en arbetsrelaterad fråga. Företaget kan initiera och finansiera coachingen; samtalen är individuella och konfidentiella.",
 };
 
 const relevanceList = [

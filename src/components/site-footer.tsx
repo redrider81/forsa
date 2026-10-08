@@ -37,7 +37,7 @@ export default function SiteFooter() {
             label: "Coaching",
             links: [
               { title: "Individuell coaching", href: href("/individuell-coaching") },
-              { title: "Företagscoaching", href: href("/business-coaching") },
+              { title: "Business coaching", href: href("/business-coaching") },
               { title: "Så fungerar coaching", href: href("/coaching") },
             ],
           },

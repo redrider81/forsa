@@ -18,7 +18,7 @@ export const svDictionary = {
     contact: "Kontakt",
     login: "Logga in",
     loginAriaLabel: "Logga in till CVB Base",
-    leadershipLabel: "Individuell och företagscoaching",
+    leadershipLabel: "Individuell och business coaching",
     startHereLabel: "Osäker?",
     unsureTitle: "Osäker på vilken coaching som är relevant?",
     unsureBody:
@@ -27,7 +27,7 @@ export const svDictionary = {
   },
   footer: {
     description:
-      "Individuell coaching och företagscoaching, från Göteborg.",
+      "Individuell coaching och business coaching, från Göteborg.",
     services: "Coaching",
     about: "Om",
     portal: "Portal",
@@ -38,7 +38,7 @@ export const svDictionary = {
   },
   cta: {
     primary: "Boka ett inledande samtal",
-    secondary: "Individuell coaching eller företagscoaching",
+    secondary: "Individuell coaching eller business coaching",
     tertiary: "Omfattning och investering",
     engagementLink: "Så går det till →",
   },
