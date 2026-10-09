@@ -4,9 +4,9 @@ import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
-  title: "Coaching i arbetslivet i Göteborg | CVB Coaching",
+  title: "Företagscoaching i Göteborg | CVB Coaching",
   description:
-    "Coaching i arbetslivet hos CVB Coaching i Göteborg. För medarbetare, ledare och team som vill utvecklas i sin roll och hantera aktuella utmaningar i arbetslivet.",
+    "Företagscoaching hos CVB Coaching i Göteborg. För medarbetare, ledare och team som vill utvecklas i sin roll och hantera aktuella utmaningar i arbetslivet.",
 };
 
 const focusAreas = [
@@ -26,7 +26,7 @@ export default function BusinessCoachingPage() {
           <HeroReveal>
             <div data-hero-line className="mb-5 h-px w-10 bg-line-accent" />
             <h1 data-hero-headline className="mt-6 max-w-4xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              Coaching i arbetslivet
+              Företagscoaching
             </h1>
             <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
               För medarbetare, ledare och team som vill utvecklas i sin roll och hantera aktuella
@@ -64,7 +64,7 @@ export default function BusinessCoachingPage() {
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
             <h2 className="max-w-4xl text-3xl font-medium leading-[1.25] tracking-tight md:text-4xl">
-              Vill du veta mer om coaching i arbetslivet?
+              Vill du veta mer om företagscoaching?
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
               Hör gärna av dig så kan vi prata om era behov och hur ett upplägg skulle kunna se ut.

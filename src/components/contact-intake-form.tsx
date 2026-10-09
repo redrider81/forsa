@@ -262,7 +262,7 @@ export default function ContactIntakeForm() {
     locale === "sv"
       ? [
           { value: "Individuell coaching", label: "Individuell coaching" },
-          { value: "Coaching i arbetslivet", label: "Coaching i arbetslivet" },
+          { value: "Företagscoaching", label: "Företagscoaching" },
           {
             value: "Jag är osäker – vill börja med ett samtal",
             label: "Jag är osäker – vill börja med ett samtal",

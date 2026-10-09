@@ -37,12 +37,12 @@ const servicesSv: Service[] = [
   {
     index: "02",
     href: "/business-coaching",
-    title: "Coaching i arbetslivet",
+    title: "Företagscoaching",
     intro:
       "För medarbetare, ledare och team som vill utvecklas och hitta nya perspektiv.",
     description:
       "Coaching kan ge utrymme för reflektion kring det som är aktuellt i arbetslivet. Det kan handla om arbetsuppgifter, ledarskap, kommunikation, samarbete eller förändringar – men också om att utvecklas i sin roll och ta vara på sina styrkor.",
-    ctaLabel: "Läs om coaching i arbetslivet",
+    ctaLabel: "Läs om företagscoaching",
   },
 ];
 
