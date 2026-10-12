@@ -39,6 +39,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_invitations: {
+        Row: {
+          activated_at: string | null
+          attempt_count: number
+          auth_user_id: string | null
+          client_id: string
+          created_at: string
+          last_attempt_at: string | null
+          last_error_code: string | null
+          last_error_message: string | null
+          provider_accepted_at: string | null
+          provider_message_id: string | null
+          recipient_email: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string | null
+          attempt_count?: number
+          auth_user_id?: string | null
+          client_id: string
+          created_at?: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string | null
+          attempt_count?: number
+          auth_user_id?: string | null
+          client_id?: string
+          created_at?: string
+          last_attempt_at?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          provider_accepted_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_invitations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           created_at: string
@@ -1730,10 +1786,13 @@ export type Database = {
         Args: { p_booking_id: string }
         Returns: string
       }
+      begin_client_invitation: { Args: { p_client_id: string }; Returns: Json }
       cancel_session_booking: {
         Args: { p_booking_id: string }
         Returns: undefined
       }
+      client_portal_access: { Args: { p_client_id: string }; Returns: Json }
+      client_recovery_target: { Args: { p_email: string }; Returns: string }
       client_owned_by_current_coach: {
         Args: { p_client_id: string }
         Returns: boolean
@@ -1828,6 +1887,7 @@ export type Database = {
         }[]
       }
       get_public_booking_status: { Args: { p_slug: string }; Returns: boolean }
+      mark_own_client_invitation_activated: { Args: never; Returns: undefined }
       reactivate_coach_client: {
         Args: { p_client_id: string }
         Returns: undefined
@@ -1871,6 +1931,17 @@ export type Database = {
           session_id: string
           updated_at: string
         }[]
+      }
+      record_client_invitation_result: {
+        Args: {
+          p_auth_user_id?: string
+          p_client_id: string
+          p_error_code?: string
+          p_error_message?: string
+          p_provider_message_id?: string
+          p_status: string
+        }
+        Returns: undefined
       }
       record_contract_confirmation_result: {
         Args: {

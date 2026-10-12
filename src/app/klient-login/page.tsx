@@ -44,6 +44,14 @@ export default async function ClientLoginPage() {
 
           <div className="portal-login-glass mt-6 rounded-2xl border p-6 md:p-7">
             <LoginForm demo={demoHint("klient")} role="klient" redirectTo="/klient" />
+            <p className="mt-5 text-center text-[0.8125rem]">
+              <Link
+                href="/klient-aterstall"
+                className="rounded-sm text-zinc-600 underline underline-offset-4 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/15"
+              >
+                Glömt lösenord?
+              </Link>
+            </p>
           </div>
 
           <Link href="/" className={`mt-8 w-full ${portalOutlineButtonClass}`}>
