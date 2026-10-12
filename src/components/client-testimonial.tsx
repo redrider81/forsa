@@ -17,6 +17,8 @@ import { HOME_DISPLAY_SM } from "@/lib/homepage-typography";
 const copy: Record<
   Locale,
   {
+    /** Rubrik före citatet. Saknas den visas citatet utan rubrik. */
+    heading?: string;
     quote: string;
     quoteOpen: string;
     quoteClose: string;
@@ -26,6 +28,7 @@ const copy: Record<
   }
 > = {
   sv: {
+    heading: "Med klientens egna ord",
     quote:
       "Det som stannade kvar mest är modet jag fick med mig – modet att stanna upp, tänka efter, och göra annorlunda i praktiken",
     quoteOpen: "”",
@@ -167,7 +170,16 @@ export default function ClientTestimonial({ locale = "sv" }: Props) {
           className="block h-px w-full origin-left bg-zinc-500/70"
         />
 
-        <figure className="mt-10 md:mt-14">
+        {c.heading ? (
+          <h2
+            data-testimonial-lead
+            className="mt-10 font-sans text-xs font-medium uppercase tracking-[0.16em] text-[#c2a46b] md:mt-14"
+          >
+            {c.heading}
+          </h2>
+        ) : null}
+
+        <figure className={c.heading ? "mt-6 md:mt-8" : "mt-10 md:mt-14"}>
           <blockquote data-testimonial-quote className="max-w-4xl">
             <p data-testimonial-lead className={`${HOME_DISPLAY_SM} text-white`}>
               <span aria-hidden="true">{c.quoteOpen}</span>

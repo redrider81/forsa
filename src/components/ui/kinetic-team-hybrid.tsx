@@ -32,7 +32,8 @@ const copy: Record<
   sv: {
     heading: "Coaching med Carolina",
     imageAlt: "Carolina von Braun, coach och grundare av CVB Coaching",
-    // Samma fyra stycken som Carolina-avsnittet på /om-oss.
+    // Startsidans presentation. Skiljer sig avsiktligt från /om-oss, där
+    // kunden lämnat en ny text (kundunderlag 2026-10-12).
     paragraphs: [
       "Diplomerad Professionell Coach med lång erfarenhet av arbetsliv, ledarskap och företagande.",
       "Jag driver CVB Coaching i Göteborg och har närmare 20 års erfarenhet från säljande och ledande roller inom bank, samt erfarenhet av eget företagande inom finans och fastighet.",

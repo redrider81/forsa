@@ -392,10 +392,10 @@ describe("booking form privacy information", () => {
   it("renders the Swedish notice with a link to the privacy policy", () => {
     const html = render(createElement(BookingPrivacyNotice, { locale: "sv", t: getDictionary("sv") }));
     expect(html).toContain(
-      "När du skickar förfrågan behandlar CVB Coaching dina uppgifter för att hantera din bokning och kontakt med dig.",
+      "När du skickar en förfrågan behandlar CVB Coaching dina personuppgifter för att hantera din förfrågan och kontakta dig.",
     );
     expect(html).toContain('href="/integritet"');
-    expect(html).toContain(">integritetspolicyn</a>");
+    expect(html).toContain(">vår integritetspolicy</a>");
   });
 
   it("renders the English notice with a link to the English privacy policy", () => {

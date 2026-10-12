@@ -12,34 +12,24 @@ export const metadata: Metadata = {
 
 const processFaq: ProcessFaqItem[] = [
   {
+    question: "Vad händer efter att jag skickat en bokningsförfrågan?",
+    answer:
+      "Jag går igenom din förfrågan och ringer upp dig under det tidsfönster du har valt.",
+  },
+  {
     question: "Vad är det första samtalet?",
     answer:
-      "Det första samtalet är ett kort och kostnadsfritt telefonsamtal. Tvåtimmarsperioden du väljer i kalendern är ett tidsfönster — den period jag kan ringa upp inom, inte samtalets längd. Du berättar lite om vad du söker, och vi känner efter om coaching är rätt väg och om det känns rätt att arbeta tillsammans. Det är inte en coachingsession och du förbinder dig inte till något.",
-  },
-  {
-    question: "Vad händer om vi vill gå vidare?",
-    answer:
-      "Om vi båda vill gå vidare pratar vi igenom vad du vill arbeta med och hur vårt coachingsamarbete kan se ut. Vi kommer överens om omfattning, praktiskt upplägg och pris innan vi börjar.",
-  },
-  {
-    question: "Hur börjar coachingsamarbetet?",
-    answer:
-      "När vi har kommit överens om hur vi vill arbeta tillsammans får du en personlig bekräftelse från mig och vi planerar vårt första coachingsamtal. Du får också tillgång till CVB Base, där vi samlar det som hör till vårt arbete tillsammans.",
-  },
-  {
-    question: "Vad är CVB Base?",
-    answer:
-      "CVB Base är en del av hur jag arbetar med mina klienter. Där kan du samla reflektioner, förbereda sådant du vill ta med till nästa samtal och återvända till sådant vi tidigare har arbetat med. På så sätt finns sammanhanget kvar även mellan våra samtal.",
-  },
-  {
-    question: "Hur arbetar du med företag?",
-    answer:
-      "Jag arbetar med företag genom individuella coachingsamarbeten med personer i verksamheten. Det kan börja med en person och vid behov utökas med fler. Varje samarbete är separat, och innan vi börjar är vi tydliga med vem som betalar och vad som, om något, ska återkopplas till beställaren.",
+      "Det är ett kort och kostnadsfritt telefonsamtal där vi pratar om din situation, vad du vill få ut av coaching och om coaching med mig känns rätt för dig.",
   },
   {
     question: "Måste jag bestämma mig efter det första samtalet?",
     answer:
-      "Nej. Det första samtalet är till för att vi båda ska kunna känna efter om det här är rätt. Vi går bara vidare om det känns bra och relevant för oss båda.",
+      "Nej. Samtalet är till för att vi ska få en bild av vad du söker och se om coaching med mig passar dig. Du förbinder dig inte till något.",
+  },
+  {
+    question: "Vad händer om vi vill gå vidare?",
+    answer:
+      "Vi pratar om vad du vill arbeta med, kommer överens om ett upplägg och sätter en gemensam riktning för coachingen.",
   },
 ];
 
@@ -56,14 +46,18 @@ export default function KontaktPage() {
               Kontakt
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              Börja med ett samtal.
+              Boka ett inledande samtal
             </h1>
-            <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Välj ett tidsfönster som passar och skriv några rader om vad du vill ta upp. Jag
-              ringer upp under den valda perioden. Det första samtalet är ett kort, kostnadsfritt
-              telefonsamtal där vi stämmer av om coaching är rätt stöd och om vi vill gå vidare
-              tillsammans.
-            </p>
+            <div data-hero-body className="mt-8 max-w-3xl space-y-6 text-lg leading-8 text-zinc-700">
+              <p>
+                Välj ett tidsfönster som passar dig och berätta kort vad du vill ta upp. Jag ringer
+                upp dig under den valda perioden.
+              </p>
+              <p>
+                Det första samtalet är kostnadsfritt och ger oss möjlighet att prata om din situation,
+                vad du vill få ut av coachingen och om coaching med mig känns rätt för dig.
+              </p>
+            </div>
           </HeroReveal>
         </section>
 
@@ -74,7 +68,7 @@ export default function KontaktPage() {
             </div>
 
             <aside className="max-w-2xl border-t border-line-accent/30 pt-12 md:pt-16">
-              <ProcessFaq heading="Vad händer efter att du bokat?" items={processFaq} />
+              <ProcessFaq heading="Vanliga frågor" items={processFaq} />
             </aside>
           </div>
         </section>

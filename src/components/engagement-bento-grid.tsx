@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { coachingProcessParagraphsSv } from "@/lib/coaching-process";
 import type { Locale } from "@/lib/i18n/config";
 import {
   homeTravel,
@@ -17,9 +18,9 @@ import {
  * En sammanhängande beskrivning av hur arbetet går till, i stället för
  * numrerade steg.
  */
-const explanations: Record<Locale, string> = {
-  sv: "Vi börjar med att tydliggöra vad du vill ha ut av coachingen och vilka övergripande mål vi ska arbeta mot. Det ger en gemensam riktning för vårt arbete. Inför varje samtal ringar vi in vad du vill fokusera på och vad du vill få med dig. Vi utforskar frågan tillsammans, ser på olika perspektiv och undersöker vad som kan hjälpa dig vidare. Mellan samtalen kan det finnas något du vill prova, fundera vidare på eller lägga märke till i din vardag. Vid nästa samtal följer vi upp vad du har upptäckt och vad du vill ta med dig vidare.",
-  en: "We start by clarifying what you want to get out of the coaching and which overall goals we will work towards. This gives our work a shared direction. Before each session, we narrow down what you want to focus on and what you want to take away. We explore the question together, look at different perspectives and examine what could help you move forward. Between sessions, there may be something you want to try, reflect on further or notice in your everyday life. At the next session, we follow up on what you have discovered and what you want to take forward.",
+const explanations: Record<Locale, readonly string[]> = {
+  sv: coachingProcessParagraphsSv,
+  en: ["We start by clarifying what you want to get out of the coaching and which overall goals we will work towards. This gives our work a shared direction. Before each session, we narrow down what you want to focus on and what you want to take away. We explore the question together, look at different perspectives and examine what could help you move forward. Between sessions, there may be something you want to try, reflect on further or notice in your everyday life. At the next session, we follow up on what you have discovered and what you want to take forward."],
 };
 
 type Props = {
@@ -116,12 +117,14 @@ export default function EngagementBentoGrid({ locale }: Props) {
     <div ref={rootRef}>
       <div ref={panelRef}>
         <div className="border-t border-zinc-300 pt-10 md:grid md:grid-cols-12 md:gap-x-8 md:pt-14">
-          <p
+          <div
             data-bento-card
-            className="max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-7 md:col-start-6"
+            className="max-w-2xl space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-7 md:col-start-6"
           >
-            {explanations[locale]}
-          </p>
+            {explanations[locale].map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -270,3 +270,77 @@ button:focus-visible {
     line-height: 1.35;
   }
 }
+
+/*
+ * Startsidans svenska hero (data-hero-fluid) bär sedan kundunderlaget
+ * 2026-10-12 (§4.1) en längre introduktion. Den ryms inte i en låst
+ * 100svh-scen på mobil, surfplatta eller skärmar lägre än ca 990px, och
+ * bokningsknappen kapades. Där växer hero i stället med innehållet och
+ * släpper sticky-läget. På stora, höga skärmar gäller den ordinarie
+ * kompositionen ovan oförändrad.
+ */
+@media (max-width: 1023.98px), (max-height: 989.98px) {
+  [data-hero-sticky][data-hero-fluid] {
+    position: relative;
+    top: auto;
+    height: auto;
+  }
+
+  [data-hero-sticky][data-hero-fluid] [data-hero-overlay] {
+    position: relative;
+  }
+
+  [data-hero-sticky][data-hero-fluid] [data-hero-column] {
+    position: relative;
+    inset: auto;
+    --tw-translate-y: 0;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 100svh;
+    /* Plats för vägvalslänkarna som ligger absolut längst ned i hero. */
+    padding-bottom: calc(max(clamp(1.25rem, 4.5svh, 2.75rem), env(safe-area-inset-bottom, 0px)) + 4.75rem);
+  }
+
+  /* Luften under navigeringen fyller ut det som blir över, men aldrig mindre
+     än att rubriken går fri från logotypen. */
+  [data-hero-sticky][data-hero-fluid] [data-hero-spacer] {
+    display: block;
+    flex: 1 0 auto;
+    min-height: 12rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px), (min-width: 768px) and (max-height: 989.98px) {
+  [data-hero-sticky][data-hero-fluid] [data-hero-column] {
+    max-width: none;
+    padding-right: 5.5vw;
+    padding-left: 5.5vw;
+  }
+
+  [data-hero-sticky][data-hero-fluid] [data-hero-spacer] {
+    min-height: 15.5rem;
+  }
+}
+
+/* Kort landskapsvy: regeln ovan döljer spacern och krymper brödtexten. Den
+   svenska introduktionen består av flera stycken i en gemensam behållare. */
+@media (orientation: landscape) and (min-width: 600px) and (max-height: 500px) {
+  [data-hero-sticky][data-hero-fluid] [data-hero-column] {
+    padding-top: clamp(5rem, 22svh, 6.25rem);
+    padding-right: 4vw;
+    padding-left: 4vw;
+  }
+
+  [data-hero-sticky] [data-hero-body] > p {
+    max-width: none;
+    margin-top: 0.35rem;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  [data-hero-sticky] [data-hero-body] > p:first-child {
+    margin-top: 0;
+  }
+}

@@ -19,29 +19,37 @@ type Service = {
   href: string;
   title: string;
   intro?: string;
-  description: string;
+  /** Ett stycke, eller flera stycken som visas i ordning. */
+  description: string | readonly string[];
   ctaLabel: string;
 };
+
+function paragraphsOf(description: Service["description"]): readonly string[] {
+  return typeof description === "string" ? [description] : description;
+}
 
 const servicesSv: Service[] = [
   {
     index: "01",
     href: "/individuell-coaching",
     title: "Individuell coaching",
-    intro:
-      "För dig som vill utvecklas, hitta klarhet eller ta nästa steg i livet eller karriären.",
-    description:
-      "Coaching kan ge dig möjlighet att stanna upp, sortera dina tankar och se nya perspektiv. Det kan handla om en förändring eller ett beslut, men också om att utveckla dina styrkor, hitta nya möjligheter eller komma fram till vad som är viktigt för dig.",
+    intro: "För dig som vill förstå, utforska eller förändra något.",
+    description: [
+      "Ibland står vi inför beslut, förändringar eller frågor som behöver få ta plats.",
+      "Ibland finns en längtan efter något annat, utan att vi riktigt vet vad det är ännu.",
+      "I coaching får du möjlighet att sortera dina tankar, se nya perspektiv och utforska vad som är viktigt för dig och hur du vill gå vidare.",
+    ],
     ctaLabel: "Läs om individuell coaching",
   },
   {
     index: "02",
     href: "/business-coaching",
     title: "Företagscoaching",
-    intro:
-      "För medarbetare, ledare och team som vill utvecklas och hitta nya perspektiv.",
-    description:
-      "Coaching kan ge utrymme för reflektion kring det som är aktuellt i arbetslivet. Det kan handla om arbetsuppgifter, ledarskap, kommunikation, samarbete eller förändringar – men också om att utvecklas i sin roll och ta vara på sina styrkor.",
+    intro: "För medarbetare och ledare som vill utvecklas i arbetslivet.",
+    description: [
+      "Arbetslivet rymmer många perspektiv, förväntningar och beslut. Ibland behövs ett eget utrymme för att reflektera över sin roll, sitt ledarskap eller en situation som känns utmanande.",
+      "Jag erbjuder coaching med fokus på individens utveckling, nya perspektiv och ökad tydlighet i det som behöver hanteras eller förändras.",
+    ],
     ctaLabel: "Läs om företagscoaching",
   },
 ];
@@ -222,12 +230,14 @@ export default function CoachingServicesGrid({
                       {service.intro}
                     </p>
                   ) : null}
-                  <p
+                  <div
                     data-card-part
-                    className="mt-4 max-w-md flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]"
+                    className="mt-4 max-w-md flex-1 space-y-4 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]"
                   >
-                    {service.description}
-                  </p>
+                    {paragraphsOf(service.description).map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
                   <div
                     data-card-part
                     className="group mt-8 flex justify-center md:mt-10 md:justify-start"
@@ -268,7 +278,7 @@ export default function CoachingServicesGrid({
                   {service.title}
                 </span>
                 <span className="mt-4 flex-1 text-[1.02rem] font-[450] leading-[1.7] text-zinc-600 md:text-[1.0625rem]">
-                  {service.description}
+                  {paragraphsOf(service.description).join(" ")}
                 </span>
                 <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition-[decoration-color,color] duration-300 group-hover:decoration-zinc-900">
                   {service.ctaLabel}

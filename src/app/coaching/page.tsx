@@ -5,6 +5,7 @@ import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
+import { coachingProcessParagraphsSv } from "@/lib/coaching-process";
 
 export const metadata: Metadata = {
   title: "Coaching | CVB Coaching",
@@ -20,11 +21,11 @@ export const metadata: Metadata = {
  */
 
 const relevancePoints = [
-  "Du står inför ett vägval och behöver förstå vad som faktiskt är viktigt för dig.",
-  "Du har fått ett nytt ansvar eller befinner dig i en förändring i arbetslivet.",
+  "Du står inför ett vägval och vill förstå vad som faktiskt är viktigt för dig.",
+  "Du har fått ett nytt ansvar eller befinner dig i en förändring i arbetslivet eller livet i stort.",
   "Du vet att något behöver förändras, men ser ännu inte hur du vill gå vidare.",
   "Du behöver fatta ett beslut utan att ha alla svar ännu.",
-  "Du vill prata fritt, i förtroende och utanför din egen krets.",
+  "Du vill ha ett samtal där du kan tänka fritt, utforska dina tankar och prata i förtroende.",
 ];
 
 const passarNär = [
@@ -58,9 +59,6 @@ const workRows = [
   },
 ];
 
-const processExplanation =
-  "Vi börjar med att tydliggöra vad du vill ha ut av coachingen och vilka övergripande mål vi ska arbeta mot. Det ger en gemensam riktning för vårt arbete. Inför varje samtal ringar vi in vad du vill fokusera på och vad du vill få med dig. Vi utforskar frågan tillsammans, ser på olika perspektiv och undersöker vad som kan hjälpa dig vidare. Mellan samtalen kan det finnas något du vill prova, fundera vidare på eller lägga märke till i din vardag. Vid nästa samtal följer vi upp vad du har upptäckt och vad du vill ta med dig vidare.";
-
 /** "När coaching är relevant — och när den inte är det" är dolt tills vidare på kundens begäran. */
 const SHOW_COACHING_FIT = false;
 
@@ -78,23 +76,42 @@ const routes = [
     href: "/business-coaching",
     title: "Företagscoaching",
     description:
-      "För medarbetare och ledare med en fråga i arbetslivet — ett nytt ansvar, en svår relation eller ett beslut som påverkar andra.",
+      "För medarbetare och ledare med en fråga i arbetslivet – ett nytt ansvar, en utmanande relation eller ett beslut som påverkar andra.",
     ctaLabel: "Läs om företagscoaching",
   },
 ];
 
-const practical = [
+const practical: { title: string; body: string[] }[] = [
   {
     title: "I Göteborg eller digitalt",
-    body: "CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt, beroende på vad som passar bäst.",
+    body: [
+      "Jag erbjuder coaching på plats i Göteborg eller digitalt, beroende på vad som passar bäst.",
+    ],
   },
   {
-    title: "Konfidentiellt",
-    body: "Vad som sägs i samtalet behandlas konfidentiellt.",
+    title: "Samtalens längd",
+    body: [
+      "Vi avsätter vanligtvis 60 minuter per coachingsamtal. Det ger oss tid att utforska det som är viktigt för dig och avrunda med det du vill ta med dig vidare.",
+    ],
+  },
+  {
+    title: "Pris och upplägg",
+    body: [
+      "Varje coachingsamarbete utgår från dina behov och det du vill arbeta med. Kontakta mig gärna så pratar vi om vilket upplägg som passar dig och vad det kostar.",
+    ],
+  },
+  {
+    title: "Konfidentialitet och CVB Base",
+    body: [
+      "Allt som sägs i våra coachingsamtal stannar mellan oss. Jag för inte vidare det du delar med mig till arbetsgivare eller uppdragsgivare.",
+      "CVB Base är utformat med hänsyn till klientens och coachens integritet. Inloggning krävs för att använda plattformen.",
+    ],
   },
   {
     title: "När företaget tar första kontakten",
-    body: "CVB Coaching arbetar med enskilda medarbetare och ledare i arbetslivet. Företaget kan ta den första kontakten och finansiera coachingen. Därefter sker coachingen i en personlig och konfidentiell relation mellan Carolina och klienten.",
+    body: [
+      "Ett företag kan ta initiativ till och finansiera coaching för en medarbetare eller ledare. Coachingen sker i en personlig och konfidentiell relation mellan mig och klienten.",
+    ],
   },
 ];
 
@@ -102,27 +119,32 @@ const faqItems: ProcessFaqItem[] = [
   {
     question: "Vad är det första samtalet?",
     answer:
-      "Det första samtalet är ett kort och kostnadsfritt telefonsamtal. Du berättar lite om vad du söker, och vi känner efter om coaching är rätt väg och om det känns rätt att arbeta tillsammans. Det är inte en coachingsession och du förbinder dig inte till något.",
+      "Ett kostnadsfritt telefonsamtal där vi pratar om din situation och vad du vill få ut av coachingen.",
   },
   {
     question: "Måste jag bestämma mig efter det första samtalet?",
     answer:
-      "Nej. Det första samtalet är till för att vi båda ska kunna känna efter om det här är rätt. Vi går bara vidare om det känns bra och relevant för oss båda.",
+      "Nej. Du får möjlighet att ställa frågor och känna efter om coaching med mig känns rätt för dig.",
+  },
+  {
+    question: "Hur många coachingsamtal brukar behövas?",
+    answer:
+      "Jag arbetar gärna med coaching över tid, eftersom det ger utrymme att utforska frågor på djupet, pröva nya perspektiv och följa det som utvecklas mellan samtalen. Jag rekommenderar vanligtvis minst sex samtal, gärna tio eller fler, beroende på dina behov och vad du vill arbeta med.",
   },
   {
     question: "Hur börjar coachingsamarbetet?",
     answer:
-      "När vi har kommit överens om hur vi vill arbeta tillsammans får du en personlig bekräftelse från mig och vi planerar vårt första coachingsamtal. Du får också tillgång till CVB Base, där vi samlar det som hör till vårt arbete tillsammans.",
+      "Vi kommer överens om ett övergripande mål och utforskar sedan det som känns viktigast för dig inför varje samtal.",
   },
   {
     question: "Vad är CVB Base?",
     answer:
-      "CVB Base är en del av hur jag arbetar med mina klienter. Där kan du samla reflektioner, förbereda sådant du vill ta med till nästa samtal och återvända till sådant vi tidigare har arbetat med. På så sätt finns sammanhanget kvar även mellan våra samtal.",
+      "Ett digitalt stöd där du kan förbereda samtal, samla reflektioner och följa dina tankar mellan våra möten.",
   },
   {
     question: "Hur arbetar du med företag?",
     answer:
-      "Jag arbetar med företag genom individuella coachingsamarbeten med personer i verksamheten. Det kan börja med en person och vid behov utökas med fler. Varje samarbete är separat, och innan vi börjar är vi tydliga med vem som betalar och vad som, om något, ska återkopplas till beställaren.",
+      "Jag erbjuder coaching för medarbetare och ledare. Vi börjar med en dialog om behovet och uppdragets ramar. Det som sägs i coachingsamtalen förs inte vidare till uppdragsgivaren.",
   },
 ];
 
@@ -152,7 +174,7 @@ export default function CoachingPage() {
                 data-hero-headline
                 className="mt-14 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[1.2] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
               >
-                Vad coaching innebär hos CVB.
+                Coaching hos CVB
               </h1>
             </div>
           </HeroReveal>
@@ -223,7 +245,7 @@ export default function CoachingPage() {
             data-section-heading
             className="mt-10 max-w-3xl font-serif text-[clamp(2.8rem,6vw,6rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:mt-16"
           >
-            Vad vi fokuserar på
+            Vad kan coaching ge dig?
           </h2>
           <div className="mt-24 border-t border-zinc-300 md:mt-40">
             {workRows.map((row) => (
@@ -283,12 +305,14 @@ export default function CoachingPage() {
               data-editorial-row
               className="border-t border-zinc-300 pt-10 md:grid md:grid-cols-12 md:gap-x-8 md:pt-14"
             >
-              <p
+              <div
                 data-row-body
-                className="max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-7 md:col-start-6"
+                className="max-w-2xl space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-7 md:col-start-6"
               >
-                {processExplanation}
-              </p>
+                {coachingProcessParagraphsSv.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
             </div>
           </EditorialRowsReveal>
         </div>
@@ -303,8 +327,7 @@ export default function CoachingPage() {
           <div data-col-left className="md:col-span-7">
             <p className={chapterDark}>04</p>
             <h2 className="mt-12 max-w-3xl font-serif text-[clamp(3rem,4.4vw,4.75rem)] font-medium text-balance leading-[1.14] tracking-[-0.04em] text-white md:mt-16">
-              Samtalet står i centrum. CVB Base hjälper dig att behålla sammanhanget mellan
-              samtalen.
+              Stöd mellan samtalen
             </h2>
           </div>
           <div
@@ -312,9 +335,16 @@ export default function CoachingPage() {
             className="space-y-8 border-t border-white/60 pt-10 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-8 md:mt-40 md:pt-12"
           >
             <p data-col-paragraph>
+              Samtalet står i centrum. CVB Base hjälper dig att behålla sammanhanget mellan samtalen.
+            </p>
+            <p data-col-paragraph>
               När det är relevant använder du CVB Base för att förbereda frågor, samla reflektioner
-              och återvända till sådant du vill följa över tid. Det ersätter inte coachingen, utan
-              ger dig en plats för det som händer mellan samtalen.
+              och återvända till sådant du vill följa över tid. Det ger dig möjlighet att fånga upp
+              tankar mellan våra möten och ta med det som känns viktigt till nästa samtal.
+            </p>
+            <p data-col-paragraph>
+              CVB Base ersätter inte coachingen, utan är ett stöd för det arbete du gör även mellan
+              samtalen.
             </p>
           </div>
         </ScrollReveal>
@@ -422,7 +452,7 @@ export default function CoachingPage() {
               ))}
             </ul>
             <p className="ml-auto mt-16 max-w-xl border-l border-zinc-300 pl-6 text-[0.9375rem] leading-[1.7] text-zinc-600 md:pl-8">
-              Är du osäker på vilken form av coaching som är relevant för din fråga? Det klargör vi
+              Är du osäker på vilken form av coaching som passar din situation? Det kan vi prata om
               i det första samtalet.
             </p>
           </EditorialRowsReveal>
@@ -437,7 +467,7 @@ export default function CoachingPage() {
           <div className="flex items-baseline gap-6">
             <p className={chapterIndexOnLight}>06</p>
             <h2 className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.03em] text-zinc-900">
-              Praktiskt
+              Praktisk information
             </h2>
           </div>
 
@@ -461,9 +491,11 @@ export default function CoachingPage() {
                   </dt>
                   <dd
                     data-row-body
-                    className="max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-6 md:col-start-7"
+                    className="max-w-xl space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-6 md:col-start-7"
                   >
-                    {item.body}
+                    {item.body.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
                   </dd>
                 </div>
               ))}
@@ -498,8 +530,8 @@ export default function CoachingPage() {
               data-cta-body
               className="max-w-xl text-[1.125rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-7"
             >
-              Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
-              Samtalet är konfidentiellt.
+              Berätta kort vad du funderar på. Det första samtalet är kostnadsfritt och ger oss
+              möjlighet att se om coaching med mig känns rätt för dig.
             </p>
             <div data-cta-actions className="md:col-span-5 md:col-start-7">
               <CtaLink href="/kontakt" variant="secondary" translucent>

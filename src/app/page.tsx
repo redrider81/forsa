@@ -64,12 +64,22 @@ const CHAPTER_ON_DARK = `${CHAPTER} text-white`;
 /** "När coaching är relevant — och när den inte är det" är dolt tills vidare på kundens begäran. */
 const SHOW_COACHING_FIT = false;
 
+const heroIntro = [
+  "Coaching för människor som vill utforska nya perspektiv, hitta större tydlighet och komma vidare i det som är viktigt.",
+  "Med nyfikenhet, närvaro och lyhördhet skapar jag utrymme för reflektion och utveckling – för dig som individ och för människor i organisationer.",
+];
+
+const relevanceIntro = [
+  "Ibland börjar det med en fråga som inte riktigt släpper.",
+  "Det kan handla om att …",
+];
+
 const relevancePoints = [
-  "Du står inför ett vägval och behöver förstå vad som faktiskt är viktigt för dig.",
-  "Du har fått ett nytt ansvar eller befinner dig i en förändring i arbetslivet.",
-  "Du vet att något behöver förändras, men ser ännu inte hur du vill gå vidare.",
-  "Du behöver fatta ett beslut utan att ha alla svar ännu.",
-  "Du vill prata fritt, i förtroende och utanför din egen krets.",
+  "du står inför ett vägval och vill förstå vad som faktiskt är viktigt för dig.",
+  "du har fått en ny roll eller ett större ansvar och vill hitta ditt sätt att ta dig an det.",
+  "något behöver förändras, men du har ännu inte landat i vad eller hur.",
+  "du vill fatta ett beslut med större tydlighet och tillit till din egen bedömning.",
+  "du behöver ett samtal där du kan tänka fritt, utforska olika perspektiv och få syn på det du kanske inte sett tidigare.",
 ];
 
 const passarNär = [
@@ -89,18 +99,25 @@ const workRows = [
   {
     index: "01",
     title: "Klarhet",
-    body: "Sortera tankar, se nya perspektiv och få syn på vad som är viktigt för dig.",
+    body: "Få syn på vad som är viktigt för dig och förstå din situation tydligare.",
   },
   {
     index: "02",
     title: "Beslut",
-    body: "Utforska olika alternativ och komma fram till vad som känns rätt för dig.",
+    body: "Utforska olika möjligheter och komma närmare beslut som känns genomtänkta och förankrade i det som är viktigt för dig.",
   },
   {
     index: "03",
     title: "Riktning",
-    body: "Tydliggöra vad du vill och hitta nästa steg utifrån dina mål.",
+    body: "Hitta en väg framåt som känns relevant för dig och identifiera vilka steg du vill ta.",
   },
+];
+
+const firstCallIntro = [
+  "Vi börjar med det som känns aktuellt för dig just nu och utforskar vad du vill få ut av våra samtal.",
+  "Det första samtalet ger oss möjlighet att lära känna varandra, prata om din situation och se om coaching med mig känns rätt för dig.",
+  "Samtalet är kostnadsfritt och du får möjlighet att ställa frågor och berätta vad du funderar på.",
+  "Välkommen att höra av dig!",
 ];
 
 const firstCallValueRows = [
@@ -124,15 +141,15 @@ const firstCallValueRows = [
 const cvbBaseBenefits = [
   {
     title: "Coaching som fortsätter mellan samtalen",
-    body: "Förbered nästa samtal, fånga reflektioner när de uppstår och återvänd till det som blivit viktigt utan att behöva börja om från början varje gång.",
+    body: "Förbered dina samtal, samla dina reflektioner, följ dina tankar och ta med det som känns viktigt till nästa samtal.",
   },
   {
-    title: "Byggt för både individen och företagsuppdraget",
-    body: "När ett företag finansierar coachingen finns flera relationer samtidigt. CVB Base är utformat för att hålla uppdragsgivarens ramar, Carolinas arbete och klientens personliga coachingrelation tydligt åtskilda.",
+    title: "För individen och företagsuppdraget",
+    body: "CVB Base ger plats för klientens egna reflektioner samtidigt som det stödjer en tydlig struktur kring coachinguppdraget.",
   },
   {
     title: "Du bestämmer vad du delar",
-    body: "Eget material kan vara privat. Det du väljer att dela kan Carolina använda som underlag i coachingen, medan hennes egna arbetsanteckningar hålls utanför klientvyn.",
+    body: "Du ska kunna känna dig trygg med vad du delar och ha tydlighet kring vem som får ta del av det.",
   },
   {
     title: "Ett sammanhang för hela coachingprocessen",
@@ -147,14 +164,16 @@ export default function HomePage() {
         {/* ======================= AKT 00 · HERO ======================= */}
         <section
           data-hero-sticky
+          data-hero-fluid
           className="relative z-0 h-[100svh] min-h-[100svh] w-full overflow-hidden md:sticky md:top-0"
         >
           <HeroVideoBackground />
           <div className="pointer-events-none absolute inset-0 z-[1] bg-black/45" aria-hidden="true" />
           <SiteNavigation />
-          <div className="pointer-events-none absolute inset-0 z-[2]">
-            <div className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[max(clamp(2.5rem,8svh,4.5rem),env(safe-area-inset-bottom,0px))] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
+          <div data-hero-overlay className="pointer-events-none absolute inset-0 z-[2]">
+            <div data-hero-column className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[max(clamp(2.5rem,8svh,4.5rem),env(safe-area-inset-bottom,0px))] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
               <div
+                data-hero-spacer
                 className="w-full shrink-0 min-h-[min(38svh,22rem)] md:hidden"
                 aria-hidden="true"
               />
@@ -167,13 +186,20 @@ export default function HomePage() {
                     Tid att tänka. Utrymme att utvecklas
                   </h1>
                 </div>
-                <p
-                  data-hero-body
-                  className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg"
-                >
-                  Professionell coaching för dig som vill utvecklas, fatta beslut eller hitta nya
-                  perspektiv, i livet eller arbetslivet.
-                </p>
+                <div data-hero-body className="flex w-full flex-col items-center md:items-start">
+                  <p className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg">
+                    Professionell coaching för dig som vill utvecklas, fatta beslut eller hitta nya
+                    perspektiv, i livet eller arbetslivet.
+                  </p>
+                  {heroIntro.map((paragraph) => (
+                    <p
+                      key={paragraph}
+                      className="mt-4 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:max-w-[46ch] md:text-lg"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
                 <div className="mt-9 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-10 md:items-start">
                   <span data-hero-cta className="inline-flex justify-center md:justify-start">
                     <CtaLink href="/kontakt" variant="primary" translucent>
@@ -239,6 +265,14 @@ export default function HomePage() {
                   className="flex md:col-span-6 md:col-start-7 md:h-full md:flex-col md:pt-2 lg:pt-6"
                 >
                   <div className="flex min-h-0 flex-1 flex-col">
+                    <div
+                      data-reveal-group
+                      className="mb-8 space-y-4 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mb-10"
+                    >
+                      {relevanceIntro.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
                     <ul className="flex w-full flex-col divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700 md:min-h-full md:flex-1">
                       {relevancePoints.map((point) => (
                         <li
@@ -308,8 +342,12 @@ export default function HomePage() {
                   data-section-heading
                   className={`mt-10 max-w-3xl max-md:max-w-[16.5ch] ${DISPLAY} text-zinc-900 md:mt-14`}
                 >
-                  Vad vi fokuserar på
+                  Vad kan coaching ge dig?
                 </h2>
+                <p data-section-intro className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
+                  Coaching kan ge dig utrymme att stanna upp, reflektera och se din situation ur nya
+                  perspektiv.
+                </p>
                 <div className="mt-20 border-t border-zinc-300 md:mt-28">
                   {workRows.map((row) => (
                     <article
@@ -359,9 +397,10 @@ export default function HomePage() {
           <ClientTestimonial locale="sv" />
 
           {/* ============ YTA 4 · ljus · akt 04 · processen ============
-              Stegen och det som släpper kravet på att veta allt i förväg är
-              en och samma rörelse: så går det till, och så mycket behöver du
-              inte ha klart för dig innan. Ingen ytväxling emellan. */}
+              Så går det till och det första samtalet är en och samma rörelse.
+              Ingen ytväxling emellan. "Du behöver inte veta allt från början"
+              är borttaget på kundens begäran (2026-10-12); bokningsknappen
+              ligger nu under texten om det första samtalet. */}
           <div data-parallax-section className="pt-24 pb-28 md:pt-32 md:pb-40 lg:pt-40">
             <EngagementSection locale="sv" variant="field" />
 
@@ -374,11 +413,16 @@ export default function HomePage() {
                 >
                   Det första samtalet ska ge dig något
                 </h2>
-                <p data-section-intro className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
-                  Du behöver inte ha bestämt dig för coaching. Det första samtalet är ett tillfälle att
-                  förstå frågan bättre, pröva om coaching är rätt stöd och känna efter om vi fungerar bra
-                  tillsammans.
-                </p>
+                <div data-section-intro className="mt-8 max-w-2xl md:mt-10">
+                  <div className="space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600">
+                    {firstCallIntro.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                  <div className="mt-10">
+                    <CtaLink href="/kontakt" variant="tertiary">Boka ett inledande samtal</CtaLink>
+                  </div>
+                </div>
                 <div className="mt-12 border-t border-zinc-300 md:mt-16">
                   {firstCallValueRows.map((row) => (
                     <article
@@ -415,27 +459,6 @@ export default function HomePage() {
               </EditorialRowsReveal>
             </section>
 
-            <ScrollReveal
-              variant="splitColumn"
-              emphasis
-              className="mx-auto mt-32 grid max-w-7xl gap-10 px-6 md:mt-44 md:grid-cols-12 md:gap-x-8 md:px-10"
-            >
-              <h2 data-col-left className={`max-w-xl ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
-                Du behöver inte veta allt från början
-              </h2>
-              <div data-col-right className="md:col-span-6 md:col-start-7 md:pt-4">
-                <p
-                  data-col-paragraph
-                  className="max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600"
-                >
-                  Du behöver inte veta i förväg hur många samtal som behövs eller ha formulerat
-                  frågan helt. Det klarnar i det första samtalet.
-                </p>
-                <div data-col-paragraph className="mt-10">
-                  <CtaLink href="/kontakt" variant="tertiary">Boka ett inledande samtal</CtaLink>
-                </div>
-              </div>
-            </ScrollReveal>
           </div>
 
           {/* ======= YTA 5 · mörk · akt 05 och akt 06 · uttoning =======
@@ -460,18 +483,18 @@ export default function HomePage() {
                     className="h-12 w-auto md:h-14 lg:h-16"
                   />
                   <h2 className={`mt-6 max-w-3xl ${DISPLAY_BASE} text-white md:mt-8 lg:max-w-4xl`}>
-                    Utvecklat för professionell coaching i svensk kontext.
+                    {/* Mjukt bindestreck: ordet är bredare än spalten vid 320 px. */}
+                    {"Ett digitalt stöd genom hela coaching­processen"}
                   </h2>
                   <div data-reveal-group className="mt-8 space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:mt-10">
                     <p data-col-paragraph className="max-w-2xl">
-                      CVB Coaching utvecklar CVB Base för individuell coaching och företagscoaching i svenska
-                      sammanhang. Det är ett svenskspråkigt digitalt stöd som utvecklas för att hålla ihop det som
-                      är viktigt före, mellan och efter samtalen — i situationer där en klient, en uppdragsgivare och
-                      en coach behöver tydliga ramar.
+                      CVB Base är mitt digitala stöd för individuell coaching och företagscoaching, utvecklat för
+                      svenska sammanhang.
                     </p>
                     <p data-col-paragraph className="max-w-2xl">
-                      Tydliga roller och kontroll över vad som delas är därför en integrerad del av CVB Base — inte
-                      ett tillägg runt coachingen.
+                      Det ger dig möjlighet att förbereda samtal, fånga tankar och reflektioner mellan samtalen och
+                      återvända till det som blivit viktigt längs vägen. På så sätt finns det du arbetar med i
+                      coachingen kvar att utforska och bygga vidare på – även mellan våra möten.
                     </p>
                   </div>
                 </div>
@@ -481,7 +504,7 @@ export default function HomePage() {
                     <CvbBaseBenefitsAccordion items={cvbBaseBenefits} />
                   </div>
                   <p className="mt-12 max-w-2xl border-t border-white/20 pt-10 font-serif text-lg font-medium italic leading-[1.45] tracking-[-0.02em] text-balance text-zinc-400 md:mt-14 md:max-w-3xl md:pt-12 md:text-xl lg:max-w-4xl">
-                    <span className="max-sm:whitespace-nowrap">CVB Base som stöd</span> före, mellan
+                    <span className="max-sm:whitespace-nowrap">CVB Base – ett stöd</span> före, mellan
                     <br className="sm:hidden" aria-hidden="true" />
                     {" "}och efter samtalen.
                   </p>
@@ -509,31 +532,26 @@ export default function HomePage() {
                   <div data-col-left data-reveal-group className="md:col-span-6 lg:col-span-5">
                     <div data-reveal-group className="space-y-8 md:space-y-10">
                       <h2 className={`max-w-md ${DISPLAY_SM} text-zinc-900`}>
-                        När företaget tar första kontakten
-                      </h2>
-                      <h2 className={`max-w-md ${DISPLAY_SM} text-zinc-900`}>
-                        I Göteborg eller digitalt
+                        Coaching för individer och företag
                       </h2>
                     </div>
                     <div data-reveal-group className="mt-10 space-y-8 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-12 md:space-y-7">
                       <div data-reveal-group className="space-y-6">
                         <p data-col-paragraph className="max-w-xl">
-                          CVB Coaching arbetar med enskilda medarbetare och ledare i arbetslivet. Företaget
-                          kan ta den första kontakten och finansiera coachingen.
+                          Jag erbjuder coaching för medarbetare och ledare i arbetslivet, både i Göteborg och
+                          digitalt.
                         </p>
                         <p data-col-paragraph className="max-w-xl">
-                          Därefter sker coachingen i en personlig och konfidentiell relation mellan Carolina
-                          och klienten. I den första dialogen pratar jag med företaget om behovet, ramarna
-                          för samarbetet och hur kontakten fungerar.
-                        </p>
-                      </div>
-                      <div data-reveal-group className="space-y-6 border-t border-zinc-300 pt-8 md:pt-7">
-                        <p data-col-paragraph className="max-w-xl">
-                          CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt, beroende på
-                          vad som passar bäst.
+                          Ett företagsuppdrag börjar med en dialog om behovet, ramarna för uppdraget och hur
+                          samarbetet ska fungera.
                         </p>
                         <p data-col-paragraph className="max-w-xl">
-                          Vad som sägs i samtalet behandlas konfidentiellt.
+                          Själva coachingen sker i en personlig och konfidentiell relation mellan mig och
+                          klienten. Det är viktigt att det finns tydlighet kring roller, förväntningar och vad
+                          som delas med uppdragsgivaren.
+                        </p>
+                        <p data-col-paragraph className="max-w-xl">
+                          Samtalen hålls på plats i Göteborg eller digitalt, beroende på vad som passar bäst.
                         </p>
                       </div>
                     </div>
@@ -567,8 +585,8 @@ export default function HomePage() {
                     data-cta-body
                     className="max-w-xl text-[1.125rem] font-[450] leading-[1.75] text-zinc-300 max-md:mt-6 md:col-span-5 md:col-start-7 md:mt-0"
                   >
-                    Berätta kort vad du vill prata om och välj en tid. Du behöver inte ha formulerat allt.
-                    Samtalet är konfidentiellt.
+                    Berätta kort vad du funderar på. Det första samtalet är kostnadsfritt och ger oss
+                    möjlighet att se om coaching med mig känns rätt för dig.
                   </p>
                   <div
                     data-cta-actions

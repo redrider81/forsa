@@ -9,7 +9,7 @@ import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 export const metadata: Metadata = {
   title: "Carolina von Braun – coach i Göteborg | CVB Coaching",
   description:
-    "Carolina von Braun driver CVB Coaching i Göteborg. Kommersiell bakgrund från kapitalmarknad och styrelsearbete, diplomerad coach vid Gothia Akademi.",
+    "Diplomerad professionell coach i Göteborg med erfarenhet från arbetsliv, ledarskap och företagande. Individuell coaching och företagscoaching.",
 };
 
 const t = svDictionary;
@@ -38,9 +38,9 @@ const principles = [
 ];
 
 const audiences = [
-  "Privatpersoner som står inför ett vägval, en förändring eller ett beslut som väger.",
-  "Medarbetare och ledare som behöver tänka klart med någon utanför den egna arbetsplatsen.",
-  "Personer som vill sortera ansvar, prioriteringar eller beslut i en arbetsrelaterad situation.",
+  "Privatpersoner som vill utforska en förändring, ett vägval eller ett beslut i livet.",
+  "Medarbetare och ledare som vill utvecklas i sin yrkesroll eller hantera utmaningar i arbetslivet.",
+  "Människor med ansvar som vill få nya perspektiv på prioriteringar, relationer eller beslut.",
 ];
 
 export default function AboutPage() {
@@ -78,12 +78,14 @@ export default function AboutPage() {
             </h2>
             <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
               <p>
-                De flesta har människor omkring sig som vill väl. Färre har någon vars enda
-                uppgift är att hjälpa dig att tänka färdigt, utan att ha en åsikt om utgången.
+                I vardagen finns det ofta människor att prata med, men inte alltid någon som kan
+                lyssna utan att vilja ge råd, komma med lösningar eller påverka vilket beslut du
+                fattar.
               </p>
               <p>
-                Jag erbjuder den platsen — för dig som kommer på egen hand och för dig som kommer
-                genom ditt arbete.
+                I coaching får du utrymme att utforska det som upptar dig, utmana dina egna tankar
+                och upptäcka nya perspektiv. Det är det utrymmet jag vill skapa – både för dig som
+                söker coaching på egen hand och för dig som kommer genom ditt arbete.
               </p>
             </div>
           </ScrollReveal>
@@ -112,25 +114,28 @@ export default function AboutPage() {
                 className={`${BODY_STACK_ON_DARK} md:col-span-6 md:col-start-7 md:row-start-2 md:mt-12 md:flex md:min-h-0 md:flex-col md:justify-between md:space-y-0 md:gap-8 lg:gap-10`}
               >
                 <p>
-                  Diplomerad Professionell Coach med lång erfarenhet av arbetsliv, ledarskap och
-                  företagande.
+                  Diplomerad professionell coach med närmare 20 års erfarenhet från arbetsliv, ledarskap
+                  och företagande.
                 </p>
                 <p>
-                  Jag driver CVB Coaching i Göteborg och har närmare 20 års erfarenhet från säljande och
-                  ledande roller inom bank, samt erfarenhet av eget företagande inom finans och fastighet.
+                  Jag driver CVB Coaching i Göteborg. Innan jag började arbeta som coach hade jag
+                  säljande och ledande roller inom bank. Jag har också erfarenhet av eget företagande
+                  inom finans och fastighet.
                 </p>
                 <p>
-                  Idag arbetar jag som coach och möter både privatpersoner och människor i arbetslivet.
-                  Med min erfarenhet och utbildning som grund skapar jag ett tryggt och professionellt
-                  samtal.
+                  Min bakgrund har gett mig erfarenhet av arbetslivets villkor, ansvar och beslut och av
+                  att människor kan behöva olika saker för att komma vidare. I dag möter jag både
+                  privatpersoner och människor i arbetslivet i min roll som coach.
                 </p>
                 <p>
-                  För mig handlar coaching om att skapa ett tryggt och förtroendefullt utrymme där du kan
-                  tänka högt, reflektera och se på din situation ur olika perspektiv. Min uppgift är att
-                  hjälpa dig att undersöka dina egna tankar och idéer, utmana det som behöver utmanas och
-                  hitta det som känns relevant för dig. Det är också viktigt för mig att våra samtal har
-                  ett mål. Du ska känna att tiden vi lägger tillsammans är värdefull och att du får med
-                  dig något som du kan använda efter samtalet.
+                  I våra samtal är jag nyfiken på hur du ser på din situation och vad som ligger bakom
+                  dina tankar och val. Jag lyssnar, ställer frågor och utmanar när det behövs. Jag ger
+                  dig inte färdiga svar, men hjälper dig att undersöka dina egna resonemang och komma
+                  närmare det du vill förstå, besluta eller förändra.
+                </p>
+                <p>
+                  Det är viktigt för mig att samtalen inte bara blir intressanta i stunden, utan också
+                  hjälper dig vidare i det som är viktigt för dig.
                 </p>
               </div>
             </ScrollReveal>
@@ -167,10 +172,13 @@ export default function AboutPage() {
               Konfidentialitet
             </h2>
             <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
-              <p>Vad som sägs i samtalet behandlas konfidentiellt.</p>
               <p>
-                När samtalen beställs av någon annan än klienten kommer vi överens om vad som
-                återkopplas, innan arbetet börjar.
+                Det som sägs i våra coachingsamtal stannar mellan oss. Jag för inte vidare det du
+                delar med mig till någon annan.
+              </p>
+              <p>
+                När ett företag bekostar coachingen är det viktigt att det finns tydlighet kring
+                uppdragets ramar och vad som delas med uppdragsgivaren.
               </p>
             </div>
           </ScrollReveal>
@@ -182,6 +190,9 @@ export default function AboutPage() {
               Vilka jag arbetar med
             </h2>
             <div data-col-right className="md:col-span-6 md:col-start-7 md:pt-8 lg:pt-12">
+              <p className={`mb-8 ${BODY}`}>
+                Jag möter både privatpersoner och människor i arbetslivet.
+              </p>
               <ScrollReveal variant="staggerList">
                 <ul className="divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                   {audiences.map((item) => (
@@ -213,21 +224,24 @@ export default function AboutPage() {
         <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
           <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
-              Det första samtalet är till för att känna efter.
+              Ett första samtal för att se om coaching passar dig
             </h2>
             <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
               <p>
                 Du behöver inte ha formulerat frågan färdigt. I ett kort och kostnadsfritt första
-                telefonsamtal får du berätta var du befinner dig, förstå om coaching är rätt stöd och
-                känna efter om Carolina är rätt person att prata med.
+                telefonsamtal får du berätta om din situation, ställa frågor och känna efter om
+                coaching med mig känns rätt för dig.
               </p>
               <p className="text-[0.875rem] leading-[1.6] text-zinc-500">
-                Det är inte en coachingsession och innebär inget åtagande.
+                Samtalet är inte en coachingsession och innebär inget åtagande.
               </p>
               <div>
                 <CtaLink href="/kontakt" variant="primary">
                   Boka ett inledande samtal
                 </CtaLink>
+                <p className="mt-6 text-[0.875rem] leading-[1.6] text-zinc-500">
+                  Kort och kostnadsfritt första telefonsamtal.
+                </p>
               </div>
             </div>
           </ScrollReveal>

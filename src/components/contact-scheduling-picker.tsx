@@ -266,7 +266,9 @@ export default function ContactSchedulingPicker({
 
   return (
     <div className="space-y-10">
-      <p className="max-w-prose text-[0.9375rem] leading-[1.75] text-zinc-600">{t.form.schedulingHint}</p>
+      {t.form.schedulingHint ? (
+        <p className="max-w-prose text-[0.9375rem] leading-[1.75] text-zinc-600">{t.form.schedulingHint}</p>
+      ) : null}
 
       {(loadFailed || isPaused) && (
         <p className="text-[0.9375rem] leading-[1.75] text-zinc-600">
@@ -288,7 +290,7 @@ export default function ContactSchedulingPicker({
                 />
                 <span>
                   {locale === "sv"
-                    ? "Grön markering visar dagar med lediga tidsfönster. Välj en dag för att se dem."
+                    ? "Grön markering visar dagar med lediga tidsfönster. Välj en dag för att se tillgängliga tider."
                     : "The green marking shows days with available time windows. Pick a day to see them."}
                 </span>
               </p>
@@ -420,12 +422,12 @@ export default function ContactSchedulingPicker({
                   {selectedSlotStart && selectedSlotEnd
                     ? `${formatSelectedDateLabel(selectedSlotStart, locale)} · ${formatSlotInterval(selectedSlotStart, selectedSlotEnd)}`
                     : locale === "sv"
-                      ? "Välj ett tidsfönster ovan"
+                      ? "Välj ett tidsfönster ovan."
                       : "Choose a time window above"}
                 </p>
                 <p className="mt-2 text-[0.8125rem] leading-[1.6] text-zinc-500">
                   {locale === "sv"
-                    ? "Tidsfönstret är när Carolina kan ringa upp — inte samtalets längd."
+                    ? "Tidsfönstret anger när jag kan ringa upp dig, inte hur länge samtalet varar."
                     : "The time window is when Carolina can call you — not the length of the conversation."}
                 </p>
 
@@ -462,6 +464,12 @@ export default function ContactSchedulingPicker({
                       ))}
                     </select>
                   </div>
+
+                  {locale === "sv" ? (
+                    <p className="pt-2 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
+                      Kontaktuppgifter
+                    </p>
+                  ) : null}
 
                   <div className="space-y-1.5">
                     <label htmlFor="picker-namn" className={compactLabelClass}>
@@ -553,9 +561,16 @@ export default function ContactSchedulingPicker({
                     <label htmlFor="picker-situation" className={compactLabelClass}>
                       {t.form.fields.situation}
                     </label>
+                    {locale === "sv" ? (
+                      <p id="picker-situation-hint" className="text-[0.75rem] leading-[1.6] text-zinc-500">
+                        Skriv gärna några rader om vad du funderar på eller vad du skulle vilja prata om. Du
+                        behöver inte ha formulerat frågan färdigt.
+                      </p>
+                    ) : null}
                     <textarea
                       id="picker-situation"
                       name="situation"
+                      aria-describedby={locale === "sv" ? "picker-situation-hint" : undefined}
                       value={situation}
                       onChange={(event) => onSituationChange(event.target.value)}
                       className={cn(compactTextareaClass, situationError && "border-zinc-600")}

@@ -58,13 +58,13 @@ export const svDictionary = {
     confidentialityNote: "All kontakt hanteras konfidentiellt.",
     privacyNotice: {
       before:
-        "När du skickar förfrågan behandlar CVB Coaching dina uppgifter för att hantera din bokning och kontakt med dig. Läs mer i ",
-      link: "integritetspolicyn",
+        "När du skickar en förfrågan behandlar CVB Coaching dina personuppgifter för att hantera din förfrågan och kontakta dig. Läs mer i ",
+      link: "vår integritetspolicy",
       after: ".",
     },
     sections: {
       contact: "Kontaktuppgifter",
-      scheduling: "Boka ett inledande telefonsamtal",
+      scheduling: "Boka ett inledande samtal",
       situation: "Situation",
       nextStep: "Nästa steg",
     },
@@ -80,11 +80,12 @@ export const svDictionary = {
       situation: "Vad vill du ta upp?",
       clarity: "Vad behöver bli tydligare?",
       timing: "När vill du komma vidare?",
-      preferredDate: "Datum",
-      preferredTime: "Tidsfönster",
+      preferredDate: "Välj datum",
+      preferredTime: "Välj tidsfönster",
     },
-    schedulingHint:
-      "Välj ett tidsfönster som passar dig. Carolina återkommer per telefon under den valda perioden. Samtalet är kort och kostnadsfritt.",
+    // Tom: bokningsintroduktionen står i sidhuvudet på /kontakt
+    // (kundunderlag 2026-10-12, 7.1) och ska inte upprepas i en äldre version.
+    schedulingHint: "",
     timeSlotAria: "Välj tidsfönster",
     timeWindows: {
       "08_10": "08:00–10:00",
