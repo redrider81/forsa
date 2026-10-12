@@ -41,7 +41,9 @@ function buildStepsReveal(
   // Processtexten är ett enda block och avtäcks som ett. På desktop står den
   // i högra delen av rutnätet och glider in från höger efter rubriken.
   const travel = homeTravel();
-  gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
+  if (lines.length) {
+    gsap.set(lines, { scaleX: 0, transformOrigin: "left center", force3D: true });
+  }
   gsap.set(cards, { autoAlpha: 0, x: travel.x, y: travel.x ? travel.yText * 0.5 : travel.y, force3D: true });
   if (footnote) {
     gsap.set(footnote, { autoAlpha: 0, y: 10, force3D: true });
@@ -62,11 +64,13 @@ function buildStepsReveal(
     },
     0.1,
   );
-  tl.to(
-    lines,
-    { scaleX: 1, duration: motion.duration.long, ease: motion.ease.editorial, stagger: 0.08, force3D: true },
-    0.05,
-  );
+  if (lines.length) {
+    tl.to(
+      lines,
+      { scaleX: 1, duration: motion.duration.long, ease: motion.ease.editorial, stagger: 0.08, force3D: true },
+      0.05,
+    );
+  }
   if (footnote) {
     tl.to(
       footnote,

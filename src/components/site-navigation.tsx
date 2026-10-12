@@ -7,6 +7,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type FocusEvent,
@@ -441,6 +442,8 @@ export default function SiteNavigation() {
   const mobileMenuId = useId();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileCoachingOpen, setMobileCoachingOpen] = useState(false);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
+  const mobileOverlayRef = useRef<HTMLDivElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const megaPanelRef = useRef<HTMLDivElement>(null);
   const coachingTabRef = useRef<HTMLLIElement>(null);
@@ -635,6 +638,14 @@ export default function SiteNavigation() {
       window.removeEventListener("keydown", handleEscape);
       window.removeEventListener("popstate", handlePopState);
     };
+  }, [mobileOpen]);
+
+  // När menyn stängs får fokus inte ligga kvar i den nu aria-dolda panelen.
+  useLayoutEffect(() => {
+    if (mobileOpen) return;
+    if (mobileOverlayRef.current?.contains(document.activeElement)) {
+      mobileToggleRef.current?.focus({ preventScroll: true });
+    }
   }, [mobileOpen]);
 
   const headerSurface = isHome
@@ -835,6 +846,7 @@ export default function SiteNavigation() {
             }`}
           />
           <button
+            ref={mobileToggleRef}
             type="button"
             aria-label={mobileOpen ? t.nav.menuClose : t.nav.menuOpen}
             aria-expanded={mobileOpen}
@@ -849,6 +861,7 @@ export default function SiteNavigation() {
     </header>
 
     <div
+      ref={mobileOverlayRef}
       className={`fixed inset-0 z-[110] overflow-hidden md:hidden motion-reduce:transition-none transition-[visibility,opacity] duration-200 ease-out ${
         mobileOpen ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"
       }`}
