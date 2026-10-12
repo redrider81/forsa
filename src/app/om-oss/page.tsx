@@ -173,8 +173,9 @@ export default function AboutPage() {
             </h2>
             <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
               <p>
-                Det som sägs i våra coachingsamtal stannar mellan oss. Jag för inte vidare det du
-                delar med mig till någon annan.
+                Våra coachingsamtal är konfidentiella. Det du delar med mig behandlas med respekt för
+                din integritet och förs inte vidare utan ditt samtycke, annat än när det finns en
+                rättslig skyldighet att lämna ut information.
               </p>
               <p>
                 När ett företag bekostar coachingen är det viktigt att det finns tydlighet kring

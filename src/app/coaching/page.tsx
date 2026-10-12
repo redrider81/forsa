@@ -103,7 +103,7 @@ const practical: { title: string; body: string[] }[] = [
   {
     title: "Konfidentialitet och CVB Base",
     body: [
-      "Allt som sägs i våra coachingsamtal stannar mellan oss. Jag för inte vidare det du delar med mig till arbetsgivare eller uppdragsgivare.",
+      "Innehållet i coachingsamtalen är konfidentiellt och delas inte med arbetsgivaren eller uppdragsgivaren utan klientens samtycke, annat än när lag kräver det. Eventuell administrativ återrapportering sker enligt vad som överenskommits i förväg.",
       "CVB Base är utformat med hänsyn till klientens och coachens integritet. Inloggning krävs för att använda plattformen.",
     ],
   },

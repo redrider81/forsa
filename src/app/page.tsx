@@ -148,8 +148,8 @@ const cvbBaseBenefits = [
     body: "CVB Base ger plats för klientens egna reflektioner samtidigt som det stödjer en tydlig struktur kring coachinguppdraget.",
   },
   {
-    title: "Du bestämmer vad du delar",
-    body: "Du ska kunna känna dig trygg med vad du delar och ha tydlighet kring vem som får ta del av det.",
+    title: "Din integritet i CVB Base",
+    body: "Dina reflektioner och uppgifter hanteras med respekt för din integritet. I CVB Base finns tydliga behörigheter för vilken information du och din coach har tillgång till.",
   },
   {
     title: "Ett sammanhang för hela coachingprocessen",
