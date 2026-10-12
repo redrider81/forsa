@@ -35,9 +35,10 @@ export default async function KlientLayout({ children }: { children: React.React
           <div className="mx-auto w-full max-w-[1280px] px-5 md:px-8 lg:px-10">
             {/* Under md en enda kompakt rad: logotyp till vänster, menyknapp
                 till höger. Alla destinationer, FAQ och utloggning ligger i
-                menyn; datumet visas från md. */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-3 py-2.5 md:gap-x-5 md:py-4">
-              <LogoMark className="order-1 h-9 w-auto shrink-0 md:h-11" priority />
+                menyn; datumet visas från md. Logotypen har samma mått och
+                ordning (monogram över ordbild) som coachportalens mobilhuvud. */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-3 pb-3.5 pt-6 md:gap-x-5 md:py-4">
+              <LogoMark className="h-12 w-auto shrink-0 md:order-1 md:h-11" priority />
 
               <time
                 dateTime={today}

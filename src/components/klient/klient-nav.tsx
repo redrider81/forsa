@@ -112,10 +112,10 @@ export function KlientMobileMenu() {
           {/* Samma mått som toppraden, så att stängknappen hamnar där
               menyknappen satt. */}
           <div
-            className="klient-topbar flex shrink-0 items-center justify-between gap-x-3 px-5 pb-2.5"
-            style={{ paddingTop: "calc(0.625rem + env(safe-area-inset-top, 0px))" }}
+            className="klient-topbar flex shrink-0 items-center justify-between gap-x-3 px-5 pb-3.5"
+            style={{ paddingTop: "calc(1.5rem + env(safe-area-inset-top, 0px))" }}
           >
-            <LogoMark className="order-1 h-9 w-auto shrink-0" />
+            <LogoMark className="h-12 w-auto shrink-0" />
             <button
               type="button"
               aria-label="Stäng meny"
