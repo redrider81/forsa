@@ -617,12 +617,6 @@
   border-bottom: 1px solid var(--klient-border-hairline);
 }
 
-.klient-bottombar {
-  background: rgba(244, 241, 235, 0.84);
-  backdrop-filter: blur(26px) saturate(1.25);
-  border-top: 1px solid var(--klient-border-hairline);
-}
-
 /* ---------------------------------------------------------------- rörelse */
 
 @keyframes klient-reveal {
