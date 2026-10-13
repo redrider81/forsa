@@ -45,17 +45,17 @@ const workRows = [
   {
     index: "01",
     title: "Klarhet",
-    body: "Sortera tankar, se nya perspektiv och få syn på vad som är viktigt för dig.",
+    body: "Få syn på vad som är viktigt för dig och förstå din situation tydligare.",
   },
   {
     index: "02",
     title: "Beslut",
-    body: "Utforska olika alternativ och komma fram till vad som känns rätt för dig.",
+    body: "Utforska olika möjligheter och komma närmare beslut som känns genomtänkta och förankrade i det som är viktigt för dig.",
   },
   {
     index: "03",
     title: "Riktning",
-    body: "Tydliggöra vad du vill och hitta nästa steg utifrån dina mål.",
+    body: "Hitta en väg framåt som känns relevant för dig och identifiera vilka steg du vill ta.",
   },
 ];
 
@@ -247,6 +247,10 @@ export default function CoachingPage() {
           >
             Vad kan coaching ge dig?
           </h2>
+          <p data-section-intro className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
+            Coaching kan ge dig utrymme att stanna upp, reflektera och se din situation ur nya
+            perspektiv.
+          </p>
           <div className="mt-24 border-t border-zinc-300 md:mt-40">
             {workRows.map((row) => (
               <article
@@ -387,17 +391,6 @@ export default function CoachingPage() {
         </div>
       </section>
       )}
-
-      {/* ---------- Paus · Statement ----------
-          Frasen stod tidigare två gånger på sidan (hero och rubriken nedan).
-          Den är flyttad hit som en egen paus i stället för att upprepas. */}
-      <section className="flex min-h-[72svh] items-center bg-[#f4f3ef] pb-28 pt-12 md:min-h-[86svh] md:pb-40">
-        <ScrollReveal variant="fadeUp" className="mx-auto w-full max-w-7xl px-6 md:px-10">
-          <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
-            Individuell coaching och företagscoaching utgår från samma arbetssätt.
-          </p>
-        </ScrollReveal>
-      </section>
 
       {/* ---------- 06 · Individuell eller företagscoaching ---------- */}
       <section id="vagar" className="scroll-mt-28 bg-white py-24 md:py-32 lg:py-36">

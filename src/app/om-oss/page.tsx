@@ -30,13 +30,6 @@ const BODY_STACK_ON_DARK = "space-y-7 text-[1.0625rem] font-[450] leading-[1.75]
 const SECTION_STACK = "mt-32 md:mt-48";
 const SECTION_GRID = "grid gap-14 md:grid-cols-12 md:gap-x-8 md:gap-y-16";
 
-const principles = [
-  "Konfidentialitet.",
-  "Frågor före råd. Du äger dina slutsatser.",
-  "Precision framför uppmuntran.",
-  "Uppföljning tills något faktiskt har hänt.",
-];
-
 const audiences = [
   "Privatpersoner som vill utforska en förändring, ett vägval eller ett beslut i livet.",
   "Medarbetare och ledare som vill utvecklas i sin yrkesroll eller hantera utmaningar i arbetslivet.",
@@ -144,30 +137,6 @@ export default function AboutPage() {
 
         <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
           <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
-            <h2 data-col-left className={`max-w-sm ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
-              Principer
-            </h2>
-            <ScrollReveal
-              variant="staggerList"
-              data-col-right
-              className="grid gap-5 md:col-span-6 md:col-start-7 md:grid-cols-2 md:gap-6"
-            >
-              {principles.map((item, index) => (
-                <div
-                  key={item}
-                  data-list-item
-                  className="border border-zinc-300/90 bg-[#f9f8f5] p-7 md:p-9"
-                >
-                  <p className={CHAPTER_ON_LIGHT}>{`0${index + 1}`}</p>
-                  <p className={`mt-5 ${BODY}`}>{item}</p>
-                </div>
-              ))}
-            </ScrollReveal>
-          </ScrollReveal>
-        </section>
-
-        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
-          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
               Konfidentialitet
             </h2>
@@ -218,32 +187,6 @@ export default function AboutPage() {
                 CVB Coaching finns i Göteborg. Samtalen hålls på plats eller digitalt, och var du
                 befinner dig avgör inte om det fungerar.
               </p>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
-          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
-            <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
-              Ett första samtal för att se om coaching passar dig
-            </h2>
-            <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
-              <p>
-                Du behöver inte ha formulerat frågan färdigt. I ett kort och kostnadsfritt första
-                telefonsamtal får du berätta om din situation, ställa frågor och känna efter om
-                coaching med mig känns rätt för dig.
-              </p>
-              <p className="text-[0.875rem] leading-[1.6] text-zinc-500">
-                Samtalet är inte en coachingsession och innebär inget åtagande.
-              </p>
-              <div>
-                <CtaLink href="/kontakt" variant="primary">
-                  Boka ett inledande samtal
-                </CtaLink>
-                <p className="mt-6 text-[0.875rem] leading-[1.6] text-zinc-500">
-                  Kort och kostnadsfritt första telefonsamtal.
-                </p>
-              </div>
             </div>
           </ScrollReveal>
         </section>

@@ -356,17 +356,6 @@ export default function CoachingPageEn() {
       </section>
       )}
 
-      {/* ---------- Paus · Statement ----------
-          Frasen stod tidigare två gånger på sidan (hero och rubriken nedan).
-          Den är flyttad hit som en egen paus i stället för att upprepas. */}
-      <section className="flex min-h-[72svh] items-center bg-[#f4f3ef] pb-28 pt-12 md:min-h-[86svh] md:pb-40">
-        <ScrollReveal variant="fadeUp" className="mx-auto w-full max-w-7xl px-6 md:px-10">
-          <p className="max-w-[20ch] font-serif text-[clamp(2.25rem,5.5vw,5.5rem)] font-medium leading-[1.14] tracking-[-0.04em] text-zinc-900 md:ml-[16.666%]">
-            Individual coaching and business coaching share the same approach.
-          </p>
-        </ScrollReveal>
-      </section>
-
       {/* ---------- 06 · Individuell eller business coaching ---------- */}
       <section id="vagar" className="scroll-mt-28 bg-white py-24 md:py-32 lg:py-36">
         <div className="mx-auto max-w-7xl px-6 md:px-10">

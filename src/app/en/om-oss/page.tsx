@@ -30,13 +30,6 @@ const BODY_STACK_ON_DARK = "space-y-7 text-[1.0625rem] font-[450] leading-[1.75]
 const SECTION_STACK = "mt-32 md:mt-48";
 const SECTION_GRID = "grid gap-14 md:grid-cols-12 md:gap-x-8 md:gap-y-16";
 
-const principles = [
-  "Confidentiality.",
-  "Questions before advice. You own your conclusions.",
-  "Precision rather than encouragement.",
-  "Follow-up until something has actually happened.",
-];
-
 const audiences = [
   "Private individuals facing a choice, a change or a decision that carries weight.",
   "Employees and leaders who need to think clearly with someone outside their own workplace.",
@@ -140,30 +133,6 @@ export default function AboutPageEn() {
 
         <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
           <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
-            <h2 data-col-left className={`max-w-sm ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
-              Principles
-            </h2>
-            <ScrollReveal
-              variant="staggerList"
-              data-col-right
-              className="grid gap-5 md:col-span-6 md:col-start-7 md:grid-cols-2 md:gap-6"
-            >
-              {principles.map((item, index) => (
-                <div
-                  key={item}
-                  data-list-item
-                  className="border border-zinc-300/90 bg-[#f9f8f5] p-7 md:p-9"
-                >
-                  <p className={CHAPTER_ON_LIGHT}>{`0${index + 1}`}</p>
-                  <p className={`mt-5 ${BODY}`}>{item}</p>
-                </div>
-              ))}
-            </ScrollReveal>
-          </ScrollReveal>
-        </section>
-
-        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
-          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
               Confidentiality
             </h2>
@@ -207,29 +176,6 @@ export default function AboutPageEn() {
                 CVB Coaching is based in Gothenburg. Sessions take place in person or online, and where
                 you are does not decide whether it works.
               </p>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
-          <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
-            <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
-              The first conversation is there to see if it feels right.
-            </h2>
-            <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
-              <p>
-                You do not need to have fully formulated the question. In a short, free first phone
-                call you get to describe where you are, find out whether coaching is the right support
-                and get a sense of whether Carolina is the right person to talk to.
-              </p>
-              <p className="text-[0.875rem] leading-[1.6] text-zinc-500">
-                It is not a coaching session and involves no commitment.
-              </p>
-              <div>
-                <CtaLink href="/en/kontakt" variant="primary">
-                  {t.cta.primary}
-                </CtaLink>
-              </div>
             </div>
           </ScrollReveal>
         </section>
