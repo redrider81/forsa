@@ -13,6 +13,7 @@ import EngagementSection from "@/components/engagement-section";
 import KineticTeamHybrid from "@/components/ui/kinetic-team-hybrid";
 import ClientTestimonial from "@/components/client-testimonial";
 import CvbBaseBenefitsAccordion from "@/components/cvb-base-benefits-accordion";
+import MobileStickyCta from "@/components/mobile-sticky-cta";
 import HeroCoachingPathLinks, {
   heroPathLinksPlacementClass,
 } from "@/components/hero-coaching-path-links";
@@ -600,6 +601,11 @@ export default function HomePage() {
           </div>
         </div>
       </ParallaxController>
+      <MobileStickyCta>
+        <CtaLink href="/kontakt" variant="primary" translucent>
+          Boka ett inledande samtal
+        </CtaLink>
+      </MobileStickyCta>
     </main>
   );
 }
