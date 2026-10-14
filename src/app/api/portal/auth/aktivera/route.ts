@@ -61,11 +61,19 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: LINK_INVALID }, { status: 400 });
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role, client_id")
     .eq("id", verified.user.id)
     .single();
+  // PGRST116 is .single()'s "no row": an account without a client link,
+  // handled below. Any other error is a database fault.
+  if (profileError && profileError.code !== "PGRST116") {
+    // A database fault, not a missing client link: say so, without details.
+    await supabase.auth.signOut();
+    console.error("[CVB Coaching] Profilen kunde inte läsas vid aktivering");
+    return Response.json({ ok: false, error: GENERIC }, { status: 503 });
+  }
   if (!profile || profile.role !== "klient" || !profile.client_id) {
     await supabase.auth.signOut();
     return Response.json({ ok: false, error: NOT_A_CLIENT }, { status: 403 });

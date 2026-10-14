@@ -27,6 +27,17 @@ export type PortalUser = {
 };
 
 /**
+ * Utfallet av ett inloggningsförsök. "invalid" täcker både fel uppgifter och
+ * ett konto utan behörighet till den efterfrågade portalen — de får samma
+ * svar, så att svaret inte avslöjar vilka konton som finns. "unavailable" är
+ * ett tekniskt fel (Auth eller databasen) och får aldrig se ut som fel
+ * lösenord.
+ */
+export type AuthenticationResult =
+  | { ok: true; user: PortalUser }
+  | { ok: false; reason: "invalid" | "unavailable" };
+
+/**
  * Autentiserar mot Supabase Auth och slår sedan upp profilen. En klient kan
  * aldrig logga in som coach — rollen kommer från profiles, inte från vad
  * anroparen skickar, och matchas mot den efterfrågade rollen här.
@@ -35,32 +46,46 @@ export async function authenticate(
   email: string,
   password: string,
   role: PortalRole,
-): Promise<PortalUser | null> {
+): Promise<AuthenticationResult> {
   const supabase = await createSupabaseServerClient();
   const { data: signIn, error: signInError } = await supabase.auth.signInWithPassword({
     email: email.trim().toLowerCase(),
     password,
   });
-  if (signInError || !signIn.user) return null;
+  if (signInError) {
+    // Supabase Auth answers rejected credentials with 400; anything else
+    // (rate limit, 5xx, network) is a fault on our side.
+    return { ok: false, reason: signInError.status === 400 ? "invalid" : "unavailable" };
+  }
+  if (!signIn.user) return { ok: false, reason: "invalid" };
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("id, role, coach_id, client_id, email, name")
     .eq("id", signIn.user.id)
-    .single();
+    .maybeSingle();
+
+  if (profileError) {
+    await supabase.auth.signOut();
+    console.error("[CVB Coaching] Profilen kunde inte läsas vid inloggning");
+    return { ok: false, reason: "unavailable" };
+  }
 
   const subjectId = profile?.role === "coach" ? profile.coach_id : profile?.client_id;
   if (!profile || profile.role !== role || !subjectId) {
     await supabase.auth.signOut();
-    return null;
+    return { ok: false, reason: "invalid" };
   }
 
   return {
-    id: profile.id,
-    email: profile.email,
-    name: profile.name,
-    role: profile.role,
-    subjectId,
+    ok: true,
+    user: {
+      id: profile.id,
+      email: profile.email,
+      name: profile.name,
+      role: profile.role,
+      subjectId,
+    },
   };
 }
 

@@ -5,6 +5,7 @@ import { KlientDesktopNav, KlientMobileMenu } from "@/components/klient/klient-n
 import { LogoMark } from "@/components/brand/logo";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { readClientSession } from "@/lib/portal/session";
+import PortalUnavailable from "@/components/portal/portal-unavailable";
 
 export const metadata: Metadata = {
   title: "CVB Base – Klient | CVB Coaching",
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function KlientLayout({ children }: { children: React.ReactNode }) {
-  const session = await readClientSession();
+  // A profile read error is a fault, not a signed-out session.
+  const session = await readClientSession().catch(() => undefined);
+  if (session === undefined) return <PortalUnavailable portal="klient" />;
   if (!session) redirect("/klient-login");
 
   const today = todayIso();

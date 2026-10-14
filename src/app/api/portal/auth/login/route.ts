@@ -48,12 +48,18 @@ export async function POST(request: Request) {
     );
   }
 
-  const user = await authenticate(email, password, requestedRole);
-  if (!user) {
+  const result = await authenticate(email, password, requestedRole);
+  if (!result.ok && result.reason === "unavailable") {
+    return Response.json(
+      { ok: false, error: "Inloggningen kunde inte slutföras just nu. Försök igen om en stund." },
+      { status: 503 },
+    );
+  }
+  if (!result.ok) {
     return Response.json({ ok: false, error: "Fel e-postadress eller lösenord." }, { status: 401 });
   }
 
   // Supabase Auth-sessionen sätts redan av authenticate() via
   // createSupabaseServerClient() — ingen egen cookie behöver skrivas här.
-  return Response.json({ ok: true, role: user.role });
+  return Response.json({ ok: true, role: result.user.role });
 }

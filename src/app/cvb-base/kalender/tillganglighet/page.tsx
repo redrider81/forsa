@@ -8,25 +8,26 @@ import {
   listAvailabilityExceptions,
   listAvailabilityRules,
 } from "@/lib/portal/availability";
-import { PageHeading, portalPageStackClass } from "@/components/portal/ui";
+import { EmptyState, PageHeading, portalPageStackClass } from "@/components/portal/ui";
 
 export default async function TillganglighetPage() {
   const session = await readCoachSession();
   if (!session) return null;
 
+  // A read error throws to the CVB Base error boundary; null means the coach
+  // has no booking settings row, which is shown as such below.
   const settings = await getBookingSettings(session.coachId);
-  if (!settings) return null;
 
-  const [rules, exceptions] = await Promise.all([listAvailabilityRules(), listAvailabilityExceptions()]);
+  const [rules, exceptions] = settings
+    ? await Promise.all([listAvailabilityRules(), listAvailabilityExceptions()])
+    : [[], []];
 
   const today = new Date(`${todayIso()}T00:00:00Z`);
   const previewEnd = new Date(today);
   previewEnd.setUTCDate(previewEnd.getUTCDate() + 14);
-  const previewSlots = await getPreviewSlots(
-    settings.publicSlug,
-    todayIso(),
-    previewEnd.toISOString().slice(0, 10),
-  );
+  const previewSlots = settings
+    ? await getPreviewSlots(settings.publicSlug, todayIso(), previewEnd.toISOString().slice(0, 10))
+    : [];
 
   return (
     <div className={portalPageStackClass}>
@@ -40,12 +41,16 @@ export default async function TillganglighetPage() {
         </div>
       </div>
 
-      <AvailabilityManager
-        initialRules={rules}
-        initialExceptions={exceptions}
-        initialSettings={settings}
-        previewSlots={previewSlots.slice(0, 12)}
-      />
+      {settings ? (
+        <AvailabilityManager
+          initialRules={rules}
+          initialExceptions={exceptions}
+          initialSettings={settings}
+          previewSlots={previewSlots.slice(0, 12)}
+        />
+      ) : (
+        <EmptyState>Det finns inga bokningsinställningar för ditt konto ännu, så tillgängligheten kan inte visas.</EmptyState>
+      )}
     </div>
   );
 }

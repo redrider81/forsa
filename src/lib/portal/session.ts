@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { PortalRole } from "@/lib/portal/token";
+import { PortalDataError } from "@/lib/portal/data-errors";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
@@ -18,16 +19,22 @@ type PortalProfile = {
   name: string;
 };
 
+/**
+ * No signed-in user, or a user without a portal profile: null. A failed
+ * profile read throws PortalDataError — a database fault must not look like
+ * a signed-out session.
+ */
 async function readProfile(): Promise<PortalProfile | null> {
   const supabase = await createSupabaseServerClient();
   const { data: userData, error } = await supabase.auth.getUser();
   if (error || !userData.user) return null;
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("id, role, coach_id, client_id, name")
     .eq("id", userData.user.id)
-    .single();
+    .maybeSingle();
+  if (profileError) throw new PortalDataError("profiles");
 
   return profile ?? null;
 }

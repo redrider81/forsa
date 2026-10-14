@@ -36,10 +36,12 @@ export default function MeetingWorkspace({
   const [explore, setExplore] = useState(exploreContext);
   const [agreementBusy, setAgreementBusy] = useState(false);
   const [agreementSaved, setAgreementSaved] = useState(false);
+  const [agreementError, setAgreementError] = useState(false);
 
   const [notes, setNotes] = useState(initialCoachNotes);
   const [notesBusy, setNotesBusy] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
+  const [notesError, setNotesError] = useState(false);
 
   const [showClosePanel, setShowClosePanel] = useState(false);
   const [awareness, setAwareness] = useState("");
@@ -48,33 +50,49 @@ export default function MeetingWorkspace({
   const [followUp, setFollowUp] = useState("");
   const [nextFocus, setNextFocus] = useState("");
   const [completingSession, setCompletingSession] = useState(false);
+  const [completeError, setCompleteError] = useState(false);
 
   async function saveAgreement() {
     setAgreementBusy(true);
     setAgreementSaved(false);
-    await fetch("/api/portal/mote/agreement", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, clientFocus, desiredOutcome, exploration: explore }),
-    });
-    setAgreementBusy(false);
-    setAgreementSaved(true);
+    setAgreementError(false);
+    try {
+      const response = await fetch("/api/portal/mote/agreement", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, clientFocus, desiredOutcome, exploration: explore }),
+      });
+      if (response.ok) setAgreementSaved(true);
+      else setAgreementError(true);
+    } catch {
+      setAgreementError(true);
+    } finally {
+      setAgreementBusy(false);
+    }
   }
 
   async function saveNotes() {
     setNotesBusy(true);
     setNotesSaved(false);
-    await fetch("/api/portal/mote/notes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, notes }),
-    });
-    setNotesBusy(false);
-    setNotesSaved(true);
+    setNotesError(false);
+    try {
+      const response = await fetch("/api/portal/mote/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, notes }),
+      });
+      if (response.ok) setNotesSaved(true);
+      else setNotesError(true);
+    } catch {
+      setNotesError(true);
+    } finally {
+      setNotesBusy(false);
+    }
   }
 
   async function completeSession() {
     setCompletingSession(true);
+    setCompleteError(false);
     const insightsArray = insights
       .split("\n")
       .map((line) => line.trim())
@@ -104,7 +122,11 @@ export default function MeetingWorkspace({
 
       if (response.ok) {
         router.push("/cvb-base");
+      } else {
+        setCompleteError(true);
       }
+    } catch {
+      setCompleteError(true);
     } finally {
       setCompletingSession(false);
     }
@@ -184,7 +206,7 @@ export default function MeetingWorkspace({
               />
             </div>
 
-            <div className="border-t border-zinc-200/80 pt-6 flex items-center gap-3">
+            <div className="border-t border-zinc-200/80 pt-6 flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={() => setShowClosePanel(false)}
@@ -201,6 +223,11 @@ export default function MeetingWorkspace({
               >
                 {completingSession ? "Slutför…" : "Slutför session"}
               </button>
+              {completeError ? (
+                <span role="alert" className="text-[0.8125rem] text-red-600">
+                  Sessionen kunde inte slutföras. Inget har sparats. Försök igen.
+                </span>
+              ) : null}
             </div>
           </div>
         </Panel>
@@ -250,6 +277,11 @@ export default function MeetingWorkspace({
               {agreementBusy ? "Sparar…" : "Spara"}
             </button>
             {agreementSaved ? <span className="text-[0.8125rem] text-zinc-500">Sparat.</span> : null}
+            {agreementError ? (
+              <span role="alert" className="text-[0.8125rem] text-red-600">
+                Fel vid sparning
+              </span>
+            ) : null}
           </div>
         </div>
       </Panel>
@@ -299,6 +331,11 @@ export default function MeetingWorkspace({
               {notesBusy ? "Sparar…" : "Spara anteckningar"}
             </button>
             {notesSaved ? <span className="text-[0.8125rem] text-zinc-500">Sparat.</span> : null}
+            {notesError ? (
+              <span role="alert" className="text-[0.8125rem] text-red-600">
+                Fel vid sparning
+              </span>
+            ) : null}
           </div>
         </div>
       </Panel>

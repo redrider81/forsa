@@ -20,6 +20,7 @@ npm run dev
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript utan emit |
 | `npm run test` | Enhetstester (Vitest) |
+| `npm run test:db` | Databasintegrationstester mot produktionens behörighetsmodell (kräver Docker) |
 
 ## Struktur
 
@@ -61,6 +62,46 @@ Data-access är abstraherat i `src/lib/portal/repository.ts`:
 - rena `build*`/`list*` som tar en `PortalRepositoryData`-ögonblicksbild och är
   enhetstestade
 - tunna `get*`-omslag som hämtar ögonblicksbilden från Supabase via RLS
+
+### Databasbehörigheter och migreringar
+
+Produktionsprojektet ger **inga** data- eller EXECUTE-rättigheter till `anon`,
+`authenticated` eller `service_role` på nya objekt i `public`. Varje migrering
+måste därför själv `GRANT`a exakt det applikationen gör — en RLS-policy utan
+matchande GRANT nekas med 42501 innan policyn ens utvärderas. Lokal Supabase
+(och Supabase-imagen) ger däremot allt per default, så en saknad GRANT syns
+inte lokalt. Så uppstod kalender- och coachprofilfelen 2026-10-14.
+
+`npm run test:db` kör alla migreringar i en isolerad engångscontainer med
+produktionens default privileges och testar sedan som portalens egna roller
+(aldrig `service_role`): behörigheter för varje tabell- och RPC-anrop
+(`tests/db/20_privileges.sql`), coach/klient-isolering, samtyckesgränsen,
+kalendern, mötesavslut och `plpgsql_check` av alla funktioner. Ett nytt
+`.from()`/`.rpc()`-anrop i koden kräver en rad i `20_privileges.sql`.
+
+**Produktionssättning av en migrering**
+
+1. Kör `npm run test:db` — grönt krävs.
+2. Applicera migreringen på produktionen via Supabase (MCP `apply_migration`
+   eller SQL-editorn som migrering). Plattformen registrerar då sin egen
+   version (tidsstämpel för appliceringen).
+3. Läs den registrerade versionen (`supabase_migrations.schema_migrations`) och
+   döp om den lokala filen till exakt den versionen innan commit, så att repo
+   och produktion har samma historik.
+4. Commit och push.
+
+**Kör inte `supabase db push` mot produktionen.** Tre äldre migreringar har
+olika versionsnummer i repot och i produktionens register (samma innehåll):
+
+| Repo | Produktion |
+| --- | --- |
+| `20261003100000_general_terms_version_2026_10_03` | `20261003092107` |
+| `20261012120000_cvb_base_client_invitations` | `20261012030441` |
+| `20261014120000_cvb_base_availability_table_grants` | `20261014124441` |
+
+`db push` skulle betrakta dem som oapplicerade. Att normalisera historiken
+(`supabase migration repair` eller omdöpning av filerna) är ett separat beslut
+som inte är genomfört.
 
 ## Portalen
 

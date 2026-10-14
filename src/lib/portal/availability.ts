@@ -2,6 +2,7 @@ import "server-only";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { TablesUpdate } from "@/lib/supabase/database.types";
+import { PortalDataError } from "@/lib/portal/data-errors";
 
 export type AvailabilityRule = {
   id: string;
@@ -53,11 +54,12 @@ function toTime(value: string): string {
 
 export async function listAvailabilityRules(): Promise<AvailabilityRule[]> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("coach_availability_rules")
     .select("*")
     .order("weekday", { ascending: true })
     .order("start_time", { ascending: true });
+  if (error) throw new PortalDataError("coach_availability_rules");
   return (data ?? []).map((row) => ({
     id: row.id,
     weekday: row.weekday,
@@ -95,7 +97,11 @@ function toExceptionType(value: string): AvailabilityExceptionType {
 
 export async function listAvailabilityExceptions(): Promise<AvailabilityException[]> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.from("coach_availability_exceptions").select("*").order("date", { ascending: true });
+  const { data, error } = await supabase
+    .from("coach_availability_exceptions")
+    .select("*")
+    .order("date", { ascending: true });
+  if (error) throw new PortalDataError("coach_availability_exceptions");
   return (data ?? []).map((row) => ({
     id: row.id,
     date: row.date,
@@ -166,10 +172,12 @@ export async function deleteAvailabilityException(exceptionId: string): Promise<
   return !error;
 }
 
+/** null only when the coach has no settings row; a read error throws. */
 export async function getBookingSettings(coachId: string): Promise<BookingSettings | null> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.from("coach_booking_settings").select("*").eq("coach_id", coachId).maybeSingle();
-  if (error || !data) return null;
+  if (error) throw new PortalDataError("coach_booking_settings");
+  if (!data) return null;
   return {
     meetingDurationMinutes: data.meeting_duration_minutes,
     bufferMinutes: data.buffer_minutes,
@@ -307,10 +315,11 @@ export async function respondToPublicBookingRequest(
 
 export async function getPreviewSlots(slug: string, startDate: string, endDate: string): Promise<PublicSlot[]> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.rpc("get_public_booking_slots", {
+  const { data, error } = await supabase.rpc("get_public_booking_slots", {
     p_slug: slug,
     p_start_date: startDate,
     p_end_date: endDate,
   });
+  if (error) throw new PortalDataError("get_public_booking_slots");
   return (data ?? []).map((row) => ({ date: row.date, startAt: row.start_at, endAt: row.end_at }));
 }

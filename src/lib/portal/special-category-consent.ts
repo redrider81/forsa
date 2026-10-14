@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { PortalDataError } from "@/lib/portal/data-errors";
 import {
   activeConsent,
   SPECIAL_CATEGORY_CONSENT_VERSION,
@@ -10,15 +11,17 @@ import {
 
 /**
  * Consent history for one client, newest first. Runs under RLS: a client
- * only ever sees their own rows, the coach only her own clients'.
+ * only ever sees their own rows, the coach only her own clients'. A read
+ * error throws; it is never reported as "no consent history".
  */
 export async function listSpecialCategoryConsents(clientId: string): Promise<SpecialCategoryConsentRecord[]> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("special_category_consents")
     .select("id, consent_version, granted_at, withdrawn_at")
     .eq("client_id", clientId)
     .order("granted_at", { ascending: false });
+  if (error) throw new PortalDataError("special_category_consents");
   return (data ?? []).map((row) => ({
     id: row.id,
     version: row.consent_version,
@@ -53,14 +56,18 @@ export async function withdrawSpecialCategoryConsent(): Promise<{ ok: true } | {
   return error ? { ok: false, error: error.message } : { ok: true };
 }
 
-/** Erasure requests for one client, newest first (RLS: own / own clients). */
+/**
+ * Erasure requests for one client, newest first (RLS: own / own clients). A
+ * read error throws, so an open request is never hidden from the coach.
+ */
 export async function listSpecialCategoryErasureRequests(clientId: string): Promise<SpecialCategoryErasureRequest[]> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("special_category_erasure_requests")
     .select("id, cutoff, requested_at, completed_at")
     .eq("client_id", clientId)
     .order("requested_at", { ascending: false });
+  if (error) throw new PortalDataError("special_category_erasure_requests");
   return (data ?? []).map((row) => ({
     id: row.id,
     cutoff: row.cutoff,
@@ -91,5 +98,6 @@ export async function eraseSpecialCategoryContent(clientId: string): Promise<{ o
 export async function countClientPrivateContent(clientId: string): Promise<number> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.rpc("count_client_private_content", { p_client_id: clientId });
-  return error || typeof data !== "number" ? 0 : data;
+  if (error || typeof data !== "number") throw new PortalDataError("count_client_private_content");
+  return data;
 }

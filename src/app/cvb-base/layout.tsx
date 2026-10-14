@@ -6,6 +6,7 @@ import { PortalDesktopNav, PortalMobileNav } from "@/components/portal/portal-na
 import { LogoMark } from "@/components/brand/logo";
 import { formatWeekdayDate, todayIso } from "@/lib/portal/format";
 import { readCoachSession } from "@/lib/portal/session";
+import PortalUnavailable from "@/components/portal/portal-unavailable";
 
 export const metadata: Metadata = {
   title: "CVB Base | CVB Coaching",
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
-  const session = await readCoachSession();
+  // A profile read error is a fault, not a signed-out session.
+  const session = await readCoachSession().catch(() => undefined);
+  if (session === undefined) return <PortalUnavailable portal="coach" />;
   if (!session) {
     redirect("/coach-login");
   }

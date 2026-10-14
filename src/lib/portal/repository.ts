@@ -43,6 +43,7 @@ import {
   listClientMaterials,
 } from "@/lib/portal/materials-repository";
 import type { CoachingMaterial } from "@/lib/portal/types";
+import { PortalDataError } from "@/lib/portal/data-errors";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
@@ -990,12 +991,35 @@ function groupBy<T, K>(items: T[], keyOf: (item: T) => K): Map<K, T[]> {
   return map;
 }
 
+/** Source of each read in fetchPortalRepositoryData, in the same order (for logs). */
+const PORTAL_DATA_SOURCES = [
+  "coaches",
+  "organisations",
+  "engagements",
+  "milestones",
+  "clients",
+  "coaching_agreements",
+  "development_goals",
+  "sessions",
+  "session_summaries",
+  "session_coach_notes",
+  "read_session_preparations",
+  "reflections",
+  "insights",
+  "commitments",
+  "documents",
+  "materials",
+  "special_category_consents",
+  "read_commitment_client_notes",
+] as const;
+
 /**
  * Hämtar hela den ögonblicksbild av data som den inloggade sessionen (coach
  * eller klient) har rätt att se, via RLS. Anropas oavsett roll — för en
  * klient returnerar t.ex. session_coach_notes helt enkelt en tom lista, eftersom
  * ingen policy alls finns för klienter på den tabellen. Kontextisoleringen
  * upprätthålls därmed på databasnivå, inte bara i applikationskoden.
+ * Ett läsfel kastar PortalDataError — det blir aldrig en tom lista.
  */
 async function fetchPortalRepositoryData(
   options: {
@@ -1017,26 +1041,7 @@ async function fetchPortalRepositoryData(
 ): Promise<PortalRepositoryData> {
   const supabase = await createSupabaseServerClient();
 
-  const [
-    { data: coachRows },
-    { data: organisationRows },
-    { data: engagementRows },
-    { data: milestoneRows },
-    { data: rawClientRows },
-    { data: agreementRows },
-    { data: rawGoalRows },
-    { data: rawSessionRows },
-    { data: rawSummaryRows },
-    { data: rawCoachNoteRows },
-    { data: rawPrepRows },
-    { data: rawReflectionRows },
-    { data: rawInsightRows },
-    { data: rawCommitmentRows },
-    { data: documentRows },
-    { data: materialRows },
-    { data: consentRows },
-    { data: commitmentNoteRows },
-  ] = await Promise.all([
+  const results = await Promise.all([
     supabase.from("coaches").select("*"),
     supabase.from("organisations").select("*"),
     supabase.from("engagements").select("*"),
@@ -1061,6 +1066,36 @@ async function fetchPortalRepositoryData(
     supabase.from("special_category_consents").select("client_id, granted_at, withdrawn_at"),
     supabase.rpc("read_commitment_client_notes"),
   ]);
+
+  // Fail closed. A failed read is never "no rows": an empty consent list
+  // would lift the article 9 restriction below, and an empty client list
+  // turns every ownership check into "not found".
+  const failed = results.findIndex((result) => result.error);
+  if (failed !== -1) {
+    console.error("[CVB Coaching] Portaldata kunde inte läsas", { source: PORTAL_DATA_SOURCES[failed] });
+    throw new PortalDataError(PORTAL_DATA_SOURCES[failed]);
+  }
+
+  const [
+    { data: coachRows },
+    { data: organisationRows },
+    { data: engagementRows },
+    { data: milestoneRows },
+    { data: rawClientRows },
+    { data: agreementRows },
+    { data: rawGoalRows },
+    { data: rawSessionRows },
+    { data: rawSummaryRows },
+    { data: rawCoachNoteRows },
+    { data: rawPrepRows },
+    { data: rawReflectionRows },
+    { data: rawInsightRows },
+    { data: rawCommitmentRows },
+    { data: documentRows },
+    { data: materialRows },
+    { data: consentRows },
+    { data: commitmentNoteRows },
+  ] = results;
 
   // ---- Article 9 restriction after withdrawn consent -------------------
   //

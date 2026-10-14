@@ -24,7 +24,9 @@ export const metadata: Metadata = {
 };
 
 export default async function CarolinaLoginPage() {
-  const session = await readSession();
+  // Only decides whether an already signed-in user skips the form. If the
+  // profile cannot be read, show the form; signing in reports the fault.
+  const session = await readSession().catch(() => null);
   if (session?.role === "coach") redirect("/cvb-base");
 
   return (
