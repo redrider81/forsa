@@ -447,9 +447,12 @@ export function buildEngagementOverview(
 ): EngagementOverview | null {
   const engagement = getEngagement(coachId, engagementId, data);
   if (!engagement) return null;
+  // Individual engagements have no organisation; they get the same empty
+  // fallback as buildClientDossier. A set organisationId that cannot be
+  // read is still "not found".
   const organisation = engagement.organisationId
     ? getOrganisation(coachId, engagement.organisationId, data)
-    : null;
+    : EMPTY_ORGANISATION;
   if (!organisation) return null;
 
   const participants = listClientsForEngagement(coachId, engagementId, state, data).map((client) => {

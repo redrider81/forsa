@@ -2,7 +2,6 @@ import Link from "next/link";
 import { readCoachSession } from "@/lib/portal/session";
 import { fetchPortalRepositoryData, getCoach, listClients, listEngagements } from "@/lib/portal/repository";
 import { LogoutButton } from "@/components/portal/portal-nav";
-import DemoResetButton from "@/components/portal/demo-reset-button";
 import ProfileEditor from "@/components/portal/profile-editor";
 import { PageHeading, Panel, PanelHeading, portalOutlineButtonClass, portalPageStackClass } from "@/components/portal/ui";
 
@@ -13,7 +12,10 @@ export default async function ProfilePage() {
   const data = await fetchPortalRepositoryData();
   const coach = getCoach(data);
   const engagements = listEngagements(session.coachId, data);
-  const clients = listClients(session.coachId, undefined, data);
+  // Ongoing relationships: the same active-client definition as the overview.
+  const clients = listClients(session.coachId, undefined, data).filter(
+    (client) => (client.status ?? "aktiv") === "aktiv",
+  );
 
   return (
     <div className={portalPageStackClass}>
@@ -57,25 +59,6 @@ export default async function ProfilePage() {
               <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">{item.text}</p>
             </div>
           ))}
-        </div>
-      </Panel>
-
-      <Panel>
-        <PanelHeading label="Miljö" title="Testmiljö" />
-        <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
-          Fiktivt testmaterial. Inga verkliga klientuppgifter. Sammanställning sker server-side och arbetar endast
-          med öppnad klient eller öppnat uppdrag.
-        </p>
-      </Panel>
-
-      <Panel>
-        <PanelHeading label="Demoläge" title="Återställning" />
-        <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
-          Nollställer klientens tillägg: reflektioner, förberedelse och statusändringar. Seed-datan
-          påverkas inte.
-        </p>
-        <div className="mt-5">
-          <DemoResetButton />
         </div>
       </Panel>
 

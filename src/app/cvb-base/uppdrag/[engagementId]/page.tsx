@@ -32,6 +32,8 @@ export default async function EngagementPage({
 
   const { engagement, organisation, participants } = overview;
   const openFollowUps = participants.reduce((sum, item) => sum + item.openCommitments, 0);
+  // Individual engagements have no organisation, so no sponsor-level views.
+  const hasOrganisation = Boolean(organisation.id);
 
   return (
     <div className={portalPageStackClass}>
@@ -42,9 +44,11 @@ export default async function EngagementPage({
         >
           Uppdrag
         </Link>
-        <div className="mt-4">
-          <SectionLabel>{organisation.name}</SectionLabel>
-        </div>
+        {hasOrganisation ? (
+          <div className="mt-4">
+            <SectionLabel>{organisation.name}</SectionLabel>
+          </div>
+        ) : null}
         <h1 className="mt-3 text-[1.75rem] font-medium leading-[1.15] tracking-tight text-balance text-zinc-900 md:text-[2.05rem]">
           {engagement.title}
         </h1>
@@ -166,50 +170,56 @@ export default async function EngagementPage({
         </div>
       </Panel>
 
-      <AiAskPanel
-        contextType="organisation"
-        contextId={engagement.id}
-        emailSubject={`CVB Coaching – Underlag för ${organisation.name}`}
-        title={`Fråga om ${organisation.name}`}
-        scopeNote="Endast detta uppdrag och endast data tillåten på organisationsnivå. Individuella reflektioner, insikter och coachanteckningar ingår aldrig."
-        suggestions={[
-          {
-            label: "Sessioner framåt",
-            question: "Vilka deltagare har sessioner den närmaste månaden?",
-          },
-          { label: "Aktiviteter som väntar", question: "Vilka aktiviteter väntar?" },
-          { label: "Genomförande", question: "Hur ser programmets genomförande ut?" },
-          {
-            label: "Inför nästa genomgång",
-            question: "Vad behöver förberedas inför nästa programgenomgång?",
-          },
-          {
-            label: "Öppna uppföljningar",
-            question: "Vilka deltagare har öppna uppföljningar?",
-          },
-        ]}
-        placeholder="Fråga om deltagare, sessioner, programstatus, milstolpar eller dokument…"
-      />
+      {hasOrganisation ? (
+        <AiAskPanel
+          contextType="organisation"
+          contextId={engagement.id}
+          emailSubject={`CVB Coaching – Underlag för ${organisation.name}`}
+          title={`Fråga om ${organisation.name}`}
+          scopeNote="Endast detta uppdrag och endast data tillåten på organisationsnivå. Individuella reflektioner, insikter och coachanteckningar ingår aldrig."
+          suggestions={[
+            {
+              label: "Sessioner framåt",
+              question: "Vilka deltagare har sessioner den närmaste månaden?",
+            },
+            { label: "Aktiviteter som väntar", question: "Vilka aktiviteter väntar?" },
+            { label: "Genomförande", question: "Hur ser programmets genomförande ut?" },
+            {
+              label: "Inför nästa genomgång",
+              question: "Vad behöver förberedas inför nästa programgenomgång?",
+            },
+            {
+              label: "Öppna uppföljningar",
+              question: "Vilka deltagare har öppna uppföljningar?",
+            },
+          ]}
+          placeholder="Fråga om deltagare, sessioner, programstatus, milstolpar eller dokument…"
+        />
+      ) : null}
 
-      <Panel>
-        <PanelHeading label="Rapport" title="Programöversikt" />
-        <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-          För uppdragsgivaren. Endast data tillåten på organisationsnivå.
-        </p>
-        <Link
-          href={`/cvb-base/uppdrag/${engagement.id}/programoversikt`}
-          className={`mt-5 ${portalOutlineButtonClass} min-h-11 px-6 py-3 text-sm`}
-        >
-          Öppna programöversikt
-        </Link>
-      </Panel>
+      {hasOrganisation ? (
+        <Panel>
+          <PanelHeading label="Rapport" title="Programöversikt" />
+          <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
+            För uppdragsgivaren. Endast data tillåten på organisationsnivå.
+          </p>
+          <Link
+            href={`/cvb-base/uppdrag/${engagement.id}/programoversikt`}
+            className={`mt-5 ${portalOutlineButtonClass} min-h-11 px-6 py-3 text-sm`}
+          >
+            Öppna programöversikt
+          </Link>
+        </Panel>
+      ) : null}
 
-      <Panel>
-        <PanelHeading label="Sekretess" title="Rapporteringsprinciper" />
-        <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
-          {engagement.sponsorReporting}
-        </p>
-      </Panel>
+      {engagement.sponsorReporting ? (
+        <Panel>
+          <PanelHeading label="Sekretess" title="Rapporteringsprinciper" />
+          <p className="mt-3.5 text-[0.9375rem] leading-[1.7] text-zinc-700">
+            {engagement.sponsorReporting}
+          </p>
+        </Panel>
+      ) : null}
     </div>
   );
 }

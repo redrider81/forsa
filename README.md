@@ -127,11 +127,13 @@ och ett klientkonto kan inte logga in via coachformuläret.
 npm run reset:demo
 ```
 
-Nollställer det klienten lagt till. Samma funktion finns för coachen under
-**Profil → Återställ demoläge**. Endpointen kräver coachsession — klienten kan
-aldrig anropa den.
+Raderar bara den äldre demo-state-cookien (`cvb_demo_state`) i webbläsaren.
+Ingen databaspost påverkas. Endpointen kräver coachsession — klienten kan
+aldrig anropa den. Det finns ingen återställningsknapp i portalen.
 
-**All data i portalen är fiktiv.** Inga verkliga klientuppgifter förekommer.
+**Demodata:** databasen innehåller fiktiva seed-poster (klienter, uppdrag,
+sessioner, avtal, dokument) bredvid poster som skapats i portalen. Demoposter
+tas inte bort automatiskt.
 
 ### Sekretessnivåer
 

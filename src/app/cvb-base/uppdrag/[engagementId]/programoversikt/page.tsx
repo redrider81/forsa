@@ -16,7 +16,8 @@ export default async function ProgramReportPage({
   if (!session) return null;
 
   const overview = await getEngagementOverview(session.coachId, engagementId);
-  if (!overview) notFound();
+  // A report for the organisation's sponsor; an individual engagement has none.
+  if (!overview || !overview.organisation.id) notFound();
 
   const { engagement, organisation, participants } = overview;
   const openFollowUps = participants.reduce((sum, item) => sum + item.openCommitments, 0);

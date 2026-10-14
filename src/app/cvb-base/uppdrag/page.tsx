@@ -30,8 +30,8 @@ export default async function EngagementsPage() {
                 href={`/cvb-base/uppdrag/${engagement.id}`}
                 className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-white"
               >
-                <SectionLabel>{overview.organisation.name}</SectionLabel>
-                <h2 className="mt-2.5 text-[1.25rem] font-medium leading-[1.3] tracking-tight text-zinc-900">
+                {overview.organisation.name ? <SectionLabel>{overview.organisation.name}</SectionLabel> : null}
+                <h2 className={`${overview.organisation.name ? "mt-2.5 " : ""}text-[1.25rem] font-medium leading-[1.3] tracking-tight text-zinc-900`}>
                   {engagement.title}
                 </h2>
                 <p className="mt-2.5 text-[0.9375rem] leading-[1.7] text-zinc-600">
@@ -51,10 +51,12 @@ export default async function EngagementsPage() {
                 </div>
 
                 <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-zinc-200/80 pt-4 sm:grid-cols-4">
-                  <div>
-                    <dt className="text-[0.6875rem] uppercase tracking-[0.1em] text-zinc-400">Organisation</dt>
-                    <dd className="mt-1 text-[0.8125rem] text-zinc-700">{overview.organisation.sizeLabel}</dd>
-                  </div>
+                  {overview.organisation.id ? (
+                    <div>
+                      <dt className="text-[0.6875rem] uppercase tracking-[0.1em] text-zinc-400">Organisation</dt>
+                      <dd className="mt-1 text-[0.8125rem] text-zinc-700">{overview.organisation.sizeLabel}</dd>
+                    </div>
+                  ) : null}
                   <div>
                     <dt className="text-[0.6875rem] uppercase tracking-[0.1em] text-zinc-400">Genomfört</dt>
                     <dd className="mt-1 text-[0.8125rem] text-zinc-700">

@@ -263,7 +263,9 @@ export function buildEngagementContext(
   data: PortalRepositoryData = SEED_REPOSITORY_DATA,
 ): BuiltContext | null {
   const overview = buildEngagementOverview(coachId, engagementId, state, data);
-  if (!overview) return null;
+  // Organisation-level context exists only for engagements with an
+  // organisation; an individual engagement has no organisation level.
+  if (!overview || !overview.organisation.id) return null;
 
   const { engagement, organisation, participants } = overview;
   const sections: string[] = [];

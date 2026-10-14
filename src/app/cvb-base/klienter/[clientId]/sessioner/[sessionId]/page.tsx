@@ -5,7 +5,14 @@ import { readCoachSession } from "@/lib/portal/session";
 import { fetchPortalRepositoryData, getClientDossier, getSession } from "@/lib/portal/repository";
 import { formatWeekdayDate, formatDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
 import { sessionStatusTagTone } from "@/lib/portal/status-tones";
-import { Panel, PanelHeading, portalPageStackClass, SectionLabel, Tag } from "@/components/portal/ui";
+import {
+  Panel,
+  PanelHeading,
+  portalPageStackClass,
+  portalPrimaryButtonSmClass,
+  SectionLabel,
+  Tag,
+} from "@/components/portal/ui";
 
 export default async function SessionPage({
   params,
@@ -54,6 +61,14 @@ export default async function SessionPage({
                 {coachingSession.location} · {coachingSession.durationMinutes} minuter
               </span>
             </p>
+            {/* The existing meeting workspace, for every upcoming session —
+                also one whose date has passed, so it can still be completed.
+                Ownership is enforced by RLS and complete_coaching_session. */}
+            {coachingSession.status === "kommande" ? (
+              <Link href={`/cvb-base/mote/${coachingSession.id}`} className={`mt-4 ${portalPrimaryButtonSmClass}`}>
+                Öppna möte
+              </Link>
+            ) : null}
           </div>
           <Tag tone={sessionStatusTagTone[coachingSession.status]}>
             {coachingSession.status === "kommande" ? "Kommande" : "Genomförd"}

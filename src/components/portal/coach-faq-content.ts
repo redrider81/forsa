@@ -157,7 +157,7 @@ export const coachFaqCategories: FaqCategory[] = [
     entries: [
       {
         question: "Vad finns under Profil?",
-        answer: ["Profil visar dina uppgifter och en sammanfattning av portalens integritetsnivåer. I demoläget finns även återställning av fiktivt testmaterial."],
+        answer: ["Profil visar dina uppgifter och en sammanfattning av portalens integritetsnivåer."],
       },
       {
         question: "Vad delas mellan coach och klient?",
