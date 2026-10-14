@@ -420,7 +420,7 @@ export default function HomePage() {
                       <p key={paragraph}>{paragraph}</p>
                     ))}
                   </div>
-                  <div className="mt-10">
+                  <div data-booking-cta className="mt-10">
                     <CtaLink href="/kontakt" variant="tertiary">Boka ett inledande samtal</CtaLink>
                   </div>
                 </div>

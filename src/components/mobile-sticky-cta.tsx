@@ -1,68 +1,157 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 
 /**
- * Flytande bokningsknapp på startsidan, endast mobil. Tar över när heroknappen
- * inte syns och döljs från den avslutande bokningssektionen (#kontakt) och
- * nedåt, så att sidfoten inte täcks. Ligger under navigeringen och
- * mobilmenyns överlägg (z-[100]/z-[110]).
+ * Flytande bokningsknapp på startsidan, endast mobil. Det syns hela tiden en
+ * enda bokningsknapp: när heroknappens intoning är klar läggs den flytande
+ * knappen exakt där heroknappen står och heroknappen döljs. Därefter ligger
+ * knappen kvar på samma plats på skärmen medan sidan scrollar. Den viker undan
+ * medan en annan bokningsknapp på sidan syns: knappen mitt på sidan
+ * ([data-booking-cta]) och knappen i den avslutande bokningssektionen
+ * (#kontakt). Ligger under navigeringen och mobilmenyns överlägg
+ * (z-[100]/z-[110]).
  */
+
+const DESKTOP_QUERY = "(min-width: 768px)";
+
+/** Läge i dokumentet utan transformer, så att heroanimationen inte påverkar. */
+function layoutOffset(element: HTMLElement) {
+  let top = 0;
+  let left = 0;
+  for (let node: HTMLElement | null = element; node; node = node.offsetParent as HTMLElement | null) {
+    top += node.offsetTop;
+    left += node.offsetLeft;
+  }
+  return { top, left };
+}
+
 export default function MobileStickyCta({ children }: { children: ReactNode }) {
-  const [visible, setVisible] = useState(false);
+  const [position, setPosition] = useState<CSSProperties | null>(null);
+  const [otherOpacity, setOtherOpacity] = useState(0);
+  const measureRef = useRef<() => number>(() => 0);
 
   useEffect(() => {
-    const heroCta = document.querySelector("[data-hero-cta]");
-    const closing = document.getElementById("kontakt");
-    if (!heroCta || !closing) return;
+    const heroWrapper = document.querySelector<HTMLElement>("[data-hero-cta]");
+    const heroLink = heroWrapper?.querySelector<HTMLElement>("a");
+    const closingCta = document.getElementById("kontakt")?.querySelector<HTMLElement>("a");
+    const pageCtas = [...document.querySelectorAll<HTMLElement>("[data-booking-cta] a")];
+    if (!heroWrapper || !heroLink || !closingCta) return;
 
-    // Läget räknas om direkt vid varje scroll i stället för med
-    // IntersectionObserver: ett hopp eller ett snabbt svep förbi den låga
-    // heroknappen korsar aldrig viewporten och skulle annars inte märkas. Hero
-    // är bara sticky från md och uppåt; på mobil scrollar den normalt, så
-    // heroknappens läge går att lita på.
-    //
-    // Den flytande knappen syns så fort heroknappen inte ligger helt inom den
-    // användbara delen av viewporten: under nederkanten (korta skärmar där den
-    // hamnar under vikningen) eller ovanför översta fjärdedelen. Viewportens
-    // överkant är på telefon täckt av statusfält och webbläsarens adressfält, så
-    // att vänta tills knappen lämnat viewporten helt ger ett glapp där ingen
-    // knapp syns.
-    //
-    // flushSync gör att ändringen når DOM:en innan nästa bildruta målas. Annars
-    // ritar React om först i en senare uppgift och ett hopp (ankarlänk, Page
-    // Down) visar en bildruta utan någon knapp.
-    const update = () => {
-      const hero = heroCta.getBoundingClientRect();
-      const heroInView = hero.bottom <= window.innerHeight && hero.bottom >= window.innerHeight * 0.25;
-      const closingReached = closing.getBoundingClientRect().top < window.innerHeight;
-      flushSync(() => setVisible(!heroInView && !closingReached));
+    const desktop = window.matchMedia(DESKTOP_QUERY);
+    let revealed = false;
+    let frame = 0;
+
+    // Hero är bara sticky från md och uppåt; på mobil scrollar den normalt, så
+    // heroknappens läge i dokumentet är samma som dess läge på skärmen vid
+    // scrolltopp. På korta skärmar där den hamnar under vikningen dockas den
+    // flytande knappen i stället vid nederkanten.
+    const place = () => {
+      if (desktop.matches || !revealed) {
+        heroLink.style.visibility = "";
+        setPosition(null);
+        return;
+      }
+      const { top, left } = layoutOffset(heroLink);
+      const docked = `calc(100dvh - env(safe-area-inset-bottom, 0px) - 1rem - ${heroLink.offsetHeight}px)`;
+      heroLink.style.visibility = "hidden";
+      setPosition({ top: `min(${top}px, ${docked})`, left: `${left}px` });
     };
 
-    const frame = requestAnimationFrame(update);
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    // Den flytande knappen viker undan för en annan bokningsknapp på sidan som
+    // är i bild, så att det aldrig syns två knappar. Knapparna tonas in av
+    // ScrollReveal när de når skärmen; under intoningen tonas den flytande
+    // knappen ut i samma takt (en övertoning) och läget följs bildruta för
+    // bildruta, så att det varken blir två fullt synliga knappar eller ingen.
+    const otherCtas = [...pageCtas, closingCta];
+    const shownOpacity = (element: HTMLElement) => {
+      let opacity = 1;
+      for (let node: HTMLElement | null = element; node && node !== document.body; node = node.parentElement) {
+        const style = getComputedStyle(node);
+        if (style.visibility === "hidden") return 0;
+        opacity *= Number(style.opacity);
+      }
+      return opacity;
+    };
+    let revealFrame = 0;
+    measureRef.current = () => {
+      let strongest = 0;
+      let revealing = false;
+      for (const cta of otherCtas) {
+        // Minst halva knappen i bild, annars kan en remsa i skärmkanten bli den
+        // enda knappen som syns.
+        const rect = cta.getBoundingClientRect();
+        const middle = rect.top + rect.height / 2;
+        if (middle < 0 || middle > window.innerHeight) continue;
+        const opacity = shownOpacity(cta);
+        if (opacity < 1) revealing = true;
+        strongest = Math.max(strongest, opacity);
+      }
+      if (revealing && !revealFrame) {
+        revealFrame = requestAnimationFrame(() => {
+          revealFrame = 0;
+          setOtherOpacity(measureRef.current());
+        });
+      }
+      return strongest;
+    };
+
+    // Bytet sker när heroknappens intoning är klar, så att knappen tonas in som
+    // tidigare och sedan blir kvar. Scrollar besökaren innan dess tar den
+    // flytande knappen över direkt.
+    const waitForReveal = () => {
+      if (getComputedStyle(heroWrapper).opacity === "1" || window.scrollY > 0) {
+        revealed = true;
+        place();
+        return;
+      }
+      frame = requestAnimationFrame(waitForReveal);
+    };
+
+    // flushSync gör att ändringen når DOM:en innan nästa bildruta målas, så att
+    // ett byte aldrig visar en bildruta med två knappar eller ingen.
+    const onScroll = () => {
+      if (!revealed) {
+        cancelAnimationFrame(frame);
+        waitForReveal();
+      }
+      const next = measureRef.current();
+      flushSync(() => setOtherOpacity(next));
+    };
+
+    frame = requestAnimationFrame(waitForReveal);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", place);
+    desktop.addEventListener("change", place);
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      cancelAnimationFrame(revealFrame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", place);
+      desktop.removeEventListener("change", place);
+      heroLink.style.visibility = "";
     };
   }, []);
+
+  // När knappen har fått sin plats mäts läget om innan något målas.
+  useLayoutEffect(() => {
+    if (position) setOtherOpacity(measureRef.current());
+  }, [position]);
+
+  const opacity = position === null ? 0 : 1 - otherOpacity;
+  const visible = opacity > 0.5;
 
   return (
     <div
       data-mobile-sticky-cta
       inert={!visible}
-      // Knappen visas direkt (ingen intoning som skapar ett glapp) och tonas
-      // bara ut när den döljs.
-      className={`pointer-events-none fixed inset-x-0 bottom-0 z-[80] flex justify-center px-5 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] md:hidden ${
-        visible
-          ? "translate-y-0 opacity-100"
-          : "translate-y-3 opacity-0 transition-[opacity,transform] duration-200 ease-out motion-reduce:transition-none"
-      }`}
+      // Ingen egen övergång: opaciteten följer den andra knappens intoning, och
+      // övriga byten sker där knapparna sammanfaller.
+      style={{ ...position, opacity }}
+      className="pointer-events-none fixed z-[80] md:hidden"
     >
-      <div className={visible ? "pointer-events-auto" : undefined}>{children}</div>
+      <div className={`flex ${visible ? "pointer-events-auto" : ""}`}>{children}</div>
     </div>
   );
 }
