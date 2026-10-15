@@ -71,9 +71,9 @@ export default function ReflectionComposer({
     if (variant === "overview") {
       return (
         <div>
-          <BentoSerif>Vad har hänt sedan sist?</BentoSerif>
+          <BentoSerif>Mina reflektioner</BentoSerif>
           <p className="mt-4 max-w-prose text-[0.875rem] leading-[1.7] text-stone-600">
-            En kort reflektion mellan sessionerna. Delas med Carolina när du har ett aktivt samtycke, annars privat för dig.
+            Vad har hänt sedan sist? Samla tankar, insikter och nya perspektiv som du vill ta med dig i din fortsatta utveckling. Delas med Carolina när du har ett aktivt samtycke, annars privat för dig.
           </p>
           <button
             type="button"

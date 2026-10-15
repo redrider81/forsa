@@ -78,6 +78,9 @@ export default async function ClientOverviewPage() {
       className={`flex flex-col ${view.upcomingSession ? "lg:col-span-4" : "lg:col-span-12"}`}
     >
       <BentoTitle id="goal-heading">Min riktning</BentoTitle>
+      <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">
+        Dina egna ord om vad du vill utveckla, förändra eller röra dig mot.
+      </p>
 
       <p className="mt-6 font-serif text-[1.3125rem] font-medium leading-[1.4] tracking-[-0.015em] text-stone-900 md:text-[1.5rem] md:leading-[1.38]">
         {view.goal.headline}
@@ -216,7 +219,7 @@ export default async function ClientOverviewPage() {
         className="flex flex-col lg:col-span-7"
       >
         <h2 id="reflection-zone-heading" className="sr-only">
-          Reflektion
+          Mina reflektioner
         </h2>
         <ReflectionComposer variant="overview" embedded />
 
@@ -247,9 +250,9 @@ export default async function ClientOverviewPage() {
         aria-labelledby="latest-session-heading"
         className="flex flex-col lg:col-span-5"
       >
-        <BentoTitle id="latest-session-heading">Från senaste sessionen</BentoTitle>
+        <BentoTitle id="latest-session-heading">Från våra sessioner</BentoTitle>
         <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">
-          Sammanfattning delad efter coaching, inte din egen reflektion.
+          Här hittar du eventuella sammanfattningar och sådant ni har valt att dokumentera och dela efter sessionerna.
         </p>
 
         <div className="mt-7 flex-1">
@@ -269,7 +272,7 @@ export default async function ClientOverviewPage() {
               </p>
             </>
           ) : (
-            <BentoEmpty>Ingen sammanfattning delad ännu.</BentoEmpty>
+            <BentoEmpty>Ingen sammanfattning finns tillgänglig ännu.</BentoEmpty>
           )}
         </div>
 
@@ -287,7 +290,10 @@ export default async function ClientOverviewPage() {
         aria-labelledby="material-heading"
         className="flex flex-col lg:col-span-4"
       >
-        <BentoTitle id="material-heading">Relevant material</BentoTitle>
+        <BentoTitle id="material-heading">Material</BentoTitle>
+        <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">
+          Här hittar du material och verktyg som kan ge nya perspektiv och stödja ditt arbete mellan sessionerna.
+        </p>
 
         <div className="mt-6 flex-1">
           {relevantMaterials.length > 0 ? (

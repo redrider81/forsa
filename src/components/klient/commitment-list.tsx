@@ -116,8 +116,11 @@ export default function CommitmentList({ commitments, activeCount, overviewLimit
       <div>
         <BentoLabel>Aktuellt fokus</BentoLabel>
         <BentoTitle id="commitments-heading" className="mt-2.5">
-          Dina åtaganden
+          Mitt fokus framåt
         </BentoTitle>
+        <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">
+          Här samlar du det du vill prioritera, utforska eller arbeta vidare med fram till nästa session.
+        </p>
         <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">{activeLabel}</p>
       </div>
 
@@ -129,7 +132,7 @@ export default function CommitmentList({ commitments, activeCount, overviewLimit
 
       <div className="mt-7">
         {displayed.length === 0 ? (
-          <BentoEmpty>Inga aktuella åtaganden just nu.</BentoEmpty>
+          <BentoEmpty>Du har inget särskilt fokus registrerat just nu.</BentoEmpty>
         ) : (
           <ul className="grid gap-4 lg:grid-cols-3">
             {displayed.map((commitment) => (

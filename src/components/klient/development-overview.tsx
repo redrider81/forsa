@@ -47,7 +47,10 @@ export default function DevelopmentOverview({
   return (
     <div className="flex h-full flex-col">
       <div>
-        <BentoTitle id="development-overview-heading">Din väg så här långt</BentoTitle>
+        <BentoTitle id="development-overview-heading">Min utveckling</BentoTitle>
+        <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">
+          Följ din väg genom coachingprocessen med en överblick över sessioner, reflektioner och fokusområden.
+        </p>
         {startedAt ? (
           <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-stone-600">
             Sedan {formatDate(startedAt)}

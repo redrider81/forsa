@@ -373,18 +373,18 @@ describe("inbjudningsmejlet", () => {
   it("förklarar avsändare, vad CVB Base är, varför, hur, giltighet, utgång och kontakt", () => {
     expect(email.subject).toBe("Din inbjudan till CVB Base");
     expect(email.body).toContain("Hej Anna,");
-    expect(email.body).toContain("CVB Coachings digitala miljö");
-    expect(email.body).toContain("eftersom vi har inlett ett coachingsamarbete");
-    expect(email.body).toContain("Välj ett eget lösenord.");
+    expect(email.body).toContain("Välkommen till CvB Base, din personliga klientportal hos CvB Coaching!");
+    expect(email.body).toContain("aktivera ditt konto och välja ditt lösenord:");
     expect(email.body).toContain("https://cvbcoaching.se/klient-aktivera#aktivera-invite-abc");
-    expect(email.body).toContain("Länken gäller i ett dygn och kan bara användas en gång.");
-    expect(email.body).toContain("så skickar jag en ny inbjudan");
+    expect(email.body).toContain("Länken är giltig i ett dygn och kan bara användas en gång.");
+    expect(email.body).toContain("”Glömt lösenord?” på https://cvbcoaching.se/klient-login");
+    expect(email.body).toContain("så hjälper jag dig");
     expect(email.body).toContain("carolina@cvbcoaching.se");
-    expect(email.body).toMatch(/Carolina von Braun\nCVB Coaching$/);
+    expect(email.body).toMatch(/Carolina von Braun\nCvB Coaching$/);
   });
 
   it("innehåller inget lösenord och inget efternamn", () => {
-    expect(email.body).not.toMatch(/lösenord:\s*\S/i);
+    expect(email.body).not.toMatch(/lösenord:[ \t]*\S/i);
     expect(email.body).not.toContain("Andersson");
   });
 });
