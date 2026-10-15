@@ -1787,6 +1787,17 @@ export type Database = {
         Returns: string
       }
       begin_client_invitation: { Args: { p_client_id: string }; Returns: Json }
+      begin_coach_client_update: {
+        Args: {
+          p_client_id: string
+          p_email: string
+          p_initials: string
+          p_name: string
+          p_phone: string
+          p_role: string
+        }
+        Returns: Json
+      }
       cancel_session_booking: {
         Args: { p_booking_id: string }
         Returns: undefined
@@ -1891,6 +1902,15 @@ export type Database = {
       reactivate_coach_client: {
         Args: { p_client_id: string }
         Returns: undefined
+      }
+      register_manual_coaching_session: {
+        Args: {
+          p_client_id: string
+          p_date: string
+          p_end_time: string
+          p_start_time: string
+        }
+        Returns: string
       }
       replace_coach_availability_exception: {
         Args: { p_blocks?: Json; p_date: string; p_type: string }
@@ -2033,6 +2053,17 @@ export type Database = {
       special_category_coach_may_read: {
         Args: { p_client_id: string; p_ts: string }
         Returns: boolean
+      }
+      update_coach_client_details: {
+        Args: {
+          p_client_id: string
+          p_email: string
+          p_initials: string
+          p_name: string
+          p_phone: string
+          p_role: string
+        }
+        Returns: Json
       }
       update_own_client_profile: {
         Args: {

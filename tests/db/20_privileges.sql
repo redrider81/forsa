@@ -98,7 +98,8 @@ begin
     'set_contract_counterparty_type', 'send_contract_for_signature', 'sign_contract_as_client',
     'sign_contract_as_coach', 'begin_client_invitation', 'record_client_invitation_result',
     'client_portal_access', 'exercise_contract_withdrawal', 'record_contract_withdrawal_notification_result',
-    'record_contract_confirmation_result'
+    'record_contract_confirmation_result', 'begin_coach_client_update', 'update_coach_client_details',
+    'register_manual_coaching_session'
   ]) f
   where not exists (
     select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace

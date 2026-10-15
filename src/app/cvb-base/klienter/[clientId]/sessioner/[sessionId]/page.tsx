@@ -58,7 +58,8 @@ export default async function SessionPage({
               {formatWeekdayDate(coachingSession.date)} kl. {coachingSession.time} ·{" "}
               {relativeDayLabel(coachingSession.date, today)}
               <span className="block text-[0.8125rem] text-zinc-500">
-                {coachingSession.location} · {coachingSession.durationMinutes} minuter
+                {coachingSession.location ? `${coachingSession.location} · ` : ""}
+                {coachingSession.durationMinutes} minuter
               </span>
             </p>
             {/* The existing meeting workspace, for every upcoming session —

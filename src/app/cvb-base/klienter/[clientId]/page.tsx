@@ -5,6 +5,8 @@ import ClientDetailNav from "@/components/portal/client-detail-nav";
 import ShareMaterialPanel from "@/components/portal/share-material-panel";
 import ClientLifecycleActions from "@/components/portal/client-lifecycle-actions";
 import ClientAccessPanel from "@/components/portal/client-access-panel";
+import ClientDetailsEditor from "@/components/portal/client-details-editor";
+import ManualSessionForm from "@/components/portal/manual-session-form";
 import { readCoachSession } from "@/lib/portal/session";
 import { getClientDossier } from "@/lib/portal/repository";
 import { listClientContractsForCoach } from "@/lib/portal/contracts";
@@ -134,6 +136,12 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
         clientId={client.id}
         clientActive={(client.status ?? "aktiv") === "aktiv"}
         access={portalAccess}
+      />
+
+      <ClientDetailsEditor
+        clientId={client.id}
+        details={{ name: client.name, role: client.role, email: client.email, phone: client.phone }}
+        hasAccount={portalAccess?.hasAccount ?? false}
       />
 
       {openErasureRequest ? (
@@ -274,6 +282,9 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
       <Panel>
         <PanelHeading label="Sessioner" title="Genomförda och planerade" />
         <div className="mt-4">
+          <ManualSessionForm clientId={client.id} />
+        </div>
+        <div className="mt-4">
           {dossier.sessions.length === 0 ? (
             <EmptyState>Inga sessioner registrerade.</EmptyState>
           ) : (
@@ -282,8 +293,8 @@ export default async function ClientPage({ params }: { params: Promise<{ clientI
                 {index > 0 ? <Divider /> : null}
                 <RowLink
                   href={`/cvb-base/klienter/${client.id}/sessioner/${item.id}`}
-                  title={`Session ${item.number} · ${item.clientFocus}`}
-                  subtitle={`${formatDate(item.date)} · ${item.location}`}
+                  title={item.clientFocus ? `Session ${item.number} · ${item.clientFocus}` : `Session ${item.number}`}
+                  subtitle={item.location ? `${formatDate(item.date)} · ${item.location}` : formatDate(item.date)}
                   trailing={
                     <Tag tone={sessionStatusTagTone[item.status]}>
                       {item.status === "kommande" ? "Kommande" : "Genomförd"}
