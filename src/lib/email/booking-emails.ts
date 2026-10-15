@@ -5,9 +5,10 @@ import type { Locale } from "@/lib/i18n/config";
 /**
  * Copy for the public first-contact chain.
  *
- * Two-hour blocks are AVAILABILITY WINDOWS, never the length of the call.
- * Every message below says the same thing the website says: Carolina calls
- * during the chosen window, and the call itself is short and free.
+ * The visitor books one 30-minute time window. Every message below says the
+ * same thing the website says: Carolina calls at the chosen time, and the
+ * call itself is short and free. Only the accepted email confirms the time;
+ * the receipt says it is still awaiting confirmation.
  *
  * None of these emails may imply a coaching relationship, a client account,
  * CVB Base access, a programme, or an engagement. An accepted introductory
@@ -157,12 +158,15 @@ function customerAccepted(context: BookingEmailContext): BookingEmail {
       body: lines(
         `Hej ${context.name},`,
         "",
-        "Tack för din förfrågan. Vi ses i det tidsfönster du valde.",
+        "Tack för ditt bokade samtal! Jag ringer upp dig på den valda tiden.",
         "",
-        `Datum: ${date}`,
-        `Tidsfönster: ${window}`,
+        "Samtalet är kort och kostnadsfritt, och ger dig möjlighet att berätta om din situation, vad du vill utveckla eller vad du önskar få stöd med.",
         "",
-        "Jag ringer upp dig någon gång under det tidsfönstret. Samtalet är kort och kostnadsfritt, och du behöver inte förbereda något.",
+        `Valt datum: ${date}`,
+        "",
+        `Valt tidsfönster: ${window}`,
+        "",
+        "Ser fram emot att höras!",
         "",
         ...SIGNATURE_SV,
       ),
@@ -174,12 +178,15 @@ function customerAccepted(context: BookingEmailContext): BookingEmail {
     body: lines(
       `Hello ${context.name},`,
       "",
-      "Thank you for your request. We will speak during the time window you chose.",
+      "Thank you for booking a conversation! I will call you at the time you chose.",
       "",
-      `Date: ${date}`,
-      `Time window: ${window}`,
+      "The conversation is short and free, and gives you the opportunity to tell me about your situation, what you want to develop or what you would like support with.",
       "",
-      "I will call you at some point during that window. The conversation is short and free, and there is nothing you need to prepare.",
+      `Selected date: ${date}`,
+      "",
+      `Selected time window: ${window}`,
+      "",
+      "Looking forward to speaking with you!",
       "",
       ...SIGNATURE_EN,
     ),

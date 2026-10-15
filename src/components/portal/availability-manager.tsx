@@ -219,7 +219,7 @@ export default function AvailabilityManager({
       <Panel>
         <PanelHeading label="Tillgänglighet" title="Veckoschema" />
         <p className="mt-2 text-[0.8125rem] text-zinc-500">
-          Bokning från hemsidan sker endast måndag–fredag, i fyra fasta block. 12:00–13:00 är alltid lunch.
+          Bokning från hemsidan sker endast måndag–fredag, i fyra fasta block. Varje aktivt block erbjuds som fyra bokningsbara halvtimmar. 12:00–13:00 är alltid lunch.
         </p>
         <div className="mt-5 flex flex-col gap-5">
           {WEEKDAYS.map((weekday) => (
@@ -259,7 +259,7 @@ export default function AvailabilityManager({
       <Panel>
         <PanelHeading label="Tillgänglighet" title="Bokningsregler" />
         <p className="mt-2 text-[0.8125rem] text-zinc-500">
-          Publika tider är alltid fasta tvåtimmarsblock — möteslängd och buffert styr dem inte.
+          Publika tider är alltid halvtimmar inom de fasta blocken — möteslängd och buffert styr dem inte.
         </p>
         <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
           <label>

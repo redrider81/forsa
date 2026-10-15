@@ -112,7 +112,8 @@ function main() {
     const expected = (source.match(/raise notice 'ok - /g) ?? []).length;
     // Fixtures must apply completely; test files run on so every failure shows.
     const isFixture = file.startsWith("10_");
-    const user = /^\d+_plpgsql/.test(file) ? "supabase_admin" : "postgres";
+    // plpgsql_check and dblink (two real sessions for concurrency) need supabase_admin.
+    const user = /^\d+_(plpgsql|concurrency)/.test(file) ? "supabase_admin" : "postgres";
     const result = psql(`/tests/${file}`, { user, stopOnError: isFixture });
     const oks = result.output.split("\n").filter((line) => line.includes("NOTICE:  ok - "));
     const errors = result.output.split("\n").filter((line) => /\bERROR:/.test(line));
