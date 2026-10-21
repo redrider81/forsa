@@ -159,55 +159,53 @@ const chapterDark = chapterIndexOnDark;
 export default function CoachingPage() {
   return (
     <main id="main-content" className="min-h-screen bg-[#f4f3ef] text-zinc-900">
-      {/* ---------- 00 · Hero — gles, hög, asymmetrisk ---------- */}
-      <section className="flex min-h-[92svh] flex-col justify-between px-6 pb-20 pt-36 md:min-h-[112svh] md:px-10 md:pb-24 md:pt-52 lg:min-h-[118svh]">
+      {/* ---------- 00 · Hero ---------- */}
+      <section className="px-6 pb-14 pt-28 md:px-10 md:pb-20 md:pt-32 lg:pt-36">
         <div className="mx-auto w-full max-w-7xl">
           <HeroReveal>
             <div className="grid md:grid-cols-12 md:gap-x-8">
               <div className="md:col-span-2">
-                <div data-hero-line className="mb-8 h-px w-12 origin-left bg-[#7d6435]" />
+                <div data-hero-line className="mb-6 h-px w-12 origin-left bg-[#7d6435] md:mb-8" />
                 <p data-hero-label className={chapterLabelLight}>
                   Coaching
                 </p>
               </div>
               <h1
                 data-hero-headline
-                className="mt-14 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[1.2] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
+                className="mt-8 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[1.2] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
               >
                 Coaching hos CVB
               </h1>
             </div>
           </HeroReveal>
-        </div>
 
-        {/* Stödtexten ligger medvetet långt ned och långt till höger: öppningen
-            ska läsas som en sida som börjar, inte som ett introblock. */}
-        <div className="mx-auto mt-32 w-full max-w-7xl md:mt-0">
-          <HeroReveal>
-            <div className="grid gap-12 md:grid-cols-12 md:gap-x-8">
-              <p
-                data-hero-body
-                className="max-w-md text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-4 md:col-start-7"
-              >
-                Den här sidan beskriver när coaching kan vara relevant, hur arbetet går till och
-                vad du kan förvänta dig.
-              </p>
-              <div data-hero-cta className="md:col-span-2 md:col-start-11 md:justify-self-end">
-                <Link
-                  href="#vagar"
-                  className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
+          <div className="mt-10 md:mt-14">
+            <HeroReveal>
+              <div className="grid gap-8 md:grid-cols-12 md:gap-x-8 md:gap-y-0">
+                <p
+                  data-hero-body
+                  className="max-w-md text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-4 md:col-start-7"
                 >
-                  Individuell coaching eller företagscoaching
-                  <span
-                    aria-hidden="true"
-                    className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+                  Den här sidan beskriver när coaching kan vara relevant, hur arbetet går till och
+                  vad du kan förvänta dig.
+                </p>
+                <div data-hero-cta className="md:col-span-2 md:col-start-11 md:justify-self-end md:self-end">
+                  <Link
+                    href="#vagar"
+                    className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
                   >
-                    ↓
-                  </span>
-                </Link>
+                    Individuell coaching eller företagscoaching
+                    <span
+                      aria-hidden="true"
+                      className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+                    >
+                      ↓
+                    </span>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </HeroReveal>
+            </HeroReveal>
+          </div>
         </div>
       </section>
 

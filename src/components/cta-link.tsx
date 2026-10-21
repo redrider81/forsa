@@ -14,10 +14,10 @@ type CtaLinkProps = {
 };
 
 const baseClass =
-  "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium transition-[color,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100";
+  "inline-flex items-center justify-center text-center rounded-full px-6 py-3 text-sm font-medium leading-snug transition-[color,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100";
 
 const heroBaseClass =
-  "min-h-[2.875rem] w-auto max-w-[min(100%,20rem)] shrink-0 px-6 py-3 text-sm font-medium leading-tight tracking-[0.01em] sm:min-h-12 sm:px-7";
+  "min-h-[2.875rem] w-auto max-w-[min(100%,22rem)] shrink-0 px-6 py-3.5 text-sm font-medium leading-snug tracking-[0.01em] sm:min-h-12 sm:px-7 sm:py-3.5";
 
 const variants = {
   primary:

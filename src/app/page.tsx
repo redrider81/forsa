@@ -434,7 +434,7 @@ export default function HomePage() {
                   </div>
                   <div
                     data-cta-actions
-                    className="flex flex-col items-center pb-6 text-center md:col-span-5 md:col-start-7 md:items-start md:pb-0 md:text-left"
+                    className="flex flex-col items-center pb-6 md:col-span-5 md:col-start-7 md:items-start md:pb-0"
                   >
                     <CtaLink href="/kontakt" variant="secondary" translucent>
                       Boka ett kostnadsfritt introduktionssamtal
