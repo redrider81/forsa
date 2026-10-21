@@ -43,20 +43,31 @@ function ProfileField({
   );
 }
 
+function normaliseEmail(value: string): string {
+  return value.trim().toLowerCase();
+}
+
 export default function ProfileEditor({ initial }: { initial: ProfileValues }) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [values, setValues] = useState(initial);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailConfirm, setEmailConfirm] = useState("");
+  const emailChanged = normaliseEmail(values.email) !== normaliseEmail(initial.email);
 
   function cancel() {
     setValues(initial);
+    setEmailConfirm("");
     setError(null);
     setEditing(false);
   }
 
   async function save() {
+    if (emailChanged && normaliseEmail(emailConfirm) !== normaliseEmail(values.email)) {
+      setError("Bekräfta den nya e-postadressen genom att skriva den en gång till.");
+      return;
+    }
     setSaving(true);
     setError(null);
     try {
@@ -75,6 +86,7 @@ export default function ProfileEditor({ initial }: { initial: ProfileValues }) {
         setError(data.error ?? "Det gick inte att spara profilen.");
         return;
       }
+      setEmailConfirm("");
       setEditing(false);
       router.refresh();
     } catch {
@@ -120,6 +132,7 @@ export default function ProfileEditor({ initial }: { initial: ProfileValues }) {
           type="button"
           onClick={() => {
             setValues(initial);
+            setEmailConfirm("");
             setError(null);
             setEditing(true);
           }}
@@ -169,6 +182,22 @@ export default function ProfileEditor({ initial }: { initial: ProfileValues }) {
             className={fieldClass}
           />
         </ProfileField>
+
+        {emailChanged ? (
+          <ProfileField id="profile-email-confirm" label="Bekräfta ny e-post">
+            <input
+              id="profile-email-confirm"
+              type="email"
+              value={emailConfirm}
+              onChange={(event) => setEmailConfirm(event.target.value)}
+              autoComplete="off"
+              className={fieldClass}
+            />
+            <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-zinc-500">
+              Den nya adressen blir också din inloggning i CVB Base. Ditt lösenord är oförändrat.
+            </p>
+          </ProfileField>
+        ) : null}
 
         <ProfileField id="profile-phone" label="Telefon">
           <input

@@ -5,6 +5,7 @@ import { readCoachSession } from "@/lib/portal/session";
 import { fetchPortalRepositoryData, getClientDossier, getSession } from "@/lib/portal/repository";
 import { formatWeekdayDate, formatDate, relativeDayLabel, todayIso } from "@/lib/portal/format";
 import { sessionStatusTagTone } from "@/lib/portal/status-tones";
+import { serializeSessionSummaryDraft } from "@/lib/portal/session-summary-draft";
 import {
   Panel,
   PanelHeading,
@@ -37,6 +38,11 @@ export default async function SessionPage({
   const firstName = client.name.split(" ")[0];
   const today = todayIso();
   const summary = coachingSession.summary;
+  // An unapproved summary (e.g. written in the meeting workspace) opens as an
+  // editable draft below, where it can be approved; only an approved one is
+  // shown read-only here (CVB-CR-20261021-01).
+  const approvedSummary = summary?.approved ? summary : undefined;
+  const pendingDraft = summary && !summary.approved ? serializeSessionSummaryDraft(summary) : undefined;
 
   return (
     <div className={portalPageStackClass}>
@@ -95,22 +101,19 @@ export default async function SessionPage({
         </div>
       </Panel>
 
-      {summary ? (
+      {approvedSummary ? (
         <Panel>
-          <PanelHeading
-            label={summary.approved ? "Godkänd" : "Utkast"}
-            title="Sessionssammanfattning"
-          />
+          <PanelHeading label="Godkänd" title="Sessionssammanfattning" />
           <div className="mt-5 space-y-5">
             <div>
               <SectionLabel>Fokus för sessionen</SectionLabel>
-              <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">{summary.focus}</p>
+              <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">{approvedSummary.focus}</p>
             </div>
-            {summary.insights.length > 0 ? (
+            {approvedSummary.insights.length > 0 ? (
               <div className="border-t border-zinc-200/70 pt-5">
                 <SectionLabel>Klientens viktigaste insikter</SectionLabel>
                 <ul className="mt-2.5 space-y-2">
-                  {summary.insights.map((item) => (
+                  {approvedSummary.insights.map((item) => (
                     <li key={item} className="flex gap-3 text-[0.9375rem] leading-[1.7] text-zinc-700">
                       <span aria-hidden="true" className="mt-[0.65rem] h-1 w-1 shrink-0 rounded-full bg-zinc-400" />
                       <span>{item}</span>
@@ -121,13 +124,13 @@ export default async function SessionPage({
             ) : null}
             <div className="border-t border-zinc-200/70 pt-5">
               <SectionLabel>Ökad medvetenhet</SectionLabel>
-              <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">{summary.awareness}</p>
+              <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">{approvedSummary.awareness}</p>
             </div>
-            {summary.commitments.length > 0 ? (
+            {approvedSummary.commitments.length > 0 ? (
               <div className="border-t border-zinc-200/70 pt-5">
                 <SectionLabel>Klientens åtaganden</SectionLabel>
                 <ul className="mt-2.5 space-y-2">
-                  {summary.commitments.map((item) => (
+                  {approvedSummary.commitments.map((item) => (
                     <li key={item} className="flex gap-3 text-[0.9375rem] leading-[1.7] text-zinc-700">
                       <span aria-hidden="true" className="mt-[0.65rem] h-1 w-1 shrink-0 rounded-full bg-zinc-400" />
                       <span>{item}</span>
@@ -136,11 +139,11 @@ export default async function SessionPage({
                 </ul>
               </div>
             ) : null}
-            {summary.followUp.length > 0 ? (
+            {approvedSummary.followUp.length > 0 ? (
               <div className="border-t border-zinc-200/70 pt-5">
                 <SectionLabel>Att följa upp</SectionLabel>
                 <ul className="mt-2.5 space-y-2">
-                  {summary.followUp.map((item) => (
+                  {approvedSummary.followUp.map((item) => (
                     <li key={item} className="flex gap-3 text-[0.9375rem] leading-[1.7] text-zinc-700">
                       <span aria-hidden="true" className="mt-[0.65rem] h-1 w-1 shrink-0 rounded-full bg-zinc-400" />
                       <span>{item}</span>
@@ -152,13 +155,13 @@ export default async function SessionPage({
             <div className="border-t border-zinc-200/70 pt-5">
               <SectionLabel>Möjligt nästa fokus</SectionLabel>
               <p className="mt-2 text-[0.9375rem] leading-[1.7] text-zinc-700">
-                {summary.possibleNextFocus}
+                {approvedSummary.possibleNextFocus}
               </p>
             </div>
           </div>
-          {summary.approvedAt ? (
+          {approvedSummary.approvedAt ? (
             <p className="mt-6 border-t border-zinc-200/80 pt-4 text-[0.75rem] text-zinc-400">
-              Godkänd av coachen {formatDate(summary.approvedAt)} och delad med {firstName}.
+              Godkänd av coachen {formatDate(approvedSummary.approvedAt)} och delad med {firstName}.
             </p>
           ) : null}
         </Panel>
@@ -186,6 +189,7 @@ export default async function SessionPage({
         clientName={client.name}
         clientFirstName={firstName}
         shareComplete={summary?.approved ?? false}
+        initialDraft={pendingDraft}
       />
     </div>
   );

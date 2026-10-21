@@ -1,4 +1,7 @@
 import { readClientSession } from "@/lib/portal/session";
+import { updateOwnProfile } from "@/lib/portal/own-profile";
+import type { ClientDetailsAdmin, ClientDetailsDb } from "@/lib/portal/client-details";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function isValidEmail(value: string): boolean {
@@ -8,8 +11,12 @@ function isValidEmail(value: string): boolean {
 /**
  * Klienten uppdaterar namn, roll och kontaktuppgifter i sin profil.
  * Organisation och coachningsöverenskommelse ändras inte här.
- * update_own_client_profile (SECURITY DEFINER) begränsar skrivningen till
- * exakt dessa fyra kolumner på den inloggade klientens egen rad.
+ *
+ * CVB-CR-20261021-01: ett byte av e-postadress följer med till klientens
+ * eget inloggningskonto och profil (updateOwnProfile), så att hon loggar in
+ * med samma adress som Carolina och utskicken ser. Beslutet fattas i
+ * databasen under klientens egen session; Auth Admin används bara för att
+ * flytta hennes eget konto till den nya adressen.
  */
 export async function POST(request: Request) {
   const session = await readClientSession();
@@ -53,16 +60,17 @@ export async function POST(request: Request) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.rpc("update_own_client_profile", {
-    p_name: trimmedName,
-    p_role: trimmedRole,
-    p_email: trimmedEmail,
-    p_phone: trimmedPhone,
-  });
+  const outcome = await updateOwnProfile(
+    { name: trimmedName, role: trimmedRole, email: trimmedEmail, phone: trimmedPhone },
+    {
+      db: supabase as unknown as ClientDetailsDb,
+      admin: createSupabaseAdminClient() as unknown as ClientDetailsAdmin | null,
+    },
+  );
 
-  if (error) {
-    return Response.json({ ok: false, error: "Profilen kunde inte hittas." }, { status: 403 });
+  if (!outcome.ok) {
+    return Response.json({ ok: false, error: outcome.error, code: outcome.code }, { status: outcome.httpStatus });
   }
 
-  return Response.json({ ok: true });
+  return Response.json({ ok: true, emailChanged: outcome.emailChanged });
 }

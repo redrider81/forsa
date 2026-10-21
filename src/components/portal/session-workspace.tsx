@@ -14,6 +14,10 @@ import {
   portalTextareaClass,
   SectionLabel,
 } from "@/components/portal/ui";
+import {
+  EMPTY_SESSION_SUMMARY_TEMPLATE,
+  type SessionSummaryDraftSource,
+} from "@/lib/portal/session-summary-draft";
 
 type Stage = "idle" | "loading" | "draft" | "error";
 type ApproveStage = "idle" | "loading" | "shared" | "error";
@@ -22,6 +26,12 @@ type ApproveStage = "idle" | "loading" | "shared" | "error";
  * Insikten och åtagandet är klientens, inte coachens. Prefixen är formulerade
  * så att anteckningen alltid pekar tillbaka på klientens eget ägarskap.
  */
+const draftNotes: Record<SessionSummaryDraftSource, string> = {
+  ai: "Genererat utkast från dina anteckningar. Delas först efter godkännande.",
+  mote: "Utkast från mötesläget. Granska, redigera och godkänn — delas först efter godkännande.",
+  manuell: "Skrivet av dig. Delas först efter godkännande.",
+};
+
 const quickActions = [
   { label: "Klientens insikt", prefix: "Klientens insikt: " },
   { label: "Klientens åtagande", prefix: "Klientens åtagande: " },
@@ -31,6 +41,11 @@ const quickActions = [
 /**
  * Coachens arbetsyta under och efter sessionen. Anteckningarna är privata och
  * ligger kvar i webbläsaren tills coachen väljer att skapa en sammanfattning.
+ *
+ * CVB-CR-20261021-01: en sammanfattning kan alltid godkännas, oavsett väg —
+ * utkastet från mötesläget (initialDraft), en sammanfattning coachen skriver
+ * själv (Skriv sammanfattning) eller AI-stödets utkast. Alla tre godkänns
+ * genom samma route och syns för klienten först efter godkännande.
  */
 export default function SessionWorkspace({
   clientId,
@@ -38,6 +53,7 @@ export default function SessionWorkspace({
   clientName,
   clientFirstName,
   shareComplete = false,
+  initialDraft,
 }: {
   clientId: string;
   sessionId: string;
@@ -45,11 +61,15 @@ export default function SessionWorkspace({
   clientFirstName: string;
   /** Sammanfattningen är redan godkänd och delad från databasen. */
   shareComplete?: boolean;
+  /** Ett ej godkänt utkast som redan finns sparat, t.ex. från mötesläget. */
+  initialDraft?: string;
 }) {
   const router = useRouter();
   const [notes, setNotes] = useState("");
-  const [stage, setStage] = useState<Stage>("idle");
-  const [draft, setDraft] = useState("");
+  const hasInitialDraft = !shareComplete && Boolean(initialDraft?.trim());
+  const [stage, setStage] = useState<Stage>(hasInitialDraft ? "draft" : "idle");
+  const [draft, setDraft] = useState(hasInitialDraft ? (initialDraft ?? "") : "");
+  const [source, setSource] = useState<SessionSummaryDraftSource>(hasInitialDraft ? "mote" : "ai");
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [approveStage, setApproveStage] = useState<ApproveStage>(shareComplete ? "shared" : "idle");
@@ -69,6 +89,16 @@ export default function SessionWorkspace({
       element.setSelectionRange(element.value.length, element.value.length);
       element.scrollTop = element.scrollHeight;
     });
+  }
+
+  function writeSummary() {
+    setDraft(EMPTY_SESSION_SUMMARY_TEMPLATE);
+    setSource("manuell");
+    setStage("draft");
+    setError(null);
+    setApproveStage("idle");
+    setApproveError(null);
+    setEditing(true);
   }
 
   async function createSummary() {
@@ -95,6 +125,7 @@ export default function SessionWorkspace({
         return;
       }
       setDraft(data.text);
+      setSource("ai");
       setStage("draft");
     } catch {
       setError("Det gick inte att nå tjänsten just nu. Kontrollera uppkopplingen och försök igen.");
@@ -170,16 +201,29 @@ export default function SessionWorkspace({
       <Panel>
         <PanelHeading label="Efter sessionen" title="Skapa sammanfattning" />
         <p className="mt-2.5 text-[0.875rem] leading-relaxed text-zinc-500">
-          Struktureras från dina anteckningar. Redigera, granska och godkänn innan delning.
+          Skriv den själv eller låt sammanställningsstödet strukturera dina anteckningar. Redigera,
+          granska och godkänn innan delning.
         </p>
 
-        <AiActionButton
-          onClick={() => void createSummary()}
-          disabled={stage === "loading"}
-          className="mt-5 w-full sm:w-auto"
-        >
-          {stage === "loading" ? "Strukturerar…" : "Skapa sammanfattning"}
-        </AiActionButton>
+        <div className="mt-5 flex flex-wrap gap-2.5">
+          <AiActionButton
+            onClick={() => void createSummary()}
+            disabled={stage === "loading"}
+            className="w-full sm:w-auto"
+          >
+            {stage === "loading" ? "Strukturerar…" : "Skapa sammanfattning"}
+          </AiActionButton>
+          {stage !== "draft" ? (
+            <button
+              type="button"
+              onClick={writeSummary}
+              disabled={stage === "loading"}
+              className={`w-full sm:w-auto ${portalOutlineButtonClass}`}
+            >
+              Skriv sammanfattning
+            </button>
+          ) : null}
+        </div>
 
         {stage === "loading" ? (
           <div className="mt-5">
@@ -190,9 +234,14 @@ export default function SessionWorkspace({
         {stage === "error" ? (
           <div className={`mt-5 ${portalInsetClass}`}>
             <p className="text-[0.9375rem] leading-relaxed text-zinc-700">{error}</p>
-            <AiActionButton compact onClick={() => void createSummary()} className="mt-3">
-              Försök igen
-            </AiActionButton>
+            <div className="mt-3 flex flex-wrap gap-2.5">
+              <AiActionButton compact onClick={() => void createSummary()}>
+                Försök igen
+              </AiActionButton>
+              <button type="button" onClick={writeSummary} className={portalOutlineButtonClass}>
+                Skriv sammanfattning
+              </button>
+            </div>
           </div>
         ) : null}
 
@@ -225,9 +274,7 @@ export default function SessionWorkspace({
             />
 
             <div className="mt-4">
-              <AiDisclaimer>
-                Genererat utkast från dina anteckningar. Delas först efter godkännande.
-              </AiDisclaimer>
+              <AiDisclaimer>{draftNotes[source]}</AiDisclaimer>
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2.5">
@@ -246,9 +293,11 @@ export default function SessionWorkspace({
               >
                 {approveStage === "loading" ? "Godkänner…" : "Godkänn och dela"}
               </button>
-              <AiActionButton compact onClick={() => void createSummary()}>
-                Generera om
-              </AiActionButton>
+              {source === "ai" ? (
+                <AiActionButton compact onClick={() => void createSummary()}>
+                  Generera om
+                </AiActionButton>
+              ) : null}
             </div>
 
             {approveStage === "error" && approveError ? (

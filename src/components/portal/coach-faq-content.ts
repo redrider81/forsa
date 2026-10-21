@@ -81,7 +81,7 @@ export const coachFaqCategories: FaqCategory[] = [
       },
       {
         question: "Hur skapar jag en sessionssammanfattning?",
-        answer: ["När sessionen avslutas fyller du i samtalets lärande och nästa steg. Därefter kan du skapa ett utkast från underlaget.", "Läs igenom och redigera alltid utkastet innan du godkänner det."],
+        answer: ["När du slutför sessionen i mötesläget fyller du i samtalets lärande och nästa steg. Det sparas som ett utkast som du hittar när du öppnar sessionen. Du kan också välja Skriv sammanfattning och skriva den själv, eller låta sammanställningsstödet strukturera dina anteckningar om klienten har lämnat samtycke.", "Läs igenom och redigera alltid utkastet innan du väljer Godkänn och dela."],
       },
       {
         question: "När kan klienten se sammanfattningen?",

@@ -225,6 +225,7 @@ export const faqCategories: FaqCategory[] = [
         question: "Var ändrar jag mina kontaktuppgifter?",
         answer: [
           "Under Profil. Där redigerar du namn, roll, e-post och telefonnummer. Organisation ändras inte av dig.",
+          "Byter du e-postadress blir den nya adressen också din inloggning. Ditt lösenord är detsamma.",
         ],
       },
       {

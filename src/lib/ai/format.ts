@@ -39,6 +39,11 @@ const KNOWN_HEADINGS = new Set(
   ].map((item) => item.toLowerCase()),
 );
 
+/** True om raden är en av AI-stödets kända rubriker (skiftlägesokänsligt). */
+export function isKnownAiHeading(text: string): boolean {
+  return KNOWN_HEADINGS.has(text.replace(/:$/, "").toLowerCase().trim());
+}
+
 function stripMarkdown(line: string): string {
   return line
     .replace(/^#{1,6}\s*/, "")

@@ -1,4 +1,5 @@
-import { parseAiText } from "@/lib/ai/format";
+import { isKnownAiHeading, parseAiText } from "@/lib/ai/format";
+import { SESSION_SUMMARY_SECTIONS } from "@/lib/portal/session-summary-draft";
 import { getSession, type PortalRepositoryData } from "@/lib/portal/repository";
 import { EMPTY_DEMO_STATE } from "@/lib/portal/store/demo-state";
 import type { SessionSummary } from "@/lib/portal/types";
@@ -14,22 +15,13 @@ export type ParsedSessionSummaryDraft = Pick<
   | "possibleNextFocus"
 >;
 
-const SECTION_FIELDS: Record<string, keyof ParsedSessionSummaryDraft> = {
-  "fokus för sessionen": "focus",
-  "klientens viktigaste insikter": "insights",
-  "ökad medvetenhet": "awareness",
-  "nya perspektiv": "newPerspectives",
-  "klientens åtaganden": "commitments",
-  "att följa upp": "followUp",
-  "möjligt nästa fokus": "possibleNextFocus",
-};
+const SECTION_FIELDS: Record<string, keyof ParsedSessionSummaryDraft> = Object.fromEntries(
+  SESSION_SUMMARY_SECTIONS.map((section) => [section.heading.toLowerCase(), section.key]),
+);
 
-const LIST_FIELDS = new Set<keyof ParsedSessionSummaryDraft>([
-  "insights",
-  "newPerspectives",
-  "commitments",
-  "followUp",
-]);
+const LIST_FIELDS = new Set<keyof ParsedSessionSummaryDraft>(
+  SESSION_SUMMARY_SECTIONS.filter((section) => section.list).map((section) => section.key),
+);
 
 function emptyDraft(): ParsedSessionSummaryDraft {
   return {
@@ -43,15 +35,30 @@ function emptyDraft(): ParsedSessionSummaryDraft {
   };
 }
 
-/** Tolkar AI-utkast till fält som matchar session_summaries. */
+/**
+ * Tolkar ett utkast — från AI-stödet, mötesläget eller den manuella mallen —
+ * till fält som matchar session_summaries.
+ *
+ * En kort rad som bara ser ut som en rubrik (t.ex. "Ledarskap i ny roll")
+ * räknas som innehåll i det avsnitt den står i, så att det coachen ser i
+ * utkastet också är det som delas. Endast de sju avsnittsrubrikerna och
+ * AI-stödets övriga kända rubriker byter avsnitt.
+ */
 export function parseSessionSummaryDraft(raw: string): ParsedSessionSummaryDraft {
   const draft = emptyDraft();
   let currentField: keyof ParsedSessionSummaryDraft | null = null;
 
   for (const block of parseAiText(raw)) {
     if (block.type === "heading") {
-      currentField = SECTION_FIELDS[block.text.toLowerCase()] ?? null;
-      continue;
+      const field = SECTION_FIELDS[block.text.replace(/:$/, "").trim().toLowerCase()];
+      if (field) {
+        currentField = field;
+        continue;
+      }
+      if (!currentField || isKnownAiHeading(block.text)) {
+        currentField = null;
+        continue;
+      }
     }
     if (!currentField) continue;
 
