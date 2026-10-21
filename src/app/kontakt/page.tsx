@@ -46,16 +46,20 @@ export default function KontaktPage() {
               Kontakt
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              Boka ett inledande samtal
+              Boka ett kostnadsfritt introduktionssamtal
             </h1>
             <div data-hero-body className="mt-8 max-w-3xl space-y-6 text-lg leading-8 text-zinc-700">
               <p>
-                Välj ett tidsfönster som passar dig och berätta kort vad du vill ta upp. Jag ringer
-                upp dig under den valda perioden.
+                Är du nyfiken på coaching och vill veta om det kan vara rätt för dig eller din
+                verksamhet?
               </p>
               <p>
-                Det första samtalet är kostnadsfritt och ger oss möjlighet att prata om din situation,
-                vad du vill få ut av coachingen och om coaching med mig känns rätt för dig.
+                Boka ett första, kostnadsfritt samtal där vi pratar om din situation, dina behov och
+                vad du vill utveckla. Samtalet tar vanligtvis 15–30 minuter och jag ringer upp dig under
+                det tidsfönster du väljer.
+              </p>
+              <p>
+                Efter samtalet ser vi tillsammans om och hur vi vill gå vidare.
               </p>
             </div>
           </HeroReveal>

@@ -64,7 +64,7 @@ export const svDictionary = {
     },
     sections: {
       contact: "Kontaktuppgifter",
-      scheduling: "Boka ett inledande samtal",
+      scheduling: "Boka ett kostnadsfritt introduktionssamtal",
       situation: "Situation",
       nextStep: "Nästa steg",
     },
@@ -77,7 +77,7 @@ export const svDictionary = {
       city: "Ort",
       question: "Vad gäller det?",
       phase: "Vilket läge står ni i?",
-      situation: "Vad vill du ta upp?",
+      situation: "Vad vill du prata om?",
       clarity: "Vad behöver bli tydligare?",
       timing: "När vill du komma vidare?",
       preferredDate: "Välj datum",

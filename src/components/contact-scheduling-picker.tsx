@@ -427,7 +427,7 @@ export default function ContactSchedulingPicker({
                 </p>
                 <p className="mt-2 text-[0.8125rem] leading-[1.6] text-zinc-500">
                   {locale === "sv"
-                    ? "Tidsfönstret anger när jag kan ringa upp dig, inte hur länge samtalet varar."
+                    ? "Tidsfönstret anger när jag ringer upp dig. Själva samtalet tar vanligtvis 15–30 minuter."
                     : "The time window is when Carolina can call you — not the length of the conversation."}
                 </p>
 
@@ -563,8 +563,8 @@ export default function ContactSchedulingPicker({
                     </label>
                     {locale === "sv" ? (
                       <p id="picker-situation-hint" className="text-[0.75rem] leading-[1.6] text-zinc-500">
-                        Skriv gärna några rader om vad du funderar på eller vad du skulle vilja prata om. Du
-                        behöver inte ha formulerat frågan färdigt.
+                        Berätta gärna kort vad du funderar på eller vill utforska. Du behöver inte ha
+                        formulerat din fråga färdigt.
                       </p>
                     ) : null}
                     <textarea

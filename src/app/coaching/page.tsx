@@ -292,36 +292,6 @@ export default function CoachingPage() {
         </EditorialRowsReveal>
       </section>
 
-      {/* ---------- 03 · Så går det till — tät ---------- */}
-      <section className="bg-white py-20 md:py-24 lg:py-28">
-        <div className="mx-auto max-w-7xl px-6 md:px-10">
-          <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
-            <p data-col-left className={`${chapterIndexOnLight} md:col-span-2`}>03</p>
-            <div data-col-right className="md:col-span-8 md:col-start-5">
-              <h2 className="max-w-4xl font-serif text-[clamp(3rem,7vw,7rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900">
-                Så går det till
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <EditorialRowsReveal className="mt-20 md:mt-28">
-            <div
-              data-editorial-row
-              className="border-t border-zinc-300 pt-10 md:grid md:grid-cols-12 md:gap-x-8 md:pt-14"
-            >
-              <div
-                data-row-body
-                className="max-w-2xl space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-7 md:col-start-6"
-              >
-                {coachingProcessParagraphsSv.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-            </div>
-          </EditorialRowsReveal>
-        </div>
-      </section>
-
       {/* ---------- 04 · CVB Base (mörk scen) ---------- */}
       <section className="bg-surface-dark py-28 text-zinc-100 md:py-40 lg:py-48">
         <ScrollReveal
@@ -504,6 +474,51 @@ export default function CoachingPage() {
             <p className={`${chapterIndexOnLight} md:col-span-2`}>07</p>
             <div className="md:col-span-9 md:col-start-4">
               <ProcessFaq heading="Vanliga frågor" items={faqItems} variant="editorial" />
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ---------- Så går det till & Det första samtalet (gemensamt före bokning) ---------- */}
+      <section className="bg-[#f4f3ef] py-16 md:py-24 lg:py-28">
+        <div className="mx-auto max-w-7xl px-6 md:px-10">
+          <ScrollReveal variant="splitColumn" className="grid gap-8 md:grid-cols-12 md:items-end md:gap-x-8">
+            <div data-col-left className="md:col-span-5">
+              <h2 className="max-w-4xl font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900">
+                Så går det till
+              </h2>
+            </div>
+            <div
+              data-col-right
+              className="max-w-2xl space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-6 md:col-start-7"
+            >
+              {coachingProcessParagraphsSv.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal
+            variant="splitColumn"
+            className="mt-16 grid gap-8 border-t border-zinc-300 pt-16 md:mt-20 md:grid-cols-12 md:gap-x-8 md:pt-20"
+          >
+            <div data-col-left className="md:col-span-5">
+              <h2 className="max-w-md font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-medium text-balance leading-[1.18] tracking-[-0.035em] text-zinc-900">
+                Det första samtalet
+              </h2>
+            </div>
+            <div
+              data-col-right
+              className="space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-6 md:col-start-7"
+            >
+              <p>
+                Introduktionssamtalet är kostnadsfritt. Det tar vanligtvis 15–30 minuter och är ett
+                tillfälle att utforska om coaching känns rätt för dig.
+              </p>
+              <p>
+                Vi pratar om din situation och vad du vill få ut av coachingen. Du får möjlighet att
+                ställa frågor och berätta vad du funderar på — utan att förbinda dig till något.
+              </p>
             </div>
           </ScrollReveal>
         </div>

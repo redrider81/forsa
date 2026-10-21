@@ -7,9 +7,7 @@ import HeroReveal from "@/components/animations/HeroReveal";
 import HeroVideoBackground from "@/components/hero-video-background";
 import ParallaxController from "@/components/animations/ParallaxController";
 import ScrollReveal from "@/components/animations/ScrollReveal";
-import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import CoachingServicesGrid from "@/components/coaching-services-grid";
-import EngagementSection from "@/components/engagement-section";
 import KineticTeamHybrid from "@/components/ui/kinetic-team-hybrid";
 import ClientTestimonial from "@/components/client-testimonial";
 import CvbBaseBenefitsAccordion from "@/components/cvb-base-benefits-accordion";
@@ -17,7 +15,6 @@ import MobileStickyCta from "@/components/mobile-sticky-cta";
 import HeroCoachingPathLinks, {
   heroPathLinksPlacementClass,
 } from "@/components/hero-coaching-path-links";
-import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 import {
   HOME_DISPLAY,
   HOME_DISPLAY_BASE,
@@ -29,8 +26,6 @@ export const metadata: Metadata = {
   description:
     "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och företagscoaching för medarbetare och ledare.",
 };
-
-const t = svDictionary;
 
 /* ---------------------------------------------------------------------------
    Startsidan är komponerad som fem ytor, inte som tio sektioner.
@@ -59,7 +54,6 @@ const DISPLAY_SM = HOME_DISPLAY_SM;
 const SUB =
   "font-serif text-[clamp(2.375rem,4.6vw,4.5rem)] font-medium leading-[1.14] tracking-[-0.035em]";
 const CHAPTER = "text-xs font-medium tabular-nums tracking-[0.32em]";
-const CHAPTER_ON_LIGHT = `${CHAPTER} text-zinc-900`;
 const CHAPTER_ON_DARK = `${CHAPTER} text-white`;
 
 /** "När coaching är relevant — och när den inte är det" är dolt tills vidare på kundens begäran. */
@@ -114,29 +108,10 @@ const workRows = [
   },
 ];
 
-const firstCallIntro = [
-  "Vi börjar med det som känns aktuellt för dig just nu och utforskar vad du vill få ut av våra samtal.",
-  "Det första samtalet ger oss möjlighet att lära känna varandra, prata om din situation och se om coaching med mig känns rätt för dig.",
-  "Samtalet är kostnadsfritt och du får möjlighet att ställa frågor och berätta vad du funderar på.",
-  "Välkommen att höra av dig!",
-];
-
-const firstCallValueRows = [
-  {
-    index: "01",
-    title: "Klarare fråga",
-    body: "Vi sätter ord på det du står i och vad du behöver bli klarare i.",
-  },
-  {
-    index: "02",
-    title: "Rätt stöd",
-    body: "Vi skiljer coaching från sådant som bättre löses med rådgivning, terapi eller en annan insats.",
-  },
-  {
-    index: "03",
-    title: "Nästa steg",
-    body: "Du går därifrån med en tydligare bild av vad som skulle hjälpa dig vidare — oavsett om vi fortsätter eller inte.",
-  },
+const bookingIntro = [
+  "Är du nyfiken på coaching och vill veta om det kan vara rätt för dig eller din verksamhet?",
+  "Boka ett första, kostnadsfritt samtal där vi pratar om din situation, dina behov och vad du vill utveckla. Samtalet tar vanligtvis 15–30 minuter och jag ringer upp dig under det tidsfönster du väljer.",
+  "Efter samtalet ser vi tillsammans om och hur vi vill gå vidare.",
 ];
 
 const cvbBaseBenefits = [
@@ -216,7 +191,7 @@ export default function HomePage() {
 
         <div className="relative z-10 isolate bg-[#f4f3ef]">
           {/* ============ YTA 2 · ljus · akt 01 och akt 02 ============ */}
-          <div data-parallax-section className="pt-24 pb-28 md:pt-32 md:pb-44 lg:pt-40">
+          <div data-parallax-section className="pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-28">
             {/* -------------------- AKT 01 · COACHING --------------------
                 Vägvalet, relevansen, bilden och avgränsningen är en enda akt.
                 De låg tidigare i två sektioner med var sin yta; nu skiljs
@@ -233,24 +208,28 @@ export default function HomePage() {
                 </div>
               </ScrollReveal>
 
-              <div className="mt-14 md:mt-16">
+              <div className="mt-10 md:mt-12">
                 <CoachingServicesGrid locale="sv" dense variant="editorial" />
               </div>
 
-              <p className="mt-10 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-12">
+              <p className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
                 Samtalet står i centrum. När det är relevant hålls arbetet samman mellan samtalen.
               </p>
 
-              {/* Rörelse 2 — när coaching kan vara rätt · dokumentär bild + lista */}
+              {/* Sammanslaget avsnitt: vad coaching kan ge + vad det kan handla om */}
               <ScrollReveal
                 variant="mediaSplit"
-                className="mt-32 grid gap-10 md:mt-48 md:grid-cols-12 md:items-start md:gap-x-8"
+                className="mt-20 grid gap-8 md:mt-28 md:grid-cols-12 md:items-start md:gap-x-8"
               >
                 <div data-col-left data-reveal-group className="md:col-span-5">
-                  <h2 className={`max-w-[12ch] md:max-w-[11ch] ${DISPLAY} text-zinc-900`}>
-                    Vad kan coaching handla om?
+                  <h2 className={`max-w-[14ch] ${DISPLAY} text-zinc-900`}>
+                    Vad kan coaching ge dig?
                   </h2>
-                  <figure className="relative mt-10 aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[1.25rem] sm:max-w-md md:mt-12 md:max-w-lg md:rounded-[1.75rem] lg:max-w-xl lg:rounded-[2rem]">
+                  <p className="mt-8 max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
+                    Coaching kan ge dig utrymme att stanna upp, reflektera och se din situation ur nya
+                    perspektiv.
+                  </p>
+                  <figure className="relative mt-8 aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[1.25rem] sm:max-w-md md:mt-10 md:max-w-lg md:rounded-[1.75rem] lg:max-w-xl lg:rounded-[2rem]">
                     <Image
                       src="/carolina-02.jpg"
                       alt="Carolina von Braun i samtal vid ett mötesbord."
@@ -279,7 +258,7 @@ export default function HomePage() {
                         <li
                           key={point}
                           data-list-item
-                          className="flex flex-1 items-start gap-5 py-6 md:items-center md:py-5"
+                          className="flex flex-1 items-start gap-5 py-5 md:items-center md:py-4"
                         >
                           <span
                             className="mt-[0.72rem] h-1 w-1 shrink-0 bg-zinc-900 md:mt-0"
@@ -292,6 +271,40 @@ export default function HomePage() {
                   </div>
                 </div>
               </ScrollReveal>
+
+              <div className="mt-16 border-t border-zinc-300 md:mt-20">
+                {workRows.map((row) => (
+                  <article
+                    key={row.index}
+                    data-editorial-row
+                    className="border-b border-zinc-300 py-10 md:py-16"
+                  >
+                    <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-x-8">
+                      <div className="flex items-baseline gap-4 md:contents">
+                        <span
+                          data-row-index
+                          aria-hidden="true"
+                          className="min-w-[2.5rem] shrink-0 font-serif tabular-nums text-[2rem] leading-tight tracking-[-0.02em] text-zinc-400 md:col-span-1 md:min-w-0 md:text-[clamp(2.25rem,3.2vw,2.875rem)]"
+                        >
+                          {row.index}
+                        </span>
+                        <h3
+                          data-row-title
+                          className={`${SUB} text-zinc-900 md:col-span-4 md:col-start-2`}
+                        >
+                          {row.title}
+                        </h3>
+                      </div>
+                      <p
+                        data-row-body
+                        className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-5 md:col-start-8"
+                      >
+                        {row.body}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </section>
 
             {/* Rörelse 3 — avgränsningen, en kvalificerande rörelse och därför
@@ -330,65 +343,6 @@ export default function HomePage() {
               </ScrollReveal>
             </div>
             )}
-
-            {/* -------------------- AKT 02 · ARBETET --------------------
-                Aktens signaturmoment ligger i posttiteln, inte i siffran.
-                De tidigare lösryckta jättesiffrorna i zinc-200 konkurrerade
-                med titlarna; med index, titel och brödtext i samma radgrammatik
-                som resten av sajten blir den uppskalade titeln det som syns. */}
-            <section className="mt-40 md:mt-56">
-              <EditorialRowsReveal emphasis className="mx-auto max-w-7xl px-6 md:px-10">
-                <p data-section-label className={CHAPTER_ON_LIGHT}>03</p>
-                <h2
-                  data-section-heading
-                  className={`mt-10 max-w-3xl max-md:max-w-[16.5ch] ${DISPLAY} text-zinc-900 md:mt-14`}
-                >
-                  Vad kan coaching ge dig?
-                </h2>
-                <p data-section-intro className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
-                  Coaching kan ge dig utrymme att stanna upp, reflektera och se din situation ur nya
-                  perspektiv.
-                </p>
-                <div className="mt-20 border-t border-zinc-300 md:mt-28">
-                  {workRows.map((row) => (
-                    <article
-                      key={row.index}
-                      data-editorial-row
-                      className="border-b border-zinc-300 py-14 md:py-24"
-                    >
-                      <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-x-8">
-                        {/* Index och titel hör ihop. På smal skärm står de på samma
-                            rad; från md upplöses omslaget (contents) så att båda
-                            blir egna kolumner i radens gemensamma rutnät. */}
-                        <div className="flex items-baseline gap-4 md:contents">
-                          {/* Siffran är struktur, inte innehåll — titeln och
-                              brödtexten bär betydelsen. */}
-                          <span
-                            data-row-index
-                            aria-hidden="true"
-                            className="min-w-[2.5rem] shrink-0 font-serif tabular-nums text-[2rem] leading-tight tracking-[-0.02em] text-zinc-400 md:col-span-1 md:min-w-0 md:text-[clamp(2.25rem,3.2vw,2.875rem)]"
-                          >
-                            {row.index}
-                          </span>
-                          <h3
-                            data-row-title
-                            className={`${SUB} text-zinc-900 md:col-span-4 md:col-start-2`}
-                          >
-                            {row.title}
-                          </h3>
-                        </div>
-                        <p
-                          data-row-body
-                          className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-5 md:col-start-8"
-                        >
-                          {row.body}
-                        </p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </EditorialRowsReveal>
-            </section>
           </div>
 
           {/* ============ YTA 3 · mörk · akt 03 · Carolina ============ */}
@@ -397,71 +351,6 @@ export default function HomePage() {
           {/* Samma mörka yta · en klients röst efter Carolinas presentation */}
           <ClientTestimonial locale="sv" />
 
-          {/* ============ YTA 4 · ljus · akt 04 · processen ============
-              Så går det till och det första samtalet är en och samma rörelse.
-              Ingen ytväxling emellan. "Du behöver inte veta allt från början"
-              är borttaget på kundens begäran (2026-10-12); bokningsknappen
-              ligger nu under texten om det första samtalet. */}
-          <div data-parallax-section className="pt-24 pb-28 md:pt-32 md:pb-40 lg:pt-40">
-            <EngagementSection locale="sv" variant="field" />
-
-            <section className="mt-24 md:mt-32">
-              <EditorialRowsReveal emphasis className="mx-auto max-w-7xl px-6 md:px-10">
-                <p data-section-label className={CHAPTER_ON_LIGHT}>DET FÖRSTA SAMTALET</p>
-                <h2
-                  data-section-heading
-                  className={`mt-8 max-w-3xl ${DISPLAY} text-zinc-900 md:mt-10`}
-                >
-                  Det första samtalet ska ge dig något
-                </h2>
-                <div data-section-intro className="mt-8 max-w-2xl md:mt-10">
-                  <div className="space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600">
-                    {firstCallIntro.map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
-                    ))}
-                  </div>
-                  <div data-booking-cta className="mt-10">
-                    <CtaLink href="/kontakt" variant="tertiary">Boka ett inledande samtal</CtaLink>
-                  </div>
-                </div>
-                <div className="mt-12 border-t border-zinc-300 md:mt-16">
-                  {firstCallValueRows.map((row) => (
-                    <article
-                      key={row.index}
-                      data-editorial-row
-                      className="border-b border-zinc-300 py-10 md:py-14"
-                    >
-                      <div className="grid gap-5 md:grid-cols-12 md:items-start md:gap-x-8">
-                        <div className="flex items-baseline gap-4 md:contents">
-                          <span
-                            data-row-index
-                            aria-hidden="true"
-                            className="min-w-[2.5rem] shrink-0 font-serif tabular-nums text-[2rem] leading-tight tracking-[-0.02em] text-zinc-400 md:col-span-1 md:min-w-0 md:text-[clamp(2.25rem,3.2vw,2.875rem)]"
-                          >
-                            {row.index}
-                          </span>
-                          <h3
-                            data-row-title
-                            className={`${SUB} text-zinc-900 md:col-span-4 md:col-start-2`}
-                          >
-                            {row.title}
-                          </h3>
-                        </div>
-                        <p
-                          data-row-body
-                          className="text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-5 md:col-start-8"
-                        >
-                          {row.body}
-                        </p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </EditorialRowsReveal>
-            </section>
-
-          </div>
-
           {/* ======= YTA 5 · mörk · akt 05 och akt 06 · uttoning =======
               Sidan mörknar en sista gång och stannar mörk. CVB Base, den
               första företagskontakten och det praktiska är en enda rörelse
@@ -469,7 +358,7 @@ export default function HomePage() {
               mellan dem är skala och luft, inte en ny bakgrund. */}
           <div
             data-parallax-section
-            className="relative overflow-hidden bg-surface-dark pt-28 pb-0 text-zinc-100 md:pt-44 md:pb-32"
+            className="relative overflow-hidden bg-surface-dark pt-20 pb-0 text-zinc-100 md:pt-32 md:pb-24"
           >
             {/* -------------------- AKT 05 · KONTINUITET -------------------- */}
             <section className="mx-auto max-w-7xl px-6 md:px-10">
@@ -527,73 +416,29 @@ export default function HomePage() {
               </ScrollReveal>
             </section>
 
-            <div className="relative left-1/2 mt-16 w-screen max-w-[100vw] -translate-x-1/2 bg-[#f2f1ed] py-16 text-zinc-900 md:mt-20 md:py-20 lg:py-24">
-              <div className="mx-auto max-w-7xl px-6 md:px-10">
-                <ScrollReveal variant="mediaSplit" className="grid gap-12 md:grid-cols-12 md:items-stretch md:gap-x-8 lg:gap-x-10">
-                  <div data-col-left data-reveal-group className="md:col-span-6 lg:col-span-5">
-                    <div data-reveal-group className="space-y-8 md:space-y-10">
-                      <h2 className={`max-w-md ${DISPLAY_SM} text-zinc-900`}>
-                        Coaching för individer och företag
-                      </h2>
-                    </div>
-                    <div data-reveal-group className="mt-10 space-y-8 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-12 md:space-y-7">
-                      <div data-reveal-group className="space-y-6">
-                        <p data-col-paragraph className="max-w-xl">
-                          Jag erbjuder coaching för medarbetare och ledare i arbetslivet, både i Göteborg och
-                          digitalt.
-                        </p>
-                        <p data-col-paragraph className="max-w-xl">
-                          Ett företagsuppdrag börjar med en dialog om behovet, ramarna för uppdraget och hur
-                          samarbetet ska fungera.
-                        </p>
-                        <p data-col-paragraph className="max-w-xl">
-                          Själva coachingen sker i en personlig och konfidentiell relation mellan mig och
-                          klienten. Det är viktigt att det finns tydlighet kring roller, förväntningar och vad
-                          som delas med uppdragsgivaren.
-                        </p>
-                        <p data-col-paragraph className="max-w-xl">
-                          Samtalen hålls på plats i Göteborg eller digitalt, beroende på vad som passar bäst.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <figure
-                    data-col-right
-                    className="relative aspect-[4/5] w-full min-h-0 overflow-hidden rounded-[1.25rem] md:col-span-6 md:col-start-7 md:aspect-auto md:h-full md:max-h-none lg:rounded-[1.75rem]"
-                  >
-                    <Image
-                      src="/goteborg-hamn.jpg"
-                      alt="Göteborgs hamn vid solnedgång — segelfartyg och silhuett av staden."
-                      fill
-                      sizes="(min-width: 1024px) 42vw, (min-width: 768px) 38vw, 94vw"
-                      className="object-cover object-center"
-                      quality={80}
-                    />
-                  </figure>
-                </ScrollReveal>
-              </div>
-            </div>
-
             {/* -------------------- AKT 07 · AVSLUT -------------------- */}
-            <section id="kontakt" className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-36 md:px-10 md:scroll-mt-32">
+            <section id="kontakt" className="mx-auto mt-20 max-w-7xl scroll-mt-24 px-6 md:mt-28 md:px-10 md:scroll-mt-32">
               <ScrollReveal variant="ctaStack" emphasis>
                 <p data-cta-label className={CHAPTER_ON_DARK}>07</p>
-                <h2 data-cta-heading className={`mt-10 max-w-3xl ${DISPLAY} text-white md:mt-14`}>
-                  Boka ett inledande samtal
+                <h2 data-cta-heading className={`mt-8 max-w-3xl ${DISPLAY} text-white md:mt-10`}>
+                  Boka ett kostnadsfritt introduktionssamtal
                 </h2>
-                <div className="mt-14 border-t border-white/20 pt-10 max-md:flex max-md:flex-col max-md:gap-8 md:mt-20 md:grid md:grid-cols-12 md:gap-x-8 md:gap-y-10 md:pt-12">
-                  <p
+                <div className="mt-10 border-t border-white/20 pt-8 max-md:flex max-md:flex-col max-md:gap-8 md:mt-14 md:grid md:grid-cols-12 md:gap-x-8 md:gap-y-10 md:pt-10">
+                  <div
                     data-cta-body
-                    className="max-w-xl text-[1.125rem] font-[450] leading-[1.75] text-zinc-300 max-md:mt-6 md:col-span-5 md:col-start-7 md:mt-0"
+                    className="max-w-xl space-y-5 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 max-md:mt-4 md:col-span-5 md:col-start-7 md:mt-0"
                   >
-                    Berätta kort vad du funderar på. Det första samtalet är kostnadsfritt och ger oss
-                    möjlighet att se om coaching med mig känns rätt för dig.
-                  </p>
+                    {bookingIntro.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
                   <div
                     data-cta-actions
                     className="flex flex-col items-center pb-6 text-center md:col-span-5 md:col-start-7 md:items-start md:pb-0 md:text-left"
                   >
-                    <CtaLink href="/kontakt" variant="secondary" translucent>Boka ett inledande samtal</CtaLink>
+                    <CtaLink href="/kontakt" variant="secondary" translucent>
+                      Boka ett kostnadsfritt introduktionssamtal
+                    </CtaLink>
                   </div>
                 </div>
               </ScrollReveal>
