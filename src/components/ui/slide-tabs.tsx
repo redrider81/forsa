@@ -162,7 +162,11 @@ export function slideTabTriggerClass(
   return cn(
     "relative z-[2] inline-flex cursor-pointer items-center rounded-full px-3.5 py-2 text-sm font-medium leading-snug md:px-4 md:py-2 md:text-[0.9375rem]",
     overlay
-      ? "text-white/92 hover:text-white"
+      ? cn(
+          "text-white/92",
+          (isActive || onGoldPill) && "text-zinc-900",
+          "group-hover:text-zinc-900 group-focus-within:text-zinc-900",
+        )
       : "text-zinc-900",
     ringOffset,
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900",

@@ -61,7 +61,7 @@ function NavHoverTarget({
     <li
       ref={itemRef}
       data-nav-active={dataNavActive ? "true" : undefined}
-      className="relative list-none"
+      className="group relative list-none"
       onMouseEnter={handleEnter}
       onFocus={handleEnter}
     >
@@ -719,7 +719,7 @@ export default function SiteNavigation() {
                 <li
                   ref={coachingTabRef}
                   data-nav-active={coachingActive ? "true" : undefined}
-                  className="relative list-none"
+                  className="group relative list-none"
                   onMouseEnter={() => {
                     openMega();
                     if (coachingTabRef.current) {
