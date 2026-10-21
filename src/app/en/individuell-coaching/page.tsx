@@ -70,12 +70,12 @@ export default function IndividualCoachingPageEn() {
               Curious whether coaching could be right for you?
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-700">
-              Book an introductory conversation and together we will see whether coaching is right for
+              Book an introductory call and together we will see whether coaching is right for
               you and what you would like to get out of our sessions.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">
-                Book an introductory conversation
+                Book an introductory call
               </CtaLink>
             </div>
           </ScrollReveal>

@@ -9,7 +9,7 @@ import { enDictionary } from "@/lib/i18n/dictionaries/en";
 export const metadata: Metadata = {
   title: "Carolina von Braun – coach in Gothenburg | CVB Coaching",
   description:
-    "Carolina von Braun runs CVB Coaching in Gothenburg. A commercial background from capital markets and board work, and a coaching qualification from Gothia Akademi.",
+    "Qualified professional coach in Gothenburg with experience of working life, leadership and running a business. Individual coaching and business coaching.",
 };
 
 const t = enDictionary;
@@ -31,9 +31,9 @@ const SECTION_STACK = "mt-32 md:mt-48";
 const SECTION_GRID = "grid gap-14 md:grid-cols-12 md:gap-x-8 md:gap-y-16";
 
 const audiences = [
-  "Private individuals facing a choice, a change or a decision that carries weight.",
-  "Employees and leaders who need to think clearly with someone outside their own workplace.",
-  "People who want to sort out responsibility, priorities or decisions in a work-related situation.",
+  "Private individuals who want to explore a change, a choice or a decision in life.",
+  "Employees and leaders who want to develop in their professional role or handle challenges in working life.",
+  "People with responsibility who want new perspectives on priorities, relationships or decisions.",
 ];
 
 export default function AboutPageEn() {
@@ -71,12 +71,14 @@ export default function AboutPageEn() {
             </h2>
             <div data-col-right className={`${BODY_STACK} md:col-span-6 md:col-start-7 md:pt-4`}>
               <p>
-                Most people have others around them who mean well. Fewer have someone whose only
-                task is to help you finish the thinking, without holding a view on the outcome.
+                In everyday life there are often people to talk to, but not always someone who can
+                listen without wanting to give advice, offer solutions or influence the decision you
+                make.
               </p>
               <p>
-                I offer that space — for you who come on your own, and for you who come through
-                your work.
+                In coaching, you get the space to explore what is on your mind, challenge your own
+                thinking and discover new perspectives. That is the space I want to create – both for
+                you who seek coaching on your own and for you who come through your work.
               </p>
             </div>
           </ScrollReveal>
@@ -105,26 +107,28 @@ export default function AboutPageEn() {
                 className={`${BODY_STACK_ON_DARK} md:col-span-6 md:col-start-7 md:row-start-2 md:mt-12 md:flex md:min-h-0 md:flex-col md:justify-between md:space-y-0 md:gap-8 lg:gap-10`}
               >
                 <p>
-                  Qualified Professional Coach with long experience of working life, leadership and
-                  running a business.
+                  Qualified professional coach with nearly 20 years of experience of working life,
+                  leadership and running a business.
                 </p>
                 <p>
-                  I run CVB Coaching in Gothenburg and have nearly 20 years of experience in sales and
-                  leadership roles in banking, as well as experience of running my own business in finance
-                  and property.
+                  I run CVB Coaching in Gothenburg. Before I started working as a coach, I held sales and
+                  leadership roles in banking. I also have experience of running my own business in
+                  finance and property.
                 </p>
                 <p>
-                  Today I work as a coach and meet both private individuals and people in working life.
-                  With my experience and training as a foundation, I create a safe and professional
-                  conversation.
+                  My background has given me experience of the conditions, responsibilities and decisions
+                  of working life, and of the fact that people may need different things to move forward.
+                  Today, in my role as a coach, I meet both private individuals and people in working life.
                 </p>
                 <p>
-                  For me, coaching is about creating a safe and trusting space where you can think out
-                  loud, reflect and look at your situation from different perspectives. My role is to help
-                  you explore your own thoughts and ideas, challenge what needs to be challenged and find
-                  what feels relevant to you. It is also important to me that our conversations have a
-                  goal. You should feel that the time we spend together is valuable and that you take away
-                  something you can use after the conversation.
+                  In our conversations, I am curious about how you see your situation and what lies behind
+                  your thoughts and choices. I listen, ask questions and challenge when needed. I do not
+                  give you ready-made answers, but I help you examine your own reasoning and get closer to
+                  what you want to understand, decide or change.
+                </p>
+                <p>
+                  It is important to me that our conversations are not only interesting in the moment,
+                  but also help you move forward in what matters to you.
                 </p>
               </div>
             </ScrollReveal>
@@ -152,6 +156,9 @@ export default function AboutPageEn() {
               Who I work with
             </h2>
             <div data-col-right className="md:col-span-6 md:col-start-7 md:pt-8 lg:pt-12">
+              <p className={`mb-8 ${BODY}`}>
+                I meet both private individuals and people in working life.
+              </p>
               <ScrollReveal variant="staggerList">
                 <ul className="divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                   {audiences.map((item) => (
@@ -186,7 +193,7 @@ export default function AboutPageEn() {
         <ScrollReveal variant="ctaStack" className="mx-auto max-w-7xl px-6 md:px-10">
           <p className={CHAPTER_ON_DARK}>07</p>
           <h2 data-cta-heading className={`mt-10 max-w-3xl ${DISPLAY} text-white md:mt-14`}>
-            Book an introductory conversation
+            Book an introductory call
           </h2>
           <div className="mt-14 grid gap-10 border-t border-white/20 pt-10 md:mt-20 md:grid-cols-12 md:gap-x-8 md:pt-12">
             <p data-cta-body className="max-w-xl text-[1.125rem] font-[450] leading-[1.75] text-zinc-300 md:col-span-5 md:col-start-7">

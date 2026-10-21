@@ -5,41 +5,31 @@ import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 import HeroReveal from "@/components/animations/HeroReveal";
 
 export const metadata: Metadata = {
-  title: "Book an introductory conversation | CVB Coaching",
+  title: "Book a first call | CVB Coaching",
   description:
     "Book a short, free phone call to work out whether coaching is the right support. The conversation is confidential, whether you come on your own or through your employer.",
 };
 
 const processFaq: ProcessFaqItem[] = [
   {
-    question: "What is the first conversation?",
+    question: "What happens after I send a booking request?",
     answer:
-      "The first conversation is a short, free phone call. The two-hour period you choose in the calendar is a time window — the period within which I can call you, not the length of the conversation. You tell me a little about what you are looking for, and we get a sense of whether coaching is the right path and whether it feels right to work together. It is not a coaching session, and you are not committing to anything.",
+      "I go through your request and call you during the time window you have chosen.",
+  },
+  {
+    question: "What is the first call?",
+    answer:
+      "It is a short, free phone call where we talk about your situation, what you want to get out of coaching and whether coaching with me feels right for you.",
+  },
+  {
+    question: "Do I have to decide after the first call?",
+    answer:
+      "No. The call is there so we can get a picture of what you are looking for and see whether coaching with me suits you. You are not committing to anything.",
   },
   {
     question: "What happens if we want to go ahead?",
     answer:
-      "If we both want to continue, we talk through what you would like to work on and what our coaching collaboration could look like. We agree on the scope, practical setup and price before we begin.",
-  },
-  {
-    question: "How does the coaching collaboration start?",
-    answer:
-      "Once we have agreed on how we want to work together, you receive a personal confirmation from me and we plan our first coaching conversation. You will also get access to CVB Base, where we keep together what belongs to our work together.",
-  },
-  {
-    question: "What is CVB Base?",
-    answer:
-      "CVB Base is part of how I work with my clients. There you can collect reflections, prepare what you want to bring to the next conversation and return to things we have worked on before. This helps keep the context connected between our conversations.",
-  },
-  {
-    question: "How do you work with companies?",
-    answer:
-      "I work with companies through individual coaching collaborations with people in the organisation. It can start with one person and be extended to more when needed. Each collaboration is separate, and before we begin we are clear about who is paying and what, if anything, is to be shared back with the commissioning company.",
-  },
-  {
-    question: "Do I have to decide after the first conversation?",
-    answer:
-      "No. The first conversation is there so we can both get a sense of whether this is right. We only move forward if it feels good and relevant for both of us.",
+      "We talk about what you want to work on, agree on a format and set a shared direction for the coaching.",
   },
 ];
 
@@ -55,14 +45,22 @@ export default function ContactPageEn() {
               Contact
             </p>
             <h1 data-hero-headline className="mt-6 max-w-3xl text-4xl font-medium leading-[1.25] tracking-tight md:text-6xl">
-              Start with a conversation.
+              Book a free introductory call
             </h1>
-            <p data-hero-body className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
-              Pick a time window that suits you and write a few lines about what you would like to
-              bring. I will call you during the selected period. The first conversation is a short,
-              free phone call where we work out whether coaching is the right support and whether we
-              want to go ahead together.
-            </p>
+            <div data-hero-body className="mt-8 max-w-3xl space-y-6 text-lg leading-8 text-zinc-700">
+              <p>
+                Curious about coaching and want to know whether it could be right for you or your
+                organisation?
+              </p>
+              <p>
+                Book a first, free call where we talk about your situation, your needs and what you want
+                to develop. The call usually takes 15–30 minutes, and I will call you during the time
+                window you choose.
+              </p>
+              <p>
+                After the call, we decide together whether and how to move forward.
+              </p>
+            </div>
           </HeroReveal>
         </section>
 
@@ -73,7 +71,7 @@ export default function ContactPageEn() {
             </div>
 
             <aside className="max-w-2xl border-t border-line-accent/30 pt-12 md:pt-16">
-              <ProcessFaq heading="What happens after you book?" items={processFaq} />
+              <ProcessFaq heading="Frequently asked questions" items={processFaq} />
             </aside>
           </div>
         </section>

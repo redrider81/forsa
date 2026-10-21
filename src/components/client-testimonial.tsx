@@ -42,6 +42,7 @@ const copy: Record<
     ],
   },
   en: {
+    heading: "In the client's own words",
     quote:
       "What has stayed with me most is the courage I took away with me – the courage to pause, to think things through, and to do things differently in practice",
     quoteOpen: "“",

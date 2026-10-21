@@ -59,20 +59,23 @@ const servicesEn: Service[] = [
     index: "01",
     href: "/en/individuell-coaching",
     title: "Individual coaching",
-    intro:
-      "For anyone who wants to develop, find clarity or take the next step in life or their career.",
-    description:
-      "Coaching can give you the opportunity to pause, sort your thoughts and see new perspectives. It may be about a change or a decision, but also about developing your strengths, finding new opportunities or working out what matters to you.",
+    intro: "For anyone who wants to understand, explore or change something.",
+    description: [
+      "Sometimes we face decisions, changes or questions that need room.",
+      "Sometimes there is a longing for something different, even if we do not yet know quite what it is.",
+      "In coaching, you have the opportunity to sort your thoughts, see new perspectives and explore what matters to you and how you want to move forward.",
+    ],
     ctaLabel: "Read about individual coaching",
   },
   {
     index: "02",
     href: "/en/business-coaching",
-    title: "Business Coaching",
-    intro:
-      "For employees, leaders and teams who want to develop and find new perspectives.",
-    description:
-      "Coaching can create space for reflection on whatever is current in your working life. It may involve work tasks, leadership, communication, collaboration or change – but also developing in your role and making the most of your strengths.",
+    title: "Business coaching",
+    intro: "For employees and leaders who want to grow in their working life.",
+    description: [
+      "Working life holds many perspectives, expectations and decisions. Sometimes you need a space of your own to reflect on your role, your leadership or a situation that feels challenging.",
+      "I offer coaching focused on individual development, new perspectives and greater clarity in what needs to be handled or changed.",
+    ],
     ctaLabel: "Read about business coaching",
   },
 ];

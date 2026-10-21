@@ -423,12 +423,12 @@ export default function ContactSchedulingPicker({
                     ? `${formatSelectedDateLabel(selectedSlotStart, locale)} · ${formatSlotInterval(selectedSlotStart, selectedSlotEnd)}`
                     : locale === "sv"
                       ? "Välj ett tidsfönster ovan."
-                      : "Choose a time window above"}
+                      : "Choose a time window above."}
                 </p>
                 <p className="mt-2 text-[0.8125rem] leading-[1.6] text-zinc-500">
                   {locale === "sv"
                     ? "Tidsfönstret anger när jag ringer upp dig. Själva samtalet tar vanligtvis 15–30 minuter."
-                    : "The time window is when Carolina can call you — not the length of the conversation."}
+                    : "The time window is when I will call you. The call itself usually takes 15–30 minutes."}
                 </p>
 
                 <div className="mt-6 space-y-3.5">
@@ -465,11 +465,9 @@ export default function ContactSchedulingPicker({
                     </select>
                   </div>
 
-                  {locale === "sv" ? (
-                    <p className="pt-2 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
-                      Kontaktuppgifter
-                    </p>
-                  ) : null}
+                  <p className="pt-2 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-zinc-500">
+                    {locale === "sv" ? "Kontaktuppgifter" : "Contact details"}
+                  </p>
 
                   <div className="space-y-1.5">
                     <label htmlFor="picker-namn" className={compactLabelClass}>
@@ -561,16 +559,15 @@ export default function ContactSchedulingPicker({
                     <label htmlFor="picker-situation" className={compactLabelClass}>
                       {t.form.fields.situation}
                     </label>
-                    {locale === "sv" ? (
-                      <p id="picker-situation-hint" className="text-[0.75rem] leading-[1.6] text-zinc-500">
-                        Berätta gärna kort vad du funderar på eller vill utforska. Du behöver inte ha
-                        formulerat din fråga färdigt.
-                      </p>
-                    ) : null}
+                    <p id="picker-situation-hint" className="text-[0.75rem] leading-[1.6] text-zinc-500">
+                      {locale === "sv"
+                        ? "Berätta gärna kort vad du funderar på eller vill utforska. Du behöver inte ha formulerat din fråga färdigt."
+                        : "Feel free to tell me briefly what you are thinking about or would like to explore. You do not need to have your question fully formulated."}
+                    </p>
                     <textarea
                       id="picker-situation"
                       name="situation"
-                      aria-describedby={locale === "sv" ? "picker-situation-hint" : undefined}
+                      aria-describedby="picker-situation-hint"
                       value={situation}
                       onChange={(event) => onSituationChange(event.target.value)}
                       className={cn(compactTextareaClass, situationError && "border-zinc-600")}

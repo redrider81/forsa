@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { coachingProcessParagraphsSv } from "@/lib/coaching-process";
+import { coachingProcessParagraphsEn, coachingProcessParagraphsSv } from "@/lib/coaching-process";
 import type { Locale } from "@/lib/i18n/config";
 import {
   homeTravel,
@@ -20,7 +20,7 @@ import {
  */
 const explanations: Record<Locale, readonly string[]> = {
   sv: coachingProcessParagraphsSv,
-  en: ["We start by clarifying what you want to get out of the coaching and which overall goals we will work towards. This gives our work a shared direction. Before each session, we narrow down what you want to focus on and what you want to take away. We explore the question together, look at different perspectives and examine what could help you move forward. Between sessions, there may be something you want to try, reflect on further or notice in your everyday life. At the next session, we follow up on what you have discovered and what you want to take forward."],
+  en: coachingProcessParagraphsEn,
 };
 
 type Props = {

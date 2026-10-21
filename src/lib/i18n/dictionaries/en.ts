@@ -23,7 +23,7 @@ export const enDictionary = {
     unsureTitle: "Not sure which kind of coaching is relevant?",
     unsureBody:
       "Start with a conversation. We clarify which kind of coaching is relevant to your question.",
-    bookFirstCall: "Book an introductory conversation →",
+    bookFirstCall: "Book an introductory call →",
   },
   footer: {
     description: "Individual coaching and business coaching, from Gothenburg.",
@@ -36,7 +36,7 @@ export const enDictionary = {
     copyright: "© 2026 CVB Coaching",
   },
   cta: {
-    primary: "Book an introductory conversation",
+    primary: "Book an introductory call",
     secondary: "Individual or business coaching",
     tertiary: "Scope and investment",
     engagementLink: "How it works →",
@@ -63,7 +63,7 @@ export const enDictionary = {
     },
     sections: {
       contact: "Contact details",
-      scheduling: "Book an initial phone call",
+      scheduling: "Book a free introductory call",
       situation: "Current situation",
       nextStep: "Next step",
     },
@@ -79,11 +79,12 @@ export const enDictionary = {
       situation: "What would you like to bring?",
       clarity: "What needs to become clearer?",
       timing: "When do you want to move forward?",
-      preferredDate: "Date",
-      preferredTime: "Time window",
+      preferredDate: "Choose a date",
+      preferredTime: "Choose a time window",
     },
-    schedulingHint:
-      "Choose a time window that works for you. Carolina will call you during the selected period. The conversation is short and free.",
+    // Empty, as in Swedish: the booking introduction is in the /en/kontakt
+    // page header and is not repeated here.
+    schedulingHint: "",
     timeSlotAria: "Select time window",
     timeWindows: {
       "08_10": "08:00–10:00",
