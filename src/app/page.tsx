@@ -177,7 +177,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div className="mt-9 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-10 md:items-start">
-                  <span data-hero-cta className="inline-flex justify-center md:justify-start">
+                  <span data-hero-cta className="flex w-full justify-center md:inline-flex md:w-auto md:justify-start">
                     <CtaLink href="/kontakt" variant="primary" translucent>
                       Boka ett inledande samtal
                     </CtaLink>

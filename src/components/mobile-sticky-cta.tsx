@@ -60,14 +60,18 @@ export default function MobileStickyCta({ children }: { children: ReactNode }) {
 
       if (desktop.matches) {
         heroLink.style.visibility = "";
-        setPosition(shouldShowDesktopDock() ? desktopDockStyle : null);
+        setPosition(shouldShowDesktopDock() ? { ...desktopDockStyle, transform: "none" } : null);
         return;
       }
 
-      const { top, left } = layoutOffset(heroLink);
+      const { top } = layoutOffset(heroLink);
       const docked = `calc(100dvh - env(safe-area-inset-bottom, 0px) - 1rem - ${heroLink.offsetHeight}px)`;
       heroLink.style.visibility = "hidden";
-      setPosition({ top: `min(${top}px, ${docked})`, left: `${left}px` });
+      setPosition({
+        top: `min(${top}px, ${docked})`,
+        left: "50%",
+        transform: "translateX(-50%)",
+      });
     };
 
     const otherCtas = [closingCta];
@@ -157,9 +161,9 @@ export default function MobileStickyCta({ children }: { children: ReactNode }) {
       data-mobile-sticky-cta
       inert={!visible}
       style={{ ...position, opacity }}
-      className="pointer-events-none fixed z-[80] max-md:[&_a]:max-w-[min(100vw-2rem,22rem)] md:[&_a]:max-w-[min(100vw-3rem,20rem)] md:[&_a]:text-[0.8125rem] md:[&_a]:leading-snug lg:[&_a]:max-w-[22rem] lg:[&_a]:text-sm"
+      className="pointer-events-none fixed z-[80] max-md:w-max max-md:max-w-[min(100vw-2rem,22rem)] max-md:[&_a]:max-w-[min(100vw-2rem,22rem)] md:[&_a]:max-w-[min(100vw-3rem,20rem)] md:[&_a]:text-[0.8125rem] md:[&_a]:leading-snug lg:[&_a]:max-w-[22rem] lg:[&_a]:text-sm"
     >
-      <div className={`flex ${visible ? "pointer-events-auto" : ""}`}>{children}</div>
+      <div className={`flex max-md:justify-center ${visible ? "pointer-events-auto" : ""}`}>{children}</div>
     </div>
   );
 }
