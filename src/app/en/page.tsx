@@ -486,8 +486,8 @@ export default function HomePageEn() {
         </div>
       </ParallaxController>
       <MobileStickyCta>
-        <CtaLink href="/en/kontakt" variant="primary">
-          Book a free introductory call
+        <CtaLink href="/en/kontakt" variant="primary" translucent>
+          {t.cta.primary}
         </CtaLink>
       </MobileStickyCta>
     </main>
