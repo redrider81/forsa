@@ -17,7 +17,6 @@ import MobileStickyCta from "@/components/mobile-sticky-cta";
 import HeroCoachingPathLinks, {
   heroPathLinksPlacementClass,
 } from "@/components/hero-coaching-path-links";
-import { enDictionary } from "@/lib/i18n/dictionaries/en";
 import {
   HOME_DISPLAY,
   HOME_DISPLAY_BASE,
@@ -30,8 +29,6 @@ export const metadata: Metadata = {
   description:
     "CVB Coaching in Gothenburg. Individual coaching for when you are facing a choice, and business coaching for employees and leaders.",
 };
-
-const t = enDictionary;
 
 /* ---------------------------------------------------------------------------
    Startsidan är komponerad som fem ytor, inte som tio sektioner.
@@ -172,7 +169,7 @@ export default function HomePageEn() {
                 <div className="mt-8 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-9 md:items-start">
                   <span data-hero-cta className="flex w-full justify-center md:inline-flex md:w-auto md:justify-start">
                     <CtaLink href="/en/kontakt" variant="primary" translucent>
-                      {t.cta.primary}
+                      Book a free introductory call
                     </CtaLink>
                   </span>
                 </div>
@@ -487,7 +484,7 @@ export default function HomePageEn() {
       </ParallaxController>
       <MobileStickyCta>
         <CtaLink href="/en/kontakt" variant="primary" translucent>
-          {t.cta.primary}
+          Book a free introductory call
         </CtaLink>
       </MobileStickyCta>
     </main>

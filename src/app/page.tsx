@@ -169,7 +169,7 @@ export default function HomePage() {
                 <div className="mt-8 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-9 md:items-start">
                   <span data-hero-cta className="flex w-full justify-center md:inline-flex md:w-auto md:justify-start">
                     <CtaLink href="/kontakt" variant="primary" translucent>
-                      Boka ett inledande samtal
+                      Boka ett kostnadsfritt inledande samtal
                     </CtaLink>
                   </span>
                 </div>
@@ -485,7 +485,7 @@ export default function HomePage() {
       </ParallaxController>
       <MobileStickyCta>
         <CtaLink href="/kontakt" variant="primary" translucent>
-          Boka ett inledande samtal
+          Boka ett kostnadsfritt inledande samtal
         </CtaLink>
       </MobileStickyCta>
     </main>
