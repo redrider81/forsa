@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -8,6 +9,7 @@ import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 import { coachingProcessParagraphsSv } from "@/lib/coaching-process";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("/coaching", "sv"),
   title: "Coaching | CVB Coaching",
   description:
     "Så fungerar coaching hos CVB Coaching i Göteborg: när den kan vara rätt, vad arbetet består av och hur ett samarbete går till. Individuell coaching och företagscoaching.",

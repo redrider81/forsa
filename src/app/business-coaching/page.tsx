@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("/business-coaching", "sv"),
   title: "Företagscoaching i Göteborg | CVB Coaching",
   description:
     "Företagscoaching hos CVB Coaching i Göteborg. För medarbetare, ledare och team som vill utvecklas i sin roll och hantera aktuella utmaningar i arbetslivet.",

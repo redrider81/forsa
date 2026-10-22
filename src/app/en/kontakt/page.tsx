@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import ContactIntakeForm from "@/components/contact-intake-form";
 import ContactPageScrollReset from "@/components/contact-page-scroll-reset";
 import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 import HeroReveal from "@/components/animations/HeroReveal";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("/kontakt", "en"),
   title: "Book a first call | CVB Coaching",
   description:
     "Book a short, free phone call to work out whether coaching is the right support. The conversation is confidential, whether you come on your own or through your employer.",

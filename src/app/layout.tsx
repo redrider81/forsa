@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import SiteFooter from "@/components/site-footer";
 import SiteShell from "@/components/site-shell";
 import JsonLd, { professionalServiceSchema } from "@/components/json-ld";
+import { SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,6 +26,13 @@ const playfair = Playfair_Display({
 const homeScreenGray = "#71717a";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  openGraph: {
+    siteName: "CVB Coaching",
+    locale: "sv_SE",
+    alternateLocale: ["en_GB"],
+    type: "website",
+  },
   title: "CVB Coaching – individuell coaching och företagscoaching i Göteborg",
   description:
     "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och företagscoaching för medarbetare, ledare och team.",

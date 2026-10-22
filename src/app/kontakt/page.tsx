@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import ContactIntakeForm from "@/components/contact-intake-form";
 import ContactPageScrollReset from "@/components/contact-page-scroll-reset";
 import ProcessFaq, { type ProcessFaqItem } from "@/components/process-faq";
 import HeroReveal from "@/components/animations/HeroReveal";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("/kontakt", "sv"),
   title: "Boka ett första samtal | CVB Coaching",
   description:
     "Boka ett kort och kostnadsfritt telefonsamtal där vi stämmer av om coaching är rätt stöd. Samtalet är konfidentiellt, oavsett om du kommer på egen hand eller genom din arbetsgivare.",

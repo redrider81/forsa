@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("/business-coaching", "en"),
   title: "Business coaching in Gothenburg | CVB Coaching",
   description:
     "Business coaching at CVB Coaching in Gothenburg. For employees, leaders and teams who want to develop in their roles and handle current challenges in working life.",

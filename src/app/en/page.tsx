@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import Image from "next/image";
 import CtaLink from "@/components/cta-link";
 import { LogoMark } from "@/components/brand/logo";
@@ -24,6 +25,7 @@ import {
 } from "@/lib/homepage-typography";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("", "en"),
   title: "CVB Coaching – individual and business coaching in Gothenburg",
   description:
     "CVB Coaching in Gothenburg. Individual coaching for when you are facing a choice, and business coaching for employees and leaders.",

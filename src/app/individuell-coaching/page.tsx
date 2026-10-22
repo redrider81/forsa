@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("/individuell-coaching", "sv"),
   title: "Individuell coaching i Göteborg | CVB Coaching",
   description:
     "Individuell coaching hos CVB Coaching i Göteborg. För dig som vill utvecklas, fatta beslut eller ta nästa steg i livet eller karriären.",

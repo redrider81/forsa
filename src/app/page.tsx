@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import Image from "next/image";
 import CtaLink from "@/components/cta-link";
 import { LogoMark } from "@/components/brand/logo";
@@ -23,6 +24,7 @@ import {
 } from "@/lib/homepage-typography";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("", "sv"),
   title: "CVB Coaching – individuell coaching och företagscoaching i Göteborg",
   description:
     "CVB Coaching i Göteborg. Individuell coaching för dig som står inför ett vägval, och företagscoaching för medarbetare och ledare.",

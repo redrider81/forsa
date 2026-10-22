@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageAlternates } from "@/lib/seo";
 import Image from "next/image";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -7,6 +8,7 @@ import JsonLd, { carolinaPersonSchema } from "@/components/json-ld";
 import { svDictionary } from "@/lib/i18n/dictionaries/sv";
 
 export const metadata: Metadata = {
+  alternates: pageAlternates("/om-oss", "sv"),
   title: "Carolina von Braun – coach i Göteborg | CVB Coaching",
   description:
     "Diplomerad professionell coach i Göteborg med erfarenhet från arbetsliv, ledarskap och företagande. Individuell coaching och företagscoaching.",
