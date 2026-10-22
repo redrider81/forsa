@@ -109,9 +109,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
       }
 
       if (portrait) {
-        // Bilden har en egen hover-transition på transform; därför avtäcks
-        // ramen, inte själva bilden. Beskärningen är oförändrad i slutläget.
-        gsap.set(portrait, { clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(portrait, { autoAlpha: 0 });
         const tl = gsap.timeline({ scrollTrigger: revealScrollTrigger(portrait) });
         tl.add(homeMediaReveal(portrait, false), heading ? 0.15 : 0);
       }
@@ -154,7 +152,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
     return () => {
       ctx.revert();
       showTargets(targets);
-      if (portrait) gsap.set(portrait, { clearProps: "clipPath" });
+      if (portrait) gsap.set(portrait, { clearProps: "opacity,visibility" });
     };
   }, []);
 
@@ -219,7 +217,7 @@ export default function KineticTeamHybrid({ locale = "sv" }: Props) {
               {paragraph}
             </p>
           ))}
-          <div data-col-paragraph className="mt-10 flex justify-center md:mt-12 md:justify-start">
+          <div data-col-paragraph className="mt-10 flex justify-center md:mt-12">
             <Link
               href={c.linkHref}
               className="inline-flex items-center justify-center rounded-full border border-white bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-[color,background-color,border-color] duration-200 hover:border-zinc-100 hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark"

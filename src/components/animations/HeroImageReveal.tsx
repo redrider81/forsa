@@ -5,8 +5,7 @@ import type { ReactNode } from "react";
 import gsap from "gsap";
 import { motion, prefersReducedMotion } from "@/lib/motion";
 
-const HERO_IMAGE_FROM = motion.opacity.heroFrom;
-const HERO_SCALE_FROM = motion.scale.heroFrom;
+const HERO_IMAGE_FROM = 0;
 
 type Props = {
   children: ReactNode;
@@ -21,28 +20,26 @@ export default function HeroImageReveal({ children, className }: Props) {
     if (!el) return;
 
     if (prefersReducedMotion()) {
-      gsap.set(el, { opacity: 1, scale: 1, clearProps: "transform" });
+      gsap.set(el, { opacity: 1 });
       return;
     }
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
         el,
-        { opacity: HERO_IMAGE_FROM, scale: HERO_SCALE_FROM },
+        { opacity: HERO_IMAGE_FROM },
         {
           opacity: 1,
-          scale: 1,
           duration: motion.duration.hero,
-          ease: motion.ease.hero,
+          ease: motion.ease.revealSoft,
           force3D: true,
-          clearProps: "transform",
         },
       );
     }, ref);
 
     return () => {
       ctx?.revert();
-      gsap.set(el, { opacity: 1, scale: 1, clearProps: "transform" });
+      gsap.set(el, { opacity: 1 });
     };
   }, []);
 
@@ -50,7 +47,7 @@ export default function HeroImageReveal({ children, className }: Props) {
     <div
       ref={ref}
       className={className}
-      style={{ opacity: HERO_IMAGE_FROM, transform: `scale(${HERO_SCALE_FROM})` }}
+      style={{ opacity: HERO_IMAGE_FROM }}
       aria-hidden="true"
     >
       {children}

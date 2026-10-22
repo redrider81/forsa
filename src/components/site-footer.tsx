@@ -61,7 +61,6 @@ export default function SiteFooter() {
                 external: true,
                 icon: Mail,
               },
-              { title: t.nav.login, href: "/klient-login" },
             ],
           },
         ]
@@ -94,7 +93,6 @@ export default function SiteFooter() {
                 external: true,
                 icon: Mail,
               },
-              { title: t.nav.login, href: "/klient-login" },
             ],
           },
         ];

@@ -104,6 +104,21 @@ function NavChevron({ open }: { open?: boolean }) {
   );
 }
 
+function NavCloseIcon({ className = "h-3 w-3" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={`shrink-0 text-current ${className}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.35"
+    >
+      <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const mobileHeaderControlClusterSolid =
   "flex shrink-0 items-center gap-0 rounded-full border border-zinc-200/75 bg-white/92 p-0 shadow-[0_1px_2px_rgba(24,24,27,0.05)] backdrop-blur-sm";
 
@@ -266,6 +281,8 @@ const desktopHeaderActionSolidClass = `${desktopHeaderActionBase} border border-
 
 const desktopHeaderActionHeroClass = `${desktopHeaderActionBase} ${navHeroPillSurfaceClass} hover:bg-white/28 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white/40`;
 
+const desktopHeaderLanguageHeroClass = `${desktopHeaderActionBase} border-0 bg-black/32 shadow-none backdrop-blur-[10px] hover:bg-black/42 focus-visible:ring-white/55 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent`;
+
 function desktopHeaderActionClass(onHero: boolean) {
   return onHero ? desktopHeaderActionHeroClass : desktopHeaderActionSolidClass;
 }
@@ -322,7 +339,7 @@ function LanguageMenu({
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((prev) => !prev)}
-        className={desktopHeaderActionClass(onHero)}
+        className={onHero ? desktopHeaderLanguageHeroClass : desktopHeaderActionSolidClass}
       >
         {locale === "en" ? "EN" : "SV"}
         <NavChevron open={open} />
@@ -372,8 +389,10 @@ function isCoachingActive(pathname: string) {
   return coachingPaths.some((path) => pathname === path);
 }
 
-function sectionLabelClass() {
-  return "text-xs font-medium uppercase tracking-[0.16em] text-[#92753a]";
+function sectionLabelClass(onHeroMega = false) {
+  return onHeroMega
+    ? "text-xs font-medium uppercase tracking-[0.16em] text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]"
+    : "text-xs font-medium uppercase tracking-[0.16em] text-[#92753a]";
 }
 
 const megaItemFocus =
@@ -600,6 +619,17 @@ export default function SiteNavigation() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [megaOpen]);
 
+  useEffect(() => {
+    if (!isHome) return;
+    const root = document.documentElement;
+    if (megaOpen) {
+      root.setAttribute("data-coaching-mega-open", "");
+    } else {
+      root.removeAttribute("data-coaching-mega-open");
+    }
+    return () => root.removeAttribute("data-coaching-mega-open");
+  }, [megaOpen, isHome]);
+
   const handleLanguageChange = (nextLocale: Locale) => {
     if (nextLocale === locale) return;
     router.push(toLocalePath(pathname, nextLocale));
@@ -770,7 +800,7 @@ export default function SiteNavigation() {
                           }
                         }}
                       >
-                        <NavChevron open={megaOpen} />
+                        {megaOpen ? <NavCloseIcon /> : <NavChevron />}
                       </button>
                     </span>
                   </div>
@@ -937,7 +967,11 @@ export default function SiteNavigation() {
                     coachingActive ? "text-[#92753a]" : ""
                   }`}
                 >
-                  <NavChevron open={mobileCoachingOpen} />
+                  {mobileCoachingOpen ? (
+                    <NavCloseIcon className="h-4 w-4" />
+                  ) : (
+                    <NavChevron />
+                  )}
                 </button>
               </div>
               <div
@@ -1029,8 +1063,8 @@ export default function SiteNavigation() {
             style={{ top: Math.max(0, panelTop) }}
             onMouseEnter={openMega}
             onMouseLeave={leaveMegaHoverZone}
-            className={`${isHome ? "absolute" : "fixed"} inset-x-0 z-[90] max-md:hidden ${
-              megaOpen ? "" : "pointer-events-none hidden"
+            className={`${isHome ? "absolute" : "fixed"} inset-x-0 z-[90] max-md:hidden transition-opacity duration-300 ease-out motion-reduce:transition-none ${
+              megaOpen ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
             <div
@@ -1040,15 +1074,29 @@ export default function SiteNavigation() {
             <div
               className={
                 isHome
-                  ? "border-t border-white/15 bg-transparent shadow-none"
+                  ? "border-t border-white/12 bg-black/45 shadow-none backdrop-blur-[16px]"
                   : "border-t border-zinc-200/80 bg-white shadow-[0_12px_40px_-28px_rgba(24,24,27,0.12)]"
               }
             >
             <div
-              className={`mx-auto w-full max-w-7xl px-6 py-8 md:px-10 md:py-10 lg:px-14 lg:py-11 ${
+              className={`relative mx-auto w-full max-w-7xl px-6 py-8 md:px-10 md:py-10 lg:px-14 lg:py-11 ${
                 isHome ? "bg-transparent" : "bg-white"
               }`}
             >
+              <div className="mb-4 flex justify-end md:absolute md:right-10 md:top-8 md:mb-0 lg:right-14 lg:top-11">
+                <button
+                  type="button"
+                  onClick={closeMega}
+                  aria-label={coachingSubmenuLabel(true)}
+                  className={
+                    isHome
+                      ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white transition-colors hover:bg-black/58 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                      : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/90 bg-zinc-50 text-zinc-800 transition-colors hover:bg-zinc-100 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  }
+                >
+                  <NavCloseIcon className="h-3.5 w-3.5" />
+                </button>
+              </div>
               <div className="grid gap-10 md:grid-cols-12 md:gap-x-10 lg:gap-x-14">
                 <div className="md:col-span-7 lg:col-span-7">
                   <div className="mb-9 max-w-2xl lg:max-w-3xl">
@@ -1064,8 +1112,8 @@ export default function SiteNavigation() {
                       <span
                         className={`block font-serif text-[1.5rem] font-medium leading-[1.15] tracking-[-0.02em] transition-colors duration-200 ${
                           isHome
-                            ? `text-white group-hover:text-[var(--brand-gold)] ${
-                                barePathname === coachingOverview.href ? "text-[var(--brand-gold)]" : ""
+                            ? `text-white group-hover:text-white/95 ${
+                                barePathname === coachingOverview.href ? "text-white" : ""
                               }`
                             : `text-zinc-900 group-hover:text-[#92753a] ${
                                 barePathname === coachingOverview.href ? "text-[#92753a]" : ""
@@ -1085,7 +1133,7 @@ export default function SiteNavigation() {
                       </span>
                     </Link>
                   </div>
-                  <p className={sectionLabelClass()}>{t.nav.leadershipLabel}</p>
+                  <p className={sectionLabelClass(isHome)}>{t.nav.leadershipLabel}</p>
                   <ul className="mt-5 space-y-5">
                     {coachingAudiences.map((item) => (
                       <li key={item.href}>
@@ -1101,10 +1149,8 @@ export default function SiteNavigation() {
                           <span
                             className={
                               isHome
-                                ? `block text-sm font-medium transition-colors duration-200 group-hover:text-[var(--brand-gold)] ${
-                                    barePathname === item.href
-                                      ? "text-[var(--brand-gold)]"
-                                      : "text-white"
+                                ? `block text-sm font-medium text-white transition-colors duration-200 group-hover:text-white/95 ${
+                                    barePathname === item.href ? "text-white" : ""
                                   }`
                                 : `${megaBlockTitle} ${
                                     barePathname === item.href ? "text-[#92753a]" : ""
@@ -1129,7 +1175,9 @@ export default function SiteNavigation() {
                 </div>
 
                 <div className="flex min-w-0 flex-col md:col-span-5 md:pl-10 lg:col-span-5 lg:pl-14">
-                  <p className={`${sectionLabelClass()} opacity-70`}>{t.nav.startHereLabel}</p>
+                  <p className={`${sectionLabelClass(isHome)} ${isHome ? "opacity-90" : "opacity-70"}`}>
+                    {t.nav.startHereLabel}
+                  </p>
                   <p
                     className={`mt-4 text-[0.9375rem] font-medium leading-snug tracking-tight ${
                       isHome ? "text-white" : "text-zinc-900"

@@ -6,6 +6,7 @@ import SiteNavigation from "@/components/site-navigation";
 import HeroReveal from "@/components/animations/HeroReveal";
 import HeroVideoBackground from "@/components/hero-video-background";
 import ParallaxController from "@/components/animations/ParallaxController";
+import EditorialRowsReveal from "@/components/animations/EditorialRowsReveal";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import CoachingServicesGrid from "@/components/coaching-services-grid";
 import KineticTeamHybrid from "@/components/ui/kinetic-team-hybrid";
@@ -59,22 +60,17 @@ const CHAPTER_ON_DARK = `${CHAPTER} text-white`;
 /** "När coaching är relevant — och när den inte är det" är dolt tills vidare på kundens begäran. */
 const SHOW_COACHING_FIT = false;
 
-const heroIntro = [
-  "Coaching för människor som vill utforska nya perspektiv, hitta större tydlighet och komma vidare i det som är viktigt.",
-  "Med nyfikenhet, närvaro och lyhördhet skapar jag utrymme för reflektion och utveckling – för dig som individ och för människor i organisationer.",
-];
-
 const relevanceIntro = [
   "Ibland börjar det med en fråga som inte riktigt släpper.",
   "Det kan handla om att …",
 ];
 
 const relevancePoints = [
-  "du står inför ett vägval och vill förstå vad som faktiskt är viktigt för dig.",
-  "du har fått en ny roll eller ett större ansvar och vill hitta ditt sätt att ta dig an det.",
-  "något behöver förändras, men du har ännu inte landat i vad eller hur.",
-  "du vill fatta ett beslut med större tydlighet och tillit till din egen bedömning.",
-  "du behöver ett samtal där du kan tänka fritt, utforska olika perspektiv och få syn på det du kanske inte sett tidigare.",
+  "Stå inför ett vägval och söka klarhet i vad som verkligen är viktigt.",
+  "Hitta sin väg i en ny roll eller ett större ansvar.",
+  "Känna att något behöver förändras, utan att ännu veta vad eller hur.",
+  "Fatta ett beslut med större tydlighet och tillit till den egna bedömningen.",
+  "Få utrymme att tänka fritt, utforska nya perspektiv och upptäcka sådant som tidigare inte varit tydligt.",
 ];
 
 const passarNär = [
@@ -147,10 +143,10 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 z-[1] bg-black/45" aria-hidden="true" />
           <SiteNavigation />
           <div data-hero-overlay className="pointer-events-none absolute inset-0 z-[2]">
-            <div data-hero-column className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[max(clamp(2.5rem,8svh,4.5rem),env(safe-area-inset-bottom,0px))] md:absolute md:left-[5.5vw] md:top-[66%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
+            <div data-hero-column className="pointer-events-auto flex min-h-full flex-col items-center px-6 pb-[max(clamp(2.5rem,8svh,4.5rem),env(safe-area-inset-bottom,0px))] md:absolute md:left-[5.5vw] md:top-[62%] md:min-h-0 md:max-w-md md:-translate-y-1/2 md:items-start md:justify-start md:px-0 md:pb-0 md:pt-0 lg:max-w-lg">
               <div
                 data-hero-spacer
-                className="w-full shrink-0 min-h-[min(38svh,22rem)] md:hidden"
+                className="w-full shrink-0 min-h-[min(34svh,20rem)] md:hidden"
                 aria-hidden="true"
               />
               <HeroReveal className="relative flex w-full max-w-[22rem] shrink-0 flex-col items-center text-center sm:max-w-[24rem] md:max-w-lg md:items-start md:text-left lg:max-w-xl">
@@ -163,20 +159,12 @@ export default function HomePage() {
                   </h1>
                 </div>
                 <div data-hero-body className="flex w-full flex-col items-center md:items-start">
-                  <p className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-7 md:max-w-[46ch] md:text-lg">
+                  <p className="mt-6 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:mt-6 md:max-w-[46ch] md:text-lg">
                     Professionell coaching för dig som vill utvecklas, fatta beslut eller hitta nya
                     perspektiv, i livet eller arbetslivet.
                   </p>
-                  {heroIntro.map((paragraph) => (
-                    <p
-                      key={paragraph}
-                      className="mt-4 max-w-[34ch] text-[1.0625rem] font-[450] leading-[1.6] text-balance text-white/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] md:max-w-[46ch] md:text-lg"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
                 </div>
-                <div className="mt-9 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-10 md:items-start">
+                <div className="mt-8 flex w-full max-w-full flex-col items-center gap-3 sm:gap-3.5 md:mt-9 md:items-start">
                   <span data-hero-cta className="flex w-full justify-center md:inline-flex md:w-auto md:justify-start">
                     <CtaLink href="/kontakt" variant="primary" translucent>
                       Boka ett inledande samtal
@@ -212,20 +200,25 @@ export default function HomePage() {
                 <CoachingServicesGrid locale="sv" dense variant="editorial" />
               </div>
 
-              <p className="mt-8 max-w-2xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
-                Samtalet står i centrum. När det är relevant hålls arbetet samman mellan samtalen.
-              </p>
-
               {/* Sammanslaget avsnitt: vad coaching kan ge + vad det kan handla om */}
               <ScrollReveal
                 variant="mediaSplit"
                 className="mt-20 grid gap-8 md:mt-20 md:grid-cols-12 md:items-start md:gap-x-8"
               >
                 <div data-col-left data-reveal-group className="md:col-span-5">
-                  <h2 className={`max-w-[14ch] ${DISPLAY} text-zinc-900`}>
-                    Vad kan coaching ge dig?
+                  <p className={`${CHAPTER} text-zinc-900`}>03</p>
+                  <h2
+                    className={`mt-5 max-w-[14ch] md:mt-6 md:max-w-[19ch] xl:max-w-[14ch] ${DISPLAY} text-zinc-900`}
+                  >
+                    <span className="md:hidden">Vad kan coaching ge dig?</span>
+                    <span className="hidden md:block xl:hidden">
+                      Vad kan coaching
+                      <br />
+                      ge dig?
+                    </span>
+                    <span className="hidden xl:inline">Vad kan coaching ge dig?</span>
                   </h2>
-                  <p className="mt-8 max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-6">
+                  <p className="mt-10 max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-12">
                     Coaching kan ge dig utrymme att stanna upp, reflektera och se din situation ur nya
                     perspektiv.
                   </p>
@@ -247,13 +240,13 @@ export default function HomePage() {
                   <div className="flex min-h-0 flex-1 flex-col">
                     <div
                       data-reveal-group
-                      className="mb-8 space-y-4 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mb-10"
+                      className="mb-8 space-y-4 text-[1.0625rem] font-semibold leading-[1.75] text-zinc-700 md:mb-10"
                     >
                       {relevanceIntro.map((paragraph) => (
                         <p key={paragraph}>{paragraph}</p>
                       ))}
                     </div>
-                    <ul className="flex w-full flex-col divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700 md:flex-1">
+                    <ul className="flex w-full flex-col divide-y divide-zinc-300 border-t border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700 md:flex-1">
                       {relevancePoints.map((point) => (
                         <li
                           key={point}
@@ -272,7 +265,10 @@ export default function HomePage() {
                 </div>
               </ScrollReveal>
 
-              <div className="mt-16 border-t border-zinc-300 md:mt-14">
+              <EditorialRowsReveal
+                emphasis
+                className="mt-16 border-t border-zinc-300 md:mt-24 md:pt-12 lg:mt-28 lg:pt-14"
+              >
                 {workRows.map((row) => (
                   <article
                     key={row.index}
@@ -304,7 +300,7 @@ export default function HomePage() {
                     </div>
                   </article>
                 ))}
-              </div>
+              </EditorialRowsReveal>
             </section>
 
             {/* Rörelse 3 — avgränsningen, en kvalificerande rörelse och därför
@@ -345,47 +341,86 @@ export default function HomePage() {
             )}
           </div>
 
+          <div data-parallax-gap aria-hidden="true" className="relative z-0">
+            <div
+              data-parallax-gap-surface
+              className="relative z-0 h-14 bg-[#f4f3ef] md:h-20 lg:h-24"
+            />
+          </div>
+
           {/* ============ YTA 3 · mörk · akt 03 · Carolina ============ */}
-          <KineticTeamHybrid />
+          <div data-parallax-cover className="relative z-10">
+            <KineticTeamHybrid />
 
-          {/* Samma mörka yta · en klients röst efter Carolinas presentation */}
-          <ClientTestimonial locale="sv" />
+            {/* Samma mörka yta · en klients röst efter Carolinas presentation */}
+            <ClientTestimonial locale="sv" />
+          </div>
 
-          {/* ======= YTA 5 · mörk · akt 05 och akt 06 · uttoning =======
-              Sidan mörknar en sista gång och stannar mörk. CVB Base, den
-              första företagskontakten och det praktiska är en enda rörelse
-              om kontinuitet, och avslutet ligger på samma yta — skillnaden
-              mellan dem är skala och luft, inte en ny bakgrund. */}
+          <div data-parallax-gap aria-hidden="true" className="relative z-0">
+            <div
+              data-parallax-gap-surface
+              className="relative z-0 h-14 bg-[#f4f3ef] md:h-20 lg:h-24"
+            />
+          </div>
+
+          {/* ======= YTA 5 · mörk · akt 05 · CVB Base ======= */}
           <div
+            data-parallax-cover
             data-parallax-section
-            className="relative overflow-hidden bg-surface-dark pt-20 pb-0 text-zinc-100 md:pt-32 md:pb-24"
+            className="relative z-10 overflow-hidden bg-surface-dark pt-20 pb-0 text-zinc-100 md:pt-32"
           >
             {/* -------------------- AKT 05 · KONTINUITET -------------------- */}
             <section className="mx-auto max-w-7xl px-6 md:px-10">
               <ScrollReveal
                 variant="mediaSplit"
-                className="grid gap-12 md:grid-cols-12 md:items-start md:gap-x-8 lg:gap-x-10"
+                className="grid gap-12 md:grid-cols-12 md:gap-x-8 lg:gap-x-10"
               >
-                <div data-col-left data-reveal-group className="md:col-span-7">
+                <div className="md:col-span-12">
                   <LogoMark
                     descriptor="base"
                     withCoaching={false}
                     className="h-12 w-auto md:h-14 lg:h-16"
                   />
-                  <h2 className={`mt-6 max-w-3xl ${DISPLAY_BASE} text-white md:mt-8 lg:max-w-4xl`}>
-                    {/* Mjukt bindestreck: ordet är bredare än spalten vid 320 px. */}
-                    {"Ett digitalt stöd genom hela coaching­processen"}
-                  </h2>
-                  <div data-reveal-group className="mt-8 space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:mt-10">
-                    <p data-col-paragraph className="max-w-2xl">
-                      CVB Base är mitt digitala stöd för individuell coaching och företagscoaching, utvecklat för
-                      svenska sammanhang.
-                    </p>
-                    <p data-col-paragraph className="max-w-2xl">
-                      Det ger dig möjlighet att förbereda samtal, fånga tankar och reflektioner mellan samtalen och
-                      återvända till det som blivit viktigt längs vägen. På så sätt finns det du arbetar med i
-                      coachingen kvar att utforska och bygga vidare på – även mellan våra möten.
-                    </p>
+                  <div
+                    className="mt-6 md:mt-8 md:grid md:grid-cols-12 md:items-stretch md:gap-x-8 lg:gap-x-10"
+                  >
+                    <div data-col-left data-reveal-group className="md:col-span-7">
+                      <p className={CHAPTER_ON_DARK}>05</p>
+                      <h2
+                        className={`mt-5 max-w-3xl md:mt-6 ${DISPLAY_BASE} text-white lg:max-w-4xl`}
+                      >
+                        {/* Mjukt bindestreck: ordet är bredare än spalten vid 320 px. */}
+                        {"Ett digitalt stöd genom hela coaching­processen"}
+                      </h2>
+                      <div
+                        data-reveal-group
+                        className="mt-8 space-y-6 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:mt-10"
+                      >
+                        <p data-col-paragraph className="max-w-2xl">
+                          CVB Base är mitt digitala stöd för individuell coaching och företagscoaching, utvecklat för
+                          svenska sammanhang.
+                        </p>
+                        <p data-col-paragraph className="max-w-2xl">
+                          Det ger dig möjlighet att förbereda samtal, fånga tankar och reflektioner mellan samtalen och
+                          återvända till det som blivit viktigt längs vägen. På så sätt finns det du arbetar med i
+                          coachingen kvar att utforska och bygga vidare på – även mellan våra möten.
+                        </p>
+                      </div>
+                    </div>
+
+                    <figure
+                      data-col-right
+                      className="relative mt-10 aspect-[4/5] w-full max-w-xl overflow-hidden rounded-[1.25rem] md:mt-0 md:col-span-5 md:aspect-auto md:h-full md:min-h-0 md:max-w-none md:rounded-[1.75rem] lg:rounded-[2rem]"
+                    >
+                      <Image
+                        src="/cvb-base-ipad.jpg"
+                        alt="Person som håller en surfplatta — CVB Base mellan samtalen."
+                        fill
+                        sizes="(min-width: 768px) 36vw, 94vw"
+                        className="object-cover object-center"
+                        quality={80}
+                      />
+                    </figure>
                   </div>
                 </div>
 
@@ -393,33 +428,33 @@ export default function HomePage() {
                   <div className="mt-12 border-t border-white/20 md:mt-16">
                     <CvbBaseBenefitsAccordion items={cvbBaseBenefits} />
                   </div>
-                  <p className="mt-12 max-w-2xl border-t border-white/20 pt-10 font-serif text-lg font-medium italic leading-[1.45] tracking-[-0.02em] text-balance text-zinc-400 md:mt-14 md:max-w-3xl md:pt-12 md:text-xl lg:max-w-4xl">
+                  <p className="mt-12 max-w-2xl border-t border-white/20 pt-10 pb-14 font-serif text-lg font-medium italic leading-[1.45] tracking-[-0.02em] text-balance text-zinc-400 md:mt-14 md:max-w-3xl md:pt-12 md:pb-20 md:text-xl lg:max-w-4xl lg:pb-24">
                     <span className="max-sm:whitespace-nowrap">CVB Base – ett stöd</span> före, mellan
                     <br className="sm:hidden" aria-hidden="true" />
                     {" "}och efter samtalen.
                   </p>
                 </div>
-
-                <figure
-                  data-col-right
-                  className="relative aspect-[4/5] w-full max-w-xl overflow-hidden rounded-[1.25rem] md:col-span-5 md:col-start-8 md:row-start-1 md:mt-6 md:aspect-[2/3] md:max-w-2xl md:self-start md:rounded-[1.75rem] lg:mt-10 lg:rounded-[2rem]"
-                >
-                  <Image
-                    src="/cvb-base-ipad.jpg"
-                    alt="Person som håller en surfplatta — CVB Base mellan samtalen."
-                    fill
-                    sizes="(min-width: 768px) 36vw, 94vw"
-                    className="object-cover object-center"
-                    quality={80}
-                  />
-                </figure>
               </ScrollReveal>
             </section>
+          </div>
 
-            {/* -------------------- AKT 07 · AVSLUT -------------------- */}
-            <section id="kontakt" className="mx-auto mt-20 max-w-7xl scroll-mt-24 px-6 md:mt-28 md:px-10 md:scroll-mt-32">
+          <div data-parallax-gap aria-hidden="true" className="relative z-0">
+            <div
+              data-parallax-gap-surface
+              className="relative z-0 h-14 bg-[#f4f3ef] md:h-20 lg:h-24"
+            />
+          </div>
+
+          {/* ======= YTA 5 · mörk · akt 06 · avslut ======= */}
+          <div
+            data-parallax-cover
+            data-parallax-section
+            className="relative z-10 overflow-hidden bg-surface-dark pb-20 text-zinc-100 md:pb-24"
+          >
+            {/* -------------------- AKT 06 · AVSLUT -------------------- */}
+            <section id="kontakt" className="mx-auto max-w-7xl scroll-mt-24 px-6 pt-20 md:px-10 md:scroll-mt-32 md:pt-28">
               <ScrollReveal variant="ctaStack" emphasis>
-                <p data-cta-label className={CHAPTER_ON_DARK}>07</p>
+                <p data-cta-label className={CHAPTER_ON_DARK}>06</p>
                 <h2 data-cta-heading className={`mt-8 max-w-3xl ${DISPLAY} text-white md:mt-10`}>
                   Boka ett kostnadsfritt introduktionssamtal
                 </h2>
@@ -447,7 +482,7 @@ export default function HomePage() {
         </div>
       </ParallaxController>
       <MobileStickyCta>
-        <CtaLink href="/kontakt" variant="primary" translucent>
+        <CtaLink href="/kontakt" variant="primary">
           Boka ett kostnadsfritt inledande samtal
         </CtaLink>
       </MobileStickyCta>

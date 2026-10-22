@@ -51,7 +51,7 @@ export default function CvbBaseBenefitsAccordion({
                 aria-expanded={open}
                 aria-controls={panelId}
                 onClick={() => toggle(index)}
-                className={`flex w-full items-start justify-between gap-4 py-5 text-left md:gap-6 md:py-6 ${triggerFocusClass}`}
+                className={`flex w-full items-center justify-between gap-4 py-5 text-left md:gap-6 md:py-6 ${triggerFocusClass}`}
               >
                 <span
                   className={`min-w-0 flex-1 text-balance ${
@@ -63,7 +63,7 @@ export default function CvbBaseBenefitsAccordion({
                   {row.title}
                 </span>
                 <span
-                  className="mt-0.5 shrink-0 font-sans text-[1.125rem] font-light leading-none tabular-nums text-zinc-400"
+                  className="shrink-0 font-sans text-[1.75rem] font-light leading-none tabular-nums text-zinc-200 md:text-[2rem]"
                   aria-hidden="true"
                 >
                   {open ? "−" : "+"}

@@ -79,35 +79,14 @@ export function homeTravel() {
   };
 }
 
-/** Bild som avtäcks nedifrån; ramen och beskärningen är oförändrade i slutläget. */
-export function homeMediaReveal(media: HTMLElement, scaleImage = true): gsap.core.Timeline {
-  const img = scaleImage ? media.querySelector<HTMLElement>("img") : null;
+/** Bild som tonas in vid scroll (ingen clip-path eller zoom). */
+export function homeMediaReveal(media: HTMLElement, _scaleImage = true): gsap.core.Timeline {
   const tl = gsap.timeline();
-  tl.fromTo(
-    media,
-    { clipPath: "inset(100% 0% 0% 0%)" },
-    {
-      clipPath: "inset(0% 0% 0% 0%)",
-      duration: motion.home.duration.media,
-      ease: motion.home.ease.media,
-      clearProps: "clipPath",
-    },
-    0,
-  );
-  if (img) {
-    tl.fromTo(
-      img,
-      { scale: motion.home.mediaScaleFrom },
-      {
-        scale: 1,
-        duration: motion.home.duration.media + 0.35,
-        ease: motion.home.ease.settle,
-        force3D: true,
-        clearProps: "transform",
-      },
-      0,
-    );
-  }
+  tl.to(media, {
+    autoAlpha: 1,
+    duration: motion.home.duration.media,
+    ease: motion.ease.revealSoft,
+  });
   return tl;
 }
 
@@ -138,6 +117,39 @@ export function parallaxScrollTrigger(
     invalidateOnRefresh: true,
     ...overrides,
   };
+}
+
+/** Ljus band + nästa syskon med data-parallax-cover: mörk yta glider upp över bandet. */
+export function bindParallaxGaps(root: ParentNode, mobile: boolean): void {
+  root.querySelectorAll<HTMLElement>("[data-parallax-gap]").forEach((gap) => {
+    const surface = gap.querySelector<HTMLElement>("[data-parallax-gap-surface]");
+    const cover = gap.nextElementSibling;
+    if (!surface || !(cover instanceof HTMLElement) || !cover.hasAttribute("data-parallax-cover")) {
+      return;
+    }
+
+    const band = () => surface.offsetHeight;
+    const atDocumentEnd = cover.hasAttribute("data-parallax-cover-end");
+    const yEnd = () =>
+      atDocumentEnd ? 0 : -Math.round(band() * (mobile ? 0.75 : 1));
+
+    gsap.fromTo(
+      cover,
+      { y: () => band(), force3D: true },
+      {
+        y: yEnd,
+        ease: "none",
+        force3D: true,
+        scrollTrigger: {
+          trigger: gap,
+          start: mobile ? "top 94%" : "top 90%",
+          end: mobile ? "top 8%" : "top 6%",
+          scrub: mobile ? 0.85 : 1,
+          invalidateOnRefresh: true,
+        },
+      },
+    );
+  });
 }
 
 /** Ensure elements are never left invisible after unmount / failed tween. */

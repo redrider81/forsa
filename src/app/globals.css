@@ -168,6 +168,26 @@ button:focus-visible {
   box-shadow: 0 2px 14px rgb(0 0 0 / 0.35);
 }
 
+/* Coaching-megameny på hero: tonar ut rubrik/CTA i samma takt som panelen (md+). */
+@media (min-width: 768px) {
+  [data-hero-sticky] [data-hero-column],
+  [data-hero-sticky] [data-hero-path-links] {
+    transition: opacity 300ms ease-out;
+  }
+
+  html[data-coaching-mega-open] [data-hero-sticky] [data-hero-column],
+  html[data-coaching-mega-open] [data-hero-sticky] [data-hero-path-links] {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-sticky] [data-hero-column],
+  [data-hero-sticky] [data-hero-path-links] {
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-editorial-image-transition] [data-editorial-image] {
     transform: none !important;
@@ -179,7 +199,7 @@ button:focus-visible {
    för att mikrotextens sista rad inte ska kapas vid 768–800px höjd. */
 @media (min-width: 768px) and (min-height: 501px) and (max-height: 800px) {
   [data-hero-sticky] div:has(> div > [data-hero-body]) {
-    top: 64%;
+    top: 60%;
   }
 }
 
@@ -272,12 +292,10 @@ button:focus-visible {
 }
 
 /*
- * Startsidans svenska hero (data-hero-fluid) bär sedan kundunderlaget
- * 2026-10-12 (§4.1) en längre introduktion. Den ryms inte i en låst
- * 100svh-scen på mobil, surfplatta eller skärmar lägre än ca 990px, och
- * bokningsknappen kapades. Där växer hero i stället med innehållet och
- * släpper sticky-läget. På stora, höga skärmar gäller den ordinarie
- * kompositionen ovan oförändrad.
+ * Startsidans hero (data-hero-fluid) växer med innehållet och släpper
+ * sticky-läget på mobil, surfplatta eller skärmar lägre än ca 990px så att
+ * rubrik, kort intro, CTA och vägvalslänkar inte kapas. På stora, höga skärmar
+ * gäller den ordinarie desktopkompositionen.
  */
 @media (max-width: 1023.98px), (max-height: 989.98px) {
   [data-hero-sticky][data-hero-fluid] {
@@ -324,8 +342,7 @@ button:focus-visible {
   }
 }
 
-/* Kort landskapsvy: regeln ovan döljer spacern och krymper brödtexten. Den
-   svenska introduktionen består av flera stycken i en gemensam behållare. */
+/* Kort landskapsvy: regeln ovan döljer spacern och krymper brödtexten. */
 @media (orientation: landscape) and (min-width: 600px) and (max-height: 500px) {
   [data-hero-sticky][data-hero-fluid] [data-hero-column] {
     padding-top: clamp(5rem, 22svh, 6.25rem);

@@ -190,45 +190,41 @@ export default function ClientTestimonial({ locale = "sv" }: Props) {
           </blockquote>
         </figure>
 
-        <div className="md:grid md:grid-cols-12 md:gap-x-8">
-          <div className="md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8">
-            <div data-testimonial-follow className="mt-10 md:mt-14">
-              <button
-                type="button"
-                id={triggerId}
-                aria-expanded={open}
-                aria-controls={panelId}
-                onClick={() => setOpen((current) => !current)}
-                className={`-mx-1 inline-flex min-h-11 items-center gap-3 px-1 py-2 text-left text-[1.0625rem] font-medium text-white md:text-lg transition-colors duration-200 hover:text-zinc-300 ${triggerFocusClass}`}
-              >
-                <span>{open ? c.collapse : c.expand}</span>
-                <span
-                  className="font-sans text-[1.25rem] font-light leading-none tabular-nums text-zinc-400 md:text-[1.375rem]"
-                  aria-hidden="true"
-                >
-                  {open ? "−" : "+"}
-                </span>
-              </button>
-            </div>
-
-            <div
-              id={panelId}
-              role="region"
-              aria-labelledby={triggerId}
-              aria-hidden={!open}
-              inert={!open}
-              className="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none"
-              style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+        <div data-testimonial-follow className="mt-8 max-w-4xl md:mt-10">
+          <button
+            type="button"
+            id={triggerId}
+            aria-expanded={open}
+            aria-controls={panelId}
+            onClick={() => setOpen((current) => !current)}
+            className={`-mx-1 inline-flex min-h-11 items-center gap-3 px-1 py-2 text-left text-[1.0625rem] font-medium text-white md:text-lg transition-colors duration-200 hover:text-zinc-300 ${triggerFocusClass}`}
+          >
+            <span>{open ? c.collapse : c.expand}</span>
+            <span
+              className="font-sans text-[1.25rem] font-light leading-none tabular-nums text-zinc-400 md:text-[1.375rem]"
+              aria-hidden="true"
             >
-              <div className="overflow-hidden">
-                <div className="space-y-6 pt-6 pb-1 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:pt-8">
-                  {c.story.map((paragraph) => (
-                    <p key={paragraph} className="max-w-xl">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
+              {open ? "−" : "+"}
+            </span>
+          </button>
+        </div>
+
+        <div
+          id={panelId}
+          role="region"
+          aria-labelledby={triggerId}
+          aria-hidden={!open}
+          inert={!open}
+          className="max-w-4xl grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none"
+          style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+        >
+          <div className="overflow-hidden">
+            <div className="space-y-6 pt-6 pb-1 text-[1.0625rem] font-[450] leading-[1.75] text-zinc-300 md:pt-8">
+              {c.story.map((paragraph) => (
+                <p key={paragraph} className="max-w-3xl">
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
         </div>

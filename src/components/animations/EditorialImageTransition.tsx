@@ -50,18 +50,10 @@ export default function EditorialImageTransition({
 
     gsap.registerPlugin(ScrollTrigger);
     const mobile = isMobile();
-    const fromOpacity = mobile ? motion.opacity.imageFromMobile : motion.opacity.imageFrom;
-    const fromY = mobile ? motion.reveal.yImageMobile : motion.reveal.yImage;
     const start = mobile ? motion.reveal.startImageMobile : motion.reveal.startImage;
 
     const ctx = gsap.context(() => {
-      gsap.set(figure, {
-        autoAlpha: fromOpacity,
-        y: fromY,
-        scale: motion.scale.imageFrom,
-        transformOrigin: "center center",
-        force3D: true,
-      });
+      gsap.set(figure, { autoAlpha: 0, force3D: true });
       if (content.length) gsap.set(content, { autoAlpha: 0, y: motion.reveal.ySoft, force3D: true });
 
       const revealTl = gsap.timeline({
@@ -70,10 +62,8 @@ export default function EditorialImageTransition({
 
       revealTl.to(figure, {
         autoAlpha: 1,
-        y: 0,
-        scale: 1,
         duration: motion.duration.image,
-        ease: motion.ease.image,
+        ease: motion.ease.revealSoft,
         force3D: true,
       });
 
@@ -115,10 +105,7 @@ export default function EditorialImageTransition({
       <figure
         data-editorial-image-figure
         className="relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:h-[min(72vh,720px)]"
-        style={{
-          opacity: motion.opacity.imageFrom,
-          transform: `translateY(${motion.reveal.yImage}px) scale(${motion.scale.imageFrom})`,
-        }}
+        style={{ opacity: 0 }}
       >
         <Image
           src={src}

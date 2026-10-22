@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
+  bindParallaxGaps,
   bindParallaxRefresh,
   isMobile,
   motion,
@@ -80,6 +81,8 @@ export default function ParallaxController({ children }: Props) {
           });
         },
       );
+
+      bindParallaxGaps(root, mobile);
 
       scheduleScrollRevealRefresh();
     }, root);

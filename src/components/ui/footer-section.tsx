@@ -1,8 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import type { ComponentProps, ReactNode } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useReducedMotion } from "motion/react";
+import {
+  bindParallaxGaps,
+  bindParallaxRefresh,
+  isMobile,
+  prefersReducedMotion,
+  scheduleScrollRevealRefresh,
+} from "@/lib/motion";
 
 export type FooterLink = {
   title: string;
@@ -22,13 +32,39 @@ type FooterProps = {
 };
 
 export function Footer({ columns, copyright }: FooterProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || prefersReducedMotion()) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      bindParallaxGaps(root, isMobile());
+      scheduleScrollRevealRefresh();
+    }, root);
+
+    const unbindRefresh = bindParallaxRefresh(() => ScrollTrigger.refresh());
+
+    return () => {
+      unbindRefresh();
+      ctx.revert();
+    };
+  }, []);
+
   return (
-    <div className="mt-auto w-full">
+    <div ref={rootRef} className="mt-auto w-full">
+      <div data-parallax-gap aria-hidden="true" className="relative z-0 w-full">
+        <div
+          data-parallax-gap-surface
+          className="relative z-0 h-14 w-full bg-[#f4f3ef] md:h-20 lg:h-24"
+        />
+      </div>
       <div
-        aria-hidden="true"
-        className="h-10 w-full bg-[#f4f4f1] sm:h-11 md:h-12"
-      />
-      <div className="w-full bg-surface-dark pt-10 text-zinc-100 md:pt-20 lg:pt-24">
+        data-parallax-cover
+        data-parallax-cover-end
+        className="relative z-10 w-full bg-surface-dark pt-10 pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] text-zinc-100 shadow-[0_48px_0_0_var(--surface-dark)] md:pt-20 lg:pt-24"
+      >
       <footer className="mx-auto flex w-full max-w-6xl flex-col px-6 pb-10 pt-4 md:px-10 md:pb-12 md:pt-6">
         <div className="grid w-full grid-cols-2 gap-8 md:grid-cols-4 md:gap-x-8">
             {columns.map((section, index) => (
@@ -40,8 +76,11 @@ export function Footer({ columns, copyright }: FooterProps) {
                   <ul className="mt-4 space-y-2 text-sm text-zinc-500">
                     {section.links.map((link) => {
                       const Icon = link.icon;
-                      const className =
-                        "inline-flex items-center transition-colors duration-300 hover:text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark";
+                      const isMailto = link.external && link.href.startsWith("mailto:");
+                      const className = [
+                        "inline-flex items-center transition-colors duration-300 hover:text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark",
+                        isMailto ? "text-zinc-300" : "",
+                      ].join(" ");
 
                       return (
                         <li key={`${section.label}-${link.title}`}>
@@ -70,7 +109,7 @@ export function Footer({ columns, copyright }: FooterProps) {
         delay={0.45}
         className="w-full border-t border-white/10 px-6 pb-10 pt-8 md:px-10 md:pb-12 md:pt-10"
       >
-        <p className="mx-auto max-w-6xl text-xs text-zinc-600">{copyright}</p>
+        <p className="mx-auto max-w-6xl text-xs text-zinc-400">{copyright}</p>
       </AnimatedContainer>
       </div>
     </div>

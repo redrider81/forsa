@@ -54,7 +54,7 @@ function buildMediaSplit(el: HTMLElement) {
 
   parts.forEach((part) => {
     if (isMediaPart(part)) {
-      gsap.set(part, { clipPath: "inset(100% 0% 0% 0%)" });
+      gsap.set(part, { autoAlpha: 0 });
     } else if (part.hasAttribute("data-list-item")) {
       gsap.set(itemContent(part), { autoAlpha: 0, x: travel.x * 0.7, y: travel.x ? 0 : travel.yText, force3D: true });
     } else {
@@ -357,7 +357,7 @@ export default function ScrollReveal({
     return () => {
       ctx?.revert();
       showTargets([el, ...childrenTargets]);
-      if (childrenTargets.length) gsap.set(childrenTargets, { clearProps: "clipPath" });
+      if (childrenTargets.length) gsap.set(childrenTargets, { clearProps: "opacity,visibility" });
     };
   }, [variant, emphasis]);
 
