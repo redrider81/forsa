@@ -456,10 +456,14 @@ export default function SiteNavigation() {
   const isHome = barePathname === "/";
 
   const updatePanelTop = useCallback(() => {
-    if (headerRef.current) {
-      setPanelTop(headerRef.current.getBoundingClientRect().bottom);
-    }
-  }, []);
+    const header = headerRef.current;
+    if (!header) return;
+    // Startsidan: panelen hör till hero och placeras i hero-sektionens
+    // koordinater (headerns underkant). Övriga sidor: fast under sticky header.
+    setPanelTop(
+      isHome ? header.offsetTop + header.offsetHeight : header.getBoundingClientRect().bottom,
+    );
+  }, [isHome]);
 
   useEffect(() => {
     setPortalReady(true);
@@ -667,6 +671,9 @@ export default function SiteNavigation() {
   const heroLogoOnDark = isHome && !mobileOpen;
   /** Megameny får inte ändra headerhöjd — det gav synligt «wobble» vid hover. */
   const homeHeaderLayout = isHome && !mobileOpen;
+
+  const renderMegaPanel = (panel: ReactNode) =>
+    isHome ? panel : portalReady ? createPortal(panel, document.body) : null;
 
   return (
     <>
@@ -1006,8 +1013,12 @@ export default function SiteNavigation() {
       </nav>
     </div>
 
-    {portalReady
-      ? createPortal(
+    {/* Startsidans panel är transparent och bärs av hero-videon. Den renderas
+        därför inne i hero (absolut, i hero-sektionens stacking context och
+        overflow) i stället för som fast lager i body — annars ligger den kvar
+        ovanpå efterföljande sektioner när användaren scrollar med panelen öppen.
+        Undersidornas vita panel ligger kvar som fast lager under sticky header. */}
+    {renderMegaPanel(
           <div
             ref={megaPanelRef}
             id={coachingMenuId}
@@ -1018,7 +1029,7 @@ export default function SiteNavigation() {
             style={{ top: Math.max(0, panelTop) }}
             onMouseEnter={openMega}
             onMouseLeave={leaveMegaHoverZone}
-            className={`fixed inset-x-0 z-[90] max-md:hidden ${
+            className={`${isHome ? "absolute" : "fixed"} inset-x-0 z-[90] max-md:hidden ${
               megaOpen ? "" : "pointer-events-none hidden"
             }`}
           >
@@ -1142,10 +1153,8 @@ export default function SiteNavigation() {
               </div>
             </div>
             </div>
-          </div>,
-          document.body,
-        )
-      : null}
+          </div>
+    )}
     </>
   );
 }

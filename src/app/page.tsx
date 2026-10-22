@@ -219,17 +219,17 @@ export default function HomePage() {
               {/* Sammanslaget avsnitt: vad coaching kan ge + vad det kan handla om */}
               <ScrollReveal
                 variant="mediaSplit"
-                className="mt-20 grid gap-8 md:mt-28 md:grid-cols-12 md:items-start md:gap-x-8"
+                className="mt-20 grid gap-8 md:mt-20 md:grid-cols-12 md:items-start md:gap-x-8"
               >
                 <div data-col-left data-reveal-group className="md:col-span-5">
                   <h2 className={`max-w-[14ch] ${DISPLAY} text-zinc-900`}>
                     Vad kan coaching ge dig?
                   </h2>
-                  <p className="mt-8 max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-10">
+                  <p className="mt-8 max-w-xl text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:mt-6">
                     Coaching kan ge dig utrymme att stanna upp, reflektera och se din situation ur nya
                     perspektiv.
                   </p>
-                  <figure className="relative mt-8 aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[1.25rem] sm:max-w-md md:mt-10 md:max-w-lg md:rounded-[1.75rem] lg:max-w-xl lg:rounded-[2rem]">
+                  <figure className="relative mt-8 aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[1.25rem] sm:max-w-md md:mt-8 md:aspect-[16/10] md:max-w-lg md:rounded-[1.75rem] lg:max-w-xl lg:rounded-[2rem]">
                     <Image
                       src="/carolina-02.jpg"
                       alt="Carolina von Braun i samtal vid ett mötesbord."
@@ -253,7 +253,7 @@ export default function HomePage() {
                         <p key={paragraph}>{paragraph}</p>
                       ))}
                     </div>
-                    <ul className="flex w-full flex-col divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700 md:min-h-full md:flex-1">
+                    <ul className="flex w-full flex-col divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700 md:flex-1">
                       {relevancePoints.map((point) => (
                         <li
                           key={point}
@@ -272,12 +272,12 @@ export default function HomePage() {
                 </div>
               </ScrollReveal>
 
-              <div className="mt-16 border-t border-zinc-300 md:mt-20">
+              <div className="mt-16 border-t border-zinc-300 md:mt-14">
                 {workRows.map((row) => (
                   <article
                     key={row.index}
                     data-editorial-row
-                    className="border-b border-zinc-300 py-10 md:py-16"
+                    className="border-b border-zinc-300 py-10 md:py-12"
                   >
                     <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-x-8">
                       <div className="flex items-baseline gap-4 md:contents">
