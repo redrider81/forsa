@@ -21,12 +21,12 @@ const focusAreas = [
 const offers = [
   {
     title: "Single coaching session",
-    terms: "60 minutes – SEK 1,295",
+    terms: "60 minutes – €115",
     description: "For you if you want to explore a specific question or gain new perspectives.",
   },
   {
     title: "Coaching – 5 sessions",
-    terms: "5 × 60 minutes – SEK 4,750",
+    terms: "5 × 60 minutes – €425",
     description:
       "For you if you want to give your development time and keep working on what matters to you, step by step.",
   },
@@ -133,7 +133,7 @@ export default function IndividualCoachingPageEn() {
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/en/kontakt" variant="primary">
-                Book an introductory call
+                Book a free introductory call
               </CtaLink>
             </div>
           </ScrollReveal>

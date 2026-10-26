@@ -81,7 +81,7 @@ export default function SiteFooter() {
             label: "Practical",
             links: [
               { title: "Contact", href: href("/kontakt") },
-              { title: "Book an introductory call", href: href("/kontakt") },
+              { title: "Book a free introductory call", href: href("/kontakt") },
             ],
           },
           {

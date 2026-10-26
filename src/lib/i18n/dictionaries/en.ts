@@ -23,7 +23,7 @@ export const enDictionary = {
     unsureTitle: "Not sure which kind of coaching is relevant?",
     unsureBody:
       "Start with a conversation. We clarify which kind of coaching is relevant to your question.",
-    bookFirstCall: "Book an introductory call →",
+    bookFirstCall: "Book a free introductory call →",
   },
   footer: {
     description: "Individual coaching and business coaching, from Gothenburg.",
@@ -36,7 +36,7 @@ export const enDictionary = {
     copyright: "© 2026 CVB Coaching",
   },
   cta: {
-    primary: "Book an introductory call",
+    primary: "Book a free introductory call",
     secondary: "Individual or business coaching",
     tertiary: "Scope and investment",
     engagementLink: "How it works →",
