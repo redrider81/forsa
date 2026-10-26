@@ -18,6 +18,20 @@ const focusAreas = [
   "Styrkor och utveckling",
 ];
 
+const offers = [
+  {
+    title: "Enskild coachingsession",
+    terms: "60 minuter – 1 295 kr",
+    description: "För dig som vill utforska en specifik fråga eller få nya perspektiv.",
+  },
+  {
+    title: "Coaching – 5 sessioner",
+    terms: "5 × 60 minuter – 4 750 kr",
+    description:
+      "För dig som vill ge din utveckling tid och arbeta vidare med det som är viktigt för dig, steg för steg.",
+  },
+];
+
 export default function IndividuellCoachingPage() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
@@ -63,6 +77,48 @@ export default function IndividuellCoachingPage() {
           </p>
         </section>
 
+        {/* Pricing */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
+            Upplägg och priser
+          </h2>
+          <p className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
+            Coaching utgår från dig, din situation och vad du vill utveckla. Ett enskilt samtal kan
+            ge nya perspektiv, men ofta skapas större möjligheter till utveckling när vi får arbeta
+            tillsammans över tid. Därför rekommenderar jag vanligtvis ett upplägg med flera
+            sessioner.
+          </p>
+          <ScrollReveal variant="staggerList" className="mt-10">
+            <ul className="grid gap-10 md:grid-cols-2 md:gap-x-8">
+              {offers.map((offer) => (
+                <li key={offer.title} data-list-item className="border-t border-zinc-300 pt-6">
+                  <h3 className="text-xl font-medium leading-[1.35] text-zinc-900">
+                    {offer.title}
+                  </h3>
+                  <p className="mt-2 text-lg font-medium leading-8 text-zinc-900">
+                    {offer.terms}
+                  </p>
+                  <p className="mt-4 max-w-md leading-relaxed text-zinc-700">
+                    {offer.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </ScrollReveal>
+          <p className="mt-8 text-zinc-600">Samtliga priser är inklusive moms.</p>
+          <h3 className="mt-14 text-xl font-medium leading-[1.35] text-zinc-900">
+            Vi börjar med ett kostnadsfritt introduktionssamtal
+          </h3>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">
+            Du behöver inte bestämma dig för något upplägg i förväg. Vi börjar med ett kostnadsfritt
+            och förutsättningslöst samtal där vi pratar om din situation, vad du vill utveckla och
+            hur coaching skulle kunna vara ett stöd.
+          </p>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">
+            Därefter ser vi tillsammans vilket upplägg som passar dig bäst.
+          </p>
+        </section>
+
         {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
@@ -75,7 +131,7 @@ export default function IndividuellCoachingPage() {
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <CtaLink href="/kontakt" variant="primary">
-                Boka ett första samtal
+                Boka ett kostnadsfritt inledande samtal
               </CtaLink>
             </div>
           </ScrollReveal>

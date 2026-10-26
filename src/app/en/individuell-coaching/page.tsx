@@ -18,6 +18,20 @@ const focusAreas = [
   "Strengths and development",
 ];
 
+const offers = [
+  {
+    title: "Single coaching session",
+    terms: "60 minutes – SEK 1,295",
+    description: "For you if you want to explore a specific question or gain new perspectives.",
+  },
+  {
+    title: "Coaching – 5 sessions",
+    terms: "5 × 60 minutes – SEK 4,750",
+    description:
+      "For you if you want to give your development time and keep working on what matters to you, step by step.",
+  },
+];
+
 export default function IndividualCoachingPageEn() {
   return (
     <main id="main-content" className="min-h-screen bg-zinc-100 text-zinc-900">
@@ -62,6 +76,48 @@ export default function IndividualCoachingPageEn() {
           </ScrollReveal>
           <p className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
             It is your questions and what matters to you that guide what we work on.
+          </p>
+        </section>
+
+        {/* Pricing */}
+        <section className="border-b border-zinc-300 py-16 md:py-20">
+          <h2 className="text-3xl font-medium leading-[1.25] tracking-tight">
+            Format and pricing
+          </h2>
+          <p className="mt-8 max-w-3xl text-lg leading-8 text-zinc-700">
+            Coaching starts with you, your situation and what you want to develop. A single session
+            can offer new perspectives, but there is often greater room for development when we can
+            work together over time. That is why I usually recommend a format with several
+            sessions.
+          </p>
+          <ScrollReveal variant="staggerList" className="mt-10">
+            <ul className="grid gap-10 md:grid-cols-2 md:gap-x-8">
+              {offers.map((offer) => (
+                <li key={offer.title} data-list-item className="border-t border-zinc-300 pt-6">
+                  <h3 className="text-xl font-medium leading-[1.35] text-zinc-900">
+                    {offer.title}
+                  </h3>
+                  <p className="mt-2 text-lg font-medium leading-8 text-zinc-900">
+                    {offer.terms}
+                  </p>
+                  <p className="mt-4 max-w-md leading-relaxed text-zinc-700">
+                    {offer.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </ScrollReveal>
+          <p className="mt-8 text-zinc-600">All prices include VAT.</p>
+          <h3 className="mt-14 text-xl font-medium leading-[1.35] text-zinc-900">
+            We begin with a free introductory call
+          </h3>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">
+            You do not need to decide on a format in advance. We begin with a free, no-obligation
+            conversation where we talk about your situation, what you want to develop and how
+            coaching could support you.
+          </p>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">
+            Then we look together at which format suits you best.
           </p>
         </section>
 

@@ -62,6 +62,17 @@ export default function BusinessCoachingPageEn() {
           </p>
         </section>
 
+        {/* Pricing */}
+        <section className="border-b border-zinc-300 py-12 md:py-14">
+          <h2 className="text-xl font-medium leading-[1.35] tracking-tight">
+            Format and pricing
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">
+            The format and price are tailored to the scope of the assignment and the needs of the
+            organisation.
+          </p>
+        </section>
+
         {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">

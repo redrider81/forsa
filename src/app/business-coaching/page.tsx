@@ -62,6 +62,16 @@ export default function BusinessCoachingPage() {
           </p>
         </section>
 
+        {/* Pricing */}
+        <section className="border-b border-zinc-300 py-12 md:py-14">
+          <h2 className="text-xl font-medium leading-[1.35] tracking-tight">
+            Upplägg och priser
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-700">
+            Upplägg och pris anpassas efter uppdragets omfattning och verksamhetens behov.
+          </p>
+        </section>
+
         {/* CTA */}
         <section className="py-16 md:py-20">
           <ScrollReveal variant="fadeUp">
