@@ -37,7 +37,7 @@ export const svDictionary = {
     copyright: "© 2026 CVB Coaching",
   },
   cta: {
-    primary: "Boka ett inledande samtal",
+    primary: "Boka ett kostnadsfritt inledande samtal",
     secondary: "Individuell coaching eller företagscoaching",
     tertiary: "Omfattning och investering",
     engagementLink: "Så går det till →",

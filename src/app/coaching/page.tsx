@@ -543,7 +543,7 @@ export default function CoachingPage() {
             </p>
             <div data-cta-actions className="md:col-span-5 md:col-start-7">
               <CtaLink href="/kontakt" variant="secondary" translucent>
-                Boka ett inledande samtal
+                Boka ett kostnadsfritt inledande samtal
               </CtaLink>
               <p className="mt-6 text-[0.875rem] leading-[1.6] text-zinc-400">
                 Kort och kostnadsfritt första telefonsamtal.
