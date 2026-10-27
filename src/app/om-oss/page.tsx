@@ -159,7 +159,7 @@ export default function AboutPage() {
         <section className={`mx-auto ${SECTION_STACK} max-w-7xl px-6 md:px-10`}>
           <ScrollReveal variant="splitColumn" className={SECTION_GRID}>
             <h2 data-col-left className={`max-w-md ${DISPLAY_SM} text-zinc-900 md:col-span-5`}>
-              Vilka jag arbetar med
+              Vilka kan ha nytta av coaching?
             </h2>
             <div data-col-right className="md:col-span-6 md:col-start-7 md:pt-8 lg:pt-12">
               <p className={`mb-8 ${BODY}`}>

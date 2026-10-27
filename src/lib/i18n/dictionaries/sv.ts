@@ -23,7 +23,7 @@ export const svDictionary = {
     unsureTitle: "Osäker på vilken coaching som är relevant?",
     unsureBody:
       "Börja med ett samtal. Vi klargör vilken form av coaching som är relevant för din fråga.",
-    bookFirstCall: "Boka ett inledande samtal →",
+    bookFirstCall: "Boka ett kostnadsfritt inledande samtal →",
   },
   footer: {
     description:
