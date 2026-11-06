@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageAlternates } from "@/lib/seo";
+import Image from "next/image";
 import Link from "next/link";
 import CtaLink from "@/components/cta-link";
 import HeroReveal from "@/components/animations/HeroReveal";
@@ -162,10 +163,10 @@ export default function CoachingPage() {
   return (
     <main id="main-content" className="min-h-screen bg-[#f4f3ef] text-zinc-900">
       {/* ---------- 00 · Hero ---------- */}
-      <section className="px-6 pb-14 pt-28 md:px-10 md:pb-20 md:pt-32 lg:pt-36">
-        <div className="mx-auto w-full max-w-7xl">
+      <section className="pb-14 pt-28 md:pb-20 md:pt-32 lg:pt-36">
+        <div className="mx-auto w-full max-w-7xl px-6 md:px-10">
           <HeroReveal>
-            <div className="grid md:grid-cols-12 md:gap-x-8">
+            <div className="grid md:grid-cols-12 md:items-baseline md:gap-x-8">
               <div className="md:col-span-2">
                 <div data-hero-line className="mb-6 h-px w-12 origin-left bg-[#7d6435] md:mb-8" />
                 <p data-hero-label className={chapterLabelLight}>
@@ -174,7 +175,7 @@ export default function CoachingPage() {
               </div>
               <h1
                 data-hero-headline
-                className="mt-8 max-w-[15ch] font-serif text-[clamp(3rem,9vw,10rem)] font-medium leading-[1.2] tracking-[-0.055em] text-zinc-900 md:col-span-10 md:mt-0"
+                className="mt-8 max-w-[15ch] font-serif text-[clamp(3rem,9vw,8rem)] font-medium text-balance leading-[1.12] tracking-[-0.045em] [word-spacing:0.06em] text-zinc-900 md:col-span-10 md:mt-0"
               >
                 Coaching hos CVB
               </h1>
@@ -186,25 +187,11 @@ export default function CoachingPage() {
               <div className="grid gap-8 md:grid-cols-12 md:gap-x-8 md:gap-y-0">
                 <p
                   data-hero-body
-                  className="max-w-md text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-4 md:col-start-7"
+                  className="max-w-md text-[1.0625rem] font-[450] leading-[1.75] text-zinc-600 md:col-span-6 md:col-start-3 xl:col-span-4 xl:col-start-3"
                 >
                   Den här sidan beskriver när coaching kan vara relevant, hur arbetet går till och
                   vad du kan förvänta dig.
                 </p>
-                <div data-hero-cta className="md:col-span-2 md:col-start-11 md:justify-self-end md:self-end">
-                  <Link
-                    href="#vagar"
-                    className="group inline-flex items-center gap-2 border-b border-zinc-400 pb-1 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f3ef]"
-                  >
-                    Individuell coaching eller företagscoaching
-                    <span
-                      aria-hidden="true"
-                      className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
-                    >
-                      ↓
-                    </span>
-                  </Link>
-                </div>
               </div>
             </HeroReveal>
           </div>
@@ -220,8 +207,19 @@ export default function CoachingPage() {
               <h2 className="mt-10 max-w-md font-serif text-[clamp(3rem,6vw,6.5rem)] font-medium leading-[1.12] tracking-[-0.045em] text-zinc-900 md:mt-16">
                 Vad kan coaching handla om?
               </h2>
+              {/* Porträttet ligger i rubrikens spalt, samma grepp som startsidans
+                  "Vad kan coaching ge dig?". Listan bottenlinjeras mot bilden. */}
+              <figure className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden rounded-[1.25rem] md:mt-14 md:max-w-none md:rounded-[1.75rem] lg:rounded-[2rem]">
+                <Image
+                  src="/carolina-kaffe.webp"
+                  alt="Carolina von Braun vid ett bord med en kaffekopp."
+                  fill
+                  sizes="(min-width: 1280px) 30rem, (min-width: 768px) 38vw, (min-width: 480px) 28rem, 100vw"
+                  className="object-cover object-[center_60%]"
+                />
+              </figure>
             </div>
-            <div data-col-right className="md:col-span-6 md:col-start-7 md:pt-28 lg:pt-40">
+            <div data-col-right className="md:col-span-6 md:col-start-7 md:self-end md:pt-28 lg:pt-40">
               <ScrollReveal variant="staggerList">
                 <ul className="divide-y divide-zinc-300 border-y border-zinc-300 text-[1.0625rem] font-[450] leading-[1.7] text-zinc-700">
                   {relevancePoints.map((point) => (
