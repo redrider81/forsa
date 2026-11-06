@@ -96,11 +96,11 @@ export default function AboutPage() {
               </div>
               <figure className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden rounded-[1.25rem] md:col-span-5 md:row-start-2 md:mt-12 md:aspect-auto md:h-full md:min-h-[20rem] md:rounded-[1.75rem]">
                 <Image
-                  src="/carolina-von-braun.webp"
+                  src="/carolina-om.webp"
                   alt="Carolina von Braun, coach och grundare av CVB Coaching."
                   fill
-                  sizes="(min-width: 768px) 20rem, 94vw"
-                  className="object-cover object-[center_22%]"
+                  sizes="(min-width: 768px) 40rem, 94vw"
+                  className="object-cover object-[50%_40%] md:object-[62%_40%] lg:object-[46%_40%]"
                   quality={80}
                 />
               </figure>

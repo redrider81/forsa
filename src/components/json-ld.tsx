@@ -34,7 +34,7 @@ export const professionalServiceSchema = {
   name: "CVB Coaching",
   url: `${SITE_URL}/`,
   logo: `${SITE_URL}/cvb-logo.png`,
-  image: `${SITE_URL}/carolina-om-oss.jpg`,
+  image: `${SITE_URL}/carolina-om.webp`,
   email: "info@cvbcoaching.se",
   description:
     "Individuell coaching och företagscoaching i Göteborg. Fysiska möten i Göteborgsregionen kombinerat med digitalt arbete mellan mötena.",
