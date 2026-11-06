@@ -17,7 +17,7 @@ import {
 import type { Locale } from "@/lib/i18n/config";
 import { HOME_DISPLAY } from "@/lib/homepage-typography";
 
-const CAROLINA_IMAGE = "/carolina-von-braun.webp";
+const CAROLINA_IMAGE = "/carolina-startsida.webp";
 
 const copy: Record<
   Locale,
