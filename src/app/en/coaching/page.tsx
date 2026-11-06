@@ -171,9 +171,12 @@ export default function CoachingPageEn() {
                   Coaching
                 </p>
               </div>
+              {/* HeroReveal lämnar en clip-path kvar på rubriken, och den följer
+                  rubrikens ruta. pb/-mb ger plats för g:ets underhäng utan att
+                  flytta något i layouten. */}
               <h1
                 data-hero-headline
-                className="mt-8 max-w-[15ch] font-serif text-[clamp(3rem,9vw,8rem)] font-medium text-balance leading-[1.12] tracking-[-0.045em] [word-spacing:0.06em] text-zinc-900 md:col-span-10 md:mt-0"
+                className="-mb-[0.1em] mt-8 max-w-[15ch] pb-[0.1em] font-serif text-[clamp(3rem,9vw,8rem)] font-medium text-balance leading-[1.12] tracking-[-0.045em] [word-spacing:0.06em] text-zinc-900 md:col-span-10 md:mt-0"
               >
                 Coaching at CVB
               </h1>
